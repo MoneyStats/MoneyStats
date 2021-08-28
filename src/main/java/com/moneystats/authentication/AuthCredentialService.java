@@ -30,6 +30,12 @@ public class AuthCredentialService {
 
 	public AuthResponseDTO signUp(AuthCredentialDTO userCredential) throws AuthenticationException {
 		AuthenticationValidator.validateAuthCredentialDTO(userCredential);
+		AuthCredentialInputDTO authCredentialInputDTO = new AuthCredentialInputDTO(userCredential.getUsername(), userCredential.getPassword());
+		AuthCredentialEntity authCredentialEntity = authCredentialDAO.getCredential(authCredentialInputDTO);
+		if (authCredentialEntity != null){
+			LOG.error("User Present");
+			throw  new AuthenticationException(AuthenticationException.Code.USER_PRESENT);
+		}
 		userCredential.setPassword(bCryptPasswordEncoder.encode(userCredential.getPassword()));
 		authCredentialDAO.insertUserCredential(userCredential);
 		return new AuthResponseDTO(SchemaDescription.USER_ADDED_CORRECT);
