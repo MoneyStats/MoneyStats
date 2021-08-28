@@ -108,6 +108,7 @@ public class AuthServiceTest {
 		Assertions.assertEquals(USER_TOKEN.getAccessToken(), actual.getAccessToken());
 	}
 
+
 	@Test
 	void login_shouldThrowWrongCredential() throws Exception {
 		Mockito.when(dao.getCredential(USER_USER_CREDENTIAL_DTO)).thenReturn(null);
