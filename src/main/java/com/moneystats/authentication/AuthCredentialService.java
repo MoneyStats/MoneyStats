@@ -82,8 +82,13 @@ public class AuthCredentialService {
 		List<AuthCredentialDTO> listUsers = new ArrayList<>();
 		List<AuthCredentialEntity> list = authCredentialDAO.getUsers();
 		for (int i = 0; i < list.size(); i++) {
-			listUsers.add(new AuthCredentialDTO(list.get(i).getFirstName(), list.get(i).getLastName(),
-					list.get(i).getEmail(), list.get(i).getUsername(), list.get(i).getRole()));
+			listUsers.add(new AuthCredentialDTO(
+					list.get(i).getFirstName(),
+					list.get(i).getLastName(),
+					list.get(i).getDateOfBirth(),
+					list.get(i).getEmail(),
+					list.get(i).getUsername(),
+					list.get(i).getRole()));
 		}
 		return listUsers;
 	}
