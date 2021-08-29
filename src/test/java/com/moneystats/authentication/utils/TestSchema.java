@@ -43,4 +43,16 @@ public class TestSchema {
           SecurityRoles.MONEYSTATS_USER_ROLE);
   public static final TokenDTO USER_TOKEN_JWT = new TokenDTO(USER_JWT);
   public static final AuthResponseDTO AUTH_RESPONSE = new AuthResponseDTO("USER_ADDED");
+
+  private static final TokenDTO USER_TOKEN = new TokenDTO(USER_JWT);
+
+  private static final String ADMIN_USERNAME = "my-admin-username";
+  private static final String ADMIN_PASSWORD = "my-admin-password";
+  private static final String ADMIN_JWT = "the-admin-jwt-token";
+  private static final String ADMIN_PASS_HASHED = bCryptPasswordEncoder.encode(ADMIN_PASSWORD);
+  private static final AuthCredentialDTO ADMIN_USER = new AuthCredentialDTO(FIRSTNAME, LASTNAME, EMAIL,
+          ADMIN_USERNAME, SecurityRoles.MONEYSTATS_ADMIN_ROLE);
+  private static final TokenDTO ADMIN_TOKEN = new TokenDTO(ADMIN_JWT);
+  private static final AuthCredentialEntity ADMIN_USER_CREDENTIAL_ENTITY = new AuthCredentialEntity(FIRSTNAME,
+          LASTNAME, DATE_OF_BIRTH, EMAIL, ADMIN_USERNAME, ADMIN_PASS_HASHED, SecurityRoles.MONEYSTATS_ADMIN_ROLE);
 }
