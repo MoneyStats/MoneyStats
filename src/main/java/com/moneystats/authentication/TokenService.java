@@ -24,6 +24,7 @@ public class TokenService {
 
 	private static final String FIRSTNAME = "firstName";
 	private static final String LASTNAME = "lastName";
+	private static final String DATEOFBIRTH = "dateOfBirth";
 	private static final String EMAIL = "email";
 	private static final String ROLE = "role";
 
@@ -37,6 +38,7 @@ public class TokenService {
 		Claims claims = Jwts.claims().setSubject(user.getUsername());
 		claims.put(FIRSTNAME, user.getFirstName());
 		claims.put(LASTNAME, user.getLastName());
+		claims.put(DATEOFBIRTH, user.getDateOfBirth());
 		claims.put(EMAIL, user.getEmail());
 		claims.put(ROLE, user.getRole());
 		long dateExp = Long.parseLong(expirationTime);
@@ -54,8 +56,12 @@ public class TokenService {
 			LOG.error("Not Authorized");
 			throw new AuthenticationException(AuthenticationException.Code.UNAUTHORIZED);
 		}
-		AuthCredentialDTO user = new AuthCredentialDTO((@NotNull String) body.get(FIRSTNAME),
-				(@NotNull String) body.get(LASTNAME), (@NotNull String) body.get(EMAIL), body.getSubject(),
+		AuthCredentialDTO user = new AuthCredentialDTO(
+				(@NotNull String) body.get(FIRSTNAME),
+				(@NotNull String) body.get(LASTNAME),
+				(@NotNull String) body.get(DATEOFBIRTH),
+				(@NotNull String) body.get(EMAIL),
+				body.getSubject(),
 				(@NotNull String) body.get(ROLE));
 		return user;
 	}

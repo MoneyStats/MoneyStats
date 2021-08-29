@@ -75,27 +75,27 @@ public class AuthCredentialService {
     return user;
   }
 
-  public List<AuthCredentialDTO> getUsers(TokenDTO token) throws AuthenticationException {
-    TokenValidation.validateTokenDTO(token);
-    AuthCredentialDTO user = tokenService.parseToken(token);
-    if (user == null) {
-      LOG.error("User Not Found");
-      throw new AuthenticationException(AuthenticationException.Code.AUTH_CREDENTIAL_DTO_NOT_FOUND);
-    }
-    if (!user.getRole().equalsIgnoreCase(SecurityRoles.MONEYSTATS_ADMIN_ROLE)) {
-      throw new AuthenticationException(AuthenticationException.Code.NOT_ALLOWED);
-    }
-    List<AuthCredentialDTO> listUsers = new ArrayList<>();
-    List<AuthCredentialEntity> list = authCredentialDAO.getUsers();
-    for (int i = 0; i < list.size(); i++) {
-      listUsers.add(
-          new AuthCredentialDTO(
-              list.get(i).getFirstName(),
-              list.get(i).getLastName(),
-              list.get(i).getEmail(),
-              list.get(i).getUsername(),
-              list.get(i).getRole()));
-    }
-    return listUsers;
-  }
+	public List<AuthCredentialDTO> getUsers(TokenDTO token) throws AuthenticationException {
+		TokenValidation.validateTokenDTO(token);
+		AuthCredentialDTO user = tokenService.parseToken(token);
+		if (user == null) {
+			LOG.error("User Not Found");
+			throw new AuthenticationException(AuthenticationException.Code.AUTH_CREDENTIAL_DTO_NOT_FOUND);
+		}
+		if (!user.getRole().equalsIgnoreCase(SecurityRoles.MONEYSTATS_ADMIN_ROLE)) {
+			throw new AuthenticationException(AuthenticationException.Code.NOT_ALLOWED);
+		}
+		List<AuthCredentialDTO> listUsers = new ArrayList<>();
+		List<AuthCredentialEntity> list = authCredentialDAO.getUsers();
+		for (int i = 0; i < list.size(); i++) {
+			listUsers.add(new AuthCredentialDTO(
+					list.get(i).getFirstName(),
+					list.get(i).getLastName(),
+					list.get(i).getDateOfBirth(),
+					list.get(i).getEmail(),
+					list.get(i).getUsername(),
+					list.get(i).getRole()));
+		}
+		return listUsers;
+	}
 }
