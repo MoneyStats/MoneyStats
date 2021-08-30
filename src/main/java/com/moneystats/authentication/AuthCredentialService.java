@@ -33,7 +33,7 @@ public class AuthCredentialService {
     AuthCredentialEntity authCredentialEntity =
         authCredentialDAO.getCredential(authCredentialInputDTO);
     if (authCredentialEntity != null) {
-      LOG.error("User Present");
+      LOG.error("Username Present, needs different");
       throw new AuthenticationException(AuthenticationException.Code.USER_PRESENT);
     }
     userCredential.setPassword(bCryptPasswordEncoder.encode(userCredential.getPassword()));
@@ -45,13 +45,13 @@ public class AuthCredentialService {
     AuthenticationValidator.validateAuthCredentialInputDTO(userCredential);
     AuthCredentialEntity userEntity = authCredentialDAO.getCredential(userCredential);
     if (userEntity == null) {
-      LOG.error("User Not Found");
+      LOG.error("User Not Found, username");
       throw new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL);
     }
     boolean matches =
         bCryptPasswordEncoder.matches(userCredential.getPassword(), userEntity.getPassword());
     if (!matches) {
-      LOG.error("User Not Found");
+      LOG.error("User Not Found, password");
       throw new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL);
     }
     AuthCredentialDTO userDto =
@@ -61,41 +61,34 @@ public class AuthCredentialService {
             userEntity.getEmail(),
             userEntity.getUsername(),
             userEntity.getRole());
-    TokenDTO token = tokenService.generateToken(userDto);
-    return token;
+
+    return tokenService.generateToken(userDto);
   }
 
   public AuthCredentialDTO getUser(TokenDTO token) throws AuthenticationException {
     TokenValidation.validateTokenDTO(token);
-    AuthCredentialDTO user = tokenService.parseToken(token);
-    if (user == null) {
-      LOG.error("User Not Found");
-      throw new AuthenticationException(AuthenticationException.Code.AUTH_CREDENTIAL_DTO_NOT_FOUND);
-    }
-    return user;
+    return tokenService.parseToken(token);
   }
 
 	public List<AuthCredentialDTO> getUsers(TokenDTO token) throws AuthenticationException {
 		TokenValidation.validateTokenDTO(token);
 		AuthCredentialDTO user = tokenService.parseToken(token);
-		if (user == null) {
-			LOG.error("User Not Found");
-			throw new AuthenticationException(AuthenticationException.Code.AUTH_CREDENTIAL_DTO_NOT_FOUND);
-		}
+
 		if (!user.getRole().equalsIgnoreCase(SecurityRoles.MONEYSTATS_ADMIN_ROLE)) {
+		    LOG.error("Not Allowed, SecurityRoles");
 			throw new AuthenticationException(AuthenticationException.Code.NOT_ALLOWED);
 		}
 		List<AuthCredentialDTO> listUsers = new ArrayList<>();
 		List<AuthCredentialEntity> list = authCredentialDAO.getUsers();
-		for (int i = 0; i < list.size(); i++) {
-			listUsers.add(new AuthCredentialDTO(
-					list.get(i).getFirstName(),
-					list.get(i).getLastName(),
-					list.get(i).getDateOfBirth(),
-					list.get(i).getEmail(),
-					list.get(i).getUsername(),
-					list.get(i).getRole()));
-		}
+        for (AuthCredentialEntity authCredentialEntity : list) {
+            listUsers.add(new AuthCredentialDTO(
+                    authCredentialEntity.getFirstName(),
+                    authCredentialEntity.getLastName(),
+                    authCredentialEntity.getDateOfBirth(),
+                    authCredentialEntity.getEmail(),
+                    authCredentialEntity.getUsername(),
+                    authCredentialEntity.getRole()));
+        }
 		return listUsers;
 	}
 }

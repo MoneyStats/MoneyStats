@@ -54,7 +54,7 @@ public class AuthCredentialDAO {
       pstm.setString(6, user.getPassword());
       pstm.execute();
     } catch (SQLException e) {
-      LOG.error("Database Error in Insert");
+      LOG.error("Database Error in InsertUserCredential");
       throw new AuthenticationException(AuthenticationException.Code.DATABASE_ERROR);
     }
   }

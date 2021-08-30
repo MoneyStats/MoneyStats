@@ -2,7 +2,9 @@ package com.moneystats.authentication;
 
 import java.util.List;
 
+import com.moneystats.authentication.DTO.AuthResponseDTO;
 import com.moneystats.authentication.utils.TestSchema;
+import com.moneystats.generic.SchemaDescription;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,15 +50,16 @@ public class AuthServiceTest {
 	}
 
 	@Test
-	void signUpUser_shouldInsertUserCorrectly() throws Exception {
+	void signUpUser_shouldInsertUserCorrectlyAndReturnUserAdded() throws Exception {
 		Mockito.doNothing().when(dao).insertUserCredential(authCredentialDTOArgumentCaptor.capture());
 
-		service.signUp(TestSchema.USER_USER_DTO);
+		AuthResponseDTO response = service.signUp(TestSchema.USER_USER_DTO);
 
 		Assertions.assertTrue(
 				bCryptPasswordEncoder.matches(TestSchema.USER_PASSWORD, authCredentialDTOArgumentCaptor.getValue().getPassword()));
 		Assertions.assertEquals(TestSchema.USER_USER_CREDENTIAL_DTO.getUsername(),
 				authCredentialDTOArgumentCaptor.getValue().getUsername());
+		Assertions.assertEquals(SchemaDescription.USER_ADDED_CORRECT, response.getMessage());
 	}
 
 	@Test
@@ -136,7 +139,7 @@ public class AuthServiceTest {
 
 		AuthCredentialDTO actual = service.getUser(TestSchema.USER_TOKEN);
 
-		Assertions.assertEquals(TestSchema.USER_USER_DTO.getUsername(), actual.getUsername());
+		Assertions.assertEquals(TestSchema.USER_USER_DTO, actual);
 	}
 
 	@Test
@@ -177,6 +180,10 @@ public class AuthServiceTest {
 			AuthCredentialDTO actual = actuals.get(i);
 			AuthCredentialEntity expected = listUsers.get(i);
 
+			Assertions.assertEquals(expected.getFirstName(), actual.getFirstName());
+			Assertions.assertEquals(expected.getLastName(), actual.getLastName());
+			Assertions.assertEquals(expected.getDateOfBirth(), actual.getDateOfBirth());
+			Assertions.assertEquals(expected.getEmail(), actual.getEmail());
 			Assertions.assertEquals(expected.getUsername(), actual.getUsername());
 			Assertions.assertEquals(expected.getRole(), actual.getRole());
 		}

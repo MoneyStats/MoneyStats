@@ -53,7 +53,7 @@ public class TokenService {
 		try {
 			body = Jwts.parser().setSigningKey(secret).parseClaimsJws(token.getAccessToken()).getBody();
 		} catch (JwtException e) {
-			LOG.error("Not Authorized");
+			LOG.error("Not Authorized, parse Token");
 			throw new AuthenticationException(AuthenticationException.Code.UNAUTHORIZED);
 		}
 		AuthCredentialDTO user = new AuthCredentialDTO(
