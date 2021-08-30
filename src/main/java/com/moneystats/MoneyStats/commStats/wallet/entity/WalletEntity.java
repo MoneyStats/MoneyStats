@@ -13,7 +13,7 @@ public class WalletEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Long id;
 
   private String name;
 
@@ -28,7 +28,7 @@ public class WalletEntity {
   @Transient private List<StatementEntity> statementList;
 
   public WalletEntity(
-      Integer id,
+      Long id,
       String name,
       CategoryEntity category,
       AuthCredentialEntity user,
@@ -54,11 +54,11 @@ public class WalletEntity {
     this.statementList = statementList;
   }
 
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
