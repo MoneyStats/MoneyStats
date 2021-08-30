@@ -71,25 +71,26 @@ public class AuthCredentialService {
     return tokenService.parseToken(token);
   }
 
-	public List<AuthCredentialDTO> getUsers(TokenDTO token) throws AuthenticationException {
-		TokenValidation.validateTokenDTO(token);
-		AuthCredentialDTO user = tokenService.parseToken(token);
+  public List<AuthCredentialDTO> getUsers(TokenDTO token) throws AuthenticationException {
+    TokenValidation.validateTokenDTO(token);
+    AuthCredentialDTO user = tokenService.parseToken(token);
 
-		if (!user.getRole().equalsIgnoreCase(SecurityRoles.MONEYSTATS_ADMIN_ROLE)) {
-		    LOG.error("Not Allowed, SecurityRoles");
-			throw new AuthenticationException(AuthenticationException.Code.NOT_ALLOWED);
-		}
-		List<AuthCredentialDTO> listUsers = new ArrayList<>();
-		List<AuthCredentialEntity> list = authCredentialDAO.getUsers();
-        for (AuthCredentialEntity authCredentialEntity : list) {
-            listUsers.add(new AuthCredentialDTO(
-                    authCredentialEntity.getFirstName(),
-                    authCredentialEntity.getLastName(),
-                    authCredentialEntity.getDateOfBirth(),
-                    authCredentialEntity.getEmail(),
-                    authCredentialEntity.getUsername(),
-                    authCredentialEntity.getRole()));
-        }
-		return listUsers;
-	}
+    if (!user.getRole().equalsIgnoreCase(SecurityRoles.MONEYSTATS_ADMIN_ROLE)) {
+      LOG.error("Not Allowed, SecurityRoles");
+      throw new AuthenticationException(AuthenticationException.Code.NOT_ALLOWED);
+    }
+    List<AuthCredentialDTO> listUsers = new ArrayList<>();
+    List<AuthCredentialEntity> list = authCredentialDAO.getUsers();
+    for (AuthCredentialEntity authCredentialEntity : list) {
+      listUsers.add(
+          new AuthCredentialDTO(
+              authCredentialEntity.getFirstName(),
+              authCredentialEntity.getLastName(),
+              authCredentialEntity.getDateOfBirth(),
+              authCredentialEntity.getEmail(),
+              authCredentialEntity.getUsername(),
+              authCredentialEntity.getRole()));
+    }
+    return listUsers;
+  }
 }

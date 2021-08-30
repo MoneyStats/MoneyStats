@@ -52,11 +52,20 @@ public class TestSchema {
   public static final String ADMIN_PASSWORD = "my-admin-password";
   public static final String ADMIN_JWT = "the-admin-jwt-token";
   public static final String ADMIN_PASS_HASHED = bCryptPasswordEncoder.encode(ADMIN_PASSWORD);
-  public static final AuthCredentialDTO ADMIN_USER = new AuthCredentialDTO(FIRSTNAME, LASTNAME, EMAIL,
-          ADMIN_USERNAME, SecurityRoles.MONEYSTATS_ADMIN_ROLE);
+  public static final AuthCredentialDTO ADMIN_USER =
+      new AuthCredentialDTO(
+          FIRSTNAME, LASTNAME, EMAIL, ADMIN_USERNAME, SecurityRoles.MONEYSTATS_ADMIN_ROLE);
   public static final TokenDTO ADMIN_TOKEN = new TokenDTO(ADMIN_JWT);
-  public static final AuthCredentialEntity ADMIN_USER_CREDENTIAL_ENTITY = new AuthCredentialEntity(FIRSTNAME,
-          LASTNAME, DATE_OF_BIRTH, EMAIL, ADMIN_USERNAME, ADMIN_PASS_HASHED, SecurityRoles.MONEYSTATS_ADMIN_ROLE);
+  public static final AuthCredentialEntity ADMIN_USER_CREDENTIAL_ENTITY =
+      new AuthCredentialEntity(
+          FIRSTNAME,
+          LASTNAME,
+          DATE_OF_BIRTH,
+          EMAIL,
+          ADMIN_USERNAME,
+          ADMIN_PASS_HASHED,
+          SecurityRoles.MONEYSTATS_ADMIN_ROLE);
 
-  public static final AuthResponseDTO AUTH_RESPONSE_DTO = new AuthResponseDTO(SchemaDescription.USER_ADDED_CORRECT);
+  public static final AuthResponseDTO AUTH_RESPONSE_DTO =
+      new AuthResponseDTO(SchemaDescription.USER_ADDED_CORRECT);
 }
