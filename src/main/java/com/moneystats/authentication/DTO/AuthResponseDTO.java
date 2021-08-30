@@ -4,18 +4,17 @@ import javax.validation.constraints.NotNull;
 
 public class AuthResponseDTO {
 
-	@NotNull
-	private String message;
+  @NotNull private String message;
 
-	public AuthResponseDTO(String message) {
-		this.message = message;
-	}
+  public AuthResponseDTO(String message) {
+    this.message = message;
+  }
 
-	public String getMessage() {
-		return message;
-	}
+  public String getMessage() {
+    return message;
+  }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+  public void setMessage(String message) {
+    this.message = message;
+  }
 }
