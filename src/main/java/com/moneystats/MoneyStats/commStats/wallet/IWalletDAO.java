@@ -9,6 +9,11 @@ public interface IWalletDAO extends JpaRepository<WalletEntity, Long> {
 
   List<WalletEntity> findWalletsByCategoryId(Long id);
 
+  /**
+   * Used on WalletService method getAll
+   * @param userId
+   * @return all the wallet by the userId provided
+   */
   List<WalletEntity> findAllByUserId(Long userId);
 
   WalletEntity findWalletsById(Long id);
