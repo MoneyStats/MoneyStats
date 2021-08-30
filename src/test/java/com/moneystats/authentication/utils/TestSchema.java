@@ -6,6 +6,7 @@ import com.moneystats.authentication.DTO.AuthResponseDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.authentication.SecurityRoles;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
+import com.moneystats.generic.SchemaDescription;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class TestSchema {
@@ -43,7 +44,6 @@ public class TestSchema {
           USER_PASSWORD,
           SecurityRoles.MONEYSTATS_USER_ROLE);
   public static final TokenDTO USER_TOKEN_JWT = new TokenDTO(USER_JWT);
-  public static final AuthResponseDTO AUTH_RESPONSE = new AuthResponseDTO("USER_ADDED");
 
   public static final TokenDTO USER_TOKEN = new TokenDTO(USER_JWT);
 
@@ -56,4 +56,6 @@ public class TestSchema {
   public static final TokenDTO ADMIN_TOKEN = new TokenDTO(ADMIN_JWT);
   public static final AuthCredentialEntity ADMIN_USER_CREDENTIAL_ENTITY = new AuthCredentialEntity(FIRSTNAME,
           LASTNAME, DATE_OF_BIRTH, EMAIL, ADMIN_USERNAME, ADMIN_PASS_HASHED, SecurityRoles.MONEYSTATS_ADMIN_ROLE);
+
+  public static final AuthResponseDTO AUTH_RESPONSE_DTO = new AuthResponseDTO(SchemaDescription.USER_ADDED_CORRECT);
 }

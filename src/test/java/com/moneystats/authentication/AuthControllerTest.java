@@ -1,14 +1,14 @@
 package com.moneystats.authentication;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
 import com.moneystats.authentication.utils.TestSchema;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,10 +39,11 @@ public class AuthControllerTest {
   @Autowired private ObjectMapper objectMapper;
 
   @Test
-  void addUser_shouldReturnStatus200() throws Exception {
+  void addUser_shouldReturnStatus200AndReturnResponse() throws Exception {
     String userAsString = objectMapper.writeValueAsString(TestSchema.USER_USER_DTO);
+    String authResponseAsString = objectMapper.writeValueAsString(TestSchema.AUTH_RESPONSE_DTO);
 
-    Mockito.when(credential.signUp(TestSchema.USER_USER_DTO)).thenReturn(TestSchema.AUTH_RESPONSE);
+    Mockito.when(credential.signUp(TestSchema.USER_USER_DTO)).thenReturn(TestSchema.AUTH_RESPONSE_DTO);
     mockMvc
         .perform(
             post("/credential/signup")
