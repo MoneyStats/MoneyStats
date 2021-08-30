@@ -8,7 +8,6 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 
 import com.moneystats.authentication.utils.TestSchema;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +15,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
-import com.moneystats.authentication.DTO.AuthResponseDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
-import com.moneystats.authentication.entity.AuthCredentialEntity;
 
 @WebMvcTest(controllers = AuthCredentialController.class)
 public class AuthControllerTest {
@@ -40,10 +35,10 @@ public class AuthControllerTest {
 
   @Test
   void addUser_shouldReturnStatus200AndReturnResponse() throws Exception {
-    String userAsString = objectMapper.writeValueAsString(TestSchema.USER_USER_DTO);
+    String userAsString = objectMapper.writeValueAsString(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
     String authResponseAsString = objectMapper.writeValueAsString(TestSchema.AUTH_RESPONSE_DTO);
 
-    Mockito.when(credential.signUp(TestSchema.USER_USER_DTO))
+    Mockito.when(credential.signUp(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER))
         .thenReturn(TestSchema.AUTH_RESPONSE_DTO);
     mockMvc
         .perform(
@@ -69,7 +64,7 @@ public class AuthControllerTest {
 
   @Test
   void addUser_shouldReturnUserPresent() throws Exception {
-    AuthCredentialDTO user = TestSchema.USER_USER_DTO;
+    AuthCredentialDTO user = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
     String userAsString = objectMapper.writeValueAsString(user);
 
     Mockito.when(credential.signUp(Mockito.any()))
@@ -85,10 +80,10 @@ public class AuthControllerTest {
 
   @Test
   void login_shouldReturnTokenCorrectly() throws Exception {
-    String userAsString = objectMapper.writeValueAsString(TestSchema.USER_USER_CREDENTIAL_DTO);
-    String tokenAsString = objectMapper.writeValueAsString(TestSchema.USER_TOKEN_JWT);
+    String userAsString = objectMapper.writeValueAsString(TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER);
+    String tokenAsString = objectMapper.writeValueAsString(TestSchema.TOKEN_JWT_DTO_ROLE_USER);
 
-    Mockito.doReturn(TestSchema.USER_TOKEN_JWT).when(credential).login(Mockito.any());
+    Mockito.doReturn(TestSchema.TOKEN_JWT_DTO_ROLE_USER).when(credential).login(Mockito.any());
     mockMvc
         .perform(
             post("/credential/login").contentType(MediaType.APPLICATION_JSON).content(userAsString))
@@ -113,7 +108,7 @@ public class AuthControllerTest {
   @Test
   void login_shouldReturnWrongcredentialOnUsername() throws Exception {
     AuthCredentialInputDTO user =
-        new AuthCredentialInputDTO(TestSchema.USER_USERNAME_WRONG, TestSchema.USER_PASSWORD);
+        new AuthCredentialInputDTO(TestSchema.ROLE_USER_USERNAME_WRONG, TestSchema.ROLE_USER_PASSWORD);
     String userAsString = objectMapper.writeValueAsString(user);
 
     Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL))
@@ -128,7 +123,7 @@ public class AuthControllerTest {
   @Test
   void login_shouldReturnWrongcredentialOnPassword() throws Exception {
     AuthCredentialInputDTO user =
-        new AuthCredentialInputDTO(TestSchema.USER_USERNAME, TestSchema.WRONG_PASSWORD);
+        new AuthCredentialInputDTO(TestSchema.ROLE_USER_USERNAME, TestSchema.WRONG_PASSWORD);
     String userAsString = objectMapper.writeValueAsString(user);
 
     Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL))
@@ -142,20 +137,20 @@ public class AuthControllerTest {
 
   @Test
   void tokenUser_shouldReturnUser() throws Exception {
-    String userAsString = objectMapper.writeValueAsString(TestSchema.USER_USER_DTO);
+    String userAsString = objectMapper.writeValueAsString(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
 
-    Mockito.doReturn(TestSchema.USER_USER_DTO).when(credential).getUser(Mockito.any());
+    Mockito.doReturn(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER).when(credential).getUser(Mockito.any());
     mockMvc
         .perform(
             MockMvcRequestBuilders.get("/credential/token")
-                .header("Authorization", "Bearer " + TestSchema.USER_JWT))
+                .header("Authorization", "Bearer " + TestSchema.ROLE_USER_TOKEN_JWT))
         .andExpect(status().isOk())
         .andExpect(content().json(userAsString));
   }
 
   @Test
   void tokenUser_shouldReturnUnauthorized() throws Exception {
-    TokenDTO token = new TokenDTO(TestSchema.USER_JWT_WRONG);
+    TokenDTO token = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
 
     Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.UNAUTHORIZED))
         .when(credential)
@@ -181,21 +176,21 @@ public class AuthControllerTest {
 
   @Test
   void listUsers_adminShouldReceiveTheListCorrectly() throws Exception {
-    List<AuthCredentialDTO> listUsers = List.of(TestSchema.USER_USER_DTO, TestSchema.USER_USER_DTO);
+    List<AuthCredentialDTO> listUsers = List.of(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER, TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
     String usersAsString = objectMapper.writeValueAsString(listUsers);
 
     Mockito.doReturn(listUsers).when(credential).getUsers(Mockito.any());
     mockMvc
         .perform(
             MockMvcRequestBuilders.get("/credential/admin")
-                .header("Authorization", "Bearer " + TestSchema.USER_JWT))
+                .header("Authorization", "Bearer " + TestSchema.ROLE_USER_TOKEN_JWT))
         .andExpect(status().isOk())
         .andExpect(content().json(usersAsString));
   }
 
   @Test
   void listUsers_adminShouldReturnNotAllowed() throws Exception {
-    TokenDTO token = new TokenDTO(TestSchema.USER_JWT_WRONG);
+    TokenDTO token = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
 
     Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.NOT_ALLOWED))
         .when(credential)
