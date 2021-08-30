@@ -67,6 +67,21 @@ public class AuthControllerTest {
   }
 
   @Test
+  void addUser_shouldReturnUserPresent() throws Exception {
+    AuthCredentialDTO user = TestSchema.USER_USER_DTO;
+    String userAsString = objectMapper.writeValueAsString(user);
+
+    Mockito.when(credential.signUp(Mockito.any())).thenThrow(new AuthenticationException(AuthenticationException.Code.USER_PRESENT));
+
+    mockMvc
+            .perform(
+                    post("/credential/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(userAsString))
+            .andExpect(status().isBadRequest());
+  }
+
+  @Test
   void login_shouldReturnTokenCorrectly() throws Exception {
     String userAsString = objectMapper.writeValueAsString(TestSchema.USER_USER_CREDENTIAL_DTO);
     String tokenAsString = objectMapper.writeValueAsString(TestSchema.USER_TOKEN_JWT);
@@ -92,9 +107,23 @@ public class AuthControllerTest {
                 .content("{\"user1\": \"giovanni\", \"password\": 90}"))
         .andExpect(status().isBadRequest());
   }
+  @Test
+  void login_shouldReturnWrongcredentialOnUsername() throws Exception {
+    AuthCredentialInputDTO user =
+            new AuthCredentialInputDTO(TestSchema.USER_USERNAME_WRONG, TestSchema.USER_PASSWORD);
+    String userAsString = objectMapper.writeValueAsString(user);
+
+    Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL))
+            .when(credential)
+            .login(Mockito.any());
+    mockMvc
+            .perform(
+                    post("/credential/login").contentType(MediaType.APPLICATION_JSON).content(userAsString))
+            .andExpect(status().is(401));
+  }
 
   @Test
-  void login_shouldReturnWrongcredential() throws Exception {
+  void login_shouldReturnWrongcredentialOnPassword() throws Exception {
     AuthCredentialInputDTO user =
         new AuthCredentialInputDTO(TestSchema.USER_USERNAME, TestSchema.WRONG_PASSWORD);
     String userAsString = objectMapper.writeValueAsString(user);

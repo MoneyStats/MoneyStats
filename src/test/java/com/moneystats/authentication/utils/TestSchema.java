@@ -13,6 +13,7 @@ public class TestSchema {
   private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
   public static final String WRONG_PASSWORD = "giova";
   public static final String USER_USERNAME = "my-user-username";
+  public static final String USER_USERNAME_WRONG = "my-user-username-wrong";
   public static final String USER_PASSWORD = "my-user-password";
   public static final String USER_PASSWORD_WRONG = "my-user-password-wrong";
   public static final String USER_JWT = "my-user-jwt-token";
