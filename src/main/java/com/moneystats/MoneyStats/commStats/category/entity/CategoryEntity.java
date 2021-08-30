@@ -1,38 +1,37 @@
 package com.moneystats.MoneyStats.commStats.category.entity;
 
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "categories")
 public class CategoryEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String name;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    public CategoryEntity(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+  private String name;
 
-    public CategoryEntity() {
-    }
+  public CategoryEntity(Integer id, String name) {
+    this.id = id;
+    this.name = name;
+  }
 
-    public Integer getId() {
-        return id;
-    }
+  public CategoryEntity() {}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 }
