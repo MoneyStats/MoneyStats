@@ -58,6 +58,7 @@ public class AuthCredentialService {
         new AuthCredentialDTO(
             userEntity.getFirstName(),
             userEntity.getLastName(),
+            userEntity.getDateOfBirth(),
             userEntity.getEmail(),
             userEntity.getUsername(),
             userEntity.getRole());
