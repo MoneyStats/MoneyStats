@@ -108,11 +108,6 @@ public class WalletService {
     AuthCredentialInputDTO authCredentialInputDTO =
         new AuthCredentialInputDTO(
             authCredentialDTO.getUsername(), authCredentialDTO.getPassword());
-    AuthCredentialEntity utente = authCredentialDAO.getCredential(authCredentialInputDTO);
-    if (utente == null) {
-      LOG.error("User Not Found, on validateAndCreate in WalletService:102");
-      throw new WalletException(WalletException.Code.USER_NOT_FOUND);
-    }
-    return utente;
+    return authCredentialDAO.getCredential(authCredentialInputDTO);
   }
 }
