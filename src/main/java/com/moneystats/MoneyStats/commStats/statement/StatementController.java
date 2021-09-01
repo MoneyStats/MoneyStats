@@ -40,10 +40,10 @@ public class StatementController {
     return statementService.listStatementByDate(tokenDTO, date);
   }
 
-  @GetMapping("/listStatement")
-  public List<String> listByWalletAndValue(@RequestHeader(value = "Authorization") String jwt)
-      throws StatementException, WalletException, AuthenticationException {
-    TokenDTO tokenDTO = new TokenDTO(jwt);
-    return statementService.listByWalletAndValue(tokenDTO);
-  }
+  //@GetMapping("/listStatement")
+  //public List<String> listByWalletAndValue(@RequestHeader(value = "Authorization") String jwt)
+  //    throws StatementException, WalletException, AuthenticationException {
+  //  TokenDTO tokenDTO = new TokenDTO(jwt);
+  //  return statementService.listByWalletAndValue(tokenDTO);
+  //}
 }
