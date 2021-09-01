@@ -18,7 +18,7 @@ public class StatementValidator {
 
         if (violations.size() > 0){
             LOG.warn("Invalid Statement {}", statementDTO);
-            throw new StatementException(StatementException.Type.INVALID_STATEMENT_DTO);
+            throw new StatementException(StatementException.Code.INVALID_STATEMENT_DTO);
         }
     }
 }
