@@ -2,6 +2,7 @@ package com.moneystats.MoneyStats.source;
 
 import com.moneystats.MoneyStats.commStats.category.DTO.CategoryDTO;
 import com.moneystats.MoneyStats.commStats.category.entity.CategoryEntity;
+import com.moneystats.MoneyStats.commStats.statement.DTO.StatementDTO;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
@@ -97,4 +98,7 @@ public class DTOTestObjets {
 
   public static List<StatementEntity> statementEntityList =
       List.of(new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(0)));
+
+  public static StatementDTO statementDTO =
+      new StatementDTO("my-date", 10.0, authCredentialEntity, walletEntities.get(0));
 }
