@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementDTO;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementResponseDTO;
 import com.moneystats.MoneyStats.commStats.statement.StatementController;
+import com.moneystats.MoneyStats.commStats.statement.StatementException;
 import com.moneystats.MoneyStats.commStats.statement.StatementService;
 import com.moneystats.MoneyStats.source.DTOTestObjets;
 import com.moneystats.authentication.DTO.TokenDTO;
@@ -45,5 +46,25 @@ public class StatementControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(statementAsString))
         .andExpect(MockMvcResultMatchers.status().isOk());
+  }
+
+  @Test
+  public void testAddStatement_shouldBeMappedOnError() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    String statementAsString = objectMapper.writeValueAsString(statementDTO);
+    statementDTO.setValue(null);
+    statementDTO.setDate(null);
+
+    Mockito.when(statementService.addStatement(tokenDTO, statementDTO))
+        .thenThrow(new StatementException(StatementException.Code.INVALID_STATEMENT_DTO));
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/statement/addStatement")
+                .header("Authorization", "Bearer " + tokenDTO.getAccessToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(statementAsString))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 }
