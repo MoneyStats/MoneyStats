@@ -16,8 +16,8 @@ public class WalletValidator {
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     Set<ConstraintViolation<WalletDTO>> violationSet = validator.validate(walletDTO);
 
-    if (violationSet.size() > 0) {
-      LOG.warn("Invalid Statement {}", walletDTO);
+    if (!violationSet.isEmpty()) {
+      LOG.warn("Invalid Wallet {}", walletDTO);
       throw new WalletException(WalletException.Code.INVALID_WALLET_DTO);
     }
   }

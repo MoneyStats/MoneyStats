@@ -26,6 +26,12 @@ public class WalletDTO implements Serializable {
     this.statementEntityList = statementEntityList;
   }
 
+  public WalletDTO(String name, CategoryEntity categoryEntity, AuthCredentialEntity user) {
+    this.name = name;
+    this.categoryEntity = categoryEntity;
+    this.user = user;
+  }
+
   public WalletDTO() {}
 
   public String getName() {

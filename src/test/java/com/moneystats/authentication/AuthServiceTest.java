@@ -1,25 +1,21 @@
 package com.moneystats.authentication;
 
-import java.util.List;
-
+import com.moneystats.authentication.DTO.AuthCredentialDTO;
+import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
 import com.moneystats.authentication.DTO.AuthResponseDTO;
+import com.moneystats.authentication.DTO.TokenDTO;
+import com.moneystats.authentication.entity.AuthCredentialEntity;
 import com.moneystats.authentication.utils.TestSchema;
 import com.moneystats.generic.SchemaDescription;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.moneystats.authentication.DTO.AuthCredentialDTO;
-import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
-import com.moneystats.authentication.DTO.TokenDTO;
-import com.moneystats.authentication.entity.AuthCredentialEntity;
+import java.util.List;
 
 @SpringBootTest
 public class AuthServiceTest {
@@ -38,6 +34,8 @@ public class AuthServiceTest {
 
   @Captor ArgumentCaptor<AuthCredentialDTO> authCredentialDTOArgumentCaptor;
 
+  @Autowired private static TestSchema testSchema;
+
   @BeforeEach
   void setPassword_setDefaultPassword() {
     TestSchema.USER_CREDENTIAL_DTO_ROLE_USER.setPassword(TestSchema.ROLE_USER_PASSWORD);
@@ -51,7 +49,8 @@ public class AuthServiceTest {
 
     Assertions.assertTrue(
         bCryptPasswordEncoder.matches(
-            TestSchema.ROLE_USER_PASSWORD, authCredentialDTOArgumentCaptor.getValue().getPassword()));
+            TestSchema.ROLE_USER_PASSWORD,
+            authCredentialDTOArgumentCaptor.getValue().getPassword()));
     Assertions.assertEquals(
         TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER.getUsername(),
         authCredentialDTOArgumentCaptor.getValue().getUsername());
@@ -91,12 +90,14 @@ public class AuthServiceTest {
 
     TokenDTO actual = service.login(TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER);
 
-    Assertions.assertEquals(TestSchema.TOKEN_JWT_DTO_ROLE_USER.getAccessToken(), actual.getAccessToken());
+    Assertions.assertEquals(
+        TestSchema.TOKEN_JWT_DTO_ROLE_USER.getAccessToken(), actual.getAccessToken());
   }
 
   @Test
   void login_shouldThrowWrongCredential() throws Exception {
-    Mockito.when(dao.getCredential(TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER)).thenReturn(null);
+    Mockito.when(dao.getCredential(TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER))
+        .thenReturn(null);
 
     AuthenticationException expected =
         new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL);
@@ -123,7 +124,8 @@ public class AuthServiceTest {
   @Test
   void login_shouldThrowWrongPassword() throws Exception {
     AuthCredentialInputDTO user =
-        new AuthCredentialInputDTO(TestSchema.ROLE_USER_USERNAME, TestSchema.ROLE_USER_PASSWORD_WRONG);
+        new AuthCredentialInputDTO(
+            TestSchema.ROLE_USER_USERNAME, TestSchema.ROLE_USER_PASSWORD_WRONG);
 
     Mockito.when(dao.getCredential(user)).thenReturn(TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER);
 
@@ -175,8 +177,11 @@ public class AuthServiceTest {
   @Test
   void getUsers_adminshouldReiceveListOfUsers() throws Exception {
     List<AuthCredentialEntity> listUsers =
-        List.of(TestSchema.USER_CREDENTIAL_ENTITY_ROLE_ADMIN, TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER);
-    Mockito.when(tokenService.parseToken(TestSchema.TOKEN_DTO_ROLE_ADMIN)).thenReturn(TestSchema.USER_CREDENTIAL_DTO_ROLE_ADMIN);
+        List.of(
+            TestSchema.USER_CREDENTIAL_ENTITY_ROLE_ADMIN,
+            TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER);
+    Mockito.when(tokenService.parseToken(TestSchema.TOKEN_DTO_ROLE_ADMIN))
+        .thenReturn(TestSchema.USER_CREDENTIAL_DTO_ROLE_ADMIN);
     Mockito.when(dao.getUsers()).thenReturn(listUsers);
 
     List<AuthCredentialDTO> actuals = service.getUsers(TestSchema.TOKEN_DTO_ROLE_ADMIN);

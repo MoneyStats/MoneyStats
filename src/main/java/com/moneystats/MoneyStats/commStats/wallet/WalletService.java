@@ -64,7 +64,7 @@ public class WalletService {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
     walletDTO.setUser(utente);
     CategoryEntity category = categoryDAO.findById(idCategory).orElse(null);
-    if (category == null) {
+    if (category== null) {
       LOG.error("Category Not Found, on addWalletEntity into WalletService:67");
       throw new WalletException(WalletException.Code.CATEGORY_NOT_FOUND);
     }

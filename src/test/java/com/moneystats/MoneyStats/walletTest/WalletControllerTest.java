@@ -7,12 +7,9 @@ import com.moneystats.MoneyStats.commStats.wallet.WalletController;
 import com.moneystats.MoneyStats.commStats.wallet.WalletException;
 import com.moneystats.MoneyStats.commStats.wallet.WalletService;
 import com.moneystats.MoneyStats.source.DTOTestObjets;
-import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.authentication.utils.TestSchema;
 import com.moneystats.generic.SchemaDescription;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebMvcTest(controllers = WalletController.class)
@@ -31,9 +29,6 @@ public class WalletControllerTest {
   @Autowired private MockMvc mockMvc;
 
   private ObjectMapper objectMapper = new ObjectMapper();
-  @Captor private ArgumentCaptor<WalletDTO> walletDTOCaptor;
-  @Captor private ArgumentCaptor<Integer> idCategoryCaptor;
-    @Captor private ArgumentCaptor<TokenDTO> tokenDTOArgumentCaptor;
 
   @Test
   public void testGetAllWalletList_OK() throws Exception {
@@ -60,9 +55,7 @@ public class WalletControllerTest {
 
     Mockito.when(
             walletService.addWalletEntity(
-                TestSchema.TOKEN_JWT_DTO_ROLE_USER,
-                idCategory,
-                walletDTO))
+                TestSchema.TOKEN_JWT_DTO_ROLE_USER, idCategory, walletDTO))
         .thenReturn(response);
 
     mockMvc
@@ -70,7 +63,9 @@ public class WalletControllerTest {
             MockMvcRequestBuilders.post("/wallet/addWallet/" + idCategory)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(walletDTOasString)
-                .header("Authorization", "Bearer " + TestSchema.TOKEN_JWT_DTO_ROLE_USER.getAccessToken()))
+                .header(
+                    "Authorization",
+                    "Bearer " + TestSchema.TOKEN_JWT_DTO_ROLE_USER.getAccessToken()))
         .andExpect(MockMvcResultMatchers.status().isOk());
   }
 
@@ -78,7 +73,7 @@ public class WalletControllerTest {
   public void testAddWallet_shouldBeMappedOnError() throws Exception {
     WalletDTO walletDTO = DTOTestObjets.walletDTO;
     walletDTO.setName(null);
-    Integer idCategory = 1;
+    int idCategory = 1;
 
     Mockito.when(
             walletService.addWalletEntity(
@@ -86,8 +81,12 @@ public class WalletControllerTest {
         .thenThrow(new WalletException(WalletException.Code.INVALID_WALLET_DTO));
 
     mockMvc
-        .perform(MockMvcRequestBuilders.post("/wallet/postWallet/" + idCategory))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .perform(
+            MockMvcRequestBuilders.post("/wallet/postWallet/" + idCategory)
+                .header(
+                    "Authorization",
+                    "Bearer " + TestSchema.TOKEN_JWT_DTO_ROLE_USER.getAccessToken()))
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 
   @Test
