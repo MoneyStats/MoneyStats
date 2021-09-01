@@ -3,9 +3,11 @@ package com.moneystats.MoneyStats.commStats.statement;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface IStatementDAO extends JpaRepository<StatementEntity, Long> {
 
   /**
