@@ -29,6 +29,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 public class StatementServiceTest {
@@ -61,6 +62,28 @@ public class StatementServiceTest {
 
         StatementResponseDTO actual = statementService.addStatement(tokenDTO, statementDTO);
             Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    void test_addStatement_shouldAddPus() throws Exception {
+        StatementDTO statementDTO = DTOTestObjets.statementDTO;
+        TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+        StatementEntity statementEntity = DTOTestObjets.statementEntityList.get(0);
+        StatementResponseDTO expected = new StatementResponseDTO(SchemaDescription.STATEMENT_ADDED_CORRECT);
+        AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+        AuthCredentialInputDTO authCredentialInputDTO =
+                new AuthCredentialInputDTO(authCredentialDTO.getUsername(), authCredentialDTO.getRole());
+        AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
+        Optional<WalletEntity> walletEntity = Optional.ofNullable(DTOTestObjets.walletEntities.get(0));
+
+        Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
+        Mockito.when(authCredentialDAO.getCredential(Mockito.any()))
+                .thenReturn(authCredentialEntity);
+        Mockito.when(walletDAO.findById(Mockito.any())).thenReturn(walletEntity);
+        Mockito.when(statementDAO.save(Mockito.any()))
+                .thenReturn(statementEntity);
+
+        StatementResponseDTO actual = statementService.addStatement(tokenDTO, statementDTO);
+        Assertions.assertEquals(expected.getMessage(), actual.getMessage());
     }
 
     @Test
@@ -118,17 +141,23 @@ public class StatementServiceTest {
 
     @Test
     void test_addStatement_shouldThrowsOnWalletNotFound() throws Exception {
-        TokenDTO token = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
         StatementDTO statementDTO = DTOTestObjets.statementDTO;
+        TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+        StatementEntity statementEntity = DTOTestObjets.statementEntityList.get(0);
+        AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+        AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
 
-        Mockito.when(walletDAO.findById(statementDTO.getWalletEntity().getId()))
-                .thenThrow(new StatementException(StatementException.Code.WALLET_NOT_FOUND));
+        Mockito.when(authCredentialDAO.getCredential(Mockito.any()))
+                .thenReturn(authCredentialEntity);
+        Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
+        Mockito.when(statementDAO.save(statementEntity))
+                .thenReturn(statementEntity);
 
         StatementException expectedException =
                 new StatementException(StatementException.Code.WALLET_NOT_FOUND);
         StatementException actualException =
                 Assertions.assertThrows(
-                        StatementException.class, () -> statementService.addStatement(token, statementDTO));
+                        StatementException.class, () -> statementService.addStatement(tokenDTO, statementDTO));
 
         Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
     }
