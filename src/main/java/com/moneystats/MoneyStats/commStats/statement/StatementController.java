@@ -35,7 +35,7 @@ public class StatementController {
   @GetMapping("/listStatementDate/{date}")
   public List<StatementEntity> listByDate(
       @RequestHeader(value = "Authorization") String jwt, @PathVariable String date)
-      throws StatementException, WalletException, AuthenticationException {
+          throws StatementException, AuthenticationException, WalletException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return statementService.listStatementByDate(tokenDTO, date);
   }
