@@ -35,15 +35,15 @@ public class StatementController {
   @GetMapping("/listStatementDate/{date}")
   public List<StatementEntity> listByDate(
       @RequestHeader(value = "Authorization") String jwt, @PathVariable String date)
-          throws StatementException, AuthenticationException, WalletException {
+      throws StatementException, AuthenticationException, WalletException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return statementService.listStatementByDate(tokenDTO, date);
   }
 
-  //@GetMapping("/listStatement")
-  //public List<String> listByWalletAndValue(@RequestHeader(value = "Authorization") String jwt)
+  // @GetMapping("/listStatement")
+  // public List<String> listByWalletAndValue(@RequestHeader(value = "Authorization") String jwt)
   //    throws StatementException, WalletException, AuthenticationException {
   //  TokenDTO tokenDTO = new TokenDTO(jwt);
   //  return statementService.listByWalletAndValue(tokenDTO);
-  //}
+  // }
 }

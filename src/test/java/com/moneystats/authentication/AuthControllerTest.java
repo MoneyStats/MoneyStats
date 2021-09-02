@@ -1,12 +1,9 @@
 package com.moneystats.authentication;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.List;
-
-import javax.ws.rs.core.MediaType;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moneystats.authentication.DTO.AuthCredentialDTO;
+import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
+import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.authentication.utils.TestSchema;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,10 +14,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moneystats.authentication.DTO.AuthCredentialDTO;
-import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
-import com.moneystats.authentication.DTO.TokenDTO;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = AuthCredentialController.class)
 public class AuthControllerTest {
@@ -80,7 +79,8 @@ public class AuthControllerTest {
 
   @Test
   void login_shouldReturnTokenCorrectly() throws Exception {
-    String userAsString = objectMapper.writeValueAsString(TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER);
+    String userAsString =
+        objectMapper.writeValueAsString(TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER);
     String tokenAsString = objectMapper.writeValueAsString(TestSchema.TOKEN_JWT_DTO_ROLE_USER);
 
     Mockito.doReturn(TestSchema.TOKEN_JWT_DTO_ROLE_USER).when(credential).login(Mockito.any());
@@ -108,7 +108,8 @@ public class AuthControllerTest {
   @Test
   void login_shouldReturnWrongcredentialOnUsername() throws Exception {
     AuthCredentialInputDTO user =
-        new AuthCredentialInputDTO(TestSchema.ROLE_USER_USERNAME_WRONG, TestSchema.ROLE_USER_PASSWORD);
+        new AuthCredentialInputDTO(
+            TestSchema.ROLE_USER_USERNAME_WRONG, TestSchema.ROLE_USER_PASSWORD);
     String userAsString = objectMapper.writeValueAsString(user);
 
     Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL))
@@ -139,7 +140,9 @@ public class AuthControllerTest {
   void tokenUser_shouldReturnUser() throws Exception {
     String userAsString = objectMapper.writeValueAsString(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
 
-    Mockito.doReturn(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER).when(credential).getUser(Mockito.any());
+    Mockito.doReturn(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER)
+        .when(credential)
+        .getUser(Mockito.any());
     mockMvc
         .perform(
             MockMvcRequestBuilders.get("/credential/token")
@@ -176,7 +179,8 @@ public class AuthControllerTest {
 
   @Test
   void listUsers_adminShouldReceiveTheListCorrectly() throws Exception {
-    List<AuthCredentialDTO> listUsers = List.of(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER, TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
+    List<AuthCredentialDTO> listUsers =
+        List.of(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER, TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
     String usersAsString = objectMapper.writeValueAsString(listUsers);
 
     Mockito.doReturn(listUsers).when(credential).getUsers(Mockito.any());

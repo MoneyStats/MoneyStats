@@ -13,6 +13,7 @@ public interface IWalletDAO extends JpaRepository<WalletEntity, Long> {
 
   /**
    * Used on WalletService method getAll
+   *
    * @param userId
    * @return all the wallet by the userId provided
    */

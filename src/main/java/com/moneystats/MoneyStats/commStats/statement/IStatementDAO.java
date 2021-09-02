@@ -49,9 +49,10 @@ public interface IStatementDAO extends JpaRepository<StatementEntity, Long> {
    * @param userId
    * @return List of statements ordered by Date
    */
-  //@Query(
+  // @Query(
   //    value =
-  //        "select statements.date, group_concat(statements.wallet.id) as wallet, group_concat(statements.value) from StatementEntity statements "
+  //        "select statements.date, group_concat(statements.wallet.id) as wallet,
+  // group_concat(statements.value) from StatementEntity statements "
   //            + "where statements.user.id = :userId group by statements.date")
-  //List<String> findStatementByDateOrdered(Long userId);
+  // List<String> findStatementByDateOrdered(Long userId);
 }

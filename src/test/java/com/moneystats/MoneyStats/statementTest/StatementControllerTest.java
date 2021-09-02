@@ -109,12 +109,12 @@ public class StatementControllerTest {
     List<String> date = List.of("my-date");
     String dateAsString = objectMapper.writeValueAsString(date);
 
-    Mockito.when(statementService.listOfDate(tokenDTO)).thenThrow(new StatementException(StatementException.Code.INVALID_STATEMENT_DTO));
+    Mockito.when(statementService.listOfDate(tokenDTO))
+        .thenThrow(new StatementException(StatementException.Code.INVALID_STATEMENT_DTO));
 
     mockMvc
-            .perform(
-                    MockMvcRequestBuilders.get("/statement/listOfDate"))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .perform(MockMvcRequestBuilders.get("/statement/listOfDate"))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 
   @Test
@@ -123,12 +123,13 @@ public class StatementControllerTest {
     List<StatementEntity> statementEntityList = DTOTestObjets.statementEntityList;
     String date = "2021-06-09";
 
-    Mockito.when(statementService.listStatementByDate(tokenDTO, date)).thenReturn(statementEntityList);
+    Mockito.when(statementService.listStatementByDate(tokenDTO, date))
+        .thenReturn(statementEntityList);
 
     mockMvc
-            .perform(
-                    MockMvcRequestBuilders.get("/statement/listStatementDate/" + date)
-                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
-            .andExpect(MockMvcResultMatchers.status().isOk());
+        .perform(
+            MockMvcRequestBuilders.get("/statement/listStatementDate/" + date)
+                .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
+        .andExpect(MockMvcResultMatchers.status().isOk());
   }
 }
