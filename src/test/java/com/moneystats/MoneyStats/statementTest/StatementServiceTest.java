@@ -53,26 +53,6 @@ public class StatementServiceTest {
         AuthCredentialInputDTO authCredentialInputDTO =
                 new AuthCredentialInputDTO(authCredentialDTO.getUsername(), authCredentialDTO.getRole());
         AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
-
-        Mockito.when(authCredentialDAO.getCredential(authCredentialInputDTO))
-                .thenReturn(authCredentialEntity);
-        Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
-        Mockito.when(statementDAO.save(statementEntity))
-                .thenReturn(statementEntity);
-
-        StatementResponseDTO actual = statementService.addStatement(tokenDTO, statementDTO);
-            Assertions.assertEquals(expected, actual);
-    }
-    @Test
-    void test_addStatement_shouldAddPus() throws Exception {
-        StatementDTO statementDTO = DTOTestObjets.statementDTO;
-        TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-        StatementEntity statementEntity = DTOTestObjets.statementEntityList.get(0);
-        StatementResponseDTO expected = new StatementResponseDTO(SchemaDescription.STATEMENT_ADDED_CORRECT);
-        AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
-        AuthCredentialInputDTO authCredentialInputDTO =
-                new AuthCredentialInputDTO(authCredentialDTO.getUsername(), authCredentialDTO.getRole());
-        AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
         Optional<WalletEntity> walletEntity = Optional.ofNullable(DTOTestObjets.walletEntities.get(0));
 
         Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);

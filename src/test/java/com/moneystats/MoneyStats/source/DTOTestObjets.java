@@ -101,4 +101,6 @@ public class DTOTestObjets {
 
   public static StatementDTO statementDTO =
       new StatementDTO("my-date", 10.0, authCredentialEntity, walletEntities.get(0));
+
+  public static CategoryEntity categoryEntity = new CategoryEntity(1, "my-category-name");
 }
