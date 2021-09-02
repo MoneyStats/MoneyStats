@@ -33,7 +33,7 @@ public class StatementService {
   @Autowired private TokenService tokenService;
 
   public StatementResponseDTO addStatement(TokenDTO tokenDTO, StatementDTO statementDTO)
-      throws StatementException, WalletException, AuthenticationException {
+      throws StatementException, AuthenticationException {
     StatementValidator.validateStatementDTO(statementDTO);
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
     statementDTO.setUser(utente);
@@ -93,7 +93,7 @@ public class StatementService {
   //}
 
   private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO)
-      throws AuthenticationException, WalletException {
+          throws AuthenticationException, StatementException {
     TokenValidation.validateTokenDTO(tokenDTO);
     if (tokenDTO.getAccessToken().equalsIgnoreCase("")) {
       throw new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
@@ -105,7 +105,7 @@ public class StatementService {
     AuthCredentialEntity utente = authCredentialDAO.getCredential(authCredentialInputDTO);
     if (utente == null) {
       LOG.error("User Not Found, into StatementService, validateAndCreate(TokenDTO):96");
-      throw new WalletException(WalletException.Code.USER_NOT_FOUND);
+      throw new StatementException(StatementException.Code.USER_NOT_FOUND);
     }
     return utente;
   }

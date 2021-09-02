@@ -7,6 +7,7 @@ import com.moneystats.MoneyStats.commStats.statement.StatementController;
 import com.moneystats.MoneyStats.commStats.statement.StatementException;
 import com.moneystats.MoneyStats.commStats.statement.StatementService;
 import com.moneystats.MoneyStats.source.DTOTestObjets;
+import com.moneystats.authentication.AuthenticationException;
 import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.authentication.utils.TestSchema;
 import com.moneystats.generic.SchemaDescription;
@@ -66,5 +67,59 @@ public class StatementControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(statementAsString))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());
+  }
+
+  @Test
+  public void testAddStatement_shouldBeMappedOnTokenRequired() throws Exception {
+    TokenDTO tokenDTO = new TokenDTO("");
+    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    String statementAsString = objectMapper.writeValueAsString(statementDTO);
+
+    Mockito.when(statementService.addStatement(tokenDTO, statementDTO))
+            .thenThrow(new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED));
+
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.post("/statement/addStatement")
+                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(statementAsString))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+  }
+
+  @Test
+  public void testAddStatement_shouldBeMappedOnUserNotFound() throws Exception {
+    TokenDTO tokenDTO = new TokenDTO("");
+    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    String statementAsString = objectMapper.writeValueAsString(statementDTO);
+
+    Mockito.when(statementService.addStatement(tokenDTO, statementDTO))
+            .thenThrow(new StatementException(StatementException.Code.USER_NOT_FOUND));
+
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.post("/statement/addStatement")
+                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(statementAsString))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+  }
+
+  @Test
+  public void testAddStatement_shouldBeMappedOnWalletNotFound() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    String statementAsString = objectMapper.writeValueAsString(statementDTO);
+
+    Mockito.when(statementService.addStatement(tokenDTO, statementDTO))
+            .thenThrow(new StatementException(StatementException.Code.WALLET_NOT_FOUND));
+
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.post("/statement/addStatement")
+                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(statementAsString))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 }
