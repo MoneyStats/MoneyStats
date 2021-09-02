@@ -19,6 +19,7 @@ public class StatementException extends Exception {
     INVALID_STATEMENT_DTO,
     USER_NOT_FOUND,
     WALLET_NOT_FOUND,
-    STATEMENT_NOT_FOUND
+    STATEMENT_NOT_FOUND,
+    LIST_STATEMENT_DATE_NOT_FOUND
   }
 }
