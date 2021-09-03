@@ -17,6 +17,15 @@ public class StatementController {
 
   @Autowired private StatementService statementService;
 
+  /**
+   *
+   * @param jwt token into header
+   * @param statement to be added
+   * @return response of status
+   * @throws StatementException
+   * @throws WalletException
+   * @throws AuthenticationException
+   */
   @PostMapping("/addStatement")
   public StatementResponseDTO addStatement(
       @RequestHeader(value = "Authorization") String jwt, @RequestBody StatementDTO statement)
@@ -25,6 +34,14 @@ public class StatementController {
     return statementService.addStatement(tokenDTO, statement);
   }
 
+  /**
+   *
+   * @param jwt token for authentications
+   * @return a list of date
+   * @throws StatementException
+   * @throws WalletException
+   * @throws AuthenticationException
+   */
   @GetMapping("/listOfDate")
   public List<String> listOfDate(@RequestHeader(value = "Authorization") String jwt)
       throws StatementException, WalletException, AuthenticationException {
@@ -32,6 +49,15 @@ public class StatementController {
     return statementService.listOfDate(tokenDTO);
   }
 
+  /**
+   * Used to return the statement by that day
+   * @param jwt token for authentication
+   * @param date date user for serching
+   * @return
+   * @throws StatementException
+   * @throws AuthenticationException
+   * @throws WalletException
+   */
   @GetMapping("/listStatementDate/{date}")
   public List<StatementEntity> listByDate(
       @RequestHeader(value = "Authorization") String jwt, @PathVariable String date)

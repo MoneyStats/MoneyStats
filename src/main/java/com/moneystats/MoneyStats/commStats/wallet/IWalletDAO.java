@@ -9,6 +9,11 @@ import java.util.List;
 @Repository
 public interface IWalletDAO extends JpaRepository<WalletEntity, Long> {
 
+  /**
+   * not used
+   * @param id
+   * @return
+   */
   List<WalletEntity> findWalletsByCategoryId(Long id);
 
   /**
@@ -19,5 +24,10 @@ public interface IWalletDAO extends JpaRepository<WalletEntity, Long> {
    */
   List<WalletEntity> findAllByUserId(Long userId);
 
+  /**
+   * not used
+   * @param id
+   * @return
+   */
   WalletEntity findWalletsById(Long id);
 }

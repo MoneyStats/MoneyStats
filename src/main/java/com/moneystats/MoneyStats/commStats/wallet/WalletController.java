@@ -15,6 +15,13 @@ public class WalletController {
 
   @Autowired private WalletService walletService;
 
+  /**
+   *
+   * @param jwt token for authentications
+   * @return a list of wallet
+   * @throws WalletException
+   * @throws AuthenticationException
+   */
   @GetMapping("/list")
   public List<WalletDTO> getAll(@RequestHeader(value = "Authorization") String jwt)
       throws WalletException, AuthenticationException {
@@ -22,6 +29,15 @@ public class WalletController {
     return walletService.getAll(tokenDTO);
   }
 
+  /**
+   *
+   * @param jwt token for authentications
+   * @param idCategory category to be linked
+   * @param walletDTO params
+   * @return response od success or not
+   * @throws WalletException
+   * @throws AuthenticationException
+   */
   @PostMapping("/addWallet/{idCategory}")
   public WalletResponseDTO addWallet(
       @RequestHeader(value = "Authorization") String jwt,
@@ -32,6 +48,12 @@ public class WalletController {
     return walletService.addWalletEntity(tokenDTO, idCategory, walletDTO);
   }
 
+  /**
+   *
+   * @param idWallet to be deleted
+   * @return response of success or error
+   * @throws WalletException
+   */
   @DeleteMapping("/delete/{idWallet}")
   public WalletResponseDTO deleteWallet(@PathVariable long idWallet) throws WalletException {
     return walletService.deleteWalletEntity(idWallet);

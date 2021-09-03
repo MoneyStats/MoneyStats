@@ -35,6 +35,13 @@ public class WalletService {
   @Autowired private IStatementDAO statementDAO;
   @Autowired private AuthCredentialDAO authCredentialDAO;
 
+  /**
+   * Used to get all the wallet from db
+   * @param tokenDTO
+   * @return
+   * @throws WalletException
+   * @throws AuthenticationException
+   */
   public List<WalletDTO> getAll(TokenDTO tokenDTO) throws WalletException, AuthenticationException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
     List<WalletEntity> walletEntities = walletDAO.findAllByUserId(utente.getId());
@@ -57,6 +64,15 @@ public class WalletService {
     return walletDTOS;
   }
 
+  /**
+   * Used in the controller to add the wallet into the database
+   * @param tokenDTO for auth
+   * @param idCategory to link
+   * @param walletDTO to be added
+   * @return a response of status
+   * @throws WalletException
+   * @throws AuthenticationException
+   */
   public WalletResponseDTO addWalletEntity(
       TokenDTO tokenDTO, Integer idCategory, WalletDTO walletDTO)
       throws WalletException, AuthenticationException {
@@ -79,6 +95,12 @@ public class WalletService {
     return new WalletResponseDTO(SchemaDescription.WALLET_ADDED_CORRECT);
   }
 
+  /**
+   * Used to delete a wallet from the database
+   * @param idWallet to be deleted
+   * @return response of status
+   * @throws WalletException
+   */
   public WalletResponseDTO deleteWalletEntity(Long idWallet) throws WalletException {
     WalletEntity wallet = walletDAO.findById(idWallet).orElse(null);
     if (wallet == null) {
@@ -98,6 +120,12 @@ public class WalletService {
     return new WalletResponseDTO(SchemaDescription.WALLET_DELETE_CORRECT);
   }
 
+  /**
+   * Method in common on getAll and addWallet
+   * @param tokenDTO used for validations
+   * @return an user
+   * @throws AuthenticationException
+   */
   private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO)
       throws AuthenticationException {
     TokenValidation.validateTokenDTO(tokenDTO);
