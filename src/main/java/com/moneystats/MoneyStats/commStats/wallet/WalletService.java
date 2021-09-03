@@ -99,7 +99,7 @@ public class WalletService {
   }
 
   private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO)
-      throws AuthenticationException, WalletException {
+      throws AuthenticationException {
     TokenValidation.validateTokenDTO(tokenDTO);
     if (tokenDTO.getAccessToken().equalsIgnoreCase("")) {
       throw new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
