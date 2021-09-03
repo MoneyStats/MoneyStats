@@ -17,6 +17,12 @@ public class CategoryService {
 
   @Autowired private ICategoryDAO categoryDAO;
 
+  /**
+   * Used to get the list of categories avaiable for the wallet.
+   *
+   * @return a list of categories
+   * @throws CategoryException
+   */
   public List<CategoryDTO> categoryDTOList() throws CategoryException {
     List<CategoryEntity> categoryEntities = categoryDAO.findAll();
     if (categoryEntities.size() == 0) {
