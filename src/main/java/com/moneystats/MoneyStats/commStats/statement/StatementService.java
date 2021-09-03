@@ -55,7 +55,7 @@ public class StatementService {
   }
 
   public List<String> listOfDate(TokenDTO tokenDTO)
-      throws StatementException, WalletException, AuthenticationException {
+      throws StatementException, AuthenticationException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
 
     List<String> listDate = statementDAO.selectdistinctstatement(utente.getId());
