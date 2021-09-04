@@ -2,6 +2,7 @@ package com.moneystats.MoneyStats.commStats.statement.DTO;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 public class StatementReportDTO implements Serializable {
 
@@ -13,6 +14,9 @@ public class StatementReportDTO implements Serializable {
   @NotNull private String lastDate;
   @NotNull private String beforeLastDate;
   @NotNull private String firstDate;
+  @NotNull private List<String> listDate;
+  @NotNull private List<Double> statementList;
+  @NotNull private List<Double> listPil;
 
   public StatementReportDTO(
       Double statementTotal,
@@ -22,7 +26,10 @@ public class StatementReportDTO implements Serializable {
       Double pilTotal,
       String lastDate,
       String beforeLastDate,
-      String firstDate) {
+      String firstDate,
+      List<String> listDate,
+      List<Double> statementList,
+      List<Double> listPil) {
     this.statementTotal = statementTotal;
     this.statementTotalPercent = statementTotalPercent;
     this.pilPerformance = pilPerformance;
@@ -31,6 +38,33 @@ public class StatementReportDTO implements Serializable {
     this.lastDate = lastDate;
     this.beforeLastDate = beforeLastDate;
     this.firstDate = firstDate;
+    this.listDate = listDate;
+    this.statementList = statementList;
+    this.listPil = listPil;
+  }
+
+  public List<Double> getListPil() {
+    return listPil;
+  }
+
+  public void setListPil(List<Double> listPil) {
+    this.listPil = listPil;
+  }
+
+  public List<String> getListDate() {
+    return listDate;
+  }
+
+  public void setListDate(List<String> listDate) {
+    this.listDate = listDate;
+  }
+
+  public List<Double> getStatementList() {
+    return statementList;
+  }
+
+  public void setStatementList(List<Double> statementList) {
+    this.statementList = statementList;
   }
 
   public Double getStatementTotalPercent() {

@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -128,7 +129,7 @@ public class StatementService {
   public StatementReportDTO reportHomepage(TokenDTO tokenDTO)
       throws StatementException, AuthenticationException {
     StatementReportDTO reportDTO =
-        new StatementReportDTO(0.00D, 0.00D, 0.00D, 0.00D, 0.00, "", "", "");
+        new StatementReportDTO(0.00D, 0.00D, 0.00D, 0.00D, 0.00, "", "", "", null, null, null);
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
 
     List<String> listDate = statementDAO.selectdistinctstatement(utente.getId());
@@ -140,19 +141,30 @@ public class StatementService {
     String lastDate = null;
     String firstDate = null;
     String lastStatementDate = null;
+    List<Double> listStatement = new ArrayList<>();
     for (int i = 0; i < listDate.size(); i++) {
       firstDate = listDate.get(0);
       lastDate = listDate.get(listDate.size() - 1);
       lastStatementDate = listDate.get(listDate.size() - 2);
     }
-    List<StatementEntity> listStatementBylastDate =
-        statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), lastDate);
-
     Double statementReport = 0D;
-    for (int i = 0; i < listStatementBylastDate.size(); i++) {
-      statementReport += listStatementBylastDate.get(i).getValue();
+    for (int i = 0; i < listDate.size(); i++) {
+      List<StatementEntity> listStatementBylastDate =
+          statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), listDate.get(i));
+      statementReport = 0D;
+      for (int y = 0; y < listStatementBylastDate.size(); y++) {
+        statementReport += listStatementBylastDate.get(y).getValue();
+      }
+      listStatement.add(statementReport);
     }
-
+    LOG.warn("List Statement {}", listStatement);
+    List<Double> listPil = new ArrayList<>();
+    listPil.add(0.00D);
+    for (int i = 1; i < listStatement.size(); i++) {
+      Double pil = listStatement.get(i) - listStatement.get(i - 1);
+      listPil.add(pil);
+    }
+    LOG.warn("List PIL {}", listPil);
     List<StatementEntity> listStatementByPreviousDate =
         listStatementReportCalc(utente, lastStatementDate);
 
@@ -180,6 +192,9 @@ public class StatementService {
     reportDTO.setLastDate(lastDate);
     reportDTO.setFirstDate(firstDate);
     reportDTO.setBeforeLastDate(lastStatementDate);
+    reportDTO.setListDate(listDate);
+    reportDTO.setStatementList(listStatement);
+    reportDTO.setListPil(listPil);
     return reportDTO;
   }
 
