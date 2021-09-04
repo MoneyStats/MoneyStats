@@ -1,10 +1,10 @@
 package com.moneystats.MoneyStats.commStats.statement;
 
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementDTO;
+import com.moneystats.MoneyStats.commStats.statement.DTO.StatementReportDTO;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementResponseDTO;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.IWalletDAO;
-import com.moneystats.MoneyStats.commStats.wallet.WalletException;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.authentication.AuthCredentialDAO;
 import com.moneystats.authentication.AuthenticationException;
@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Service
@@ -31,9 +32,11 @@ public class StatementService {
   @Autowired private IStatementDAO statementDAO;
   @Autowired private AuthCredentialDAO authCredentialDAO;
   @Autowired private TokenService tokenService;
+  @Autowired private static DecimalFormat decimalFormatter = new DecimalFormat("#.##");
 
   /**
    * Used to add a statement into database
+   *
    * @param tokenDTO
    * @param statementDTO
    * @return
@@ -63,7 +66,6 @@ public class StatementService {
   }
 
   /**
-   *
    * @param tokenDTO
    * @return a list of unique date
    * @throws StatementException
@@ -83,7 +85,6 @@ public class StatementService {
   }
 
   /**
-   *
    * @param tokenDTO
    * @param date
    * @return a list of statement by that day
@@ -117,6 +118,82 @@ public class StatementService {
   //  }
   //  return statementsByWallet;
   // }
+
+  /**
+   * @param tokenDTO to access at the user
+   * @return a report to be access to the homapage
+   * @throws StatementException
+   * @throws AuthenticationException
+   */
+  public StatementReportDTO reportHomepage(TokenDTO tokenDTO)
+      throws StatementException, AuthenticationException {
+    StatementReportDTO reportDTO =
+        new StatementReportDTO(0.00D, 0.00D, 0.00D, 0.00D, 0.00, "", "", "");
+    AuthCredentialEntity utente = validateAndCreate(tokenDTO);
+
+    List<String> listDate = statementDAO.selectdistinctstatement(utente.getId());
+    if (listDate.size() == 0) {
+      LOG.error(
+          "Statement Date Not Found, into StatementService, statementDAO.selectdistinctstatement(utente.getId()):61");
+      throw new StatementException(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND);
+    }
+    String lastDate = null;
+    String firstDate = null;
+    String lastStatementDate = null;
+    for (int i = 0; i < listDate.size(); i++) {
+      firstDate = listDate.get(0);
+      lastDate = listDate.get(listDate.size() - 1);
+      lastStatementDate = listDate.get(listDate.size() - 2);
+    }
+    List<StatementEntity> listStatementBylastDate =
+        statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), lastDate);
+
+    Double statementReport = 0D;
+    for (int i = 0; i < listStatementBylastDate.size(); i++) {
+      statementReport += listStatementBylastDate.get(i).getValue();
+    }
+
+    List<StatementEntity> listStatementByPreviousDate =
+        listStatementReportCalc(utente, lastStatementDate);
+
+    Double previousStatementReport = 0D;
+    for (int i = 0; i < listStatementByPreviousDate.size(); i++) {
+      previousStatementReport += listStatementByPreviousDate.get(i).getValue();
+    }
+
+    List<StatementEntity> listStatementByFirstDate = listStatementReportCalc(utente, firstDate);
+
+    Double firstStatementReport = 0D;
+    for (int i = 0; i < listStatementByFirstDate.size(); i++) {
+      firstStatementReport += listStatementByFirstDate.get(i).getValue();
+    }
+
+    Double pilPerformance = ((statementReport - firstStatementReport) / firstStatementReport) * 100;
+    Double statementPercent =
+        ((statementReport - previousStatementReport) / previousStatementReport) * 100;
+
+    reportDTO.setStatementTotal(statementReport);
+    reportDTO.setStatementTotalPercent(statementPercent);
+    reportDTO.setPil(statementReport - previousStatementReport);
+    reportDTO.setPilPerformance(pilPerformance);
+    reportDTO.setPilTotal(statementReport - firstStatementReport);
+    reportDTO.setLastDate(lastDate);
+    reportDTO.setFirstDate(firstDate);
+    reportDTO.setBeforeLastDate(lastStatementDate);
+    return reportDTO;
+  }
+
+  private List<StatementEntity> listStatementReportCalc(AuthCredentialEntity utente, String date)
+      throws StatementException {
+    List<StatementEntity> list =
+        statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date);
+    if (list.size() == 0) {
+      LOG.error(
+          "Statement Not Found, into StatementService, statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date):71");
+      throw new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
+    }
+    return list;
+  }
 
   private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO)
       throws AuthenticationException, StatementException {

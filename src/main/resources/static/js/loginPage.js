@@ -155,7 +155,7 @@ $(document).ready(function () {
                 addUser(authCredentialDTO);
             }
         })
-    
+
         $('#firstName_mobile').val('');
         $('#lastName_mobile').val('');
         $('#dateOfBirth_mobile').val('');
@@ -163,7 +163,7 @@ $(document).ready(function () {
         $('#username_mobile').val('');
         $('#password_mobile').val('');
     })
-    
+
     // DESKTOP
     $('#loginBtn_desktop').click(function (){
         const authCredentialInputDTO = {
@@ -171,7 +171,7 @@ $(document).ready(function () {
             password: $('#password_login_desktop').val()
         }
         login(authCredentialInputDTO);
-    
+
         $('#username_login_desktop').val('');
         $('#password_login_desktop').val('');
     })
@@ -182,12 +182,12 @@ $(document).ready(function () {
             password: $('#password_login_mobile').val()
         }
         login(authCredentialInputDTO);
-    
+
         $('#username_login_mobile').val('');
         $('#password_login_mobile').val('');
     })
-    
-        var username = $('#usernamelogin').val();
+
+        var username = $('.username').val();
         // Login Process Start
         function login(authCredentialInputDTO){
             $.ajax({
@@ -196,7 +196,8 @@ $(document).ready(function () {
                 data: JSON.stringify(authCredentialInputDTO),
                 contentType: 'application/json',
                 dataType: 'json',
-                success: function (response) {
+                success: function (tokenDTO) {
+                    var accessToken = tokenDTO.accessToken;
                     Swal.fire({
                         icon: 'success',
                         title: 'Credenziali corrette!',
@@ -204,6 +205,8 @@ $(document).ready(function () {
                         showConfirmButton: false,
                         timer: 1500
                     }),
+                    sessionStorage.setItem('accessToken', accessToken);
+            
                     setTimeout(function (render) {
                         window.location.href='homepage.html';
                     }, 3000)

@@ -8,6 +8,6 @@ public class WebController {
 
     @RequestMapping("/")
     public String index() {
-        return "loginpage.html";
+        return "loginPage.html";
     }
 }

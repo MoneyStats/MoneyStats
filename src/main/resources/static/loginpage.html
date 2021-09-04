@@ -43,6 +43,7 @@
             </div>
             <!-- Sign In form code goes here -->
             <div class="form-container sign-in-container">
+                <form action="#">
                     <h1>Accedi</h1>
                     <div class="social-container">
                         <a href="#" class="social"><i class="fa fa-facebook"></i></a>
@@ -50,10 +51,11 @@
 		                <a href="#" class="social"><i class="fa fa-linkedin"></i></a>
                     </div>
                     <span>oppure utilizza il tuo Account</span>
-                    <input type="text" name="username" id="username_login_desktop" placeholder="Username" />
+                    <input type="text" name="username" id="username_login_desktop" class="username" placeholder="Username" />
                     <input type="password" id="password_login_desktop" name="password" placeholder="Password" />
                     <a href="#">Password dimenticata?</a>
                     <button id="loginBtn_desktop">Accedi</button>
+                </form>
             </div>
             <!-- The overlay code goes here -->
             <div class="overlay-container" >
@@ -126,7 +128,7 @@
                     </div>
                     <div class="modal-body">
                         <div class='form-floating mb-3'> 
-                            <input type='text' id="username_login_mobile" name='username' class='form-control roundedCorner mx-auto' placeholder="Inserire Username..." required>
+                            <input type='text' id="username_login_mobile" name='username' class='username form-control roundedCorner mx-auto' placeholder="Inserire Username..." required>
                             <label for='username_login_mobile'>Inserire Username</label>
                         </div> 
                         <div class='form-floating mb-3'> 
