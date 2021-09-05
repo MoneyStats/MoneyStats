@@ -50,13 +50,16 @@ $(document).ready(function () {
 
         // Graph Homepage
         var currentYear = "";
+        var lastDate = "";
         for (let i = 0; i < statementReportDTO.listDate.length; i++) {
           // Calcolo anno corrente(mi serve per la lista di date secondo anno)
           currentYear = statementReportDTO.listDate[statementReportDTO.listDate.length-1].split("-")[0];
           $('#year').text('Andamento Anno ' + currentYear);
           $('#listStatement').text('Statement Anno ' + currentYear);
           listDate += [statementReportDTO.listDate[i] + ","];
+          lastDate = statementReportDTO.listDate[i];
         }
+        $('#dataAttuale').text("Grafico Capitali in Data " + lastDate).val(lastDate)
         for (let i = 0; i < statementReportDTO.statementList.length; i++){
           statementList += [statementReportDTO.statementList[i] + ","];
         }
@@ -64,6 +67,7 @@ $(document).ready(function () {
           listPil += [statementReportDTO.listPil[i] + ","];
         }
         getGraph(listDate, statementList, listPil);
+        getGraphWallet(lastDate);
         
       }
     });
@@ -75,12 +79,6 @@ $(document).ready(function () {
     graphDate = listDate.split(",");      
     graphValues = statementList.split(",");
     graphPIL = listPil.split(",");
-
-    /*for (let z = 0; z < graphValues.length; z++){
-     piltot = graphValues[z] - firstValue;        
-     arraypil += [piltot] + ",";
-    }
-      graphpil = arraypil.split(",");*/
         // GRAFICO
         // Graph
         var ctx = document.getElementById("myChart");
@@ -134,4 +132,68 @@ $(document).ready(function () {
           },
         });
   }
+  var totLastDate;
+  var nameWallet;
+  var wallet;
+  function getGraphWallet(lastDate){
+    // TOTALE CAPITALI HOMEPAGE DATA ATTUALE
+    $.ajax({
+      type: "GET",
+      url: `/statement/listStatementDate/${lastDate}`,
+      contentType: 'application/json',
+      dataType: 'json',
+    headers: {
+      Authorization: sessionStorage.getItem('accessToken')
+    },
+    //header: sessionStorage.getItem('accessToken'),
+    success: function (listStatementDTO) {
+      for (let i = 0; i < listStatementDTO.length; i++){
+        totLastDate += listStatementDTO[i].value;
+        wallet += [listStatementDTO[i].value + ","];
+        nameWallet += [listStatementDTO[i].wallet.name + ','] ;
+      }
+      // Graph
+      var ctx1 = document.getElementById("chart-pie");
+      splitName = nameWallet.split(",");
+      splitWallet = wallet.split(",");
+      
+      var myChart = new Chart(ctx1, {
+        type: "pie",
+        data: {
+                labels: splitName,
+                datasets: [{
+                  data: splitWallet,
+                  backgroundColor: [
+                    "rgba(241, 182, 176, 0.6)",
+                    "rgba(227, 192, 67, 0.6)",
+                    "rgba(224, 99, 3, 0.9)",
+                    "rgba(205, 157, 105, 0.1)",
+                    "rgba(204, 107, 78, 0.8)",
+                    "rgba(201, 199, 115, 0.3)",
+                    "rgba(202, 149, 232, 0.2)",
+                    "rgba(181, 223, 238, 0.6)",
+                    "rgba(141, 88, 1, 0.2)",
+                    "rgba(189, 9, 95, 0.1)",
+                    "rgba(166, 73, 170, 0.5)",
+                    "rgba(133, 159, 99, 0.3)",
+                    "rgba(132, 211, 117, 0.9)",
+                    "rgba(73, 197, 30, 0.7)",
+                    "rgba(54, 16, 27, 0.6)",
+                    "rgba(94, 187, 84, 0.7)",
+                    "rgba(52, 127, 38, 0.5)",
+                    "rgba(36, 26, 13, 0.2)",
+                    "rgba(35, 81, 109, 0.3)",
+                    "rgba(33, 130, 53, 0.8)",
+                    "rgba(29, 60, 205, 0.8)",
+                    "rgba(20, 242, 54, 0.3)",
+                    "rgba(19, 26, 45, 0.4)",
+                    "rgba(5, 158, 54, 0.2)",
+                    "rgba(0, 138, 131, 0.3)",
+                  ],
+                }, ],
+              }
+            });
+          }
+        })
+    }
 });
