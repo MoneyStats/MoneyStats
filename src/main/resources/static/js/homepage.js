@@ -7,6 +7,12 @@ $(document).ready(function () {
       window.location.href='loginPage.html';
     } 
   }
+
+  // Invalidate Session
+  $('#logout').click(function (e) { 
+    sessionStorage.removeItem('accessToken');
+  });
+
   var listDate = [];
   var statementList = [];
   var listPil = [];
@@ -51,6 +57,7 @@ $(document).ready(function () {
         // Graph Homepage
         var currentYear = "";
         var lastDate = "";
+        var listDateForTable;
         for (let i = 0; i < statementReportDTO.listDate.length; i++) {
           // Calcolo anno corrente(mi serve per la lista di date secondo anno)
           currentYear = statementReportDTO.listDate[statementReportDTO.listDate.length-1].split("-")[0];
@@ -58,6 +65,7 @@ $(document).ready(function () {
           $('#listStatement').text('Statement Anno ' + currentYear);
           listDate += [statementReportDTO.listDate[i] + ","];
           lastDate = statementReportDTO.listDate[i];
+          listDateForTable += [statementReportDTO.listDate[i]];
         }
         $('#dataAttuale').text("Grafico Capitali in Data " + lastDate).val(lastDate)
         for (let i = 0; i < statementReportDTO.statementList.length; i++){
@@ -68,7 +76,7 @@ $(document).ready(function () {
         }
         getGraph(listDate, statementList, listPil);
         getGraphWallet(lastDate);
-        
+        getCurrentStatement(listDate, currentYear);
       }
     });
   }
@@ -154,8 +162,6 @@ $(document).ready(function () {
       var ctx1 = document.getElementById("chart-pie");
       let splitName = nameWallet.split(",");
       let splitWallet = statementWallet.split(",");
-      console.log(splitName);
-      console.log(splitWallet);
       
       var myChart = new Chart(ctx1, {
         type: "pie",
@@ -196,5 +202,52 @@ $(document).ready(function () {
           }
         })
     }
-  
+    // LISTA STATEMENT
+    function getWallet(){
+      $.ajax({
+        type: "GET",
+        url: `/wallet/list`,
+        contentType: 'application/json',
+        dataType: 'json',
+        headers: {
+          Authorization: sessionStorage.getItem('accessToken')
+        },
+      success: function (listWalletForHomepage) {
+          const listWallet = $('#titoloTab');
+          for (let i = 0; i < listWalletForHomepage.length; i++) {
+              $(`<th scope="col">${listWalletForHomepage[i].name}</th>`).hide().appendTo(listWallet).fadeIn(i * 20);
+              
+          }
+        }
+      })
+  }
+  getWallet();
+
+  function getCurrentStatement(listDate, year) {
+    console.log(listDate, year)
+    let splitDate = listDate.split(",");
+    const dataTabella = $('#data');
+    for (let i = 0; i < splitDate.length; i++) {
+        if (splitDate[i].includes(year)){
+          $.ajax({
+            type: "GET",
+            url: `/statement/listStatementDate/${splitDate[i]}`,
+            contentType: 'application/json',
+            dataType: 'json',
+            headers: {
+              Authorization: sessionStorage.getItem('accessToken')
+            },
+          success: function (statementTab) {
+            // DATA PER TABELLA
+            $(`<tr id="data${i}"><th scope="row">${splitDate[i]}</th></tr>`).hide().appendTo(dataTabella).fadeIn(i * 20);
+            const statTab = $(`#data${i}`)
+          // Fine calcolo
+            for (let y = 0; y < statementTab.length; y++){
+              $(`<td>£ ${statementTab[y].value}</td>`).hide().appendTo(statTab).fadeIn(i * 20);
+            }
+          }
+        })
+      }
+    }
+  }
 });

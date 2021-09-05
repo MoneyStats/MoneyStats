@@ -37,6 +37,7 @@ public class WalletService {
 
   /**
    * Used to get all the wallet from db
+   *
    * @param tokenDTO
    * @return
    * @throws WalletException
@@ -59,13 +60,13 @@ public class WalletService {
               walletEntities.get(i).getUser(),
               walletEntities.get(i).getStatementList());
       walletDTOS.add(walletDTO);
-      System.out.println(walletDTO.getCategoryEntity().getName());
     }
     return walletDTOS;
   }
 
   /**
    * Used in the controller to add the wallet into the database
+   *
    * @param tokenDTO for auth
    * @param idCategory to link
    * @param walletDTO to be added
@@ -97,6 +98,7 @@ public class WalletService {
 
   /**
    * Used to delete a wallet from the database
+   *
    * @param idWallet to be deleted
    * @return response of status
    * @throws WalletException
@@ -122,12 +124,12 @@ public class WalletService {
 
   /**
    * Method in common on getAll and addWallet
+   *
    * @param tokenDTO used for validations
    * @return an user
    * @throws AuthenticationException
    */
-  private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO)
-      throws AuthenticationException {
+  private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO) throws AuthenticationException {
     TokenValidation.validateTokenDTO(tokenDTO);
     if (tokenDTO.getAccessToken().equalsIgnoreCase("")) {
       throw new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
