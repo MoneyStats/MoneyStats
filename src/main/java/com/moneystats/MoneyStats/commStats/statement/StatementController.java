@@ -1,7 +1,6 @@
 package com.moneystats.MoneyStats.commStats.statement;
 
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementDTO;
-import com.moneystats.MoneyStats.commStats.statement.DTO.StatementReportDTO;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementResponseDTO;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.WalletException;
@@ -72,12 +71,4 @@ public class StatementController {
   //  TokenDTO tokenDTO = new TokenDTO(jwt);
   //  return statementService.listByWalletAndValue(tokenDTO);
   // }
-
-  @GetMapping("/reportHomepage")
-  public StatementReportDTO statementReportHomepage(
-      @RequestHeader(value = "Authorization") String jwt)
-      throws StatementException, AuthenticationException {
-    TokenDTO tokenDTO = new TokenDTO(jwt);
-    return statementService.reportHomepage(tokenDTO);
-  }
 }

@@ -14,7 +14,7 @@ $(document).ready(function () {
   function getReportHomepage(){
     $.ajax({
       type: "GET",
-      url: "/statement/reportHomepage",
+      url: "/homepage/reportHomepage",
       contentType: 'application/json',
       dataType: 'json',
       headers: {
@@ -132,30 +132,30 @@ $(document).ready(function () {
           },
         });
   }
-  var totLastDate;
-  var nameWallet;
-  var wallet;
+  var nameWallet = [];
+  var statementWallet = [];
   function getGraphWallet(lastDate){
     // TOTALE CAPITALI HOMEPAGE DATA ATTUALE
     $.ajax({
       type: "GET",
-      url: `/statement/listStatementDate/${lastDate}`,
+      url: `/homepage/getPieGraph/${lastDate}`,
       contentType: 'application/json',
       dataType: 'json',
-    headers: {
-      Authorization: sessionStorage.getItem('accessToken')
-    },
-    //header: sessionStorage.getItem('accessToken'),
-    success: function (listStatementDTO) {
-      for (let i = 0; i < listStatementDTO.length; i++){
-        totLastDate += listStatementDTO[i].value;
-        wallet += [listStatementDTO[i].value + ","];
-        nameWallet += [listStatementDTO[i].wallet.name + ','] ;
+      headers: {
+        Authorization: sessionStorage.getItem('accessToken')
+      },
+    success: function (listWalletStatementDTO) {
+      for (let i = 0; i < listWalletStatementDTO.walletList.length; i++){
+        nameWallet += [listWalletStatementDTO.walletList[i] + ","];
+        statementWallet += [listWalletStatementDTO.statementList[i] + ','];
       }
+      
       // Graph
       var ctx1 = document.getElementById("chart-pie");
-      splitName = nameWallet.split(",");
-      splitWallet = wallet.split(",");
+      let splitName = nameWallet.split(",");
+      let splitWallet = statementWallet.split(",");
+      console.log(splitName);
+      console.log(splitWallet);
       
       var myChart = new Chart(ctx1, {
         type: "pie",
@@ -196,4 +196,5 @@ $(document).ready(function () {
           }
         })
     }
+  
 });
