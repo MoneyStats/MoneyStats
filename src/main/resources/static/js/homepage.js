@@ -2,10 +2,41 @@ $(document).ready(function () {
   // Check if session is validated with a user
   isValidated();
   function isValidated (){
+    const LOGIN_REQUIRED = "LOGIN_REQUIRED";
     const token = sessionStorage.getItem('accessToken');
     if (token === null) {
       window.location.href='loginPage.html';
     } 
+    $.ajax({
+      type: "GET",
+      url: "/check_login",
+      contentType: 'application/json',
+      dataType: 'json',
+      headers: {
+        Authorization: sessionStorage.getItem('accessToken')
+      },
+      error: function (authErrorResponseDTO) {
+        var responseDTO = authErrorResponseDTO.responseJSON.error;
+        console.log(responseDTO)
+        if (responseDTO === LOGIN_REQUIRED){
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+          })
+          Toast.fire({
+            icon: 'error',
+            title: 'Sessione Scaduta, reinderizzazione...'
+          })
+          setTimeout(function () {
+            window.location.href = "loginPage.html";
+          }, 1500);
+        }
+      }
+    })
+    getReportHomepage();
   }
 
   // Invalidate Session
@@ -16,7 +47,7 @@ $(document).ready(function () {
   var listDate = [];
   var statementList = [];
   var listPil = [];
-  getReportHomepage();
+  
   function getReportHomepage(){
     $.ajax({
       type: "GET",
@@ -26,7 +57,6 @@ $(document).ready(function () {
       headers: {
         Authorization: sessionStorage.getItem('accessToken')
       },
-      //header: sessionStorage.getItem('accessToken'),
       success: function (statementReportDTO) {
         // Card Homepage
         $('#reportStatement').text('€ ' + statementReportDTO.statementTotal.toFixed(2));
@@ -250,4 +280,44 @@ $(document).ready(function () {
       }
     }
   }
+
+  getDate();
+  function getDate(){
+    $.ajax({
+      type: "GET",
+      url: `/statement/listOfDate`,
+      contentType: 'application/json',
+      dataType: 'json',
+      headers: {
+        Authorization: sessionStorage.getItem('accessToken')
+      },
+      success: function (date) {
+        const listDate = $('#dateOption');
+          for (let i = 0; i < date.length; i++) {
+              $(`<option id='dateSelect' value="${date[i]}">${date[i]}</option>`).hide().appendTo(listDate).fadeIn(i * 20);
+          }
+      }
+    })
+  }
+  $('#dataConfirm').click(function () {
+    document.cookie = $('#dateOption').val() + "; path=/";
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+      })
+      
+      Toast.fire({
+        icon: 'success',
+        title: 'Data inserite, reinderizzazione...'
+      })
+      setTimeout(function () {
+        window.location.href = "capitalewallet.html";
+      }, 1000);
+  })
+  $('.resetCookies').on('click', function resetCookies(){
+    document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+  })
 });
