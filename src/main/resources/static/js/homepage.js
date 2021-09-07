@@ -15,9 +15,12 @@ $(document).ready(function () {
       headers: {
         Authorization: sessionStorage.getItem('accessToken')
       },
+      success: function (authCredentialDTO){
+        console.log("User Logged with accessToken {}, ", authCredentialDTO.message, " username -> ", authCredentialDTO.username);
+        $('#options').text(`Opzioni - ${authCredentialDTO.username}`);
+      },
       error: function (authErrorResponseDTO) {
         var responseDTO = authErrorResponseDTO.responseJSON.error;
-        console.log(responseDTO)
         if (responseDTO === LOGIN_REQUIRED){
           const Toast = Swal.mixin({
             toast: true,
@@ -254,7 +257,6 @@ $(document).ready(function () {
   getWallet();
 
   function getCurrentStatement(listDate, year) {
-    console.log(listDate, year)
     let splitDate = listDate.split(",");
     const dataTabella = $('#data');
     for (let i = 0; i < splitDate.length; i++) {

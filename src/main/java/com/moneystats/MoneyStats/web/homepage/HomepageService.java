@@ -70,14 +70,14 @@ public class HomepageService {
       }
       listStatement.add(statementReport);
     }
-    LOG.warn("List Statement {}", listStatement);
+    LOG.info("List Statement {}", listStatement);
     List<Double> listPil = new ArrayList<>();
     listPil.add(0.00D);
     for (int i = 1; i < listStatement.size(); i++) {
       Double pil = listStatement.get(i) - listStatement.get(i - 1);
       listPil.add(pil);
     }
-    LOG.warn("List PIL {}", listPil);
+    LOG.info("List PIL {}", listPil);
     List<StatementEntity> listStatementByPreviousDate =
         listStatementReportCalc(utente, lastStatementDate);
 
@@ -111,6 +111,15 @@ public class HomepageService {
     return reportDTO;
   }
 
+  /**
+   * Get the Pie Graph on the Homepage
+   * @param date required to get all the statement by that date
+   * @param tokenDTO required to authenticate user
+   * @return An ojbect with statement and wallet list
+   * @throws StatementException
+   * @throws AuthenticationException
+   * @throws WalletException
+   */
   public HomepagePieChartDTO getGraph(String date, TokenDTO tokenDTO)
       throws StatementException, AuthenticationException, WalletException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
@@ -135,11 +144,18 @@ public class HomepageService {
     }
     homepagePieChartDTO.setWalletList(walletListGraph);
     homepagePieChartDTO.setStatementList(statementListGraph);
-    LOG.warn("List of Wallet on HomepageService:138 {}", homepagePieChartDTO.getWalletList());
-    LOG.warn("List of Statement on HomepageService:139 {}", homepagePieChartDTO.getStatementList());
+    LOG.info("List of Wallet on HomepageService:138 {}", homepagePieChartDTO.getWalletList());
+    LOG.info("List of Statement on HomepageService:139 {}", homepagePieChartDTO.getStatementList());
     return homepagePieChartDTO;
   }
 
+  /**
+   * Used on getHomepage
+   * @param utente
+   * @param date
+   * @return
+   * @throws StatementException
+   */
   private List<StatementEntity> listStatementReportCalc(AuthCredentialEntity utente, String date)
       throws StatementException {
     List<StatementEntity> list =
@@ -152,6 +168,13 @@ public class HomepageService {
     return list;
   }
 
+  /**
+   * Method in common
+   * @param tokenDTO required for authentications
+   * @return An user
+   * @throws AuthenticationException
+   * @throws StatementException
+   */
   private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO)
       throws AuthenticationException, StatementException {
     TokenValidation.validateTokenDTO(tokenDTO);

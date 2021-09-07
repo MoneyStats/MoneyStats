@@ -1,8 +1,9 @@
 package com.moneystats.MoneyStats.web;
 
-import com.moneystats.authentication.AuthenticationException;
+import com.moneystats.MoneyStats.web.DTO.WebResponseDTO;
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
+import com.moneystats.generic.SchemaDescription;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -27,15 +28,28 @@ public class WebService {
   @Value(value = "${jwt.secret}")
   private String secret;
 
-  @Value(value = "${jwt.time}")
-  private String expirationTime;
-
-  public void parseToken(TokenDTO token) throws WebException {
+  /**
+   * Method that check if user is valid
+   * @param token
+   * @throws WebException
+   */
+  public WebResponseDTO checkUser(TokenDTO token) throws WebException {
+    Claims body;
     try {
-      Claims body = Jwts.parser().setSigningKey(secret).parseClaimsJws(token.getAccessToken()).getBody();
+      body = Jwts.parser().setSigningKey(secret).parseClaimsJws(token.getAccessToken()).getBody();
     } catch (JwtException e) {
       LOG.error("Not Authorized, Login required WebService:38");
       throw new WebException(WebException.Code.LOGIN_REQUIRED);
     }
+    AuthCredentialDTO user =
+            new AuthCredentialDTO(
+                    (@NotNull String) body.get(FIRSTNAME),
+                    (@NotNull String) body.get(LASTNAME),
+                    (@NotNull String) body.get(DATEOFBIRTH),
+                    (@NotNull String) body.get(EMAIL),
+                    body.getSubject(),
+                    (@NotNull String) body.get(ROLE));
+
+    return new WebResponseDTO(SchemaDescription.USER_FOUND, user.getUsername());
   }
 }

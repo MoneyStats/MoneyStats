@@ -164,12 +164,14 @@ $(document).ready(function () {
         $('#password_mobile').val('');
     })
 
+    var userLogged = '';
     // DESKTOP
     $('#loginBtn_desktop').click(function (){
         const authCredentialInputDTO = {
             username: $('#username_login_desktop').val(),
             password: $('#password_login_desktop').val()
         }
+        userLogged = authCredentialInputDTO.username;
         login(authCredentialInputDTO);
 
         $('#username_login_desktop').val('');
@@ -181,15 +183,14 @@ $(document).ready(function () {
             username: $('#username_login_mobile').val(),
             password: $('#password_login_mobile').val()
         }
+        userLogged = authCredentialInputDTO.username;
         login(authCredentialInputDTO);
 
         $('#username_login_mobile').val('');
         $('#password_login_mobile').val('');
     })
-
-        var username = $('.username').val();
-        // Login Process Start
-        function login(authCredentialInputDTO){
+    // Login Process Start
+    function login(authCredentialInputDTO){
             $.ajax({
                 type: "POST",
                 url: "/credential/login",
@@ -201,7 +202,7 @@ $(document).ready(function () {
                     Swal.fire({
                         icon: 'success',
                         title: 'Credenziali corrette!',
-                        text: `Benvenuto ${username}`,
+                        text: `Benvenuto ${userLogged}`,
                         showConfirmButton: false,
                         timer: 1500
                     }),
