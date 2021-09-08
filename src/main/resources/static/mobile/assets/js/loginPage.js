@@ -29,7 +29,7 @@ $(document).ready(function () {
                     timer: 1000
                 }),
                 setTimeout(function (render) {
-                    window.location.href='loginpage.html';
+                    window.location.href='app-login.html';
                 }, 1000)
             },
             error: function (authErrorResponseDTO) {
@@ -135,7 +135,7 @@ $(document).ready(function () {
                     sessionStorage.setItem('accessToken', accessToken);
             
                     setTimeout(function (render) {
-                        window.location.href='homepage.html';
+                        window.location.href='index.html';
                     }, 3000)
                 },
                 error: function (authErrorResponseDTO) {

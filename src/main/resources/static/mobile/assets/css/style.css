@@ -130,7 +130,8 @@ a:hover, a:active, a:focus {
 }
 
 .appHeader .pageTitle .logo {
-  max-height: 24px;
+  max-height: 50px;
+  margin-top: 5px;
 }
 
 .appHeader.text-light {
@@ -472,7 +473,7 @@ a:hover, a:active, a:focus {
 
 .sidebar-balance {
   padding: 6px 16px;
-  background: #6236FF;
+  background: #080957;
 }
 
 .sidebar-balance .listview-title {
@@ -496,7 +497,7 @@ a:hover, a:active, a:focus {
   align-items: flex-start;
   justify-content: space-between;
   padding: 0px 16px 10px 16px;
-  background: #6236FF;
+  background: #080957;
 }
 
 .action-group .action-button {
@@ -1137,7 +1138,7 @@ blockquote.blockquote .blockquote-footer {
   right: 0;
   bottom: 0;
   z-index: 99999;
-  background: #6236FF;
+  background: #080957;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2882,7 +2883,7 @@ a.badge-dark {
 }
 
 .bg-primary {
-  background: #6236FF !important;
+  background: #080957 !important;
   color: #FFF;
 }
 
@@ -4967,7 +4968,7 @@ textarea,
   content: "";
   display: block;
   height: 140px;
-  background: #6236FF;
+  background: #080957;
 }
 
 .wallet-card {
