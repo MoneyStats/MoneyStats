@@ -99,6 +99,18 @@ public class AuthServiceTest {
 	}
 
 	@Test
+	void signUpUser_shouldReturnUserPresent() throws Exception {
+		AuthCredentialDTO user = new AuthCredentialDTO(USER_USERNAME, null);
+
+		AuthenticationException expected = new AuthenticationException(
+				AuthenticationException.Code.USER_PRESENT);
+		AuthenticationException actual = Assertions.assertThrows(AuthenticationException.class,
+				() -> service.signUp(user));
+
+		Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+	}
+
+	@Test
 	void login_shouldReturnTokenCorrectly() throws Exception {
 		Mockito.when(dao.getCredential(USER_USER_CREDENTIAL_DTO)).thenReturn(USER_USER_CREDENTIAL_ENTITY);
 		Mockito.when(tokenService.generateToken(authCredentialDTOArgumentCaptor.capture())).thenReturn(USER_TOKEN);
@@ -107,6 +119,7 @@ public class AuthServiceTest {
 
 		Assertions.assertEquals(USER_TOKEN.getAccessToken(), actual.getAccessToken());
 	}
+
 
 	@Test
 	void login_shouldThrowWrongCredential() throws Exception {

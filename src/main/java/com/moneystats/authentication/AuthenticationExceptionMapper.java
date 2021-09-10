@@ -43,6 +43,9 @@ public class AuthenticationExceptionMapper {
 		case WRONG_CREDENTIAL:
 			error.setMessage(Code.WRONG_CREDENTIAL.toString());
 			return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.UNAUTHORIZED);
+		case USER_PRESENT:
+			error.setMessage(Code.USER_PRESENT.toString());
+			return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.BAD_REQUEST);
 		default:
 			error.setMessage("INTERNAL_SERVER_ERROR");
 			return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
