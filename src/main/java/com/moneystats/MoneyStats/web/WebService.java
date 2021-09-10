@@ -33,7 +33,7 @@ public class WebService {
    * @param token
    * @throws WebException
    */
-  public WebResponseDTO checkUser(TokenDTO token) throws WebException {
+  public AuthCredentialDTO checkUser(TokenDTO token) throws WebException {
     Claims body;
     try {
       body = Jwts.parser().setSigningKey(secret).parseClaimsJws(token.getAccessToken()).getBody();
@@ -50,6 +50,6 @@ public class WebService {
                     body.getSubject(),
                     (@NotNull String) body.get(ROLE));
 
-    return new WebResponseDTO(SchemaDescription.USER_FOUND, user.getUsername());
+    return user;
   }
 }

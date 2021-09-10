@@ -1,12 +1,19 @@
 $(document).ready(function () {
+  
+  const LOGIN_REQUIRED = "LOGIN_REQUIRED";
+  
+  //-------------------------------------------------------------
   // Check if session is validated with a user
+  //-------------------------------------------------------------
   isValidated();
   function isValidated (){
-    const LOGIN_REQUIRED = "LOGIN_REQUIRED";
     const token = sessionStorage.getItem('accessToken');
     if (token === null) {
       window.location.href='loginPage.html';
     } 
+    //-------------------------------------------------------------
+    // Check if session is validated with a user
+    //-------------------------------------------------------------
     $.ajax({
       type: "GET",
       url: "/check_login",
@@ -16,7 +23,7 @@ $(document).ready(function () {
         Authorization: sessionStorage.getItem('accessToken')
       },
       success: function (authCredentialDTO){
-        console.log("User Logged with accessToken {}, ", authCredentialDTO.message, " username -> ", authCredentialDTO.username);
+        console.log("User Logged with accessToken {}, ", authCredentialDTO.firstName, authCredentialDTO.lastName, " username -> ", authCredentialDTO.username);
         $('#options').text(`Opzioni - ${authCredentialDTO.username}`);
       },
       error: function (authErrorResponseDTO) {
@@ -42,11 +49,19 @@ $(document).ready(function () {
     getReportHomepage();
   }
 
-  // Invalidate Session
+  //-------------------------------------------------------------
+  // Invalidate Session on Press Log Out
+  //-------------------------------------------------------------
   $('#logout').click(function (e) { 
     sessionStorage.removeItem('accessToken');
   });
+  //-------------------------------------------------------------
+  // END 
+  //-------------------------------------------------------------
 
+  //-------------------------------------------------------------
+  // Get Full Report Homepage
+  //-------------------------------------------------------------
   var listDate = [];
   var statementList = [];
   var listPil = [];
@@ -87,7 +102,9 @@ $(document).ready(function () {
           $('#pilTotale').text("£ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-danger');
         }
 
-        // Graph Homepage
+        //-----------------------------------------------------------------------
+        // Get all Data for Graph Homepage
+        //-----------------------------------------------------------------------
         var currentYear = "";
         var lastDate = "";
         var listDateForTable;
@@ -110,9 +127,15 @@ $(document).ready(function () {
         getGraph(listDate, statementList, listPil);
         getGraphWallet(lastDate);
         getCurrentStatement(listDate, currentYear);
+        //------------------------------------------------------------------------
+        // END DATA HOMEPAGE
+        //------------------------------------------------------------------------
       }
     });
   }
+  //-------------------------------------------------------------
+  // Get Line Graph Homepage
+  //-------------------------------------------------------------
   var graphDate = [];
   var graphValues = [];
   var graphPIL = [];
@@ -120,6 +143,7 @@ $(document).ready(function () {
     graphDate = listDate.split(",");      
     graphValues = statementList.split(",");
     graphPIL = listPil.split(",");
+    graphDate.pop();
         // GRAFICO
         // Graph
         var ctx = document.getElementById("myChart");
@@ -173,6 +197,13 @@ $(document).ready(function () {
           },
         });
   }
+  //-------------------------------------------------------------
+  // END Line Graph
+  //-------------------------------------------------------------
+
+  //-------------------------------------------------------------
+  // Get PieGraph Homepage
+  //-------------------------------------------------------------
   var nameWallet = [];
   var statementWallet = [];
   function getGraphWallet(lastDate){
@@ -195,6 +226,7 @@ $(document).ready(function () {
       var ctx1 = document.getElementById("chart-pie");
       let splitName = nameWallet.split(",");
       let splitWallet = statementWallet.split(",");
+      splitName.pop(); // Delete last element of array
       
       var myChart = new Chart(ctx1, {
         type: "pie",
@@ -322,4 +354,27 @@ $(document).ready(function () {
   $('.resetCookies').on('click', function resetCookies(){
     document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
   })
+
+  /*--------------------------------------------------------------------------
+    *  Switch Mobile Mode
+    *--------------------------------------------------------------------------*/
+  $('#SwitchMobile').click(function () { 
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 1000,
+      timerProgressBar: true,
+    })
+    Toast.fire({
+      icon: 'info',
+      title: "<span style='color:#2D2C2C'>Reinderizzazione...</span>",
+    })
+    setTimeout(function () {
+      window.location.href = "mobile/index.html";
+    }, 1000);
+   });
+   /*--------------------------------------------------------------------------
+    *  Switch Mobile Mode
+    *--------------------------------------------------------------------------*/
 });

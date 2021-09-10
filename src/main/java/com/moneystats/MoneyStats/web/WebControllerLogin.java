@@ -1,6 +1,7 @@
 package com.moneystats.MoneyStats.web;
 
 import com.moneystats.MoneyStats.web.DTO.WebResponseDTO;
+import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
 import jdk.jfr.StackTrace;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ public class WebControllerLogin {
 
   /** Methods with no return, it need to check if the token it is still valid */
   @GetMapping("/check_login")
-  public WebResponseDTO checkLogin(@RequestHeader(value = "Authorization") String jwt) throws WebException {
+  public AuthCredentialDTO checkLogin(@RequestHeader(value = "Authorization") String jwt) throws WebException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     LOG.info("Login Validations Process {}", jwt);
     return webService.checkUser(tokenDTO);
