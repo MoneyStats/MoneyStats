@@ -1,14 +1,14 @@
 package com.moneystats.authentication;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
 import com.moneystats.authentication.utils.TestSchema;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,10 +39,11 @@ public class AuthControllerTest {
   @Autowired private ObjectMapper objectMapper;
 
   @Test
-  void addUser_shouldReturnStatus200() throws Exception {
+  void addUser_shouldReturnStatus200AndReturnResponse() throws Exception {
     String userAsString = objectMapper.writeValueAsString(TestSchema.USER_USER_DTO);
+    String authResponseAsString = objectMapper.writeValueAsString(TestSchema.AUTH_RESPONSE_DTO);
 
-    Mockito.when(credential.signUp(TestSchema.USER_USER_DTO)).thenReturn(TestSchema.AUTH_RESPONSE);
+    Mockito.when(credential.signUp(TestSchema.USER_USER_DTO)).thenReturn(TestSchema.AUTH_RESPONSE_DTO);
     mockMvc
         .perform(
             post("/credential/signup")
@@ -61,6 +64,21 @@ public class AuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"user\": 30, \"password\": 90}"))
         .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void addUser_shouldReturnUserPresent() throws Exception {
+    AuthCredentialDTO user = TestSchema.USER_USER_DTO;
+    String userAsString = objectMapper.writeValueAsString(user);
+
+    Mockito.when(credential.signUp(Mockito.any())).thenThrow(new AuthenticationException(AuthenticationException.Code.USER_PRESENT));
+
+    mockMvc
+            .perform(
+                    post("/credential/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(userAsString))
+            .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -89,9 +107,23 @@ public class AuthControllerTest {
                 .content("{\"user1\": \"giovanni\", \"password\": 90}"))
         .andExpect(status().isBadRequest());
   }
+  @Test
+  void login_shouldReturnWrongcredentialOnUsername() throws Exception {
+    AuthCredentialInputDTO user =
+            new AuthCredentialInputDTO(TestSchema.USER_USERNAME_WRONG, TestSchema.USER_PASSWORD);
+    String userAsString = objectMapper.writeValueAsString(user);
+
+    Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL))
+            .when(credential)
+            .login(Mockito.any());
+    mockMvc
+            .perform(
+                    post("/credential/login").contentType(MediaType.APPLICATION_JSON).content(userAsString))
+            .andExpect(status().is(401));
+  }
 
   @Test
-  void login_shouldReturnWrongcredential() throws Exception {
+  void login_shouldReturnWrongcredentialOnPassword() throws Exception {
     AuthCredentialInputDTO user =
         new AuthCredentialInputDTO(TestSchema.USER_USERNAME, TestSchema.WRONG_PASSWORD);
     String userAsString = objectMapper.writeValueAsString(user);

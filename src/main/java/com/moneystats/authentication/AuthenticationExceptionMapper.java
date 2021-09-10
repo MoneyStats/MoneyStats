@@ -16,9 +16,6 @@ public class AuthenticationExceptionMapper {
 		AuthErrorResponseDTO error = new AuthErrorResponseDTO(null);
 		e.printStackTrace();
 		switch (e.getCode()) {
-		case AUTH_CREDENTIAL_DTO_NOT_FOUND:
-			error.setMessage(Code.AUTH_CREDENTIAL_DTO_NOT_FOUND.toString());
-			return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.NOT_FOUND);
 		case DATABASE_ERROR:
 			error.setMessage(Code.DATABASE_ERROR.toString());
 			return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.NO_CONTENT);

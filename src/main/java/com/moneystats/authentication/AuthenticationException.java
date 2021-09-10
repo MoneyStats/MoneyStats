@@ -15,7 +15,6 @@ public class AuthenticationException extends Exception {
     INVALID_AUTH_INPUT_DTO,
     WRONG_CREDENTIAL,
     INVALID_TOKEN_DTO,
-    AUTH_CREDENTIAL_DTO_NOT_FOUND,
     TOKEN_REQUIRED,
     USER_PRESENT;
   }
