@@ -32,6 +32,14 @@ public class StatementService {
   @Autowired private AuthCredentialDAO authCredentialDAO;
   @Autowired private TokenService tokenService;
 
+  /**
+   * Used to add a statement into database
+   * @param tokenDTO
+   * @param statementDTO
+   * @return
+   * @throws StatementException
+   * @throws AuthenticationException
+   */
   public StatementResponseDTO addStatement(TokenDTO tokenDTO, StatementDTO statementDTO)
       throws StatementException, AuthenticationException {
     StatementValidator.validateStatementDTO(statementDTO);
@@ -54,8 +62,15 @@ public class StatementService {
     return new StatementResponseDTO(SchemaDescription.STATEMENT_ADDED_CORRECT);
   }
 
+  /**
+   *
+   * @param tokenDTO
+   * @return a list of unique date
+   * @throws StatementException
+   * @throws AuthenticationException
+   */
   public List<String> listOfDate(TokenDTO tokenDTO)
-      throws StatementException, WalletException, AuthenticationException {
+      throws StatementException, AuthenticationException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
 
     List<String> listDate = statementDAO.selectdistinctstatement(utente.getId());
@@ -67,6 +82,14 @@ public class StatementService {
     return listDate;
   }
 
+  /**
+   *
+   * @param tokenDTO
+   * @param date
+   * @return a list of statement by that day
+   * @throws StatementException
+   * @throws AuthenticationException
+   */
   public List<StatementEntity> listStatementByDate(TokenDTO tokenDTO, String date)
       throws StatementException, AuthenticationException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);

@@ -14,6 +14,11 @@ public class CategoryController {
 
   @Autowired private CategoryService categoryService;
 
+  /**
+   *
+   * @return a list of categories
+   * @throws CategoryException
+   */
   @GetMapping("/list")
   public List<CategoryDTO> categoryGetList() throws CategoryException {
     return categoryService.categoryDTOList();

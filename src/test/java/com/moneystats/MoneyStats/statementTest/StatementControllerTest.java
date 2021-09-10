@@ -39,8 +39,9 @@ public class StatementControllerTest {
     StatementResponseDTO statementResponseDTO =
         new StatementResponseDTO(SchemaDescription.STATEMENT_ADDED_CORRECT);
     String statementAsString = objectMapper.writeValueAsString(statementDTO);
+    String responseAsString = objectMapper.writeValueAsString(statementResponseDTO);
 
-    Mockito.when(statementService.addStatement(tokenDTO, statementDTO))
+    Mockito.when(statementService.addStatement(Mockito.any(), Mockito.any()))
         .thenReturn(statementResponseDTO);
 
     mockMvc
@@ -49,7 +50,8 @@ public class StatementControllerTest {
                 .header("Authorization", "Bearer " + tokenDTO.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(statementAsString))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.content().json(responseAsString));
   }
 
   @Test
@@ -89,32 +91,118 @@ public class StatementControllerTest {
   }
 
   @Test
+  public void testAddStatement_shouldBeMappedOnInvalidToken() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    String statementAsString = objectMapper.writeValueAsString(statementDTO);
+
+    Mockito.when(statementService.addStatement(tokenDTO, statementDTO))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/statement/addStatement")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(statementAsString))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+  }
+
+  @Test
+  public void testAddStatement_shouldBeMappedOnUserNotFound() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    String statementAsString = objectMapper.writeValueAsString(statementDTO);
+
+    Mockito.when(statementService.addStatement(Mockito.any(), Mockito.any()))
+        .thenThrow(new StatementException(StatementException.Code.USER_NOT_FOUND));
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/statement/addStatement")
+                .header("Authorization", "Bearer " + tokenDTO.getAccessToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(statementAsString))
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
+  }
+
+  @Test
+  public void testAddStatement_shouldBeMappedOnWalletNotFound() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    String statementAsString = objectMapper.writeValueAsString(statementDTO);
+
+    Mockito.when(statementService.addStatement(Mockito.any(), Mockito.any()))
+        .thenThrow(new StatementException(StatementException.Code.WALLET_NOT_FOUND));
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/statement/addStatement")
+                .header("Authorization", "Bearer " + tokenDTO.getAccessToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(statementAsString))
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
+  }
+
+  @Test
   public void testListOfDate_OK() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     List<String> date = List.of("my-date");
     String dateAsString = objectMapper.writeValueAsString(date);
 
-    Mockito.when(statementService.listOfDate(tokenDTO)).thenReturn(date);
+    Mockito.when(statementService.listOfDate(Mockito.any())).thenReturn(date);
 
     mockMvc
         .perform(
             MockMvcRequestBuilders.get("/statement/listOfDate")
                 .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.content().json(dateAsString));
   }
 
   @Test
-  public void testListOfDate_shouldBeMappedOnError() throws Exception {
+  public void testListOfDate_shouldBeMappedOnTokenRequired() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     List<String> date = List.of("my-date");
     String dateAsString = objectMapper.writeValueAsString(date);
 
     Mockito.when(statementService.listOfDate(tokenDTO))
-        .thenThrow(new StatementException(StatementException.Code.INVALID_STATEMENT_DTO));
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED));
 
     mockMvc
         .perform(MockMvcRequestBuilders.get("/statement/listOfDate"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());
+  }
+
+  @Test
+  public void testListOfDate_shouldBeMappedOnUserNotFound() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    List<String> date = List.of("my-date");
+    String dateAsString = objectMapper.writeValueAsString(date);
+
+    Mockito.when(statementService.listOfDate(Mockito.any()))
+            .thenThrow(new StatementException(StatementException.Code.USER_NOT_FOUND));
+
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.get("/statement/listOfDate")
+                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
+  }
+
+  @Test
+  public void testListOfDate_shouldBeMappedOnListStatementNotFound() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    List<String> date = List.of("my-date");
+    String dateAsString = objectMapper.writeValueAsString(date);
+
+    Mockito.when(statementService.listOfDate(Mockito.any()))
+        .thenThrow(new StatementException(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND));
+
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/statement/listOfDate")
+                .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 
   @Test
@@ -131,5 +219,35 @@ public class StatementControllerTest {
             MockMvcRequestBuilders.get("/statement/listStatementDate/" + date)
                 .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
         .andExpect(MockMvcResultMatchers.status().isOk());
+  }
+
+  @Test
+  public void testListOfStatementByDate_shouldBeMappedOnUserNotFound() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    String date = "2021-06-09";
+
+    Mockito.when(statementService.listStatementByDate(Mockito.any(), Mockito.any()))
+            .thenThrow(new StatementException(StatementException.Code.USER_NOT_FOUND));
+
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.get("/statement/listStatementDate/" + date)
+                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
+  }
+
+  @Test
+  public void testListOfStatementByDate_shouldBeMappedOnListStatementNotFound() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    String date = "2021-06-09";
+
+    Mockito.when(statementService.listStatementByDate(Mockito.any(), Mockito.any()))
+            .thenThrow(new StatementException(StatementException.Code.STATEMENT_NOT_FOUND));
+
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.get("/statement/listStatementDate/" + date)
+                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 }
