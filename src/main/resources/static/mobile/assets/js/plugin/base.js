@@ -11,7 +11,7 @@
 //-----------------------------------------------------------------------
 // DARK MODE
 //-----------------------------------------------------------------------
-localStorage.setItem("FinappDarkmode", "1");
+localStorage.setItem("MoneyStatsDarkmode", "1");
 //-----------------------------------------------------------------------
 
 //-----------------------------------------------------------------------
@@ -355,12 +355,12 @@ function androidAddtoHome() {
 }
 function AddtoHome(time, once) {
     if (once) {
-        var AddHomeStatus = localStorage.getItem("FinappAddtoHome");
+        var AddHomeStatus = localStorage.getItem("MoneyStatsAddtoHome");
         if (AddHomeStatus === "1" || AddHomeStatus === 1) {
             // already showed up
         }
         else {
-            localStorage.setItem("FinappAddtoHome", 1)
+            localStorage.setItem("MoneyStatsAddtoHome", 1)
             window.addEventListener('load', () => {
                 if (navigator.standalone) {
                     // if app installed ios home screen
@@ -414,7 +414,7 @@ function AddtoHome(time, once) {
 
 //-----------------------------------------------------------------------
 // Dark Mode
-var checkDarkModeStatus = localStorage.getItem("FinappDarkmode");
+var checkDarkModeStatus = localStorage.getItem("MoneyStatsDarkmode");
 var switchDarkMode = document.querySelectorAll(".dark-mode-switch");
 var pageBody = document.querySelector("body");
 var pageBodyActive = pageBody.classList.contains("dark-mode");
@@ -439,16 +439,16 @@ else {
 }
 switchDarkMode.forEach(function (el) {
     el.addEventListener("click", function () {
-        var darkmodeCheck = localStorage.getItem("FinappDarkmode");
+        var darkmodeCheck = localStorage.getItem("MoneyStatsDarkmode");
         if (darkmodeCheck === 1 || darkmodeCheck === "1") {
             pageBody.classList.remove("dark-mode");
-            localStorage.setItem("FinappDarkmode", "0");
+            localStorage.setItem("MoneyStatsDarkmode", "0");
             switchDarkModeCheck(false);
         }
         else {
             pageBody.classList.add("dark-mode")
             switchDarkModeCheck(true);
-            localStorage.setItem("FinappDarkmode", "1");
+            localStorage.setItem("MoneyStatsDarkmode", "1");
         }
     })
 })

@@ -63,7 +63,7 @@
             <a href="index.html" class="logo"><img src="./assets/img/logos/logo_transparent.png" alt="logo" class="logo"></a>
         </div>
         <div class="right">
-            <a href="#" class="headerButton">
+            <a href="app-settings.html" class="headerButton">
                 <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="imaged w32">
                 <span class="badge badge-danger"></span>
             </a>
@@ -110,7 +110,7 @@
                         </a>
                     </div>
                     <div class="item">
-                        <a href="#">
+                        <a href="app-cards.html">
                             <div class="icon-wrapper bg-success">
                                 <ion-icon name="card-outline"></ion-icon>
                             </div>
@@ -131,6 +131,216 @@
             </div>
         </div>
         <!-- Wallet Card -->
+
+        <!-- Deposit Action Sheet -->
+        <div class="modal fade action-sheet" id="depositActionSheet" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Balance</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="action-sheet-content">
+                            <form>
+                                <div class="form-group basic">
+                                    <div class="input-wrapper">
+                                        <label class="label" for="account1">From</label>
+                                        <select class="form-control custom-select" id="account1">
+                                            <option value="0">Savings (*** 5019)</option>
+                                            <option value="1">Investment (*** 6212)</option>
+                                            <option value="2">Mortgage (*** 5021)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group basic">
+                                    <label class="label">Enter Amount</label>
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text" id="basic-addona1">$</span>
+                                        <input type="text" class="form-control" placeholder="Enter an amount"
+                                            value="100">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group basic">
+                                    <button type="button" class="btn btn-primary btn-block btn-lg"
+                                        data-bs-dismiss="modal">Deposit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- * Deposit Action Sheet -->
+
+        <!-- Withdraw Action Sheet -->
+        <div class="modal fade action-sheet" id="withdrawActionSheet" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Withdraw Money</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="action-sheet-content">
+                            <form>
+                                <div class="form-group basic">
+                                    <div class="input-wrapper">
+                                        <label class="label" for="account2d">From</label>
+                                        <select class="form-control custom-select" id="account2d">
+                                            <option value="0">Savings (*** 5019)</option>
+                                            <option value="1">Investment (*** 6212)</option>
+                                            <option value="2">Mortgage (*** 5021)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group basic">
+                                    <div class="input-wrapper">
+                                        <label class="label" for="text11d">To</label>
+                                        <input type="email" class="form-control" id="text11d" placeholder="Enter IBAN">
+                                        <i class="clear-input">
+                                            <ion-icon name="close-circle"></ion-icon>
+                                        </i>
+                                    </div>
+                                </div>
+
+                                <div class="form-group basic">
+                                    <label class="label">Enter Amount</label>
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text" id="basic-addonb1">$</span>
+                                        <input type="text" class="form-control" placeholder="Enter an amount"
+                                            value="100">
+                                    </div>
+                                </div>
+
+                                <div class="form-group basic">
+                                    <button type="button" class="btn btn-primary btn-block btn-lg"
+                                        data-bs-dismiss="modal">Withdraw</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- * Withdraw Action Sheet -->
+
+        <!-- Send Action Sheet -->
+        <div class="modal fade action-sheet" id="sendActionSheet" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Send Money</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="action-sheet-content">
+                            <form>
+                                <div class="form-group basic">
+                                    <div class="input-wrapper">
+                                        <label class="label" for="account2">From</label>
+                                        <select class="form-control custom-select" id="account2">
+                                            <option value="0">Savings (*** 5019)</option>
+                                            <option value="1">Investment (*** 6212)</option>
+                                            <option value="2">Mortgage (*** 5021)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group basic">
+                                    <div class="input-wrapper">
+                                        <label class="label" for="text11">To</label>
+                                        <input type="email" class="form-control" id="text11"
+                                            placeholder="Enter bank ID">
+                                        <i class="clear-input">
+                                            <ion-icon name="close-circle"></ion-icon>
+                                        </i>
+                                    </div>
+                                </div>
+
+                                <div class="form-group basic">
+                                    <label class="label">Enter Amount</label>
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text" id="basic-addon1">$</span>
+                                        <input type="text" class="form-control" placeholder="Enter an amount"
+                                            value="100">
+                                    </div>
+                                </div>
+
+                                <div class="form-group basic">
+                                    <button type="button" class="btn btn-primary btn-block btn-lg"
+                                        data-bs-dismiss="modal">Send</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- * Send Action Sheet -->
+
+        <!-- Exchange Action Sheet -->
+        <div class="modal fade action-sheet" id="exchangeActionSheet" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Exchange Money</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="action-sheet-content">
+                            <form>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group basic">
+                                            <div class="input-wrapper">
+                                                <label class="label" for="currency1">From</label>
+                                                <select class="form-control custom-select" id="currency1">
+                                                    <option value="1">EUR</option>
+                                                    <option value="2">USD</option>
+                                                    <option value="3">AUD</option>
+                                                    <option value="4">CAD</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group basic">
+                                            <div class="input-wrapper">
+                                                <label class="label" for="currency2">To</label>
+                                                <select class="form-control custom-select" id="currency2">
+                                                    <option value="1">USD</option>
+                                                    <option value="1">EUR</option>
+                                                    <option value="2">AUD</option>
+                                                    <option value="3">CAD</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group basic">
+                                    <label class="label">Enter Amount</label>
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text" id="basic-addon2">$</span>
+                                        <input type="text" class="form-control" placeholder="Enter an amount"
+                                            value="100">
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group basic">
+                                    <button type="button" class="btn btn-primary btn-block btn-lg"
+                                        data-bs-dismiss="modal">Exchange</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- * Exchange Action Sheet -->
 
         <!-- Stats -->
         <div class="section">
@@ -169,7 +379,7 @@
         <div class="section mt-4">
             <div class="section-heading">
                 <h2 class="title" id="year">Graph</h2>
-                <a href="#" class="link">View All</a>
+                <a href="app-transactions.html" class="link">View All</a>
             </div>
                 <div id="chart">
                     <div id="timeline-chart"></div>
@@ -184,7 +394,7 @@
         <div class="section full mt-4">
             <div class="section-heading padding">
                 <h2 class="title">My Wallet</h2>
-                <a href="#" class="link">View All</a>
+                <a href="app-cards.html" class="link">View All</a>
             </div>
 
             <!-- carousel single -->
@@ -251,7 +461,7 @@
                 <strong>Overview</strong>
             </div>
         </a>
-        <a href="#" class="item">
+        <a href="app-pages.html" class="item">
             <div class="col">
                 <ion-icon name="document-text-outline"></ion-icon>
                 <strong>Pages</strong>
@@ -264,13 +474,13 @@
                 </div>
             </div>
         </a>
-        <a href="#" class="item">
+        <a href="app-cards.html" class="item">
             <div class="col">
                 <ion-icon name="card-outline"></ion-icon>
                 <strong>My Cards</strong>
             </div>
         </a>
-        <a href="#" class="item">
+        <a href="app-settings.html" class="item">
             <div class="col">
                 <ion-icon name="settings-outline"></ion-icon>
                 <strong>Settings</strong>
@@ -333,12 +543,12 @@
                                 Statement on Date
                             </div>
                         </a>
-                        <a href="#" class="action-button">
+                        <a href="app-cards.html" class="action-button">
                             <div class="in">
                                 <div class="iconbox">
                                     <ion-icon name="card-outline"></ion-icon>
                                 </div>
-                                My Wallet
+                                My Cards
                             </div>
                         </a>
                     </div>
@@ -354,11 +564,12 @@
                                 </div>
                                 <div class="in">
                                     Overview
+                                    <span class="badge badge-primary">10</span>
                                 </div>
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="item">
+                            <a href="app-pages.html" class="item">
                                 <div class="icon-box bg-primary">
                                     <ion-icon name="document-text-outline"></ion-icon>
                                 </div>
@@ -368,7 +579,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="item">
+                            <a href="app-components.html" class="item">
                                 <div class="icon-box bg-primary">
                                     <ion-icon name="apps-outline"></ion-icon>
                                 </div>
@@ -378,12 +589,12 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="item">
+                            <a href="app-cards.html" class="item">
                                 <div class="icon-box bg-primary">
                                     <ion-icon name="card-outline"></ion-icon>
                                 </div>
                                 <div class="in">
-                                    My Wallet
+                                    My Cards
                                 </div>
                             </a>
                         </li>
@@ -394,7 +605,7 @@
                     <div class="listview-title mt-1">Others</div>
                     <ul class="listview flush transparent no-line image-listview">
                         <li>
-                            <a href="#" class="item">
+                            <a href="app-settings.html" class="item">
                                 <div class="icon-box bg-primary">
                                     <ion-icon name="settings-outline"></ion-icon>
                                 </div>
@@ -404,7 +615,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="item">
+                            <a href="component-messages.html" class="item">
                                 <div class="icon-box bg-primary">
                                     <ion-icon name="chatbubble-outline"></ion-icon>
                                 </div>
@@ -448,10 +659,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="action-sheet-content text-center">
-                        <div class="mb-1"><img src="./assets/img/logos/favicon_trasparent.png" alt="image" class="imaged w64 mb-2">
+                        <div class="mb-1"><img src="assets/img/icon/192x192.png" alt="image" class="imaged w64 mb-2">
                         </div>
                         <div>
-                            Install <strong>MoneyStats</strong> on your iPhone's home screen.
+                            Install <strong>Finapp</strong> on your iPhone's home screen.
                         </div>
                         <div>
                             Tap <ion-icon name="share-outline"></ion-icon> and Add to homescreen.
@@ -482,10 +693,10 @@
                 <div class="modal-body">
                     <div class="action-sheet-content text-center">
                         <div class="mb-1">
-                            <img src="./assets/img/logos/favicon_trasparent.png" alt="image" class="imaged w64 mb-2">
+                            <img src="assets/img/icon/192x192.png" alt="image" class="imaged w64 mb-2">
                         </div>
                         <div>
-                            Install <strong>MoneyStats</strong> on your Android's home screen.
+                            Install <strong>Finapp</strong> on your Android's home screen.
                         </div>
                         <div>
                             Tap <ion-icon name="ellipsis-vertical"></ion-icon> and Add to homescreen.

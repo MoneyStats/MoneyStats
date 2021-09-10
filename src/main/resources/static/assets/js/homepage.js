@@ -1,10 +1,12 @@
 $(document).ready(function () {
+  
+  const LOGIN_REQUIRED = "LOGIN_REQUIRED";
+  
   //-------------------------------------------------------------
   // Check if session is validated with a user
   //-------------------------------------------------------------
   isValidated();
   function isValidated (){
-    const LOGIN_REQUIRED = "LOGIN_REQUIRED";
     const token = sessionStorage.getItem('accessToken');
     if (token === null) {
       window.location.href='loginPage.html';
