@@ -20,49 +20,54 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class TokenService {
 
-	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+  private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
-	private static final String FIRSTNAME = "firstName";
-	private static final String LASTNAME = "lastName";
-	private static final String DATEOFBIRTH = "dateOfBirth";
-	private static final String EMAIL = "email";
-	private static final String ROLE = "role";
+  private static final String FIRSTNAME = "firstName";
+  private static final String LASTNAME = "lastName";
+  private static final String DATEOFBIRTH = "dateOfBirth";
+  private static final String EMAIL = "email";
+  private static final String ROLE = "role";
 
-	@Value(value = "${jwt.secret}")
-	private String secret;
+  @Value(value = "${jwt.secret}")
+  private String secret;
 
-	@Value(value = "${jwt.time}")
-	private String expirationTime;
+  @Value(value = "${jwt.time}")
+  private String expirationTime;
 
-	public TokenDTO generateToken(AuthCredentialDTO user) {
-		Claims claims = Jwts.claims().setSubject(user.getUsername());
-		claims.put(FIRSTNAME, user.getFirstName());
-		claims.put(LASTNAME, user.getLastName());
-		claims.put(DATEOFBIRTH, user.getDateOfBirth());
-		claims.put(EMAIL, user.getEmail());
-		claims.put(ROLE, user.getRole());
-		long dateExp = Long.parseLong(expirationTime);
-		Date exp = new Date(System.currentTimeMillis() + dateExp);
-		String token = Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, secret).setExpiration(exp)
-				.compact();
-		return new TokenDTO(token);
-	}
+  public TokenDTO generateToken(AuthCredentialDTO user) {
+    Claims claims = Jwts.claims().setSubject(user.getUsername());
+    claims.put(FIRSTNAME, user.getFirstName());
+    claims.put(LASTNAME, user.getLastName());
+    claims.put(DATEOFBIRTH, user.getDateOfBirth());
+    claims.put(EMAIL, user.getEmail());
+    claims.put(ROLE, user.getRole());
+    long dateExp = Long.parseLong(expirationTime);
+    Date exp = new Date(System.currentTimeMillis() + dateExp);
+    String token =
+        Jwts.builder()
+            .setClaims(claims)
+            .signWith(SignatureAlgorithm.HS512, secret)
+            .setExpiration(exp)
+            .compact();
+    return new TokenDTO(token);
+  }
 
-	public AuthCredentialDTO parseToken(TokenDTO token) throws AuthenticationException {
-		Claims body;
-		try {
-			body = Jwts.parser().setSigningKey(secret).parseClaimsJws(token.getAccessToken()).getBody();
-		} catch (JwtException e) {
-			LOG.error("Not Authorized, parse Token");
-			throw new AuthenticationException(AuthenticationException.Code.UNAUTHORIZED);
-		}
-		AuthCredentialDTO user = new AuthCredentialDTO(
-				(@NotNull String) body.get(FIRSTNAME),
-				(@NotNull String) body.get(LASTNAME),
-				(@NotNull String) body.get(DATEOFBIRTH),
-				(@NotNull String) body.get(EMAIL),
-				body.getSubject(),
-				(@NotNull String) body.get(ROLE));
-		return user;
-	}
+  public AuthCredentialDTO parseToken(TokenDTO token) throws AuthenticationException {
+    Claims body;
+    try {
+      body = Jwts.parser().setSigningKey(secret).parseClaimsJws(token.getAccessToken()).getBody();
+    } catch (JwtException e) {
+      LOG.error("Not Authorized, parse Token");
+      throw new AuthenticationException(AuthenticationException.Code.UNAUTHORIZED);
+    }
+    AuthCredentialDTO user =
+        new AuthCredentialDTO(
+            (@NotNull String) body.get(FIRSTNAME),
+            (@NotNull String) body.get(LASTNAME),
+            (@NotNull String) body.get(DATEOFBIRTH),
+            (@NotNull String) body.get(EMAIL),
+            body.getSubject(),
+            (@NotNull String) body.get(ROLE));
+    return user;
+  }
 }

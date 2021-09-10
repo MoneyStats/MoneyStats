@@ -38,6 +38,5 @@ public class CategoryServiceTest {
         Assertions.assertThrows(CategoryException.class, () -> categoryService.categoryDTOList());
 
     Assertions.assertEquals(expected.getCode(), actual.getCode());
-
   }
 }

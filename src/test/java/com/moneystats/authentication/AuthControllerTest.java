@@ -43,7 +43,8 @@ public class AuthControllerTest {
     String userAsString = objectMapper.writeValueAsString(TestSchema.USER_USER_DTO);
     String authResponseAsString = objectMapper.writeValueAsString(TestSchema.AUTH_RESPONSE_DTO);
 
-    Mockito.when(credential.signUp(TestSchema.USER_USER_DTO)).thenReturn(TestSchema.AUTH_RESPONSE_DTO);
+    Mockito.when(credential.signUp(TestSchema.USER_USER_DTO))
+        .thenReturn(TestSchema.AUTH_RESPONSE_DTO);
     mockMvc
         .perform(
             post("/credential/signup")
@@ -71,14 +72,15 @@ public class AuthControllerTest {
     AuthCredentialDTO user = TestSchema.USER_USER_DTO;
     String userAsString = objectMapper.writeValueAsString(user);
 
-    Mockito.when(credential.signUp(Mockito.any())).thenThrow(new AuthenticationException(AuthenticationException.Code.USER_PRESENT));
+    Mockito.when(credential.signUp(Mockito.any()))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_PRESENT));
 
     mockMvc
-            .perform(
-                    post("/credential/signup")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(userAsString))
-            .andExpect(status().isBadRequest());
+        .perform(
+            post("/credential/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userAsString))
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -107,19 +109,20 @@ public class AuthControllerTest {
                 .content("{\"user1\": \"giovanni\", \"password\": 90}"))
         .andExpect(status().isBadRequest());
   }
+
   @Test
   void login_shouldReturnWrongcredentialOnUsername() throws Exception {
     AuthCredentialInputDTO user =
-            new AuthCredentialInputDTO(TestSchema.USER_USERNAME_WRONG, TestSchema.USER_PASSWORD);
+        new AuthCredentialInputDTO(TestSchema.USER_USERNAME_WRONG, TestSchema.USER_PASSWORD);
     String userAsString = objectMapper.writeValueAsString(user);
 
     Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL))
-            .when(credential)
-            .login(Mockito.any());
+        .when(credential)
+        .login(Mockito.any());
     mockMvc
-            .perform(
-                    post("/credential/login").contentType(MediaType.APPLICATION_JSON).content(userAsString))
-            .andExpect(status().is(401));
+        .perform(
+            post("/credential/login").contentType(MediaType.APPLICATION_JSON).content(userAsString))
+        .andExpect(status().is(401));
   }
 
   @Test
