@@ -21,12 +21,15 @@ public class StatementExceptionMapper {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
       case INVALID_STATEMENT_DTO:
         error.setError(StatementException.Code.INVALID_STATEMENT_DTO.toString());
-        return new ResponseEntity<>(error, HttpStatus.BAD_GATEWAY);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
       case WALLET_NOT_FOUND:
         error.setError(StatementException.Code.WALLET_NOT_FOUND.toString());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
       case STATEMENT_NOT_FOUND:
         error.setError(StatementException.Code.STATEMENT_NOT_FOUND.toString());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+      case LIST_STATEMENT_DATE_NOT_FOUND:
+        error.setError(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND.toString());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
       default:
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);

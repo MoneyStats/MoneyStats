@@ -33,7 +33,7 @@ public class StatementService {
   @Autowired private TokenService tokenService;
 
   public StatementResponseDTO addStatement(TokenDTO tokenDTO, StatementDTO statementDTO)
-      throws StatementException, WalletException, AuthenticationException {
+      throws StatementException, AuthenticationException {
     StatementValidator.validateStatementDTO(statementDTO);
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
     statementDTO.setUser(utente);
@@ -58,20 +58,22 @@ public class StatementService {
       throws StatementException, WalletException, AuthenticationException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
 
-    for (int i = 0; i < statementDAO.selectdistinctstatement(utente.getId()).size(); i++) {
-      System.out.println(statementDAO.selectdistinctstatement(utente.getId()));
-      return statementDAO.selectdistinctstatement(utente.getId());
+    List<String> listDate = statementDAO.selectdistinctstatement(utente.getId());
+    if (listDate.size() == 0) {
+      LOG.error(
+              "Statement Date Not Found, into StatementService, statementDAO.selectdistinctstatement(utente.getId()):61");
+      throw new StatementException(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND);
     }
-    return null;
+    return listDate;
   }
 
   public List<StatementEntity> listStatementByDate(TokenDTO tokenDTO, String date)
-      throws StatementException, WalletException, AuthenticationException {
+      throws StatementException, AuthenticationException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
 
     List<StatementEntity> statementList =
         statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date);
-    if (statementList == null) {
+    if (statementList.size() == 0) {
       LOG.error(
           "Statement Not Found, into StatementService, statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date):71");
       throw new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
@@ -93,7 +95,7 @@ public class StatementService {
   //}
 
   private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO)
-      throws AuthenticationException, WalletException {
+          throws AuthenticationException, StatementException {
     TokenValidation.validateTokenDTO(tokenDTO);
     if (tokenDTO.getAccessToken().equalsIgnoreCase("")) {
       throw new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
@@ -105,7 +107,7 @@ public class StatementService {
     AuthCredentialEntity utente = authCredentialDAO.getCredential(authCredentialInputDTO);
     if (utente == null) {
       LOG.error("User Not Found, into StatementService, validateAndCreate(TokenDTO):96");
-      throw new WalletException(WalletException.Code.USER_NOT_FOUND);
+      throw new StatementException(StatementException.Code.USER_NOT_FOUND);
     }
     return utente;
   }
