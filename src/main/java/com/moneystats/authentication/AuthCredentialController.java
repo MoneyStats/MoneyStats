@@ -19,31 +19,31 @@ import com.moneystats.authentication.DTO.TokenDTO;
 @RequestMapping("/credential")
 public class AuthCredentialController {
 
-	@Autowired
-	private AuthCredentialService service;
+  @Autowired private AuthCredentialService service;
 
-	@PostMapping("/signup")
-	public AuthResponseDTO addUser(@RequestBody AuthCredentialDTO userCredential) throws AuthenticationException {
-		return service.signUp(userCredential);
-	}
+  @PostMapping("/signup")
+  public AuthResponseDTO addUser(@RequestBody AuthCredentialDTO userCredential)
+      throws AuthenticationException {
+    return service.signUp(userCredential);
+  }
 
-	@PostMapping("/login")
-	public TokenDTO loginUser(@RequestBody AuthCredentialInputDTO userCredential) throws AuthenticationException {
-		return service.login(userCredential);
-	}
+  @PostMapping("/login")
+  public TokenDTO loginUser(@RequestBody AuthCredentialInputDTO userCredential)
+      throws AuthenticationException {
+    return service.login(userCredential);
+  }
 
-	@GetMapping("/token")
-	public AuthCredentialDTO tokenUser(@RequestHeader(value = "Authorization") String jwt)
-			throws AuthenticationException {
-		TokenDTO token = new TokenDTO(jwt);
-		return service.getUser(token);
-	}
+  @GetMapping("/token")
+  public AuthCredentialDTO tokenUser(@RequestHeader(value = "Authorization") String jwt)
+      throws AuthenticationException {
+    TokenDTO token = new TokenDTO(jwt);
+    return service.getUser(token);
+  }
 
-	@GetMapping("/admin")
-	public List<AuthCredentialDTO> adminListUsers(@RequestHeader(value = "Authorization") String jwt)
-			throws AuthenticationException {
-		TokenDTO token = new TokenDTO(jwt);
-		return service.getUsers(token);
-	}
-
+  @GetMapping("/admin")
+  public List<AuthCredentialDTO> adminListUsers(@RequestHeader(value = "Authorization") String jwt)
+      throws AuthenticationException {
+    TokenDTO token = new TokenDTO(jwt);
+    return service.getUsers(token);
+  }
 }

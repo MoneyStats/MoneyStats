@@ -50,7 +50,13 @@ public class AuthCredentialDTO implements Serializable {
 		this.role = role;
 	}
 
-	public AuthCredentialDTO(String firstName, String lastName, String dateOfBirth, String email, String username, String role) {
+  public AuthCredentialDTO(
+      String firstName,
+      String lastName,
+      String dateOfBirth,
+      String email,
+      String username,
+      String role) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.dateOfBirth = dateOfBirth;
