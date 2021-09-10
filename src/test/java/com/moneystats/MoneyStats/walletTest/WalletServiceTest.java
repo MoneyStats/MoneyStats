@@ -14,21 +14,17 @@ import com.moneystats.MoneyStats.source.DTOTestObjets;
 import com.moneystats.authentication.AuthCredentialDAO;
 import com.moneystats.authentication.AuthenticationException;
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
-import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.authentication.TokenService;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 import com.moneystats.authentication.utils.TestSchema;
 import com.moneystats.generic.SchemaDescription;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,17 +50,18 @@ public class WalletServiceTest {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
 
     Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
-    Mockito.when(authCredentialDAO.getCredential(Mockito.any()))
-        .thenReturn(authCredentialEntity);
-    Mockito.when(walletDAO.findAllByUserId(Mockito.any()))
-        .thenReturn(walletEntities);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
+    Mockito.when(walletDAO.findAllByUserId(Mockito.any())).thenReturn(walletEntities);
 
     List<WalletDTO> actual = walletService.getAll(tokenDTO);
     for (int i = 0; i < actual.size(); i++) {
       Assertions.assertEquals(walletDTO.get(i).getName(), actual.get(i).getName());
       Assertions.assertEquals(walletDTO.get(i).getUser(), actual.get(i).getUser());
-      Assertions.assertEquals(walletDTO.get(i).getCategoryEntity().getId(), actual.get(i).getCategoryEntity().getId());
-      Assertions.assertEquals(walletDTO.get(i).getCategoryEntity().getName(), actual.get(i).getCategoryEntity().getName());
+      Assertions.assertEquals(
+          walletDTO.get(i).getCategoryEntity().getId(), actual.get(i).getCategoryEntity().getId());
+      Assertions.assertEquals(
+          walletDTO.get(i).getCategoryEntity().getName(),
+          actual.get(i).getCategoryEntity().getName());
     }
   }
 
@@ -116,8 +113,7 @@ public class WalletServiceTest {
     List<WalletEntity> list = new ArrayList<>();
 
     Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
-    Mockito.when(authCredentialDAO.getCredential(Mockito.any()))
-            .thenReturn(authCredentialEntity);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
     Mockito.when(walletDAO.findAllByUserId(Mockito.any())).thenReturn(list);
 
     WalletException expectedException = new WalletException(WalletException.Code.WALLET_NOT_FOUND);
@@ -139,8 +135,7 @@ public class WalletServiceTest {
     Integer idCategory = 1;
 
     Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
-    Mockito.when(authCredentialDAO.getCredential(Mockito.any()))
-            .thenReturn(authCredentialEntity);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
     Mockito.when(categoryDAO.findById(Mockito.any())).thenReturn(categoryEntity);
     Mockito.when(walletDAO.save(Mockito.any())).thenReturn(walletEntity);
 
@@ -190,8 +185,7 @@ public class WalletServiceTest {
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
 
     Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
-    Mockito.when(authCredentialDAO.getCredential(Mockito.any()))
-            .thenReturn(authCredentialEntity);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
 
     WalletException expectedException =
         new WalletException(WalletException.Code.CATEGORY_NOT_FOUND);

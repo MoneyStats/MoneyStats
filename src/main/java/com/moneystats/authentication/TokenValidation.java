@@ -1,16 +1,14 @@
 package com.moneystats.authentication;
 
-import java.util.Set;
+import com.moneystats.authentication.DTO.TokenDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.moneystats.authentication.DTO.TokenDTO;
+import java.util.Set;
 
 public class TokenValidation {
   private static final Logger LOG = LoggerFactory.getLogger(AuthenticationValidator.class);
