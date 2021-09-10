@@ -2,6 +2,7 @@ package com.moneystats.MoneyStats.commStats.wallet;
 
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletResponseDTO;
+import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.authentication.AuthenticationException;
 import com.moneystats.authentication.DTO.TokenDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class WalletController {
    * @throws AuthenticationException
    */
   @GetMapping("/list")
-  public List<WalletDTO> getAll(@RequestHeader(value = "Authorization") String jwt)
+  public List<WalletEntity> getAll(@RequestHeader(value = "Authorization") String jwt)
       throws WalletException, AuthenticationException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return walletService.getAll(tokenDTO);

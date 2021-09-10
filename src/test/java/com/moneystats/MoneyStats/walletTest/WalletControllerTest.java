@@ -6,6 +6,7 @@ import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletResponseDTO;
 import com.moneystats.MoneyStats.commStats.wallet.WalletController;
 import com.moneystats.MoneyStats.commStats.wallet.WalletException;
 import com.moneystats.MoneyStats.commStats.wallet.WalletService;
+import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.MoneyStats.source.DTOTestObjets;
 import com.moneystats.authentication.AuthenticationException;
 import com.moneystats.authentication.DTO.TokenDTO;
@@ -34,7 +35,7 @@ public class WalletControllerTest {
   @Test
   public void testGetAllWalletList_OK() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    List<WalletDTO> walletDTOS = DTOTestObjets.walletDTOS;
+    List<WalletEntity> walletDTOS = DTOTestObjets.walletEntities;
     String walletAsString = objectMapper.writeValueAsString(walletDTOS);
 
     Mockito.when(walletService.getAll(Mockito.any())).thenReturn(walletDTOS);
