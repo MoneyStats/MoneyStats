@@ -6,25 +6,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- SEZIONE COLORI SEARCH BAR --> 
-	<!-- Chrome, Firefox OS and Opera --> 
 	<meta name='theme-color' content='#080957'> 
-	<!-- Windows Phone --> 
 	<meta name='msapplication-navbutton-color' content='#080957'> 
-	<!-- iOS Safari --> 
 	<meta name='apple-mobile-web-app-status-bar-style' content='#080957'> 
-
+    <!-- Login Page Style -->
     <link rel="stylesheet" href="./assets/css/loginPage.css">
-    <script src="./assets/js/jquery-3.6.0.min.js"></script>
+    <!-- JQuery Library -->
+    <script src="./assets/js/plugin/jquery-3.6.0.min.js"></script>
+    <!-- Login Page Script -->
     <script src="./assets/js/loginPage.js"></script>
     <!-- Libreria per i popout di conferma -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" media='screen and (max-width: 700px)' rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <title>MoneyStats Login - SignUp</title>
+    <!-- Manifest -->
     <link rel="manifest" href="__manifest.json">
+    <!-- Loader Plugin -->
+    <link rel="stylesheet" href="./assets/css/plugin/loader.css">
+    <script src="./assets/js/plugin/loader.js"></script>
 </head>
 <body class="loginpage">
+
+    <!-- loader -->
+    <div id="loader">
+        <img src="./assets/img/logos/favicon_trasparent.png" alt="icon" class="loading-icon">
+    </div>
+    <!-- * loader -->
 
     <div id="content-desktop">
 	<div class="container" id="container">

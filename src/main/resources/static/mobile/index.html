@@ -7,7 +7,13 @@
         content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000">
+    <!-- SEZIONE COLORI SEARCH BAR --> 
+	<!-- Chrome, Firefox OS and Opera --> 
+	<meta name='theme-color' content='#080957'> 
+	<!-- Windows Phone --> 
+	<meta name='msapplication-navbutton-color' content='#080957'> 
+	<!-- iOS Safari --> 
+	<meta name='apple-mobile-web-app-status-bar-style' content='#080957'> 
     <title>MoneyStats - Homepage</title>
     <meta name="description" content="Finapp HTML Mobile Template">
     <meta name="keywords"
@@ -21,6 +27,7 @@
         <!-- Include the Dark theme -->
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="./assets/js/homepage.js"></script>
+        <link rel="stylesheet" href="assets/css/index.css">
         <link rel="manifest" href="../__manifest.json">
 </head>
 
@@ -76,7 +83,7 @@
                     <div class="item">
                         <a href="#" data-bs-toggle="modal" data-bs-target="#withdrawActionSheet">
                             <div class="icon-wrapper bg-danger">
-                                <ion-icon name="add-outline"></ion-icon>
+                                + <ion-icon name="card-outline"></ion-icon>
                             </div>
                             <strong>Add Wallet</strong>
                         </a>
@@ -100,7 +107,7 @@
                     <div class="item">
                         <a href="#" data-bs-toggle="modal" data-bs-target="#exchangeActionSheet">
                             <div class="icon-wrapper bg-warning">
-                                <ion-icon name="swap-vertical"></ion-icon>
+                                <ion-icon name="bar-chart-outline"></ion-icon>
                             </div>
                             <strong>Statement on Date</strong>
                         </a>
@@ -358,68 +365,16 @@
         <!-- Graph -->
         <div class="section mt-4">
             <div class="section-heading">
-                <h2 class="title">Graph</h2>
+                <h2 class="title" id="year">Graph</h2>
                 <a href="app-transactions.html" class="link">View All</a>
             </div>
-            <div class="transactions">
-                <!-- item -->
-                <a href="app-transaction-detail.html" class="item">
-                    <div class="detail">
-                        <img src="assets/img/sample/brand/1.jpg" alt="img" class="image-block imaged w48">
-                        <div>
-                            <strong>Amazon</strong>
-                            <p>Shopping</p>
-                        </div>
-                    </div>
-                    <div class="right">
-                        <div class="price text-danger"> - $ 150</div>
-                    </div>
-                </a>
-                <!-- * item -->
-                <!-- item -->
-                <a href="app-transaction-detail.html" class="item">
-                    <div class="detail">
-                        <img src="assets/img/sample/brand/2.jpg" alt="img" class="image-block imaged w48">
-                        <div>
-                            <strong>Apple</strong>
-                            <p>Appstore Purchase</p>
-                        </div>
-                    </div>
-                    <div class="right">
-                        <div class="price text-danger">- $ 29</div>
-                    </div>
-                </a>
-                <!-- * item -->
-                <!-- item -->
-                <a href="app-transaction-detail.html" class="item">
-                    <div class="detail">
-                        <img src="assets/img/sample/avatar/avatar3.jpg" alt="img" class="image-block imaged w48">
-                        <div>
-                            <strong>Alex Ljung</strong>
-                            <p>Transfer</p>
-                        </div>
-                    </div>
-                    <div class="right">
-                        <div class="price">+ $ 1,000</div>
-                    </div>
-                </a>
-                <!-- * item -->
-                <!-- item -->
-                <a href="app-transaction-detail.html" class="item">
-                    <div class="detail">
-                        <img src="assets/img/sample/avatar/avatar4.jpg" alt="img" class="image-block imaged w48">
-                        <div>
-                            <strong>Beatriz Brito</strong>
-                            <p>Transfer</p>
-                        </div>
-                    </div>
-                    <div class="right">
-                        <div class="price text-danger">- $ 186</div>
-                    </div>
-                </a>
-                <!-- * item -->
+                <div id="chart">
+                    <div id="timeline-chart"></div>
+                  </div>
+                  <div id="pieChart">
+                    <div id="timeline-chart"></div>
+                  </div>
             </div>
-        </div>
         <!-- * Graph -->
 
         <!-- my Wallet -->
@@ -430,153 +385,48 @@
             </div>
 
             <!-- carousel single -->
-            <div class="carousel-single splide">
+            <div class="carousel-wallet splide">
                 <div class="splide__track">
-                    <ul class="splide__list">
-
-                        <li class="splide__slide">
-                            <!-- card block -->
-                            <div class="card-block bg-primary">
-                                <div class="card-main">
-                                    <div class="card-button dropdown">
-                                        <button type="button" class="btn btn-link btn-icon" data-bs-toggle="dropdown">
-                                            <ion-icon name="ellipsis-horizontal"></ion-icon>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="javacript:;">
-                                                <ion-icon name="pencil-outline"></ion-icon>Edit
-                                            </a>
-                                            <a class="dropdown-item" href="javacript:;">
-                                                <ion-icon name="close-outline"></ion-icon>Remove
-                                            </a>
-                                            <a class="dropdown-item" href="javacript:;">
-                                                <ion-icon name="arrow-up-circle-outline"></ion-icon>Upgrade
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="balance">
-                                        <span class="label">BALANCE</span>
-                                        <h1 class="title">$ 1,256,90</h1>
-                                    </div>
-                                    <div class="in">
-                                        <div class="card-number">
-                                            <span class="label">Card Number</span>
-                                            •••• 9905
-                                        </div>
-                                        <div class="bottom">
-                                            <div class="card-expiry">
-                                                <span class="label">Expiry</span>
-                                                12 / 25
-                                            </div>
-                                            <div class="card-ccv">
-                                                <span class="label">CCV</span>
-                                                553
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- * card block -->
-                        </li>
-
-                        <li class="splide__slide">
-                            <!-- card block -->
-                            <div class="card-block bg-dark">
-                                <div class="card-main">
-                                    <div class="card-button dropdown">
-                                        <button type="button" class="btn btn-link btn-icon" data-bs-toggle="dropdown">
-                                            <ion-icon name="ellipsis-horizontal"></ion-icon>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="javacript:;">
-                                                <ion-icon name="pencil-outline"></ion-icon>Edit
-                                            </a>
-                                            <a class="dropdown-item" href="javacript:;">
-                                                <ion-icon name="close-outline"></ion-icon>Remove
-                                            </a>
-                                            <a class="dropdown-item" href="javacript:;">
-                                                <ion-icon name="arrow-up-circle-outline"></ion-icon>Upgrade
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="balance">
-                                        <span class="label">BALANCE</span>
-                                        <h1 class="title">$ 1,256,90</h1>
-                                    </div>
-                                    <div class="in">
-                                        <div class="card-number">
-                                            <span class="label">Card Number</span>
-                                            •••• 9905
-                                        </div>
-                                        <div class="bottom">
-                                            <div class="card-expiry">
-                                                <span class="label">Expiry</span>
-                                                12 / 25
-                                            </div>
-                                            <div class="card-ccv">
-                                                <span class="label">CCV</span>
-                                                553
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- * card block -->
-                        </li>
-
-                        <li class="splide__slide">
-                            <!-- card block -->
-                            <div class="card-block bg-secondary">
-                                <div class="card-main">
-                                    <div class="card-button dropdown">
-                                        <button type="button" class="btn btn-link btn-icon" data-bs-toggle="dropdown">
-                                            <ion-icon name="ellipsis-horizontal"></ion-icon>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="javacript:;">
-                                                <ion-icon name="pencil-outline"></ion-icon>Edit
-                                            </a>
-                                            <a class="dropdown-item" href="javacript:;">
-                                                <ion-icon name="close-outline"></ion-icon>Remove
-                                            </a>
-                                            <a class="dropdown-item" href="javacript:;">
-                                                <ion-icon name="arrow-up-circle-outline"></ion-icon>Upgrade
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="balance">
-                                        <span class="label">BALANCE</span>
-                                        <h1 class="title">$ 1,256,90</h1>
-                                    </div>
-                                    <div class="in">
-                                        <div class="card-number">
-                                            <span class="label">Card Number</span>
-                                            •••• 9905
-                                        </div>
-                                        <div class="bottom">
-                                            <div class="card-expiry">
-                                                <span class="label">Expiry</span>
-                                                12 / 25
-                                            </div>
-                                            <div class="card-ccv">
-                                                <span class="label">CCV</span>
-                                                553
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- * card block -->
-                        </li>
-
-                    </ul>
+                    <!-- Wallet List Last Statement -->
+                    <ul class="splide__list" id="walletList"></ul>
+                    <!-- END Wallet List Last Statement -->
                 </div>
             </div>
             <!-- * carousel single -->
-
+            
         </div>
         <!-- * my wallet -->
+        
+        <!-- Switch Desktop Mode -->
+        <div id="appCapsule" style="padding-top: 20px !important; padding-bottom: 20px !important;">
 
+            <div class="section">
+                <div class="section-title">Desktop Mode</div>
+                <div class="card">
+
+                    <ul class="listview image-listview transparent flush">
+                        <li>
+                            <div class="item">
+                                <div class="icon-box bg-primary">
+                                    <ion-icon name="desktop-outline"></ion-icon>
+                                </div>
+                                <div class="in">
+                                    <div>
+                                        Enable Desktop Mode
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="SwitchDesktop">
+                                        <label class="form-check-label" for="SwitchDesktop"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+        <!-- END Switch Desktop -->
 
         <!-- app footer -->
         <div class="appFooter">
@@ -637,7 +487,7 @@
                             <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="imaged  w36">
                         </div>
                         <div class="in">
-                            <strong>Name Surname</strong>
+                            <strong id="nameMenu">Name Surname</strong>
                             <div id="usernameMenu" class="text-muted">Username</div>
                         </div>
                         <a href="#" class="btn btn-link btn-icon sidebar-close" data-bs-dismiss="modal">
@@ -762,7 +612,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/logout" class="item">
+                            <a href="/logout" id="logout" class="item">
                                 <div class="icon-box bg-primary">
                                     <ion-icon name="log-out-outline"></ion-icon>
                                 </div>
@@ -857,6 +707,8 @@
     <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
     <!-- Splide -->
     <script src="./assets/js/plugin/splide/splide.min.js"></script>
+    <!-- Chart -->
+    <script src="./assets/js/plugin/apexcharts.min.js"></script>
     <!-- Base Js File -->
     <script src="./assets/js/plugin/base.js"></script>
 

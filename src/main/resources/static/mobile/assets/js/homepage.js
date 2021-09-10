@@ -16,8 +16,9 @@ $(document).ready(function () {
         Authorization: sessionStorage.getItem('accessToken')
       },
       success: function (authCredentialDTO){
-        console.log("User Logged with accessToken {}, ", authCredentialDTO.message, " username -> ", authCredentialDTO.username);
+        console.log("User Logged with accessToken {}, ", authCredentialDTO.firstName, " username -> ", authCredentialDTO.username);
         $('#usernameMenu').text(`${authCredentialDTO.username}`);
+        $('#nameMenu').text(`${authCredentialDTO.firstName} ${authCredentialDTO.lastName}`);
       },
       error: function (authErrorResponseDTO) {
         var responseDTO = authErrorResponseDTO.responseJSON.error;
@@ -29,19 +30,10 @@ $(document).ready(function () {
             timer: 1500,
             timerProgressBar: true,
           })
-          var darkmodeCheck = localStorage.getItem("FinappDarkmode");
-          if (darkmodeCheck === 1 || darkmodeCheck === "1") {
           Toast.fire({
             icon: 'error',
-            title: 'Sessione Scaduta, reinderizzazione...',
-            background: '#080957'
+            title: "<span style='color:#2D2C2C'>Sessione Scaduta, reinderizzazione...</span>",
           })
-        } else {
-          Toast.fire({
-            icon: 'error',
-            title: 'Sessione Scaduta, reinderizzazione...',
-          })
-        }
         setTimeout(function () {
           window.location.href = "app-login.html";
         }, 1500);
@@ -51,11 +43,19 @@ $(document).ready(function () {
     getReportHomepage();
   }
 
-  // Invalidate Session
+  //-------------------------------------------------------------
+  // Invalidate Session on Press Log Out
+  //-------------------------------------------------------------
   $('#logout').click(function (e) { 
     sessionStorage.removeItem('accessToken');
   });
+  //-------------------------------------------------------------
+  // END 
+  //-------------------------------------------------------------
 
+  //-------------------------------------------------------------
+  // Get Full Report Homepage
+  //-------------------------------------------------------------
   var listDate = [];
   var statementList = [];
   var listPil = [];
@@ -97,21 +97,20 @@ $(document).ready(function () {
           $(`<span class="text-danger h2 font-weight-bold mb-0"><i class="fa fa-arrow-down"></i> ${statementReportDTO.pilPerformance.toFixed(0)}%</span>`).appendTo(`.performanceFirstDate`)
           $('#pilTotale').text("€ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-danger');
         }
-
-        // Graph Homepage
+        //-----------------------------------------------------------------------
+        // Get all Data for Graph Homepage
+        //-----------------------------------------------------------------------
         var currentYear = "";
         var lastDate = "";
         var listDateForTable;
         for (let i = 0; i < statementReportDTO.listDate.length; i++) {
           // Calcolo anno corrente(mi serve per la lista di date secondo anno)
           currentYear = statementReportDTO.listDate[statementReportDTO.listDate.length-1].split("-")[0];
-          $('#year').text('Andamento Anno ' + currentYear);
-          $('#listStatement').text('Statement Anno ' + currentYear);
+          $('#year').text('Graph ' + currentYear);
           listDate += [statementReportDTO.listDate[i] + ","];
           lastDate = statementReportDTO.listDate[i];
           listDateForTable += [statementReportDTO.listDate[i]];
         }
-        $('#dataAttuale').text("Grafico Capitali in Data " + lastDate).val(lastDate)
         for (let i = 0; i < statementReportDTO.statementList.length; i++){
           statementList += [statementReportDTO.statementList[i] + ","];
         }
@@ -120,10 +119,18 @@ $(document).ready(function () {
         }
         getGraph(listDate, statementList, listPil);
         getGraphWallet(lastDate);
-        getCurrentStatement(listDate, currentYear);
+        getCurrentStatement(lastDate);
+        //------------------------------------------------------------------------
+        // END DATA HOMEPAGE
+        //------------------------------------------------------------------------
       }
     });
   }
+
+  /*--------------------------------------------------------------------------
+  * Get Graph on index.html Area Chart
+  * Provided by ApexChart, needs CSS JS and HTML container
+  *--------------------------------------------------------------------------*/
   var graphDate = [];
   var graphValues = [];
   var graphPIL = [];
@@ -131,59 +138,49 @@ $(document).ready(function () {
     graphDate = listDate.split(",");      
     graphValues = statementList.split(",");
     graphPIL = listPil.split(",");
+    graphDate.pop();
         // GRAFICO
         // Graph
-        var ctx = document.getElementById("myChart");
+        var options = {
+          series: [{
+          name: 'Capitali Totali',
+          data: graphValues
+        }, {
+          name: 'PIL',
+          data: graphPIL
+        }],
+          chart: {
+          height: 350,
+          type: 'area'
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        xaxis: {
+          type: 'datetime',
+          categories: graphDate
+        },
+        tooltip: {
+          x: {
+            format: 'dd-MM-yy'
+          },
+        },
+        };
 
-        var myChart = new Chart(ctx, {
-          type: "line",
-          data: {
-            labels: graphDate,
-            datasets: [
-              {
-                label: "Capitali Totali",
-                data: graphValues,
-                backgroundColor: "transparent",
-                borderColor: "#007bff",
-                borderWidth: 4,
-                backgroundColor: [
-                  'rgba(105, 0, 132, .2)',
-                  ],
-                  borderColor: [
-                  'rgba(200, 99, 132, .7)',
-                  ],
-                  borderWidth: 2
-              },
-              {
-                label: "PIL",
-                data: graphPIL,
-                backgroundColor: [
-                'rgba(0, 137, 132, .2)',
-                ],
-                borderColor: [
-                'rgba(0, 10, 130, .7)',
-                ],
-                borderWidth: 2
-                }
-            ],
-          },
-          
-          options: {
-            scales: {
-              yAxes: [
-                {
-                  ticks: {
-                    beginAtZero: true,
-                  },
-                },
-              ],
-            },
-            legend: {
-              display: true,
-            },
-          },
-        });
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
   }
+  /*--------------------------------------------------------------------------
+  * End Graph Area Chart
+  *--------------------------------------------------------------------------*/
+
+  /*--------------------------------------------------------------------------
+  * Get Graph on index.html Pie Chart
+  * Provided by ApexChart, needs CSS JS and HTML container
+  *--------------------------------------------------------------------------*/
   var nameWallet = [];
   var statementWallet = [];
   function getGraphWallet(lastDate){
@@ -203,134 +200,137 @@ $(document).ready(function () {
       }
       
       // Graph
-      var ctx1 = document.getElementById("chart-pie");
       let splitName = nameWallet.split(",");
-      let splitWallet = statementWallet.split(",");
-      
-      var myChart = new Chart(ctx1, {
-        type: "pie",
-        data: {
-                labels: splitName,
-                datasets: [{
-                  data: splitWallet,
-                  backgroundColor: [
-                    "rgba(241, 182, 176, 0.6)",
-                    "rgba(227, 192, 67, 0.6)",
-                    "rgba(224, 99, 3, 0.9)",
-                    "rgba(205, 157, 105, 0.1)",
-                    "rgba(204, 107, 78, 0.8)",
-                    "rgba(201, 199, 115, 0.3)",
-                    "rgba(202, 149, 232, 0.2)",
-                    "rgba(181, 223, 238, 0.6)",
-                    "rgba(141, 88, 1, 0.2)",
-                    "rgba(189, 9, 95, 0.1)",
-                    "rgba(166, 73, 170, 0.5)",
-                    "rgba(133, 159, 99, 0.3)",
-                    "rgba(132, 211, 117, 0.9)",
-                    "rgba(73, 197, 30, 0.7)",
-                    "rgba(54, 16, 27, 0.6)",
-                    "rgba(94, 187, 84, 0.7)",
-                    "rgba(52, 127, 38, 0.5)",
-                    "rgba(36, 26, 13, 0.2)",
-                    "rgba(35, 81, 109, 0.3)",
-                    "rgba(33, 130, 53, 0.8)",
-                    "rgba(29, 60, 205, 0.8)",
-                    "rgba(20, 242, 54, 0.3)",
-                    "rgba(19, 26, 45, 0.4)",
-                    "rgba(5, 158, 54, 0.2)",
-                    "rgba(0, 138, 131, 0.3)",
-                  ],
-                }, ],
-              }
-            });
-          }
-        })
-    }
-    // LISTA STATEMENT
-    function getWallet(){
-      $.ajax({
-        type: "GET",
-        url: `/wallet/list`,
-        contentType: 'application/json',
-        dataType: 'json',
-        headers: {
-          Authorization: sessionStorage.getItem('accessToken')
-        },
-      success: function (listWalletForHomepage) {
-          const listWallet = $('#titoloTab');
-          for (let i = 0; i < listWalletForHomepage.length; i++) {
-              $(`<th scope="col">${listWalletForHomepage[i].name}</th>`).hide().appendTo(listWallet).fadeIn(i * 20);
-              
+      let splitWallet = statementWallet.split(",").map(Number);
+      splitName.pop();
+      splitWallet.pop();
+      var pie = {
+        series: splitWallet,
+        chart: {
+        width: 380,
+        type: 'pie',
+      },
+      labels: splitName,
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 400
+          },
+          legend: {
+            position: 'right'
           }
         }
-      })
-  }
-  getWallet();
+      }]
+      };
 
-  function getCurrentStatement(listDate, year) {
-    let splitDate = listDate.split(",");
-    const dataTabella = $('#data');
-    for (let i = 0; i < splitDate.length; i++) {
-        if (splitDate[i].includes(year)){
-          $.ajax({
-            type: "GET",
-            url: `/statement/listStatementDate/${splitDate[i]}`,
-            contentType: 'application/json',
-            dataType: 'json',
-            headers: {
-              Authorization: sessionStorage.getItem('accessToken')
-            },
-          success: function (statementTab) {
-            // DATA PER TABELLA
-            $(`<tr id="data${i}"><th scope="row">${splitDate[i]}</th></tr>`).hide().appendTo(dataTabella).fadeIn(i * 20);
-            const statTab = $(`#data${i}`)
-          // Fine calcolo
-            for (let y = 0; y < statementTab.length; y++){
-              $(`<td>£ ${statementTab[y].value}</td>`).hide().appendTo(statTab).fadeIn(i * 20);
-            }
+      var chart = new ApexCharts(document.querySelector("#pieChart"), pie);
+      chart.render();
           }
         })
-      }
     }
-  }
+    /*--------------------------------------------------------------------------
+    * End Graph Area Chart
+    *--------------------------------------------------------------------------*/
 
-  getDate();
-  function getDate(){
-    $.ajax({
-      type: "GET",
-      url: `/statement/listOfDate`,
-      contentType: 'application/json',
-      dataType: 'json',
-      headers: {
-        Authorization: sessionStorage.getItem('accessToken')
-      },
-      success: function (date) {
-        const listDate = $('#dateOption');
-          for (let i = 0; i < date.length; i++) {
-              $(`<option id='dateSelect' value="${date[i]}">${date[i]}</option>`).hide().appendTo(listDate).fadeIn(i * 20);
-          }
-      }
-    })
-  }
-  $('#dataConfirm').click(function () {
-    document.cookie = $('#dateOption').val() + "; path=/";
+    /*--------------------------------------------------------------------------
+    * List Wallet Homepage
+    *--------------------------------------------------------------------------*/
+    function getCurrentStatement(lastDate) {
+      var walletIndex = $('#walletList');
+            $.ajax({
+              type: "GET",
+              url: `/statement/listStatementDate/${lastDate}`,
+              contentType: 'application/json',
+              dataType: 'json',
+              headers: {
+                Authorization: sessionStorage.getItem('accessToken')
+              },
+            success: function (statementTab) {
+              for (let y = 0; y < statementTab.length; y++){
+                $(`<li class="splide__slide">
+                <div class="card-block bg-primary">
+                <div class="card-main">
+                    <div class="card-button">
+                      <ion-icon name="ellipsis-horizontal"></ion-icon>
+                    </div>
+                    <div class="balance">
+                        <span class="label">BALANCE</span>
+                        <h1 class="title">€ ${statementTab[y].value}</h1>
+                    </div>
+                    <div class="in">
+                        <div class="card-number">
+                            <span class="label">Wallet Name</span>
+                            ${statementTab[y].wallet.name}
+                        </div>
+                        <div class="bottom">
+                            <div class="card-expiry">
+                                <span class="label">Date Statement</span>
+                                ${lastDate}
+                            </div>
+                            <div class="card-ccv">
+                                <span class="label">User</span>
+                                ${statementTab[y].user.firstName} ${statementTab[y].user.lastName}
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>`).appendTo(walletIndex);
+
+              }
+              /*--------------------------------------------------------------------------
+              * Splice Slider Effect Carousel Wallet
+              *--------------------------------------------------------------------------*/
+              var elms = document.getElementsByClassName('carousel-wallet');
+              for ( var i = 0, len = elms.length; i < len; i++ ) {
+	              new Splide( elms[ i ], {
+                  perPage: 3,
+                  rewind: true,
+                  gap: 16,
+                  padding: 16,
+                  arrows: false,
+                  pagination: false,
+                  breakpoints: {
+                      768: {
+                          perPage: 1
+                      },
+                      991: {
+                          perPage: 2
+                      }
+                  }
+              }).mount();
+              }
+              /*--------------------------------------------------------------------------
+              * END Splice Slider Effect Carousel Wallet
+              *--------------------------------------------------------------------------*/
+            }
+          })
+    }
+    /*--------------------------------------------------------------------------
+    *  END Splice Slider Effect Carousel Wallet
+    *--------------------------------------------------------------------------*/
+
+    /*--------------------------------------------------------------------------
+    *  Switch Desktop Mode
+    *--------------------------------------------------------------------------*/
+   $('#SwitchDesktop').click(function () { 
     const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 1000,
-        timerProgressBar: true,
-      })
-      
-      Toast.fire({
-        icon: 'success',
-        title: 'Data inserite, reinderizzazione...'
-      })
-      setTimeout(function () {
-        window.location.href = "capitalewallet.html";
-      }, 1000);
-  })
-  $('.resetCookies').on('click', function resetCookies(){
-    document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
-  })
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 1000,
+      timerProgressBar: true,
+    })
+    Toast.fire({
+      icon: 'info',
+      title: "<span style='color:#2D2C2C'>Reinderizzazione...</span>",
+    })
+    setTimeout(function () {
+      window.location.href = "../homepage.html";
+    }, 1000);
+   });
+   /*--------------------------------------------------------------------------
+    *  Switch Desktop Mode
+    *--------------------------------------------------------------------------*/
 });

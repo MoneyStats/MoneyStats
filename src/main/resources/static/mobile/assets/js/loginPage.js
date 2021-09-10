@@ -23,7 +23,7 @@ $(document).ready(function () {
             success: function (response) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'INSERITO!',
+                    title: '<span style="color:#2D2C2C">INSERITO!</span>',
                     text: 'Utente inserito Correttamente',
                     showConfirmButton: false,
                     timer: 1000
@@ -37,28 +37,28 @@ $(document).ready(function () {
                 if (responseDTO === INVALID_AUTH_CREDENTIAL_DTO){
                     Swal.fire({
                         icon: 'error',
-                        title: "Errore, Non è possibile aggiungere l'utente",
+                        title: "<span style='color:#2D2C2C'>Errore, Non è possibile aggiungere l'utente!</span>",
                         text: 'Controlla i dati e riprova.'
                     })
                 }
                 if (responseDTO === DATABASE_ERROR){
                     Swal.fire({
                         icon: 'error',
-                        title: "Errore Interno",
+                        title: "<span style='color:#2D2C2C'>Errore Interno</span>",
                         text: 'Riprova Più tardi.'
                     })
                 }
                 if (responseDTO === USER_PRESENT){
                     Swal.fire({
                         icon: 'error',
-                        title: "Errore, Non è possibile aggiungere l'utente",
+                        title: "<span style='color:#2D2C2C'>Errore, Non è possibile aggiungere l'utente!</span>",
                         text: "Lo username inserito è già presente, riprova con un'altro username."
                     })
                 }
                 if (responseDTO === INTERNAL_SERVER_ERROR){
                     Swal.fire({
                         icon: 'error',
-                        title: "Errore Interno",
+                        title: "<span style='color:#2D2C2C'>Errore Interno</span>",
                         text: 'Riprova Più tardi.'
                     })
                 }
@@ -127,7 +127,7 @@ $(document).ready(function () {
                     var accessToken = tokenDTO.accessToken;
                     Swal.fire({
                         icon: 'success',
-                        title: 'Credenziali corrette!',
+                        title: '<span style="color:#2D2C2C">Credenziali corrette!</span>',
                         text: `Benvenuto ${userLogged}`,
                         showConfirmButton: false,
                         timer: 1500
@@ -143,28 +143,28 @@ $(document).ready(function () {
                     if (responseDTO === INVALID_AUTH_INPUT_DTO){
                         Swal.fire({
                             icon: 'error',
-                            title: "Errore!",
+                            title: "<span style='color:#2D2C2C'>Errore!</span>",
                             text: 'Controlla i dati e riprova.'
                         })
                     }
                     if (responseDTO === DATABASE_ERROR){
                         Swal.fire({
                             icon: 'error',
-                            title: "Errore Interno",
+                            title: "<span style='color:#2D2C2C'>Errore Interno</span>",
                             text: 'Riprova Più tardi.'
                         })
                     }
                     if (responseDTO === WRONG_CREDENTIAL){
                         Swal.fire({
                             icon: 'error',
-                            title: "Credenziali Errare",
+                            title: "<span style='color:#2D2C2C'>Credenziali Errate</span>",
                             text: "Username o Password errati, riprova."
                         })
                     }
                     if (responseDTO === INTERNAL_SERVER_ERROR){
                         Swal.fire({
                             icon: 'error',
-                            title: "Errore Interno",
+                            title: "<span style='color:#2D2C2C'>Errore Interno</span>",
                             text: 'Riprova Più tardi.'
                         })
                     }
