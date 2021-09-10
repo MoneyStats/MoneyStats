@@ -26,6 +26,7 @@ public class AuthCredentialService {
   private static final Logger LOG = LoggerFactory.getLogger(AuthCredentialService.class);
 
   public AuthResponseDTO signUp(AuthCredentialDTO userCredential) throws AuthenticationException {
+    userCredential.setRole(SecurityRoles.MONEYSTATS_USER_ROLE);
     AuthenticationValidator.validateAuthCredentialDTO(userCredential);
     AuthCredentialInputDTO authCredentialInputDTO =
         new AuthCredentialInputDTO(userCredential.getUsername(), userCredential.getPassword());

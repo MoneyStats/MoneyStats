@@ -18,7 +18,6 @@ public class StatementController {
   @Autowired private StatementService statementService;
 
   /**
-   *
    * @param jwt token into header
    * @param statement to be added
    * @return response of status
@@ -35,7 +34,6 @@ public class StatementController {
   }
 
   /**
-   *
    * @param jwt token for authentications
    * @return a list of date
    * @throws StatementException
@@ -51,6 +49,7 @@ public class StatementController {
 
   /**
    * Used to return the statement by that day
+   *
    * @param jwt token for authentication
    * @param date date user for serching
    * @return

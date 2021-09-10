@@ -4,7 +4,6 @@ import com.moneystats.MoneyStats.commStats.statement.DTO.StatementDTO;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementResponseDTO;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.IWalletDAO;
-import com.moneystats.MoneyStats.commStats.wallet.WalletException;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.authentication.AuthCredentialDAO;
 import com.moneystats.authentication.AuthenticationException;
@@ -34,6 +33,7 @@ public class StatementService {
 
   /**
    * Used to add a statement into database
+   *
    * @param tokenDTO
    * @param statementDTO
    * @return
@@ -63,7 +63,6 @@ public class StatementService {
   }
 
   /**
-   *
    * @param tokenDTO
    * @return a list of unique date
    * @throws StatementException
@@ -83,7 +82,6 @@ public class StatementService {
   }
 
   /**
-   *
    * @param tokenDTO
    * @param date
    * @return a list of statement by that day
