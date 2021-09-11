@@ -2,6 +2,9 @@ $(document).ready(function () {
 
   var COUNT_ERROR = 0;
 
+    /*--------------------------------------------------------------------------
+    * Get all wallet for the statement
+    *--------------------------------------------------------------------------*/
     function getWallet(){
       $.ajax({
         type: "GET",
@@ -47,9 +50,16 @@ $(document).ready(function () {
         }
       })
     }
+    /*--------------------------------------------------------------------------
+    * END Get all wallet for the statement
+    *--------------------------------------------------------------------------*/
       getWallet();
       var cookiearray = [];
       var valueCookie;
+
+    /*--------------------------------------------------------------------------
+    * add statement for each wallet
+    *--------------------------------------------------------------------------*/
       $('#aggiungiStatement').click(function () {
         var cookie = document.cookie;
         cookiearray = cookie.split(';');
@@ -110,6 +120,7 @@ $(document).ready(function () {
                         window.location.href = "index.html";
                       }, 1000);
                     }
+                    // Needs COUNT_ERROR to check the statement process
                     COUNT_ERROR = 0;
                   })
                 }
@@ -151,7 +162,13 @@ $(document).ready(function () {
         }
       });
     }
+    /*--------------------------------------------------------------------------
+    * END add Statement
+    *--------------------------------------------------------------------------*/
 
+    /*--------------------------------------------------------------------------
+    * Reset Cookies
+    *--------------------------------------------------------------------------*/
     $('.resetCookies').on('click', function resetCookies(){
       document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
     })
