@@ -226,10 +226,8 @@ $(document).ready(function () {
     //-------------------------------------------------------------
         $('#aggiungiWallet').click(function () {
             const wallet = {
-                name: $('#name').val(),
-                category: {
-                    id: $('#catOptionhtml').val(),
-                }
+                name: $('#walletName').val(),
+                categoryId: $('#catOptionhtml').val(),
             }
             Swal.fire({
                 icon: 'question',
@@ -246,16 +244,13 @@ $(document).ready(function () {
               })
             
 
-        $('#value').val('');
-        $('#date').val('');
-        $('#listWallet').val('');
+        $('#walletName').val('');
     })
 
     function addWallet(wallet) {
-        console.log("Dentro funzione")
         $.ajax({
             type: "POST",
-            url: `/wallet/postWallet/${wallet.category.id}`,
+            url: `/wallet/addWallet/${wallet.categoryId}`,
             data: JSON.stringify(wallet),
             contentType: 'application/json',
             headers: {

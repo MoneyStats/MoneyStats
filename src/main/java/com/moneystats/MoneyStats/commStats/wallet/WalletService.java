@@ -6,6 +6,7 @@ import com.moneystats.MoneyStats.commStats.statement.IStatementDAO;
 import com.moneystats.MoneyStats.commStats.statement.StatementException;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
+import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletResponseDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletStatementDTO;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
@@ -77,9 +78,10 @@ public class WalletService {
    * @throws AuthenticationException
    */
   public WalletResponseDTO addWalletEntity(
-      TokenDTO tokenDTO, Integer idCategory, WalletDTO walletDTO)
+      TokenDTO tokenDTO, Integer idCategory, WalletInputDTO walletInputDTO)
       throws WalletException, AuthenticationException {
-    WalletValidator.validateWalletDTO(walletDTO);
+    WalletValidator.validateWalletDTO(walletInputDTO);
+    WalletDTO walletDTO = new WalletDTO();
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
     walletDTO.setUser(utente);
     CategoryEntity category = categoryDAO.findById(idCategory).orElse(null);
@@ -87,6 +89,7 @@ public class WalletService {
       LOG.error("Category Not Found, on addWalletEntity into WalletService:67");
       throw new WalletException(WalletException.Code.CATEGORY_NOT_FOUND);
     }
+    walletDTO.setName(walletInputDTO.getName());
     walletDTO.setCategoryEntity(category);
     WalletEntity walletEntity =
         new WalletEntity(
@@ -114,7 +117,7 @@ public class WalletService {
     List<StatementEntity> statementEntities = statementDAO.findStatementByWalletId(wallet.getId());
     if (statementEntities.size() == 0) {
       LOG.error("No Statement Found, on deleteWalletEntity into WalletService:90");
-      throw new WalletException(WalletException.Code.STATEMENT_NOT_FOUND);
+      //throw new WalletException(WalletException.Code.STATEMENT_NOT_FOUND);
     }
     wallet.setStatementList(statementEntities);
     for (StatementEntity statementEntity : wallet.getStatementList()) {

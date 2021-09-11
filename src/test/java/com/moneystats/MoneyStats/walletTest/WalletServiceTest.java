@@ -5,6 +5,7 @@ import com.moneystats.MoneyStats.commStats.category.entity.CategoryEntity;
 import com.moneystats.MoneyStats.commStats.statement.IStatementDAO;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
+import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletResponseDTO;
 import com.moneystats.MoneyStats.commStats.wallet.IWalletDAO;
 import com.moneystats.MoneyStats.commStats.wallet.WalletException;
@@ -120,7 +121,7 @@ public class WalletServiceTest {
     AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
     Optional<CategoryEntity> categoryEntity = Optional.ofNullable(DTOTestObjets.categoryEntity);
-    WalletDTO walletDTO = DTOTestObjets.walletDTO;
+    WalletInputDTO walletDTO = DTOTestObjets.walletInputDTO;
     WalletEntity walletEntity = DTOTestObjets.walletEntities.get(0);
     Integer idCategory = 1;
 
@@ -136,7 +137,7 @@ public class WalletServiceTest {
   @Test
   void test_addWallet_shouldThrowsOnInvalidWallet() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    WalletDTO walletDTO = DTOTestObjets.walletDTO;
+    WalletInputDTO walletDTO = DTOTestObjets.walletInputDTO;
     walletDTO.setName(null);
     Integer idCategory = 1;
 
@@ -185,7 +186,7 @@ public class WalletServiceTest {
   @Test
   void test_addWallet_shouldThrowsOnCategoryNotFound() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    WalletDTO walletDTO = DTOTestObjets.walletDTO;
+    WalletInputDTO walletDTO = DTOTestObjets.walletInputDTO;
     Integer idCategory = null;
     AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;

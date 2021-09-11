@@ -9,11 +9,58 @@ $(document).ready(function () {
     const TOKEN_REQUIRED = "TOKEN_REQUIRED";
     const INVALID_TOKEN_DTO = "INVALID_TOKEN_DTO";
     const CATEGORY_NOT_FOUND = "CATEGORY_NOT_FOUND";
+    const LOGIN_REQUIRED = "LOGIN_REQUIRED";
+
+    //-------------------------------------------------------------
+  // Check if session is validated with a user
+  //-------------------------------------------------------------
+  isValidated();
+  function isValidated (){
+    const token = sessionStorage.getItem('accessToken');
+    if (token === null) {
+      window.location.href='app-login.html';
+    } 
+    //-------------------------------------------------------------
+    // Check if session is validated with a user
+    //-------------------------------------------------------------
+    $.ajax({
+      type: "GET",
+      url: "/check_login",
+      contentType: 'application/json',
+      dataType: 'json',
+      headers: {
+        Authorization: sessionStorage.getItem('accessToken')
+      },
+      success: function (authCredentialDTO){
+        console.log("User Logged with accessToken {}, ", authCredentialDTO.firstName, authCredentialDTO.lastName, " username -> ", authCredentialDTO.username);
+        $('#options').text(`Opzioni - ${authCredentialDTO.username}`);
+      },
+      error: function (authErrorResponseDTO) {
+        var responseDTO = authErrorResponseDTO.responseJSON.error;
+        if (responseDTO === LOGIN_REQUIRED){
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+          })
+          Toast.fire({
+            icon: 'error',
+            title: '<span style="color:#2D2C2C">Sessione Scaduta, reinderizzazione...</span>'
+          })
+          setTimeout(function () {
+            window.location.href = "app-login.html";
+          }, 1500);
+        }
+      }
+    })
+    getWallet();
+  }
 
     //-------------------------------------------------------------
     // Modal Get Wallet List Homepage
     //-------------------------------------------------------------
-    getWallet();
     function getWallet(){
         $.ajax({
             type: "GET",
@@ -24,8 +71,9 @@ $(document).ready(function () {
               Authorization: sessionStorage.getItem('accessToken')
             },
             success: function (resume){
-            const listWallet = $('#listWallet');
-            for (let i = resume.walletEntities.length - 1; i >= 0; i--) {
+                const listWallet = $('#listWallet');
+                for (let i = resume.walletEntities.length - 1; i >= 0; i--) {
+                var defaultValue = 0.00;
                 let img = '';
                 let color = '';
                 switch (resume.walletEntities[i].category.name){
@@ -82,6 +130,9 @@ $(document).ready(function () {
                         color = 'bg-dark';
                         break;
                 }
+                if (resume.statementEntities[i].value != undefined){
+                    defaultValue = resume.statementEntities[i].value;
+                }
                 $(`<!-- card block -->
                 <div class="card-block ${color} mb-2">
                     <div class="card-main">
@@ -100,7 +151,7 @@ $(document).ready(function () {
                         </div>
                         <div class="balance">
                             <span class="label">BALANCE</span>
-                            <h1 class="title">€ ${resume.statementEntities[i].value}</h1>
+                            <h1 class="title">€ ${defaultValue}</h1>
                         </div>
                         <div class="in">
                             <div class="card-number">
@@ -308,10 +359,8 @@ $(document).ready(function () {
     //-------------------------------------------------------------
         $('#aggiungiWallet').click(function () {
             const wallet = {
-                name: $('#name').val(),
-                category: {
-                    id: $('#catOptionhtml').val(),
-                }
+                name: $('#walletName').val(),
+                categoryId: $('#catOptionhtml').val(),
             }
             Swal.fire({
                 icon: 'question',
@@ -328,16 +377,13 @@ $(document).ready(function () {
               })
             
 
-        $('#value').val('');
-        $('#date').val('');
-        $('#listWallet').val('');
+        $('#walletName').val('');
     })
 
     function addWallet(wallet) {
-        console.log("Dentro funzione")
         $.ajax({
             type: "POST",
-            url: `/wallet/postWallet/${wallet.category.id}`,
+            url: `/wallet/addWallet/${wallet.categoryId}`,
             data: JSON.stringify(wallet),
             contentType: 'application/json',
             headers: {

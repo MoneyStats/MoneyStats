@@ -2,6 +2,7 @@ package com.moneystats.MoneyStats.walletTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
+import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletResponseDTO;
 import com.moneystats.MoneyStats.commStats.wallet.WalletController;
 import com.moneystats.MoneyStats.commStats.wallet.WalletException;
@@ -118,7 +119,7 @@ public class WalletControllerTest {
 
   @Test
   public void testAddWallet_shouldBeMappedOnError() throws Exception {
-    WalletDTO walletDTO = DTOTestObjets.walletDTO;
+    WalletInputDTO walletDTO = DTOTestObjets.walletInputDTO;
     walletDTO.setName(null);
     int idCategory = 1;
 
@@ -169,7 +170,7 @@ public class WalletControllerTest {
 
   @Test
   public void testAddWallet_shouldBeMappedUserNotFound() throws Exception {
-    WalletDTO walletDTO = DTOTestObjets.walletDTO;
+    WalletInputDTO walletDTO = DTOTestObjets.walletInputDTO;
     Integer idCategory = 1;
 
     Mockito.when(
@@ -184,7 +185,7 @@ public class WalletControllerTest {
 
   @Test
   public void testAddWalletList_shouldBeMappedCategoryNotFound() throws Exception {
-    WalletDTO walletDTO = DTOTestObjets.walletDTO;
+    WalletInputDTO walletDTO = DTOTestObjets.walletInputDTO;
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     Integer idCategory = null;
 
