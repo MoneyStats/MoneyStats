@@ -1,7 +1,9 @@
 package com.moneystats.MoneyStats.commStats.wallet;
 
+import com.moneystats.MoneyStats.commStats.statement.StatementException;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletResponseDTO;
+import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletStatementDTO;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.authentication.AuthenticationException;
 import com.moneystats.authentication.DTO.TokenDTO;
@@ -17,7 +19,6 @@ public class WalletController {
   @Autowired private WalletService walletService;
 
   /**
-   *
    * @param jwt token for authentications
    * @return a list of wallet
    * @throws WalletException
@@ -31,7 +32,6 @@ public class WalletController {
   }
 
   /**
-   *
    * @param jwt token for authentications
    * @param idCategory category to be linked
    * @param walletDTO params
@@ -50,7 +50,6 @@ public class WalletController {
   }
 
   /**
-   *
    * @param idWallet to be deleted
    * @return response of success or error
    * @throws WalletException
@@ -58,5 +57,12 @@ public class WalletController {
   @DeleteMapping("/delete/{idWallet}")
   public WalletResponseDTO deleteWallet(@PathVariable long idWallet) throws WalletException {
     return walletService.deleteWalletEntity(idWallet);
+  }
+
+  @GetMapping("/listMobile")
+  public WalletStatementDTO walletListMobile(@RequestHeader(value = "Authorization") String jwt)
+      throws WalletException, StatementException, AuthenticationException {
+    TokenDTO tokenDTO = new TokenDTO(jwt);
+    return walletService.myWalletMobile(tokenDTO);
   }
 }
