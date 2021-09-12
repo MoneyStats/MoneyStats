@@ -71,20 +71,19 @@ public class WalletService {
    * Used in the controller to add the wallet into the database
    *
    * @param tokenDTO for auth
-   * @param idCategory to link
-   * @param walletDTO to be added
+   * @param walletInputDTO to be added
    * @return a response of status
    * @throws WalletException
    * @throws AuthenticationException
    */
   public WalletResponseDTO addWalletEntity(
-      TokenDTO tokenDTO, Integer idCategory, WalletInputDTO walletInputDTO)
+      TokenDTO tokenDTO, WalletInputDTO walletInputDTO)
       throws WalletException, AuthenticationException {
     WalletValidator.validateWalletDTO(walletInputDTO);
     WalletDTO walletDTO = new WalletDTO();
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
     walletDTO.setUser(utente);
-    CategoryEntity category = categoryDAO.findById(idCategory).orElse(null);
+    CategoryEntity category = categoryDAO.findById(walletInputDTO.getCategoryId()).orElse(null);
     if (category == null) {
       LOG.error("Category Not Found, on addWalletEntity into WalletService:67");
       throw new WalletException(WalletException.Code.CATEGORY_NOT_FOUND);
@@ -117,7 +116,6 @@ public class WalletService {
     List<StatementEntity> statementEntities = statementDAO.findStatementByWalletId(wallet.getId());
     if (statementEntities.size() == 0) {
       LOG.error("No Statement Found, on deleteWalletEntity into WalletService:90");
-      //throw new WalletException(WalletException.Code.STATEMENT_NOT_FOUND);
     }
     wallet.setStatementList(statementEntities);
     for (StatementEntity statementEntity : wallet.getStatementList()) {
@@ -152,6 +150,13 @@ public class WalletService {
       LOG.error(
           "Statement Not Found, into WalletService, statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date):150");
       throw new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
+    }
+    if (walletEntities.size() > statementList.size()){
+      int walletPlus = walletEntities.size() - statementList.size();
+      for (int i = 0; i < walletPlus; i ++){
+        StatementEntity statementEntity = new StatementEntity(date, 0.00D, utente, walletEntities.get(i));
+        statementList.add(statementEntity);
+      }
     }
     walletStatementDTO.setWalletEntities(walletEntities);
     walletStatementDTO.setStatementEntities(statementList);

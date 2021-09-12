@@ -130,7 +130,7 @@ public class WalletServiceTest {
     Mockito.when(categoryDAO.findById(Mockito.any())).thenReturn(categoryEntity);
     Mockito.when(walletDAO.save(walletEntity)).thenReturn(walletEntity);
 
-    WalletResponseDTO actual = walletService.addWalletEntity(tokenDTO, idCategory, walletDTO);
+    WalletResponseDTO actual = walletService.addWalletEntity(tokenDTO, walletDTO);
     Assertions.assertEquals(expected.getMessage(), actual.getMessage());
   }
 
@@ -146,7 +146,7 @@ public class WalletServiceTest {
     WalletException actualException =
         Assertions.assertThrows(
             WalletException.class,
-            () -> walletService.addWalletEntity(tokenDTO, idCategory, walletDTO));
+            () -> walletService.addWalletEntity(tokenDTO, walletDTO));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
@@ -199,7 +199,7 @@ public class WalletServiceTest {
     WalletException actualException =
         Assertions.assertThrows(
             WalletException.class,
-            () -> walletService.addWalletEntity(tokenDTO, idCategory, walletDTO));
+            () -> walletService.addWalletEntity(tokenDTO, walletDTO));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }

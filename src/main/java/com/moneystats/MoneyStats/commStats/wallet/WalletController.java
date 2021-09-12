@@ -40,14 +40,13 @@ public class WalletController {
    * @throws WalletException
    * @throws AuthenticationException
    */
-  @PostMapping("/addWallet/{idCategory}")
+  @PostMapping("/addWallet")
   public WalletResponseDTO addWallet(
       @RequestHeader(value = "Authorization") String jwt,
-      @PathVariable int idCategory,
       @RequestBody WalletInputDTO walletDTO)
       throws WalletException, AuthenticationException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
-    return walletService.addWalletEntity(tokenDTO, idCategory, walletDTO);
+    return walletService.addWalletEntity(tokenDTO, walletDTO);
   }
 
   /**

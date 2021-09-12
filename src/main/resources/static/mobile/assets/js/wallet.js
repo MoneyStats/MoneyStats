@@ -383,7 +383,7 @@ $(document).ready(function () {
     function addWallet(wallet) {
         $.ajax({
             type: "POST",
-            url: `/wallet/addWallet/${wallet.categoryId}`,
+            url: `/wallet/addWallet`,
             data: JSON.stringify(wallet),
             contentType: 'application/json',
             headers: {

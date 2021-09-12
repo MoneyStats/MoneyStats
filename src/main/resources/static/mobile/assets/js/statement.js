@@ -15,7 +15,7 @@ $(document).ready(function () {
           Authorization: sessionStorage.getItem('accessToken')
         },
         success: function (resume){
-          const listWallet = $('#listWallet');
+          const listWallet = $('#listWalletStat');
           for (let i = 0; i < resume.length; i++) {
               document.cookie = "id"+i+" = " + resume[i].id;
               $(`<div class="form-group basic animated">
