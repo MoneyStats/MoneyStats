@@ -27,6 +27,12 @@ public class WalletExceptionMapper {
       case INVALID_WALLET_DTO:
         error.setError(WalletException.Code.INVALID_WALLET_DTO.toString());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+      case INVALID_WALLET_INPUT_DTO:
+        error.setError(WalletException.Code.INVALID_WALLET_INPUT_DTO.toString());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+      case INVALID_WALLET_INPUT_ID_DTO:
+        error.setError(WalletException.Code.INVALID_WALLET_INPUT_ID_DTO.toString());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
       case WALLET_NOT_FOUND:
         error.setError(WalletException.Code.WALLET_NOT_FOUND.toString());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);

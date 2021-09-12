@@ -141,7 +141,7 @@ $(document).ready(function () {
                                 <ion-icon name="ellipsis-horizontal"></ion-icon>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="javacript:;">
+                                <a class="dropdown-item btn-modifica-wallet" data-bs-toggle="modal" data-bs-target="#editWalletActionSheet" data-id='${resume.walletEntities[i].id}'>
                                     <ion-icon name="pencil-outline"></ion-icon>Edit
                                 </a>
                                 <a class="dropdown-item btn-elimina-wallet" href="javacript:;">
@@ -183,82 +183,100 @@ $(document).ready(function () {
     //-------------------------------------------------------------
     // Modal Get Wallet List Homepage (Edit Wallet)
     //-------------------------------------------------------------
-    //Modifica un ristorante dalla lista principale
-    /*let editMode = false;
+    let editMode = false;
     let idModifica = -1;
 
-    function editWallet(wallet) {
+    function editWallet(walletEdit) {
         $.ajax({
             type: "PUT",
-            url: `/user/ristorantiuser`,
-            data: JSON.stringify(ristorante),
+            url: `/wallet/editWallet`,
+            data: JSON.stringify(walletEdit),
             contentType: 'application/json',
             dataType: 'json',
+            headers: {
+                Authorization: sessionStorage.getItem('accessToken')
+            },
             success: function (response) {
                 editMode = false;
                 idModifica = -1;
+                Swal.fire('<span style="color:#2D2C2C">Edited!</span>', '', 'success')
+                setTimeout(function () {
+                    window.location.href = 'app-wallet.html';
+                }, 2000);
             },
             error: function (error) {
-                 alert("Problema nella modifica");
+                Swal.fire({
+                    icon: 'error',
+                    title: '<span style="color:#2D2C2C">Error, Delete process aborted</span>',
+                    text: 'Try again.'
+                })
              }
         });
     }
 
-    $('#listaRistorantiUser').on('click', '.btn-modifica-risto', function () {
+    //------------------------------------------------------------------------------------
+    // On click on the wallet list of button edit, show wallet name and list category
+    //------------------------------------------------------------------------------------
+    $('#listWallet').on('click', '.btn-modifica-wallet', function () {
         editMode = true;
         const id = +$(this).attr('data-id');
         idModifica = id;
-        $.get(`/user/ristorantiuser/${id}`, function (modifica) {
-            let img = '';
-            if (modifica.immagini === null) {
-                img = '../logos/logo.png';
-            } else {
-                img = '../upload/' + modifica.immagini;
+        const optionCategory = $('#catOptionhtmlEdit');
+        $.ajax({
+            type: "GET",
+            url: `/wallet/getById/${idModifica}`,
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (response) {
+
+            $('#walletNameEdit').val(response.name);
+            $('#catOptionhtmlEdit').val(response.categoryEntity.id);
+            
+            $.ajax({
+                type: "GET",
+                url: "/category/list",
+                contentType: 'application/json',
+                dataType: 'json',
+                headers: {
+                    Authorization: sessionStorage.getItem('accessToken')
+                },
+                success: function (resume){
+                    for (let i = resume.length - 1; i >= 0; i--) {
+                    $(`<option id='walletSelect' class="roundedCorner" value="${resume[i].id}">${resume[i].name}</option>`).hide().appendTo(optionCategory).fadeIn(i * 20);
+                    }
+                }
+            })
             }
-        $('#modificaRistoranteLogo').attr('src', img);
-            $('#ragionesociale').val(modifica.ragionesociale);
-            $('#piva').val(modifica.piva);
-            $('#cittaRistorante').val(modifica.citta);
-            $('#regioneRistorante').val(modifica.regione);
-            $('#viaRistorante').val(modifica.via);
-            $('#ncivico').val(modifica.ncivico);
-            $('#modificaRistoranteTitle').text('Modifica ' + modifica.ragionesociale);
-            $('#modificaRistorante').text('Modifica ' + modifica.ragionesociale);
-            $('#title').text('Modifica ' + modifica.ragionesociale);
         });
     });
-    $('#modificaRistorante').click(function () {
-        const ristorante = {
-            ragionesociale: $('#ragionesociale').val(),
-            piva: $('#piva').val(),
-            citta: $('#cittaRistorante').val(),
-            regione: $('#regioneRistorante').val(),
-            via: $('#viaRistorante').val(),
-            ncivico: $('#ncivico').val()
+    //------------------------------------------------------------------------------------
+    // END On click on the wallet list of button edit, show wallet name and list category
+    //------------------------------------------------------------------------------------
+
+    $('#editWalletConfirm').click(function () {
+        const walletEdit = {
+            id: idModifica,
+            name: $('#walletNameEdit').val(),
+            idCategory: $('#catOptionhtmlEdit').val()
         }
-        console.log(ristorante);
         if (editMode) {
             Swal.fire({
                 icon: 'question',
-                title: 'Vuoi salvare la Modifica di ' + ristorante.ragionesociale + '?',
+                title: '<span style="color:#2D2C2C">Do you want to save ' + walletEdit.name + '?</span>',
                 showDenyButton: true,
                 showCancelButton: true,
-                confirmButtonText: `Salva`,
-                denyButtonText: `Non Salvare`,
+                confirmButtonText: `Save`,
+                denyButtonText: `Don't Save`,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire('Salvato!', '', 'success')
-                    ristorante.id = idModifica;
-                    modificaRistorante(ristorante);
-                    setTimeout(function () {
-                        window.location.href = 'ristorantiUser.html';
-                    }, 2000);
+                    editWallet(walletEdit);
+                    
                 } else if (result.isDenied) {
-                    Swal.fire('Modifiche non salvate', '', 'info')
+                    Swal.fire("Wallet don't edited!", '', 'info')
                 }
             })
         }
-    })*/
+    })
     //-------------------------------------------------------------
     // END Modal Get Wallet List Homepage (Edit Wallet)
     //-------------------------------------------------------------
@@ -391,6 +409,9 @@ $(document).ready(function () {
             },
             success: function (response) {
                 Swal.fire('<span style="color:#2D2C2C">Saved!</span>', '', 'success')
+                setTimeout(function () {
+                    window.location.href = 'app-wallet.html';
+                }, 2000);
             },
             error: function (authErrorResponseDTO) {
                 var responseDTO = authErrorResponseDTO.responseJSON.message;
