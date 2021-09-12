@@ -94,35 +94,15 @@ $(document).ready(function () {
                   document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
                   Swal.fire({
                     title: '<span style="color:#2D2C2C">Saved!</span>',
-                    text: "New Statement?",
-                    showDenyButton: true,
-                    confirmButtonText: `Yes`,
-                    denyButtonText: `No, go to Homepage`,
-                    confirmButtonColor: '#3085d6',
-                    denyButtonColor: '#d33',
+                    showDenyButton: false,
                     icon: 'success'
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                    } else if (result.isDenied) {
-                      const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 1000,
-                        timerProgressBar: true,
-                      })
-                      
-                      Toast.fire({
-                        icon: 'success',
-                        title: '<span style="color:#2D2C2C">Render Homepage...</span>'
-                      })
-                      setTimeout(function () {
-                        window.location.href = "index.html";
-                      }, 1000);
-                    }
+                  })
+                  setTimeout(function () {
+                    window.location.href = "index.html";
+                  }, 1000);
+                  
                     // Needs COUNT_ERROR to check the statement process
                     COUNT_ERROR = 0;
-                  })
                 }
             } else if (result.isDenied) {
                   Swal.fire(

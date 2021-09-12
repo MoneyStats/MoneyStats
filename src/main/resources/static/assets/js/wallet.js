@@ -276,6 +276,9 @@ $(document).ready(function () {
             },
             success: function (response) {
                 Swal.fire('Saved!', '', 'success')
+                setTimeout(function () {
+                    window.location.href = 'homepage.html';
+                }, 2000);
             },
             error: function (authErrorResponseDTO) {
                 var responseDTO = authErrorResponseDTO.responseJSON.message;

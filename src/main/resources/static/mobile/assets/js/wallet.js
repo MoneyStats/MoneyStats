@@ -134,7 +134,7 @@ $(document).ready(function () {
                     defaultValue = resume.statementEntities[i].value;
                 }
                 $(`<!-- card block -->
-                <div class="card-block ${color} mb-2">
+                <div class="card-block ${color} mb-2" id='riga-${resume.walletEntities[i].id}'>
                     <div class="card-main">
                         <div class="card-button dropdown">
                             <button type="button" class="btn btn-link btn-icon" data-bs-toggle="dropdown">
@@ -144,7 +144,7 @@ $(document).ready(function () {
                                 <a class="dropdown-item btn-modifica-wallet" data-bs-toggle="modal" data-bs-target="#editWalletActionSheet" data-id='${resume.walletEntities[i].id}'>
                                     <ion-icon name="pencil-outline"></ion-icon>Edit
                                 </a>
-                                <a class="dropdown-item btn-elimina-wallet" href="javacript:;">
+                                <a class="dropdown-item btn-elimina-wallet" data-id='${resume.walletEntities[i].id}'">
                                     <ion-icon name="close-outline"></ion-icon>Remove
                                 </a>
                             </div>
@@ -199,10 +199,20 @@ $(document).ready(function () {
             success: function (response) {
                 editMode = false;
                 idModifica = -1;
-                Swal.fire('<span style="color:#2D2C2C">Edited!</span>', '', 'success')
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true,
+                  })
+                Toast.fire({
+                    icon: 'success',
+                    title: '<span style="color:#2D2C2C">Edited, Refresh...</span>'
+                  })
                 setTimeout(function () {
                     window.location.href = 'app-wallet.html';
-                }, 2000);
+                }, 1000);
             },
             error: function (error) {
                 Swal.fire({
@@ -272,7 +282,7 @@ $(document).ready(function () {
                     editWallet(walletEdit);
                     
                 } else if (result.isDenied) {
-                    Swal.fire("Wallet don't edited!", '', 'info')
+                    Swal.fire("<span style='color:#2D2C2C'>Wallet don't edited!</span>", '', 'info')
                 }
             })
         }
@@ -284,11 +294,11 @@ $(document).ready(function () {
     //-------------------------------------------------------------
     // Modal Get Wallet List Homepage (Delete Wallet)
     //-------------------------------------------------------------
-    function deleteWallet(id) {
-        let idPagina = $(`#riga-${id}`);
+    function deleteWallet(idDelete) {
+        let idPagina = $(`#riga-${idDelete}`);
         $.ajax({
             type: "DELETE",
-            url: `/wallet/delete/${id}`,
+            url: `/wallet/delete/${idDelete}`,
             headers: {
               Authorization: sessionStorage.getItem('accessToken')
             },
@@ -321,9 +331,10 @@ $(document).ready(function () {
             }
         });
     }
-
+    var idDelete = 0;
     $('#listWallet').on('click', '.btn-elimina-wallet', function () {
-        const id = $(this).attr('data-id');
+        const id = +$(this).attr('data-id');
+        idDelete = Number(id);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-danger',
@@ -341,7 +352,7 @@ $(document).ready(function () {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                deleteWallet(id);
+                deleteWallet(idDelete);
             } else if (
                 result.dismiss === Swal.DismissReason.cancel
             ) {
@@ -390,7 +401,7 @@ $(document).ready(function () {
                 if (result.isConfirmed) {
                     addWallet(wallet);
                 } else if (result.isDenied) {
-                  swalWithBootstrapButtons.fire(`Wallet don't added`, '', 'info')
+                  swalWithBootstrapButtons.fire(`<span style="color:#2D2C2C">Wallet don't added</span>`, '', 'info')
                 }
               })
             
