@@ -45,7 +45,7 @@ $(document).ready(function () {
             title: '<span style="color:#2D2C2C">Error loading...</span>'
           })
           setTimeout(function () {
-            window.location.href = "index.html";
+            window.location.href = "app-login.html";
           }, 1000);
         }
       })

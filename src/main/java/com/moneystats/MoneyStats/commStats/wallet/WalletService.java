@@ -3,9 +3,11 @@ package com.moneystats.MoneyStats.commStats.wallet;
 import com.moneystats.MoneyStats.commStats.category.ICategoryDAO;
 import com.moneystats.MoneyStats.commStats.category.entity.CategoryEntity;
 import com.moneystats.MoneyStats.commStats.statement.IStatementDAO;
+import com.moneystats.MoneyStats.commStats.statement.StatementException;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletResponseDTO;
+import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletStatementDTO;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.authentication.AuthCredentialDAO;
 import com.moneystats.authentication.AuthenticationException;
@@ -21,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,7 +44,8 @@ public class WalletService {
    * @throws WalletException
    * @throws AuthenticationException
    */
-  public List<WalletEntity> getAll(TokenDTO tokenDTO) throws WalletException, AuthenticationException {
+  public List<WalletEntity> getAll(TokenDTO tokenDTO)
+      throws WalletException, AuthenticationException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
     List<WalletEntity> walletEntities = walletDAO.findAllByUserId(utente.getId());
     if (walletEntities.size() == 0) {
@@ -120,6 +122,37 @@ public class WalletService {
     }
     walletDAO.deleteById(idWallet);
     return new WalletResponseDTO(SchemaDescription.WALLET_DELETE_CORRECT);
+  }
+
+  public WalletStatementDTO myWalletMobile(TokenDTO tokenDTO)
+      throws AuthenticationException, StatementException, WalletException {
+    AuthCredentialEntity utente = validateAndCreate(tokenDTO);
+    WalletStatementDTO walletStatementDTO = new WalletStatementDTO(null, null);
+
+    List<String> listDate = statementDAO.selectdistinctstatement(utente.getId());
+    if (listDate.size() == 0) {
+      LOG.error(
+          "Statement Date Not Found, into WalletService, statementDAO.selectdistinctstatement(utente.getId()):135");
+      throw new StatementException(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND);
+    }
+    String date = listDate.get(listDate.size() - 1);
+    LOG.info("Date my wallet mobile {}", date);
+
+    List<WalletEntity> walletEntities = walletDAO.findAllByUserId(utente.getId());
+    if (walletEntities.size() == 0) {
+      LOG.error("Wallet Not Found on getAll, WalletService:41");
+      throw new WalletException(WalletException.Code.WALLET_NOT_FOUND);
+    }
+    List<StatementEntity> statementList =
+        statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date);
+    if (statementList.size() == 0) {
+      LOG.error(
+          "Statement Not Found, into WalletService, statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date):150");
+      throw new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
+    }
+    walletStatementDTO.setWalletEntities(walletEntities);
+    walletStatementDTO.setStatementEntities(statementList);
+    return walletStatementDTO;
   }
 
   /**

@@ -45,6 +45,8 @@
     <script src="./assets/js/plugin/jquery-3.6.0.min.js"></script>
     <!-- JS Homepage -->
     <script src="./assets/js/homepage.js"></script>
+    <!-- JS Wallet -->
+    <script src="./assets/js/wallet.js"></script>
     <!-- SweetAlert -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- JS Chart -->
@@ -74,7 +76,7 @@
                         </a>   
                         <ul class='dropdown-menu dropdown-menu-lg-end' aria-labelledby='navbarDropdown'>   
                                <li><a class='dropdown-item' aria-current='page' href='statement.html'>Aggiungi Statement</a></li>
-                            <li><a class='dropdown-item disabled' aria-current='page' data-bs-toggle="modal" data-bs-target="#addWallet">Aggiungi Portafoglio</a></li>
+                            <li><a class='dropdown-item' aria-current='page' data-bs-toggle="modal" data-bs-target="#addWallet">Aggiungi Portafoglio</a></li>
                         </ul> 
                      </li>   
                      <li class='nav-item dropdown'>   
@@ -86,7 +88,7 @@
                             <li><a class='dropdown-item disabled' href='storicoanno.html'>Storico Annuale</a></li>   
                             <li><a class='dropdown-item disabled' href='storico.html'>Storico Totale</a></li>
                             <li><a class='dropdown-item disabled' href='#'>Grafico Annuale</a></li>
-                            <li><a class='dropdown-item disabled' data-bs-toggle="modal" data-bs-target="#wallet">Portafogli disponibili</a></li> 
+                            <li><a class='dropdown-item' data-bs-toggle="modal" data-bs-target="#wallet">Portafogli disponibili</a></li> 
                             <li><a class='dropdown-item disabled' data-bs-toggle="modal" data-bs-target="#category">Categorie disponibili</a></li> 
                         </ul>   
                     </li> 
@@ -263,7 +265,7 @@
           <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
           <div class="modal-content opacity" style="border-radius: 20px;">
               <div class="modal-header">
-                      <img src="./assets/img/logos/logo_transparent.png" alt="block" style="width: 50px; border-radius: 100px; padding-right: 10px;">
+                      <img src="./assets/img/logos/favicon_trasparent.png" alt="block" style="width: 50px; border-radius: 100px; padding-right: 10px;">
                   <h5 class="modal-title" id="walletModal">MoneyStats Wallet</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
