@@ -23,18 +23,12 @@ public class CategoryService {
    * @return a list of categories
    * @throws CategoryException
    */
-  public List<CategoryDTO> categoryDTOList() throws CategoryException {
+  public List<CategoryEntity> categoryDTOList() throws CategoryException {
     List<CategoryEntity> categoryEntities = categoryDAO.findAll();
     if (categoryEntities.size() == 0) {
       LOG.error("Category Not Found, Not present into DB");
       throw new CategoryException(CategoryException.Code.CATEGORY_NOT_FOUND);
     }
-    List<CategoryDTO> categoryDTOS = new ArrayList<>();
-    CategoryDTO categoryDTO;
-    for (CategoryEntity categoryEntity : categoryEntities) {
-      categoryDTO = new CategoryDTO(categoryEntity.getName());
-      categoryDTOS.add(categoryDTO);
-    }
-    return categoryDTOS;
+    return categoryEntities;
   }
 }

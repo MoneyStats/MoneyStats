@@ -138,6 +138,16 @@ public class HomepageService {
     }
     List<String> walletListGraph = new ArrayList<>();
     List<Double> statementListGraph = new ArrayList<>();
+
+    // Fix addWallet with no statement
+    if (walletEntities.size() > statementList.size()){
+      int walletPlus = walletEntities.size() - statementList.size();
+      for (int i = 0; i < walletPlus; i ++){
+        StatementEntity statementEntity = new StatementEntity(date, 0.00D, utente, walletEntities.get(i));
+        statementList.add(statementEntity);
+      }
+    }
+
     for (int i = 0; i < walletEntities.size(); i++) {
       walletListGraph.add(walletEntities.get(i).getName());
       statementListGraph.add(statementList.get(i).getValue());

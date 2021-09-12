@@ -1,9 +1,7 @@
 package com.moneystats.MoneyStats.commStats.wallet;
 
 import com.moneystats.MoneyStats.commStats.statement.StatementException;
-import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
-import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletResponseDTO;
-import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletStatementDTO;
+import com.moneystats.MoneyStats.commStats.wallet.DTO.*;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.authentication.AuthenticationException;
 import com.moneystats.authentication.DTO.TokenDTO;
@@ -33,20 +31,17 @@ public class WalletController {
 
   /**
    * @param jwt token for authentications
-   * @param idCategory category to be linked
    * @param walletDTO params
    * @return response od success or not
    * @throws WalletException
    * @throws AuthenticationException
    */
-  @PostMapping("/addWallet/{idCategory}")
+  @PostMapping("/addWallet")
   public WalletResponseDTO addWallet(
-      @RequestHeader(value = "Authorization") String jwt,
-      @PathVariable int idCategory,
-      @RequestBody WalletDTO walletDTO)
+      @RequestHeader(value = "Authorization") String jwt, @RequestBody WalletInputDTO walletDTO)
       throws WalletException, AuthenticationException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
-    return walletService.addWalletEntity(tokenDTO, idCategory, walletDTO);
+    return walletService.addWalletEntity(tokenDTO, walletDTO);
   }
 
   /**
@@ -64,5 +59,19 @@ public class WalletController {
       throws WalletException, StatementException, AuthenticationException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return walletService.myWalletMobile(tokenDTO);
+  }
+
+  @PutMapping("/editWallet")
+  public WalletResponseDTO editWallet(
+      @RequestHeader(value = "Authorization") String jwt,
+      @RequestBody WalletInputIdDTO walletInputIdDTO)
+      throws WalletException, AuthenticationException {
+    TokenDTO tokenDTO = new TokenDTO(jwt);
+    return walletService.editWallet(walletInputIdDTO, tokenDTO);
+  }
+
+  @GetMapping("/getById/{idWallet}")
+  public WalletDTO getById (@PathVariable long idWallet) throws WalletException {
+    return walletService.walletById(idWallet);
   }
 }

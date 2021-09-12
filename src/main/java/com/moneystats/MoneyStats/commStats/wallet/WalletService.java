@@ -5,9 +5,7 @@ import com.moneystats.MoneyStats.commStats.category.entity.CategoryEntity;
 import com.moneystats.MoneyStats.commStats.statement.IStatementDAO;
 import com.moneystats.MoneyStats.commStats.statement.StatementException;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
-import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
-import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletResponseDTO;
-import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletStatementDTO;
+import com.moneystats.MoneyStats.commStats.wallet.DTO.*;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.authentication.AuthCredentialDAO;
 import com.moneystats.authentication.AuthenticationException;
@@ -52,17 +50,6 @@ public class WalletService {
       LOG.error("Wallet Not Found on getAll, WalletService:41");
       throw new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     }
-    /*List<WalletEntity> walletDTOS = new ArrayList<>();
-    WalletDTO walletDTO = null;
-    for (int i = 0; i < walletEntities.size(); i++) {
-      walletDTO =
-          new WalletDTO(
-              walletEntities.get(i).getName(),
-              walletEntities.get(i).getCategory(),
-              walletEntities.get(i).getUser(),
-              walletEntities.get(i).getStatementList());
-      walletDTOS.add(walletDTO);
-    }*/
     return walletEntities;
   }
 
@@ -70,23 +57,23 @@ public class WalletService {
    * Used in the controller to add the wallet into the database
    *
    * @param tokenDTO for auth
-   * @param idCategory to link
-   * @param walletDTO to be added
+   * @param walletInputDTO to be added
    * @return a response of status
    * @throws WalletException
    * @throws AuthenticationException
    */
-  public WalletResponseDTO addWalletEntity(
-      TokenDTO tokenDTO, Integer idCategory, WalletDTO walletDTO)
+  public WalletResponseDTO addWalletEntity(TokenDTO tokenDTO, WalletInputDTO walletInputDTO)
       throws WalletException, AuthenticationException {
-    WalletValidator.validateWalletDTO(walletDTO);
+    WalletValidator.validateWalletDTO(walletInputDTO);
+    WalletDTO walletDTO = new WalletDTO();
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
     walletDTO.setUser(utente);
-    CategoryEntity category = categoryDAO.findById(idCategory).orElse(null);
+    CategoryEntity category = categoryDAO.findById(walletInputDTO.getCategoryId()).orElse(null);
     if (category == null) {
       LOG.error("Category Not Found, on addWalletEntity into WalletService:67");
       throw new WalletException(WalletException.Code.CATEGORY_NOT_FOUND);
     }
+    walletDTO.setName(walletInputDTO.getName());
     walletDTO.setCategoryEntity(category);
     WalletEntity walletEntity =
         new WalletEntity(
@@ -114,7 +101,6 @@ public class WalletService {
     List<StatementEntity> statementEntities = statementDAO.findStatementByWalletId(wallet.getId());
     if (statementEntities.size() == 0) {
       LOG.error("No Statement Found, on deleteWalletEntity into WalletService:90");
-      throw new WalletException(WalletException.Code.STATEMENT_NOT_FOUND);
     }
     wallet.setStatementList(statementEntities);
     for (StatementEntity statementEntity : wallet.getStatementList()) {
@@ -150,9 +136,51 @@ public class WalletService {
           "Statement Not Found, into WalletService, statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date):150");
       throw new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
     }
+
+    // Fix addWallet dont show wallet
+    if (walletEntities.size() > statementList.size()) {
+      int walletPlus = walletEntities.size() - statementList.size();
+      for (int i = 0; i < walletPlus; i++) {
+        StatementEntity statementEntity =
+            new StatementEntity(date, 0.00D, utente, walletEntities.get(i));
+        statementList.add(statementEntity);
+      }
+    }
     walletStatementDTO.setWalletEntities(walletEntities);
     walletStatementDTO.setStatementEntities(statementList);
     return walletStatementDTO;
+  }
+
+  public WalletResponseDTO editWallet(WalletInputIdDTO walletInputIdDTO, TokenDTO token)
+      throws WalletException, AuthenticationException {
+    WalletValidator.validateWalletInputWithIDDTO(walletInputIdDTO);
+    AuthCredentialEntity utente = validateAndCreate(token);
+    CategoryEntity categoryEntity =
+        categoryDAO.findById(walletInputIdDTO.getIdCategory()).orElse(null);
+    if (categoryEntity == null) {
+      LOG.error("Category Not Found, on editWallet into WalletService:171");
+      throw new WalletException(WalletException.Code.CATEGORY_NOT_FOUND);
+    }
+    WalletEntity walletEntityToEdit =
+        new WalletEntity(
+            walletInputIdDTO.getId(), walletInputIdDTO.getName(), categoryEntity, utente, null);
+    walletDAO.save(walletEntityToEdit);
+    return new WalletResponseDTO(SchemaDescription.WALLET_EDIT_CORRECT);
+  }
+
+  public WalletDTO walletById(Long idWallet) throws WalletException {
+    WalletEntity walletEntity = walletDAO.findById(idWallet).orElse(null);
+    if (walletEntity == null) {
+      LOG.error("WalletEntity Not Found, on walletById into WalletService:182");
+      throw new WalletException(WalletException.Code.WALLET_NOT_FOUND);
+    }
+    WalletDTO walletDTO =
+        new WalletDTO(
+            walletEntity.getName(),
+            walletEntity.getCategory(),
+            walletEntity.getUser(),
+            walletEntity.getStatementList());
+    return walletDTO;
   }
 
   /**

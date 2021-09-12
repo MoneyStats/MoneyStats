@@ -28,6 +28,10 @@
     <script src="./assets/js/homepage.js"></script>
     <!-- JS AddStatement -->
     <script src="./assets/js/statement.js"></script>
+    <!-- JS Category -->
+    <script src="./assets/js/category.js"></script>
+    <!-- JS Wallet -->
+    <script src="./assets/js/wallet.js"></script>
 
     <!-- ========= SEZIONE COLORI SEARCH BAR ========= --> 
 	<!-- Chrome, Firefox OS and Opera --> 
@@ -61,7 +65,7 @@
                 <ion-icon name="menu-outline"></ion-icon>
             </a>
         </div>
-        <div class="pageTitle">
+        <div class="pageTitle" style="padding-top: 15px; padding-bottom: 15px;">
             <a href="index.html" class="logo"><img src="./assets/img/logos/logo_transparent.png" alt="logo" class="logo"></a>
         </div>
         <div class="right">
@@ -104,7 +108,7 @@
                         </a>
                     </div>
                     <div class="item">
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#categoryActionSheet">
                             <div class="icon-wrapper">
                                 <ion-icon name="arrow-down-outline"></ion-icon>
                             </div>
@@ -515,7 +519,7 @@
                         <div class="section-title">Wallet</div>
                             <div class="card">
                                    <div class="card-body">
-                                       <div id="listWallet"></div>
+                                       <div id="listWalletStat"></div>
                                            
                                        </div>
                                    </div>
@@ -564,8 +568,8 @@
                                    <div class="card-body">
                                        <div class="form-group basic animated">
                                         <div class="input-group input-wrapper">
-                                            <label class="label" for="name">Wallet Name</label>
-                                            <input type="text" class="form-control" id="name" placeholder="Wallet Name">
+                                            <label class="label" for="walletName">Wallet Name</label>
+                                            <input type="text" class="form-control" id="walletName" placeholder="Wallet Name">
                                             <i class="clear-input">
                                                 <ion-icon name="close-circle"></ion-icon>
                                             </i>
@@ -584,9 +588,6 @@
                                             <div class="input-group input-wrapper">
                                                 <label class="label" for="catOptionhtml">Category</label>
                                                 <select class="form-control custom-select" id="catOptionhtml">
-                                                    <option value="0">Savings (*** 5019)</option>
-                                                    <option value="1">Investment (*** 6212)</option>
-                                                    <option value="2">Mortgage (*** 5021)</option>
                                                 </select>
                                             </div>
                                             <div class="input-info">Please select a category and then confirm</div>
@@ -607,6 +608,32 @@
         </div>
     </div>
     <!-- * Send Action Sheet -->
+
+    <!-- Category list Action Sheet -->
+    <div class="modal fade modalbox" id="categoryActionSheet" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Category</h5>
+                    <a href="javascript:;" data-bs-dismiss="modal">Close</a>
+                </div>
+                <div class="modal-body">
+                    <div class="section mt-2 mb-2">
+                        <div class="card">
+            
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <tbody id="listCategory"></tbody>
+                                </table>
+                            </div>
+            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- * Category list Action Sheet -->
 
 
 

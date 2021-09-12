@@ -9,11 +9,58 @@ $(document).ready(function () {
     const TOKEN_REQUIRED = "TOKEN_REQUIRED";
     const INVALID_TOKEN_DTO = "INVALID_TOKEN_DTO";
     const CATEGORY_NOT_FOUND = "CATEGORY_NOT_FOUND";
+    const LOGIN_REQUIRED = "LOGIN_REQUIRED";
+
+    //-------------------------------------------------------------
+  // Check if session is validated with a user
+  //-------------------------------------------------------------
+  isValidated();
+  function isValidated (){
+    const token = sessionStorage.getItem('accessToken');
+    if (token === null) {
+      window.location.href='app-login.html';
+    } 
+    //-------------------------------------------------------------
+    // Check if session is validated with a user
+    //-------------------------------------------------------------
+    $.ajax({
+      type: "GET",
+      url: "/check_login",
+      contentType: 'application/json',
+      dataType: 'json',
+      headers: {
+        Authorization: sessionStorage.getItem('accessToken')
+      },
+      success: function (authCredentialDTO){
+        console.log("User Logged with accessToken {}, ", authCredentialDTO.firstName, authCredentialDTO.lastName, " username -> ", authCredentialDTO.username);
+        $('#options').text(`Opzioni - ${authCredentialDTO.username}`);
+      },
+      error: function (authErrorResponseDTO) {
+        var responseDTO = authErrorResponseDTO.responseJSON.error;
+        if (responseDTO === LOGIN_REQUIRED){
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+          })
+          Toast.fire({
+            icon: 'error',
+            title: '<span style="color:#2D2C2C">Sessione Scaduta, reinderizzazione...</span>'
+          })
+          setTimeout(function () {
+            window.location.href = "app-login.html";
+          }, 1500);
+        }
+      }
+    })
+    getWallet();
+  }
 
     //-------------------------------------------------------------
     // Modal Get Wallet List Homepage
     //-------------------------------------------------------------
-    getWallet();
     function getWallet(){
         $.ajax({
             type: "GET",
@@ -24,8 +71,9 @@ $(document).ready(function () {
               Authorization: sessionStorage.getItem('accessToken')
             },
             success: function (resume){
-            const listWallet = $('#listWallet');
-            for (let i = resume.walletEntities.length - 1; i >= 0; i--) {
+                const listWallet = $('#listWallet');
+                for (let i = resume.walletEntities.length - 1; i >= 0; i--) {
+                var defaultValue = 0.00;
                 let img = '';
                 let color = '';
                 switch (resume.walletEntities[i].category.name){
@@ -82,25 +130,28 @@ $(document).ready(function () {
                         color = 'bg-dark';
                         break;
                 }
+                if (resume.statementEntities[i].value != undefined){
+                    defaultValue = resume.statementEntities[i].value;
+                }
                 $(`<!-- card block -->
-                <div class="card-block ${color} mb-2">
+                <div class="card-block ${color} mb-2" id='riga-${resume.walletEntities[i].id}'>
                     <div class="card-main">
                         <div class="card-button dropdown">
                             <button type="button" class="btn btn-link btn-icon" data-bs-toggle="dropdown">
                                 <ion-icon name="ellipsis-horizontal"></ion-icon>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="javacript:;">
+                                <a class="dropdown-item btn-modifica-wallet" data-bs-toggle="modal" data-bs-target="#editWalletActionSheet" data-id='${resume.walletEntities[i].id}'>
                                     <ion-icon name="pencil-outline"></ion-icon>Edit
                                 </a>
-                                <a class="dropdown-item btn-elimina-wallet" href="javacript:;">
+                                <a class="dropdown-item btn-elimina-wallet" data-id='${resume.walletEntities[i].id}'">
                                     <ion-icon name="close-outline"></ion-icon>Remove
                                 </a>
                             </div>
                         </div>
                         <div class="balance">
                             <span class="label">BALANCE</span>
-                            <h1 class="title">€ ${resume.statementEntities[i].value}</h1>
+                            <h1 class="title">€ ${defaultValue}</h1>
                         </div>
                         <div class="in">
                             <div class="card-number">
@@ -132,82 +183,110 @@ $(document).ready(function () {
     //-------------------------------------------------------------
     // Modal Get Wallet List Homepage (Edit Wallet)
     //-------------------------------------------------------------
-    //Modifica un ristorante dalla lista principale
-    /*let editMode = false;
+    let editMode = false;
     let idModifica = -1;
 
-    function editWallet(wallet) {
+    function editWallet(walletEdit) {
         $.ajax({
             type: "PUT",
-            url: `/user/ristorantiuser`,
-            data: JSON.stringify(ristorante),
+            url: `/wallet/editWallet`,
+            data: JSON.stringify(walletEdit),
             contentType: 'application/json',
             dataType: 'json',
+            headers: {
+                Authorization: sessionStorage.getItem('accessToken')
+            },
             success: function (response) {
                 editMode = false;
                 idModifica = -1;
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true,
+                  })
+                Toast.fire({
+                    icon: 'success',
+                    title: '<span style="color:#2D2C2C">Edited, Refresh...</span>'
+                  })
+                setTimeout(function () {
+                    window.location.href = 'app-wallet.html';
+                }, 1000);
             },
             error: function (error) {
-                 alert("Problema nella modifica");
+                Swal.fire({
+                    icon: 'error',
+                    title: '<span style="color:#2D2C2C">Error, Delete process aborted</span>',
+                    text: 'Try again.'
+                })
              }
         });
     }
 
-    $('#listaRistorantiUser').on('click', '.btn-modifica-risto', function () {
+    //------------------------------------------------------------------------------------
+    // On click on the wallet list of button edit, show wallet name and list category
+    //------------------------------------------------------------------------------------
+    $('#listWallet').on('click', '.btn-modifica-wallet', function () {
         editMode = true;
         const id = +$(this).attr('data-id');
         idModifica = id;
-        $.get(`/user/ristorantiuser/${id}`, function (modifica) {
-            let img = '';
-            if (modifica.immagini === null) {
-                img = '../logos/logo.png';
-            } else {
-                img = '../upload/' + modifica.immagini;
+        const optionCategory = $('#catOptionhtmlEdit');
+        $.ajax({
+            type: "GET",
+            url: `/wallet/getById/${idModifica}`,
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (response) {
+
+            $('#walletNameEdit').val(response.name);
+            $('#catOptionhtmlEdit').val(response.categoryEntity.id);
+            
+            $.ajax({
+                type: "GET",
+                url: "/category/list",
+                contentType: 'application/json',
+                dataType: 'json',
+                headers: {
+                    Authorization: sessionStorage.getItem('accessToken')
+                },
+                success: function (resume){
+                    for (let i = resume.length - 1; i >= 0; i--) {
+                    $(`<option id='walletSelect' class="roundedCorner" value="${resume[i].id}">${resume[i].name}</option>`).hide().appendTo(optionCategory).fadeIn(i * 20);
+                    }
+                }
+            })
             }
-        $('#modificaRistoranteLogo').attr('src', img);
-            $('#ragionesociale').val(modifica.ragionesociale);
-            $('#piva').val(modifica.piva);
-            $('#cittaRistorante').val(modifica.citta);
-            $('#regioneRistorante').val(modifica.regione);
-            $('#viaRistorante').val(modifica.via);
-            $('#ncivico').val(modifica.ncivico);
-            $('#modificaRistoranteTitle').text('Modifica ' + modifica.ragionesociale);
-            $('#modificaRistorante').text('Modifica ' + modifica.ragionesociale);
-            $('#title').text('Modifica ' + modifica.ragionesociale);
         });
     });
-    $('#modificaRistorante').click(function () {
-        const ristorante = {
-            ragionesociale: $('#ragionesociale').val(),
-            piva: $('#piva').val(),
-            citta: $('#cittaRistorante').val(),
-            regione: $('#regioneRistorante').val(),
-            via: $('#viaRistorante').val(),
-            ncivico: $('#ncivico').val()
+    //------------------------------------------------------------------------------------
+    // END On click on the wallet list of button edit, show wallet name and list category
+    //------------------------------------------------------------------------------------
+
+    $('#editWalletConfirm').click(function () {
+        const walletEdit = {
+            id: idModifica,
+            name: $('#walletNameEdit').val(),
+            idCategory: $('#catOptionhtmlEdit').val()
         }
-        console.log(ristorante);
         if (editMode) {
             Swal.fire({
                 icon: 'question',
-                title: 'Vuoi salvare la Modifica di ' + ristorante.ragionesociale + '?',
+                title: '<span style="color:#2D2C2C">Do you want to save ' + walletEdit.name + '?</span>',
                 showDenyButton: true,
                 showCancelButton: true,
-                confirmButtonText: `Salva`,
-                denyButtonText: `Non Salvare`,
+                confirmButtonText: `Save`,
+                denyButtonText: `Don't Save`,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire('Salvato!', '', 'success')
-                    ristorante.id = idModifica;
-                    modificaRistorante(ristorante);
-                    setTimeout(function () {
-                        window.location.href = 'ristorantiUser.html';
-                    }, 2000);
+                    editWallet(walletEdit);
+                    
                 } else if (result.isDenied) {
-                    Swal.fire('Modifiche non salvate', '', 'info')
+                    Swal.fire("<span style='color:#2D2C2C'>Wallet don't edited!</span>", '', 'info')
                 }
             })
         }
-    })*/
+    })
     //-------------------------------------------------------------
     // END Modal Get Wallet List Homepage (Edit Wallet)
     //-------------------------------------------------------------
@@ -215,11 +294,11 @@ $(document).ready(function () {
     //-------------------------------------------------------------
     // Modal Get Wallet List Homepage (Delete Wallet)
     //-------------------------------------------------------------
-    function deleteWallet(id) {
-        let idPagina = $(`#riga-${id}`);
+    function deleteWallet(idDelete) {
+        let idPagina = $(`#riga-${idDelete}`);
         $.ajax({
             type: "DELETE",
-            url: `/wallet/delete/${id}`,
+            url: `/wallet/delete/${idDelete}`,
             headers: {
               Authorization: sessionStorage.getItem('accessToken')
             },
@@ -252,9 +331,10 @@ $(document).ready(function () {
             }
         });
     }
-
+    var idDelete = 0;
     $('#listWallet').on('click', '.btn-elimina-wallet', function () {
-        const id = $(this).attr('data-id');
+        const id = +$(this).attr('data-id');
+        idDelete = Number(id);
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-danger',
@@ -272,7 +352,7 @@ $(document).ready(function () {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                deleteWallet(id);
+                deleteWallet(idDelete);
             } else if (
                 result.dismiss === Swal.DismissReason.cancel
             ) {
@@ -308,10 +388,8 @@ $(document).ready(function () {
     //-------------------------------------------------------------
         $('#aggiungiWallet').click(function () {
             const wallet = {
-                name: $('#name').val(),
-                category: {
-                    id: $('#catOptionhtml').val(),
-                }
+                name: $('#walletName').val(),
+                categoryId: $('#catOptionhtml').val(),
             }
             Swal.fire({
                 icon: 'question',
@@ -323,21 +401,18 @@ $(document).ready(function () {
                 if (result.isConfirmed) {
                     addWallet(wallet);
                 } else if (result.isDenied) {
-                  swalWithBootstrapButtons.fire(`Wallet don't added`, '', 'info')
+                  swalWithBootstrapButtons.fire(`<span style="color:#2D2C2C">Wallet don't added</span>`, '', 'info')
                 }
               })
             
 
-        $('#value').val('');
-        $('#date').val('');
-        $('#listWallet').val('');
+        $('#walletName').val('');
     })
 
     function addWallet(wallet) {
-        console.log("Dentro funzione")
         $.ajax({
             type: "POST",
-            url: `/wallet/postWallet/${wallet.category.id}`,
+            url: `/wallet/addWallet`,
             data: JSON.stringify(wallet),
             contentType: 'application/json',
             headers: {
@@ -345,6 +420,9 @@ $(document).ready(function () {
             },
             success: function (response) {
                 Swal.fire('<span style="color:#2D2C2C">Saved!</span>', '', 'success')
+                setTimeout(function () {
+                    window.location.href = 'app-wallet.html';
+                }, 2000);
             },
             error: function (authErrorResponseDTO) {
                 var responseDTO = authErrorResponseDTO.responseJSON.message;

@@ -33,7 +33,7 @@ $(document).ready(function () {
                     <div class="btn-group roundedCorner" role="group">
                         <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary roundedCorner dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Opzioni</button>
                             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                <li><a class="dropdown-item btn-modifica-risto" data-bs-toggle="modal" data-bs-target="#modifica" data-id='${resume[i].id}'>Modifica</a></li>
+                                <li><a class="dropdown-item btn-modifica-wallet" data-bs-toggle="modal" data-bs-target="#editWallet" data-id='${resume[i].id}'>Modifica</a></li>
                                 <li><a class="dropdown-item btn-elimina-wallet" data-id='${resume[i].id}'>Elimina</a></li>
                             </ul>
                     </div>
@@ -50,82 +50,100 @@ $(document).ready(function () {
     //-------------------------------------------------------------
     // Modal Get Wallet List Homepage (Edit Wallet)
     //-------------------------------------------------------------
-    //Modifica un ristorante dalla lista principale
-    /*let editMode = false;
+    let editMode = false;
     let idModifica = -1;
 
-    function editWallet(wallet) {
+    function editWallet(walletEdit) {
         $.ajax({
             type: "PUT",
-            url: `/user/ristorantiuser`,
-            data: JSON.stringify(ristorante),
+            url: `/wallet/editWallet`,
+            data: JSON.stringify(walletEdit),
             contentType: 'application/json',
             dataType: 'json',
+            headers: {
+                Authorization: sessionStorage.getItem('accessToken')
+            },
             success: function (response) {
                 editMode = false;
                 idModifica = -1;
+                Swal.fire('Edited!', '', 'success')
+                setTimeout(function () {
+                    window.location.href = 'homepage.html';
+                }, 2000);
             },
             error: function (error) {
-                 alert("Problema nella modifica");
+                Swal.fire({
+                    icon: 'error',
+                    title: "Error, Delete process aborted",
+                    text: 'Try again.'
+                })
              }
         });
     }
 
-    $('#listaRistorantiUser').on('click', '.btn-modifica-risto', function () {
+    //------------------------------------------------------------------------------------
+    // On click on the wallet list of button edit, show wallet name and list category
+    //------------------------------------------------------------------------------------
+    $('#listWallet').on('click', '.btn-modifica-wallet', function () {
         editMode = true;
         const id = +$(this).attr('data-id');
         idModifica = id;
-        $.get(`/user/ristorantiuser/${id}`, function (modifica) {
-            let img = '';
-            if (modifica.immagini === null) {
-                img = '../logos/logo.png';
-            } else {
-                img = '../upload/' + modifica.immagini;
+        const optionCategory = $('#catOptionhtmlEdit');
+        $.ajax({
+            type: "GET",
+            url: `/wallet/getById/${idModifica}`,
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (response) {
+
+            $('#editWalletName').val(response.name);
+            $('#catOptionhtml').val(response.categoryEntity.id);
+            
+            $.ajax({
+                type: "GET",
+                url: "/category/list",
+                contentType: 'application/json',
+                dataType: 'json',
+                headers: {
+                    Authorization: sessionStorage.getItem('accessToken')
+                },
+                success: function (resume){
+                    for (let i = resume.length - 1; i >= 0; i--) {
+                    $(`<option id='walletSelect' class="roundedCorner" value="${resume[i].id}">${resume[i].name}</option>`).hide().appendTo(optionCategory).fadeIn(i * 20);
+                    }
+                }
+            })
             }
-        $('#modificaRistoranteLogo').attr('src', img);
-            $('#ragionesociale').val(modifica.ragionesociale);
-            $('#piva').val(modifica.piva);
-            $('#cittaRistorante').val(modifica.citta);
-            $('#regioneRistorante').val(modifica.regione);
-            $('#viaRistorante').val(modifica.via);
-            $('#ncivico').val(modifica.ncivico);
-            $('#modificaRistoranteTitle').text('Modifica ' + modifica.ragionesociale);
-            $('#modificaRistorante').text('Modifica ' + modifica.ragionesociale);
-            $('#title').text('Modifica ' + modifica.ragionesociale);
         });
     });
-    $('#modificaRistorante').click(function () {
-        const ristorante = {
-            ragionesociale: $('#ragionesociale').val(),
-            piva: $('#piva').val(),
-            citta: $('#cittaRistorante').val(),
-            regione: $('#regioneRistorante').val(),
-            via: $('#viaRistorante').val(),
-            ncivico: $('#ncivico').val()
+    //------------------------------------------------------------------------------------
+    // END On click on the wallet list of button edit, show wallet name and list category
+    //------------------------------------------------------------------------------------
+
+    $('#editWalletConfirm').click(function () {
+        const walletEdit = {
+            id: idModifica,
+            name: $('#editWalletName').val(),
+            idCategory: $('#catOptionhtmlEdit').val()
         }
-        console.log(ristorante);
         if (editMode) {
             Swal.fire({
                 icon: 'question',
-                title: 'Vuoi salvare la Modifica di ' + ristorante.ragionesociale + '?',
+                title: 'Do you want to save ' + walletEdit.name + '?',
                 showDenyButton: true,
                 showCancelButton: true,
-                confirmButtonText: `Salva`,
-                denyButtonText: `Non Salvare`,
+                confirmButtonText: `Save`,
+                denyButtonText: `Don't Save`,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire('Salvato!', '', 'success')
-                    ristorante.id = idModifica;
-                    modificaRistorante(ristorante);
-                    setTimeout(function () {
-                        window.location.href = 'ristorantiUser.html';
-                    }, 2000);
+                    editWallet(walletEdit);
+                    
                 } else if (result.isDenied) {
-                    Swal.fire('Modifiche non salvate', '', 'info')
+                    Swal.fire("Wallet don't edited!", '', 'info')
                 }
             })
         }
-    })*/
+    })
     //-------------------------------------------------------------
     // END Modal Get Wallet List Homepage (Edit Wallet)
     //-------------------------------------------------------------
@@ -226,10 +244,8 @@ $(document).ready(function () {
     //-------------------------------------------------------------
         $('#aggiungiWallet').click(function () {
             const wallet = {
-                name: $('#name').val(),
-                category: {
-                    id: $('#catOptionhtml').val(),
-                }
+                name: $('#walletName').val(),
+                categoryId: $('#catOptionhtml').val(),
             }
             Swal.fire({
                 icon: 'question',
@@ -246,16 +262,13 @@ $(document).ready(function () {
               })
             
 
-        $('#value').val('');
-        $('#date').val('');
-        $('#listWallet').val('');
+        $('#walletName').val('');
     })
 
     function addWallet(wallet) {
-        console.log("Dentro funzione")
         $.ajax({
             type: "POST",
-            url: `/wallet/postWallet/${wallet.category.id}`,
+            url: `/wallet/addWallet`,
             data: JSON.stringify(wallet),
             contentType: 'application/json',
             headers: {
@@ -263,6 +276,9 @@ $(document).ready(function () {
             },
             success: function (response) {
                 Swal.fire('Saved!', '', 'success')
+                setTimeout(function () {
+                    window.location.href = 'homepage.html';
+                }, 2000);
             },
             error: function (authErrorResponseDTO) {
                 var responseDTO = authErrorResponseDTO.responseJSON.message;
