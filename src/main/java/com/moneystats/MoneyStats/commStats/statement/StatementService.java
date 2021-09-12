@@ -1,6 +1,7 @@
 package com.moneystats.MoneyStats.commStats.statement;
 
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementDTO;
+import com.moneystats.MoneyStats.commStats.statement.DTO.StatementInputDTO;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementResponseDTO;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.IWalletDAO;
@@ -40,13 +41,16 @@ public class StatementService {
    * @throws StatementException
    * @throws AuthenticationException
    */
-  public StatementResponseDTO addStatement(TokenDTO tokenDTO, StatementDTO statementDTO)
+  public StatementResponseDTO addStatement(TokenDTO tokenDTO, StatementInputDTO statementInputDTO)
       throws StatementException, AuthenticationException {
-    StatementValidator.validateStatementDTO(statementDTO);
+    StatementValidator.validateStatementInputDTO(statementInputDTO);
+    StatementDTO statementDTO = new StatementDTO();
+    statementDTO.setDate(statementInputDTO.getDate());
+    statementDTO.setValue(statementInputDTO.getValue());
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
     statementDTO.setUser(utente);
     WalletEntity walletEntity =
-        walletDAO.findById(statementDTO.getWalletEntity().getId()).orElse(null);
+        walletDAO.findById(statementInputDTO.getWalletId()).orElse(null);
     if (walletEntity == null) {
       LOG.error("Wallet Not Found, into StatementService, walletDAO.findById:37");
       throw new StatementException(StatementException.Code.WALLET_NOT_FOUND);

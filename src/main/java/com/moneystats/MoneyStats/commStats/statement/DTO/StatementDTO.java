@@ -12,6 +12,8 @@ public class StatementDTO implements Serializable {
   @NotNull private AuthCredentialEntity user;
   @NotNull private WalletEntity walletEntity;
 
+  public StatementDTO() {}
+
   public StatementDTO(
       String date, Double value, AuthCredentialEntity user, WalletEntity walletEntity) {
     this.date = date;

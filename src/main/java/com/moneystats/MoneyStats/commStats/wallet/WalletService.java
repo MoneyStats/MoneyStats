@@ -43,14 +43,14 @@ public class WalletService {
    * @throws WalletException
    * @throws AuthenticationException
    */
-  public List<WalletDTO> getAll(TokenDTO tokenDTO) throws WalletException, AuthenticationException {
+  public List<WalletEntity> getAll(TokenDTO tokenDTO) throws WalletException, AuthenticationException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
     List<WalletEntity> walletEntities = walletDAO.findAllByUserId(utente.getId());
     if (walletEntities.size() == 0) {
       LOG.error("Wallet Not Found on getAll, WalletService:41");
       throw new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     }
-    List<WalletDTO> walletDTOS = new ArrayList<>();
+    /*List<WalletEntity> walletDTOS = new ArrayList<>();
     WalletDTO walletDTO = null;
     for (int i = 0; i < walletEntities.size(); i++) {
       walletDTO =
@@ -60,8 +60,8 @@ public class WalletService {
               walletEntities.get(i).getUser(),
               walletEntities.get(i).getStatementList());
       walletDTOS.add(walletDTO);
-    }
-    return walletDTOS;
+    }*/
+    return walletEntities;
   }
 
   /**

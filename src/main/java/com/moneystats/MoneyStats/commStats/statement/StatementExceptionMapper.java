@@ -31,6 +31,9 @@ public class StatementExceptionMapper {
       case LIST_STATEMENT_DATE_NOT_FOUND:
         error.setError(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND.toString());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+      case INVALID_STATEMENT_INPUT_DTO:
+        error.setError(StatementException.Code.INVALID_STATEMENT_INPUT_DTO.toString());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
       default:
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }

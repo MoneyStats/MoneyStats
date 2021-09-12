@@ -53,15 +53,15 @@ public class WalletServiceTest {
     Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
     Mockito.when(walletDAO.findAllByUserId(Mockito.any())).thenReturn(walletEntities);
 
-    List<WalletDTO> actual = walletService.getAll(tokenDTO);
+    List<WalletEntity> actual = walletService.getAll(tokenDTO);
     for (int i = 0; i < actual.size(); i++) {
       Assertions.assertEquals(walletDTO.get(i).getName(), actual.get(i).getName());
       Assertions.assertEquals(walletDTO.get(i).getUser(), actual.get(i).getUser());
       Assertions.assertEquals(
-          walletDTO.get(i).getCategoryEntity().getId(), actual.get(i).getCategoryEntity().getId());
+          walletDTO.get(i).getCategoryEntity().getId(), actual.get(i).getCategory().getId());
       Assertions.assertEquals(
           walletDTO.get(i).getCategoryEntity().getName(),
-          actual.get(i).getCategoryEntity().getName());
+          actual.get(i).getCategory().getName());
     }
   }
 
