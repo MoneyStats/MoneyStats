@@ -124,7 +124,7 @@
                         </a>
                     </div>
                     <div class="item">
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#exchangeActionSheet">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#dateStatementActionSheet">
                             <div class="icon-wrapper bg-warning">
                                 <ion-icon name="bar-chart-outline"></ion-icon>
                             </div>
@@ -175,7 +175,7 @@
         <div class="section mt-4">
             <div class="section-heading">
                 <h2 class="title" id="year">Graph</h2>
-                <a href="#" class="link">View All</a>
+                <a href="#" class="link" onclick="toastbox('soon')">View All</a>
             </div>
                 <div id="chart">
                     <div id="timeline-chart"></div>
@@ -257,13 +257,13 @@
                 <strong>Overview</strong>
             </div>
         </a>
-        <a href="#" class="item">
+        <a href="#" class="item" onclick="toastbox('soon')">
             <div class="col">
                 <ion-icon name="document-text-outline"></ion-icon>
                 <strong>Pages</strong>
             </div>
         </a>
-        <a href="#" class="item">
+        <a href="#" class="item" data-bs-toggle="modal" data-bs-target="#infoActionSheet">
             <div class="col">
                 <div class="action-button large">
                     <ion-icon name="arrow-up-outline"></ion-icon>
@@ -276,7 +276,7 @@
                 <strong>My Wallet</strong>
             </div>
         </a>
-        <a href="#" class="item">
+        <a href="#" class="item" onclick="toastbox('soon')">
             <div class="col">
                 <ion-icon name="settings-outline"></ion-icon>
                 <strong>Settings</strong>
@@ -331,7 +331,7 @@
                                 Add Wallet
                             </div>
                         </a>
-                        <a href="index.html" class="action-button">
+                        <a href="#" class="action-button" data-bs-toggle="modal" data-bs-target="#dateStatementActionSheet">
                             <div class="in">
                                 <div class="iconbox">
                                     <ion-icon name="swap-vertical"></ion-icon>
@@ -364,26 +364,6 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="item">
-                                <div class="icon-box bg-primary">
-                                    <ion-icon name="document-text-outline"></ion-icon>
-                                </div>
-                                <div class="in">
-                                    Pages
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="item">
-                                <div class="icon-box bg-primary">
-                                    <ion-icon name="apps-outline"></ion-icon>
-                                </div>
-                                <div class="in">
-                                    Components
-                                </div>
-                            </a>
-                        </li>
-                        <li>
                             <a href="app-wallet.html" class="item">
                                 <div class="icon-box bg-primary">
                                     <ion-icon name="card-outline"></ion-icon>
@@ -400,7 +380,7 @@
                     <div class="listview-title mt-1">Others</div>
                     <ul class="listview flush transparent no-line image-listview">
                         <li>
-                            <a href="#" class="item">
+                            <a href="#" class="item" onclick="toastbox('soon')">
                                 <div class="icon-box bg-primary">
                                     <ion-icon name="settings-outline"></ion-icon>
                                 </div>
@@ -410,7 +390,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="item">
+                            <a href="#" class="item" onclick="toastbox('soon')">
                                 <div class="icon-box bg-primary">
                                     <ion-icon name="chatbubble-outline"></ion-icon>
                                 </div>
@@ -634,6 +614,60 @@
         </div>
     </div>
     <!-- * Category list Action Sheet -->
+
+    <!-- Date list Action Sheet -->
+    <div class="modal fade modalbox" id="dateStatementActionSheet" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Statement By Date</h5>
+                    <a href="javascript:;" data-bs-dismiss="modal">Close</a>
+                </div>
+                <div class="modal-body">
+                            <div class="listview-title mt-2">Please Select Date</div>
+                                <ul class="listview link-listview inset dataConfirm" id="dateOption">
+                                    
+                                </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- * Category list Action Sheet -->
+
+    <!-- MoneyStats Info Action Sheet -->
+    <div class="modal fade modalbox" id="infoActionSheet" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">MoneyStats Info</h5>
+                    <a href="javascript:;" data-bs-dismiss="modal">Close</a>
+                </div>
+                <div class="modal-body">
+                    <div class="section mt-2 mb-2">
+                        <div class="captionCenter">
+                        <div class="card" style="max-width: 400px;">
+                    <img src="./assets/img/logos/logo_transparent.png" class="responsive" alt="logo_transparent">
+                    <hr>
+                    <p class="text-center">MoneyStats V0.80 Pre Release</p>
+                    </div>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- * MoneyStats Info Action Sheet -->
+
+    <!-- toast danger -->
+    <div id="soon" class="toast-box toast-bottom bg-danger">
+        <div class="in">
+            <div class="text">
+                Available Soon..
+            </div>
+        </div>
+        <button type="button" class="btn btn-sm btn-text-light close-button">OK</button>
+    </div>
+    <!-- * toast danger -->
 
 
 

@@ -25,8 +25,6 @@ $(document).ready(function () {
       Authorization: sessionStorage.getItem('accessToken')
     },
     success: function (authCredentialDTO){
-      console.log("User Logged with accessToken {}, ", authCredentialDTO.firstName, authCredentialDTO.lastName, " username -> ", authCredentialDTO.username);
-      $('#options').text(`Opzioni - ${authCredentialDTO.username}`);
     },
     error: function (authErrorResponseDTO) {
       var responseDTO = authErrorResponseDTO.responseJSON.error;
@@ -40,7 +38,7 @@ $(document).ready(function () {
         })
         Toast.fire({
           icon: 'error',
-          title: '<span style="color:#2D2C2C">Sessione Scaduta, reinderizzazione...</span>'
+          title: '<span style="color:#2D2C2C">Session Expired, redirect...</span>'
         })
         setTimeout(function () {
           window.location.href = "app-login.html";
@@ -50,6 +48,13 @@ $(document).ready(function () {
   })
   getWallet();
 }
+//-------------------------------------------------------------
+  // END Check if session is validated with a user
+  //-------------------------------------------------------------
+
+  //-------------------------------------------------------------
+  // Get List wallet
+  //-------------------------------------------------------------
     var tot = 0;
     var totold = 0;
     var dataold;
@@ -64,9 +69,8 @@ $(document).ready(function () {
           Authorization: sessionStorage.getItem('accessToken')
         },
         success: function (resume){
-          $('#title').text('MoneyStats - Capitale ' + document.cookie);
-         //   document.cookie.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-         console.log(document.cookie);
+          $('#title').text('MoneyStats - Total On ' + localStorage.getItem('date'));
+          $('.pageTitle').text('Statement On ' + localStorage.getItem('date'));
          const listWallet = $('#capitalewallet');
          for (let i = 0; i < resume.length; i++) {
            let img = '';
@@ -125,13 +129,13 @@ $(document).ready(function () {
                           color = 'bg-dark';
                           break;
                   }
-                $(`<div class="col-xl-3 col-sm-6" style="margin-bottom: 30px;">
+                $(`<div class="col-xl-3 col-sm-6">
                 <div class="card card-stats mb-4 mb-xl-0">
                   <div class="card-body">
                   <div class="row">
                       <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">${resume[i].name} (${resume[i].category.name})</h5>
-                      <span class="h2 font-weight-bold mb-0" id="tot${resume[i].id}">£ 0.0</span>
+                      <span class="h2 font-weight-bold mb-0" id="tot${resume[i].id}">€ 0.0</span>
                       </div>
                       <div class="col-auto">
                       <div class="icon icon-shape ${color} text-white rounded-circle shadow">
@@ -151,12 +155,18 @@ $(document).ready(function () {
       })
             
     }
+    //-------------------------------------------------------------
+  // END Get List wallet
+  //-------------------------------------------------------------
     
+  //-------------------------------------------------------------
+  // Get List statement
+  //-------------------------------------------------------------
     getStatement();
     function getStatement(){
       $.ajax({
         type: "GET",
-        url: `/statement/listStatementDate/${document.cookie}`,
+        url: `/statement/listStatementDate/${localStorage.getItem('date')}`,
         contentType: 'application/json',
         dataType: 'json',
         headers: {
@@ -166,36 +176,38 @@ $(document).ready(function () {
         for (let i = 0; i < statement.length; i++) {
           var value = statement[i].value;
           tot += value;
-          $(`#tot${statement[i].wallet.id}`).text('£ ' + statement[i].value.toFixed(2)).val(statement[i].value);
+          $(`#tot${statement[i].wallet.id}`).text('€ ' + statement[i].value.toFixed(2)).val(statement[i].value);
         }
-        $('#totale').text("£ " + tot).val(tot);
+        $('#totale').text("€ " + tot.toFixed(2)).val(tot);
         getDate();
       }
       })
     }
+    //-------------------------------------------------------------
+  // END Get List statement
+  //-------------------------------------------------------------
     
+  //-------------------------------------------------------------
+  // Get List date(date stored on localStorage)
+  //-------------------------------------------------------------
     function getDate() {
-      $.ajax({
-        type: "GET",
-        url: `/statement/listOfDate`,
-        contentType: 'application/json',
-        dataType: 'json',
-        headers: {
-          Authorization: sessionStorage.getItem('accessToken')
-        },
-        success: function (date){
+      var listDate = localStorage.getItem('listDate');
+      var date = listDate.split(",");
         for (let i = 0; i < date.length; i++) {
-          if (date[i] === document.cookie){
+          if (date[i] === localStorage.getItem('date')){
             dataold = date[i - 1];
-            console.log(dataold + " Sono Qui")
             $('.sincetot').text("Since " + dataold);
           }
         }
         getOld(dataold);
-      }
-      })
     }
+    //-------------------------------------------------------------
+  // END Get List date(date stored on localStorage)
+  //-------------------------------------------------------------
     
+  //-------------------------------------------------------------
+  // Get date statement
+  //-------------------------------------------------------------
     function getOld(dataold) {
       $.ajax({
         type: "GET",
@@ -226,38 +238,15 @@ $(document).ready(function () {
           var performance = ((tot - totold) / totold) * 100;
           if (performance > 0){
             $(`<span class="text-success mr-2"><i class="fa fa-arrow-up"></i> ${performance.toFixed(2)}%</span>`).appendTo('.performancetot')
-            $('#pil').text("£ " + pil.toFixed(2)).addClass('text-success');
+            $('#pil').text("€ " + pil.toFixed(2)).addClass('text-success');
           } else if (performance === 0){
             $(`<span class="text-warning mr-2"><i class="fa fa-arrow-down"></i> ${performance.toFixed(2)}%</span>`).appendTo('.performancetot')
-            $('#pil').text("£ " + pil.toFixed(2)).addClass('text-warning');
+            $('#pil').text("€ " + pil.toFixed(2)).addClass('text-warning');
           } else {
             $(`<span class="text-danger mr-2"><i class="fa fa-arrow-down"></i> ${performance.toFixed(2)}%</span>`).appendTo('.performancetot')
-            $('#pil').text("£ " + pil.toFixed(2)).addClass('text-danger');
+            $('#pil').text("€ " + pil.toFixed(2)).addClass('text-danger');
           }
         }
       })
     }    
-    /*--------------------------------------------------------------------------
-    *  Switch Mobile Mode
-    *--------------------------------------------------------------------------*/
-  $('#SwitchMobile').click(function () { 
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 1000,
-      timerProgressBar: true,
-    })
-    Toast.fire({
-      icon: 'info',
-      title: "<span style='color:#2D2C2C'>Reinderizzazione...</span>",
-    })
-    setTimeout(function () {
-      window.location.href = "mobile/index.html";
-    }, 1000);
-   });
-   /*--------------------------------------------------------------------------
-    *  Switch Mobile Mode
-    *--------------------------------------------------------------------------*/
-
 });

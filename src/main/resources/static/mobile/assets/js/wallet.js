@@ -32,7 +32,6 @@ $(document).ready(function () {
         Authorization: sessionStorage.getItem('accessToken')
       },
       success: function (authCredentialDTO){
-        console.log("User Logged with accessToken {}, ", authCredentialDTO.firstName, authCredentialDTO.lastName, " username -> ", authCredentialDTO.username);
         $('#options').text(`Opzioni - ${authCredentialDTO.username}`);
       },
       error: function (authErrorResponseDTO) {
@@ -148,6 +147,11 @@ $(document).ready(function () {
                                     <ion-icon name="close-outline"></ion-icon>Remove
                                 </a>
                             </div>
+                            <div class="col-auto" style="padding-top: 100px;">
+                      <div class="icon icon-shape ${color} text-white rounded-circle shadow">
+                        <i class="${img}"></i>
+                          </div>
+                          </div>
                         </div>
                         <div class="balance">
                             <span class="label">BALANCE</span>
