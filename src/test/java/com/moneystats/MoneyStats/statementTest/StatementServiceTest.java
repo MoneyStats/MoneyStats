@@ -2,6 +2,7 @@ package com.moneystats.MoneyStats.statementTest;
 
 import com.moneystats.MoneyStats.commStats.category.ICategoryDAO;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementDTO;
+import com.moneystats.MoneyStats.commStats.statement.DTO.StatementInputDTO;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementResponseDTO;
 import com.moneystats.MoneyStats.commStats.statement.IStatementDAO;
 import com.moneystats.MoneyStats.commStats.statement.StatementException;
@@ -42,7 +43,7 @@ public class StatementServiceTest {
 
   @Test
   void test_addStatement_shouldAdd() throws Exception {
-    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     StatementEntity statementEntity = DTOTestObjets.statementEntityList.get(0);
     StatementResponseDTO expected =
@@ -63,7 +64,7 @@ public class StatementServiceTest {
   @Test
   void test_addStatement_shouldThrowsTokenDTORequired() throws Exception {
     TokenDTO token = new TokenDTO("");
-    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
 
     AuthenticationException expectedException =
         new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
@@ -93,7 +94,7 @@ public class StatementServiceTest {
 
   @Test
   void test_addStatement_shouldBeMappedOnUserNotFound() throws Exception {
-    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     StatementEntity statementEntity = DTOTestObjets.statementEntityList.get(0);
     AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
@@ -116,7 +117,7 @@ public class StatementServiceTest {
 
   @Test
   void test_addStatement_shouldThrowsOnWalletNotFound() throws Exception {
-    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     StatementEntity statementEntity = DTOTestObjets.statementEntityList.get(0);
     AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
@@ -202,7 +203,7 @@ public class StatementServiceTest {
 
   @Test
   void test_listOfDate_shouldThrowsOnListNotFound() throws Exception {
-    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;

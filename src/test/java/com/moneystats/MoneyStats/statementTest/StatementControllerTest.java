@@ -2,6 +2,7 @@ package com.moneystats.MoneyStats.statementTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementDTO;
+import com.moneystats.MoneyStats.commStats.statement.DTO.StatementInputDTO;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementResponseDTO;
 import com.moneystats.MoneyStats.commStats.statement.StatementController;
 import com.moneystats.MoneyStats.commStats.statement.StatementException;
@@ -57,7 +58,7 @@ public class StatementControllerTest {
   @Test
   public void testAddStatement_shouldBeMappedOnError() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
     String statementAsString = objectMapper.writeValueAsString(statementDTO);
     statementDTO.setValue(null);
     statementDTO.setDate(null);
@@ -76,7 +77,7 @@ public class StatementControllerTest {
   @Test
   public void testAddStatement_shouldBeMappedOnTokenRequired() throws Exception {
     TokenDTO tokenDTO = new TokenDTO("");
-    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
     String statementAsString = objectMapper.writeValueAsString(statementDTO);
 
     Mockito.when(statementService.addStatement(tokenDTO, statementDTO))
@@ -93,7 +94,7 @@ public class StatementControllerTest {
   @Test
   public void testAddStatement_shouldBeMappedOnInvalidToken() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    StatementDTO statementDTO = DTOTestObjets.statementDTO;
+    StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
     String statementAsString = objectMapper.writeValueAsString(statementDTO);
 
     Mockito.when(statementService.addStatement(tokenDTO, statementDTO))

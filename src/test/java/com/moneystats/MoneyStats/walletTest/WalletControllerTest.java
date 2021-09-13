@@ -2,10 +2,12 @@ package com.moneystats.MoneyStats.walletTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
+import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletResponseDTO;
 import com.moneystats.MoneyStats.commStats.wallet.WalletController;
 import com.moneystats.MoneyStats.commStats.wallet.WalletException;
 import com.moneystats.MoneyStats.commStats.wallet.WalletService;
+import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.MoneyStats.source.DTOTestObjets;
 import com.moneystats.authentication.AuthenticationException;
 import com.moneystats.authentication.DTO.TokenDTO;
@@ -34,7 +36,7 @@ public class WalletControllerTest {
   @Test
   public void testGetAllWalletList_OK() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    List<WalletDTO> walletDTOS = DTOTestObjets.walletDTOS;
+    List<WalletEntity> walletDTOS = DTOTestObjets.walletEntities;
     String walletAsString = objectMapper.writeValueAsString(walletDTOS);
 
     Mockito.when(walletService.getAll(Mockito.any())).thenReturn(walletDTOS);
@@ -100,7 +102,7 @@ public class WalletControllerTest {
         new WalletResponseDTO(SchemaDescription.WALLET_ADDED_CORRECT.toString());
     String responseAsString = objectMapper.writeValueAsString(response);
 
-    Mockito.when(walletService.addWalletEntity(Mockito.any(), Mockito.any(), Mockito.any()))
+    Mockito.when(walletService.addWalletEntity(Mockito.any(), Mockito.any()))
         .thenReturn(response);
 
     mockMvc
@@ -117,13 +119,13 @@ public class WalletControllerTest {
 
   @Test
   public void testAddWallet_shouldBeMappedOnError() throws Exception {
-    WalletDTO walletDTO = DTOTestObjets.walletDTO;
+    WalletInputDTO walletDTO = DTOTestObjets.walletInputDTO;
     walletDTO.setName(null);
     int idCategory = 1;
 
     Mockito.when(
             walletService.addWalletEntity(
-                TestSchema.TOKEN_JWT_DTO_ROLE_USER, idCategory, walletDTO))
+                TestSchema.TOKEN_JWT_DTO_ROLE_USER, walletDTO))
         .thenThrow(new WalletException(WalletException.Code.INVALID_WALLET_DTO));
 
     mockMvc
@@ -140,7 +142,7 @@ public class WalletControllerTest {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     int idCategory = 1;
 
-    Mockito.when(walletService.addWalletEntity(Mockito.any(), Mockito.any(), Mockito.any()))
+    Mockito.when(walletService.addWalletEntity(Mockito.any(), Mockito.any()))
         .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
 
     mockMvc
@@ -156,7 +158,7 @@ public class WalletControllerTest {
     List<WalletDTO> walletDTOS = DTOTestObjets.walletDTOS;
     int idCategory = 1;
 
-    Mockito.when(walletService.addWalletEntity(Mockito.any(), Mockito.any(), Mockito.any()))
+    Mockito.when(walletService.addWalletEntity(Mockito.any(), Mockito.any()))
         .thenThrow(new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED));
 
     mockMvc
@@ -168,12 +170,12 @@ public class WalletControllerTest {
 
   @Test
   public void testAddWallet_shouldBeMappedUserNotFound() throws Exception {
-    WalletDTO walletDTO = DTOTestObjets.walletDTO;
+    WalletInputDTO walletDTO = DTOTestObjets.walletInputDTO;
     Integer idCategory = 1;
 
     Mockito.when(
             walletService.addWalletEntity(
-                TestSchema.TOKEN_JWT_DTO_ROLE_USER, idCategory, walletDTO))
+                TestSchema.TOKEN_JWT_DTO_ROLE_USER, walletDTO))
         .thenThrow(new WalletException(WalletException.Code.USER_NOT_FOUND));
 
     mockMvc
@@ -183,13 +185,13 @@ public class WalletControllerTest {
 
   @Test
   public void testAddWalletList_shouldBeMappedCategoryNotFound() throws Exception {
-    WalletDTO walletDTO = DTOTestObjets.walletDTO;
+    WalletInputDTO walletDTO = DTOTestObjets.walletInputDTO;
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     Integer idCategory = null;
 
     Mockito.when(
             walletService.addWalletEntity(
-                TestSchema.TOKEN_JWT_DTO_ROLE_USER, idCategory, walletDTO))
+                TestSchema.TOKEN_JWT_DTO_ROLE_USER, walletDTO))
         .thenThrow(new WalletException(WalletException.Code.CATEGORY_NOT_FOUND));
 
     mockMvc

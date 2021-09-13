@@ -1,6 +1,7 @@
 package com.moneystats.MoneyStats.commStats.statement;
 
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementDTO;
+import com.moneystats.MoneyStats.commStats.statement.DTO.StatementInputDTO;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementResponseDTO;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.WalletException;
@@ -18,7 +19,6 @@ public class StatementController {
   @Autowired private StatementService statementService;
 
   /**
-   *
    * @param jwt token into header
    * @param statement to be added
    * @return response of status
@@ -28,14 +28,13 @@ public class StatementController {
    */
   @PostMapping("/addStatement")
   public StatementResponseDTO addStatement(
-      @RequestHeader(value = "Authorization") String jwt, @RequestBody StatementDTO statement)
+      @RequestHeader(value = "Authorization") String jwt, @RequestBody StatementInputDTO statement)
       throws StatementException, WalletException, AuthenticationException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return statementService.addStatement(tokenDTO, statement);
   }
 
   /**
-   *
    * @param jwt token for authentications
    * @return a list of date
    * @throws StatementException
@@ -51,25 +50,18 @@ public class StatementController {
 
   /**
    * Used to return the statement by that day
+   *
    * @param jwt token for authentication
    * @param date date user for serching
    * @return
    * @throws StatementException
    * @throws AuthenticationException
-   * @throws WalletException
    */
   @GetMapping("/listStatementDate/{date}")
   public List<StatementEntity> listByDate(
       @RequestHeader(value = "Authorization") String jwt, @PathVariable String date)
-      throws StatementException, AuthenticationException, WalletException {
+      throws StatementException, AuthenticationException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return statementService.listStatementByDate(tokenDTO, date);
   }
-
-  // @GetMapping("/listStatement")
-  // public List<String> listByWalletAndValue(@RequestHeader(value = "Authorization") String jwt)
-  //    throws StatementException, WalletException, AuthenticationException {
-  //  TokenDTO tokenDTO = new TokenDTO(jwt);
-  //  return statementService.listByWalletAndValue(tokenDTO);
-  // }
 }

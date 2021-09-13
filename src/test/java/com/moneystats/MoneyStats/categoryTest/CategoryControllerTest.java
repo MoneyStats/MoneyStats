@@ -5,6 +5,7 @@ import com.moneystats.MoneyStats.commStats.category.CategoryController;
 import com.moneystats.MoneyStats.commStats.category.CategoryException;
 import com.moneystats.MoneyStats.commStats.category.CategoryService;
 import com.moneystats.MoneyStats.commStats.category.DTO.CategoryDTO;
+import com.moneystats.MoneyStats.commStats.category.entity.CategoryEntity;
 import com.moneystats.MoneyStats.source.DTOTestObjets;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -27,7 +28,7 @@ public class CategoryControllerTest {
 
   @Test
   public void testGetAllCategory_OK() throws Exception {
-    List<CategoryDTO> categoryDTOS = DTOTestObjets.categoryDTOList;
+    List<CategoryEntity> categoryDTOS = DTOTestObjets.categoryEntities;
     String categoryAsString = objectMapper.writeValueAsString(categoryDTOS);
     Mockito.when(categoryService.categoryDTOList()).thenReturn(categoryDTOS);
 

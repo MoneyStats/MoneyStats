@@ -1,10 +1,10 @@
 package com.moneystats.MoneyStats.commStats.statement;
 
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementDTO;
+import com.moneystats.MoneyStats.commStats.statement.DTO.StatementInputDTO;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementResponseDTO;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.IWalletDAO;
-import com.moneystats.MoneyStats.commStats.wallet.WalletException;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.authentication.AuthCredentialDAO;
 import com.moneystats.authentication.AuthenticationException;
@@ -34,19 +34,23 @@ public class StatementService {
 
   /**
    * Used to add a statement into database
+   *
    * @param tokenDTO
    * @param statementDTO
    * @return
    * @throws StatementException
    * @throws AuthenticationException
    */
-  public StatementResponseDTO addStatement(TokenDTO tokenDTO, StatementDTO statementDTO)
+  public StatementResponseDTO addStatement(TokenDTO tokenDTO, StatementInputDTO statementInputDTO)
       throws StatementException, AuthenticationException {
-    StatementValidator.validateStatementDTO(statementDTO);
+    StatementValidator.validateStatementInputDTO(statementInputDTO);
+    StatementDTO statementDTO = new StatementDTO();
+    statementDTO.setDate(statementInputDTO.getDate());
+    statementDTO.setValue(statementInputDTO.getValue());
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
     statementDTO.setUser(utente);
     WalletEntity walletEntity =
-        walletDAO.findById(statementDTO.getWalletEntity().getId()).orElse(null);
+        walletDAO.findById(statementInputDTO.getWalletId()).orElse(null);
     if (walletEntity == null) {
       LOG.error("Wallet Not Found, into StatementService, walletDAO.findById:37");
       throw new StatementException(StatementException.Code.WALLET_NOT_FOUND);
@@ -63,7 +67,6 @@ public class StatementService {
   }
 
   /**
-   *
    * @param tokenDTO
    * @return a list of unique date
    * @throws StatementException
@@ -83,7 +86,6 @@ public class StatementService {
   }
 
   /**
-   *
    * @param tokenDTO
    * @param date
    * @return a list of statement by that day
