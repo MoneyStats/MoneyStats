@@ -71,7 +71,7 @@ public class WalletController {
   }
 
   @GetMapping("/getById/{idWallet}")
-  public WalletDTO getById (@PathVariable long idWallet) throws WalletException {
+  public WalletDTO getById(@PathVariable long idWallet) throws WalletException {
     return walletService.walletById(idWallet);
   }
 }

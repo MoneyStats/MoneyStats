@@ -12,127 +12,128 @@ $(document).ready(function () {
     const LOGIN_REQUIRED = "LOGIN_REQUIRED";
 
     //-------------------------------------------------------------
-  // Check if session is validated with a user
-  //-------------------------------------------------------------
-  isValidated();
-  function isValidated (){
-    const token = sessionStorage.getItem('accessToken');
-    if (token === null) {
-      window.location.href='app-login.html';
-    } 
-    //-------------------------------------------------------------
     // Check if session is validated with a user
     //-------------------------------------------------------------
-    $.ajax({
-      type: "GET",
-      url: "/check_login",
-      contentType: 'application/json',
-      dataType: 'json',
-      headers: {
-        Authorization: sessionStorage.getItem('accessToken')
-      },
-      success: function (authCredentialDTO){
-        $('#options').text(`Opzioni - ${authCredentialDTO.username}`);
-      },
-      error: function (authErrorResponseDTO) {
-        var responseDTO = authErrorResponseDTO.responseJSON.error;
-        if (responseDTO === LOGIN_REQUIRED){
-          const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1500,
-            timerProgressBar: true,
-          })
-          Toast.fire({
-            icon: 'error',
-            title: '<span style="color:#2D2C2C">Sessione Scaduta, reinderizzazione...</span>'
-          })
-          setTimeout(function () {
-            window.location.href = "app-login.html";
-          }, 1500);
+    isValidated();
+
+    function isValidated() {
+        const token = sessionStorage.getItem('accessToken');
+        if (token === null) {
+            window.location.href = 'app-login.html';
         }
-      }
-    })
-    getWallet();
-  }
+        //-------------------------------------------------------------
+        // Check if session is validated with a user
+        //-------------------------------------------------------------
+        $.ajax({
+            type: "GET",
+            url: "/check_login",
+            contentType: 'application/json',
+            dataType: 'json',
+            headers: {
+                Authorization: sessionStorage.getItem('accessToken')
+            },
+            success: function (authCredentialDTO) {
+                $('#options').text(`Opzioni - ${authCredentialDTO.username}`);
+            },
+            error: function (authErrorResponseDTO) {
+                var responseDTO = authErrorResponseDTO.responseJSON.error;
+                if (responseDTO === LOGIN_REQUIRED) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        timerProgressBar: true,
+                    })
+                    Toast.fire({
+                        icon: 'error',
+                        title: '<span style="color:#2D2C2C">Sessione Scaduta, reinderizzazione...</span>'
+                    })
+                    setTimeout(function () {
+                        window.location.href = "app-login.html";
+                    }, 1500);
+                }
+            }
+        })
+        getWallet();
+    }
 
     //-------------------------------------------------------------
     // Modal Get Wallet List Homepage
     //-------------------------------------------------------------
-    function getWallet(){
+    function getWallet() {
         $.ajax({
             type: "GET",
             url: "/wallet/listMobile",
             contentType: 'application/json',
             dataType: 'json',
             headers: {
-              Authorization: sessionStorage.getItem('accessToken')
+                Authorization: sessionStorage.getItem('accessToken')
             },
-            success: function (resume){
+            success: function (resume) {
                 const listWallet = $('#listWallet');
                 for (let i = resume.walletEntities.length - 1; i >= 0; i--) {
-                var defaultValue = 0.00;
-                let img = '';
-                let color = '';
-                switch (resume.walletEntities[i].category.name){
-                    case 'Contanti':
-                        img = 'fas fa-money-bill-wave';
-                        color = 'bg-success';
-                        break;
-                    case 'Conto Corrente':
-                        img = 'fas fa-landmark';
-                        color = 'bg-warning';
-                        break;
-                    case 'Carte di Credito':
-                        img = 'far fa-credit-card';
-                        color = 'bg-danger';
-                        break;
-                    case 'Carte di Debito':
-                        img = 'fas fa-credit-card';
-                        color = 'bg-dark';
-                        break;
-                    case 'Cupon':
-                        img = 'fas fa-receipt';
-                        color = 'bg-info';
-                        break;
-                    case 'Risparmi':
-                        img = 'fas fa-piggy-bank';
-                        color = 'bg-success';
-                        break;
-                    case 'Cash Elettronico':
-                        img = 'fas fa-money-bill';
-                        color = 'bg-primary';
-                        break;
-                    case 'Investimenti':
-                        img = 'fas fa-chart-line';
-                        color = 'bg-primary';
-                        break;
-                    case 'Mutui':
-                        img = 'fas fa-balance-scale-left';
-                        color = 'bg-danger';
-                        break;
-                    case 'Assicurazioni':
-                        img = 'fas fa-file-invoice-dollar';
-                        color = 'bg-warning';
-                        break;
-                    case 'Assegni':
-                        img = 'fas fa-money-check-alt';
-                        color = 'bg-info';
-                        break;
-                    case 'Altro':
-                        img = 'fas fa-hand-holding-usd';
-                        color = 'bg-secondary';
-                        break;
-                    default:
-                        img = 'fas fa-chart-bar';
-                        color = 'bg-dark';
-                        break;
-                }
-                if (resume.statementEntities[i].value != undefined){
-                    defaultValue = resume.statementEntities[i].value;
-                }
-                $(`<!-- card block -->
+                    var defaultValue = 0.00;
+                    let img = '';
+                    let color = '';
+                    switch (resume.walletEntities[i].category.name) {
+                        case 'Contanti':
+                            img = 'fas fa-money-bill-wave';
+                            color = 'bg-success';
+                            break;
+                        case 'Conto Corrente':
+                            img = 'fas fa-landmark';
+                            color = 'bg-warning';
+                            break;
+                        case 'Carte di Credito':
+                            img = 'far fa-credit-card';
+                            color = 'bg-danger';
+                            break;
+                        case 'Carte di Debito':
+                            img = 'fas fa-credit-card';
+                            color = 'bg-dark';
+                            break;
+                        case 'Cupon':
+                            img = 'fas fa-receipt';
+                            color = 'bg-info';
+                            break;
+                        case 'Risparmi':
+                            img = 'fas fa-piggy-bank';
+                            color = 'bg-success';
+                            break;
+                        case 'Cash Elettronico':
+                            img = 'fas fa-money-bill';
+                            color = 'bg-primary';
+                            break;
+                        case 'Investimenti':
+                            img = 'fas fa-chart-line';
+                            color = 'bg-primary';
+                            break;
+                        case 'Mutui':
+                            img = 'fas fa-balance-scale-left';
+                            color = 'bg-danger';
+                            break;
+                        case 'Assicurazioni':
+                            img = 'fas fa-file-invoice-dollar';
+                            color = 'bg-warning';
+                            break;
+                        case 'Assegni':
+                            img = 'fas fa-money-check-alt';
+                            color = 'bg-info';
+                            break;
+                        case 'Altro':
+                            img = 'fas fa-hand-holding-usd';
+                            color = 'bg-secondary';
+                            break;
+                        default:
+                            img = 'fas fa-chart-bar';
+                            color = 'bg-dark';
+                            break;
+                    }
+                    if (resume.statementEntities[i].value != undefined) {
+                        defaultValue = resume.statementEntities[i].value;
+                    }
+                    $(`<!-- card block -->
                 <div class="card-block ${color} mb-2" id='riga-${resume.walletEntities[i].id}'>
                     <div class="card-main">
                         <div class="card-button dropdown">
@@ -176,10 +177,11 @@ $(document).ready(function () {
                     </div>
                 </div>
                 <!-- * card block -->`).hide().appendTo(listWallet).fadeIn(i * 20);
+                }
             }
-        }
         })
     }
+
     //-------------------------------------------------------------
     // END Modal Get Wallet List Homepage
     //-------------------------------------------------------------
@@ -209,11 +211,11 @@ $(document).ready(function () {
                     showConfirmButton: false,
                     timer: 1500,
                     timerProgressBar: true,
-                  })
+                })
                 Toast.fire({
                     icon: 'success',
                     title: '<span style="color:#2D2C2C">Edited, Refresh...</span>'
-                  })
+                })
                 setTimeout(function () {
                     window.location.href = 'app-wallet.html';
                 }, 1000);
@@ -224,7 +226,7 @@ $(document).ready(function () {
                     title: '<span style="color:#2D2C2C">Error, Delete process aborted</span>',
                     text: 'Try again.'
                 })
-             }
+            }
         });
     }
 
@@ -243,23 +245,23 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
 
-            $('#walletNameEdit').val(response.name);
-            $('#catOptionhtmlEdit').val(response.categoryEntity.id);
-            
-            $.ajax({
-                type: "GET",
-                url: "/category/list",
-                contentType: 'application/json',
-                dataType: 'json',
-                headers: {
-                    Authorization: sessionStorage.getItem('accessToken')
-                },
-                success: function (resume){
-                    for (let i = resume.length - 1; i >= 0; i--) {
-                    $(`<option id='walletSelect' class="roundedCorner" value="${resume[i].id}">${resume[i].name}</option>`).hide().appendTo(optionCategory).fadeIn(i * 20);
+                $('#walletNameEdit').val(response.name);
+                $('#catOptionhtmlEdit').val(response.categoryEntity.id);
+
+                $.ajax({
+                    type: "GET",
+                    url: "/category/list",
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    headers: {
+                        Authorization: sessionStorage.getItem('accessToken')
+                    },
+                    success: function (resume) {
+                        for (let i = resume.length - 1; i >= 0; i--) {
+                            $(`<option id='walletSelect' class="roundedCorner" value="${resume[i].id}">${resume[i].name}</option>`).hide().appendTo(optionCategory).fadeIn(i * 20);
+                        }
                     }
-                }
-            })
+                })
             }
         });
     });
@@ -284,7 +286,7 @@ $(document).ready(function () {
             }).then((result) => {
                 if (result.isConfirmed) {
                     editWallet(walletEdit);
-                    
+
                 } else if (result.isDenied) {
                     Swal.fire("<span style='color:#2D2C2C'>Wallet don't edited!</span>", '', 'info')
                 }
@@ -304,9 +306,9 @@ $(document).ready(function () {
             type: "DELETE",
             url: `/wallet/delete/${idDelete}`,
             headers: {
-              Authorization: sessionStorage.getItem('accessToken')
+                Authorization: sessionStorage.getItem('accessToken')
             },
-            success: function (response){
+            success: function (response) {
                 swalWithBootstrapButtons.fire(
                     '<span style="color:#2D2C2C">Cancelled!</span>',
                     'Your walles was successfuly deleted.',
@@ -318,14 +320,14 @@ $(document).ready(function () {
             },
             error: function (authErrorResponseDTO) {
                 var responseDTO = authErrorResponseDTO.responseJSON.message;
-                if (responseDTO === STATEMENT_NOT_FOUND){
+                if (responseDTO === STATEMENT_NOT_FOUND) {
                     Swal.fire({
                         icon: 'error',
                         title: '<span style="color:#2D2C2C">Error, Delete process aborted</span>',
                         text: 'Try again.'
                     })
                 }
-                if (responseDTO === WALLET_NOT_FOUND){
+                if (responseDTO === WALLET_NOT_FOUND) {
                     Swal.fire({
                         icon: 'error',
                         title: '<span style="color:#2D2C2C">Error, Delete process aborted</span>',
@@ -335,6 +337,7 @@ $(document).ready(function () {
             }
         });
     }
+
     var idDelete = 0;
     $('#listWallet').on('click', '.btn-elimina-wallet', function () {
         const id = +$(this).attr('data-id');
@@ -377,12 +380,12 @@ $(document).ready(function () {
     //-------------------------------------------------------------
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger',
-          denyButton: 'btn btn-danger'
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger',
+            denyButton: 'btn btn-danger'
         },
         buttonsStyling: false
-      })
+    })
     //-------------------------------------------------------------
     // END Custom Button Swal
     //-------------------------------------------------------------
@@ -390,25 +393,25 @@ $(document).ready(function () {
     //-------------------------------------------------------------
     // Modal Add Wallet Homepage
     //-------------------------------------------------------------
-        $('#aggiungiWallet').click(function () {
-            const wallet = {
-                name: $('#walletName').val(),
-                categoryId: $('#catOptionhtml').val(),
+    $('#aggiungiWallet').click(function () {
+        const wallet = {
+            name: $('#walletName').val(),
+            categoryId: $('#catOptionhtml').val(),
+        }
+        Swal.fire({
+            icon: 'question',
+            title: `<span style="color:#2D2C2C">Confirm save of ${wallet.name}?</span>`,
+            showDenyButton: true,
+            confirmButtonText: `Save`,
+            denyButtonText: `Don't Save`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                addWallet(wallet);
+            } else if (result.isDenied) {
+                swalWithBootstrapButtons.fire(`<span style="color:#2D2C2C">Wallet don't added</span>`, '', 'info')
             }
-            Swal.fire({
-                icon: 'question',
-                title: `<span style="color:#2D2C2C">Confirm save of ${wallet.name}?</span>`,
-                showDenyButton: true,
-                confirmButtonText: `Save`,
-                denyButtonText: `Don't Save`,
-              }).then((result) => {
-                if (result.isConfirmed) {
-                    addWallet(wallet);
-                } else if (result.isDenied) {
-                  swalWithBootstrapButtons.fire(`<span style="color:#2D2C2C">Wallet don't added</span>`, '', 'info')
-                }
-              })
-            
+        })
+
 
         $('#walletName').val('');
     })
@@ -430,28 +433,28 @@ $(document).ready(function () {
             },
             error: function (authErrorResponseDTO) {
                 var responseDTO = authErrorResponseDTO.responseJSON.message;
-                if (responseDTO === INVALID_TOKEN_DTO){
+                if (responseDTO === INVALID_TOKEN_DTO) {
                     Swal.fire({
                         icon: 'error',
                         title: '<span style="color:#2D2C2C">Operation Aborted</span>',
                         text: 'Error during the process.'
                     })
                 }
-                if (responseDTO === TOKEN_REQUIRED){
+                if (responseDTO === TOKEN_REQUIRED) {
                     Swal.fire({
                         icon: 'error',
                         title: '<span style="color:#2D2C2C">Operation Aborted!</span>',
                         text: 'Error during the process.'
                     })
                 }
-                if (responseDTO === INVALID_WALLET_DTO){
+                if (responseDTO === INVALID_WALLET_DTO) {
                     Swal.fire({
                         icon: 'error',
                         title: '<span style="color:#2D2C2C">Operation Aborted!</span>',
                         text: 'Error during the process.'
                     })
                 }
-                if (responseDTO === CATEGORY_NOT_FOUND){
+                if (responseDTO === CATEGORY_NOT_FOUND) {
                     Swal.fire({
                         icon: 'error',
                         title: '<span style="color:#2D2C2C">Operation Aborted!</span>',
@@ -461,6 +464,7 @@ $(document).ready(function () {
             }
         });
     }
+
     //-------------------------------------------------------------
     // END Modal Add Wallet Homepage
     //-------------------------------------------------------------

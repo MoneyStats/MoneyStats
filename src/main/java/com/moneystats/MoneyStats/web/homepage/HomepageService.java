@@ -51,14 +51,20 @@ public class HomepageService {
           "Statement Date Not Found, into StatementService, statementDAO.selectdistinctstatement(utente.getId()):61");
       throw new StatementException(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND);
     }
-    String lastDate = null;
-    String firstDate = null;
-    String lastStatementDate = null;
+    String lastDate = "";
+    String firstDate = "";
+    String lastStatementDate = "";
     List<Double> listStatement = new ArrayList<>();
     for (int i = 0; i < listDate.size(); i++) {
       firstDate = listDate.get(0);
-      lastDate = listDate.get(listDate.size() - 1);
-      lastStatementDate = listDate.get(listDate.size() - 2);
+      try {
+        lastDate = listDate.get(listDate.size() - 1);
+        lastStatementDate = listDate.get(listDate.size() - 2);
+      } catch (IndexOutOfBoundsException e) {
+        firstDate = "";
+        lastStatementDate = "";
+        LOG.error("Out of Bound HomepagService:66 {}", e);
+      }
     }
     Double statementReport = 0D;
     for (int i = 0; i < listDate.size(); i++) {
@@ -113,6 +119,7 @@ public class HomepageService {
 
   /**
    * Get the Pie Graph on the Homepage
+   *
    * @param date required to get all the statement by that date
    * @param tokenDTO required to authenticate user
    * @return An ojbect with statement and wallet list
@@ -140,10 +147,11 @@ public class HomepageService {
     List<Double> statementListGraph = new ArrayList<>();
 
     // Fix addWallet with no statement
-    if (walletEntities.size() > statementList.size()){
+    if (walletEntities.size() > statementList.size()) {
       int walletPlus = walletEntities.size() - statementList.size();
-      for (int i = 0; i < walletPlus; i ++){
-        StatementEntity statementEntity = new StatementEntity(date, 0.00D, utente, walletEntities.get(i));
+      for (int i = 0; i < walletPlus; i++) {
+        StatementEntity statementEntity =
+            new StatementEntity(date, 0.00D, utente, walletEntities.get(i));
         statementList.add(statementEntity);
       }
     }
@@ -161,6 +169,7 @@ public class HomepageService {
 
   /**
    * Used on getHomepage
+   *
    * @param utente
    * @param date
    * @return
@@ -173,13 +182,13 @@ public class HomepageService {
     if (list.size() == 0) {
       LOG.error(
           "Statement Not Found, into StatementService, statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date):71");
-      throw new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
     }
     return list;
   }
 
   /**
    * Method in common
+   *
    * @param tokenDTO required for authentications
    * @return An user
    * @throws AuthenticationException

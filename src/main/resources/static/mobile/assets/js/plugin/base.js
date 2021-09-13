@@ -92,12 +92,12 @@ formControl.forEach(function (el) {
     });
     // empty check
     el.addEventListener("keyup", log);
+
     function log(e) {
         var inputCheck = this.value.length;
         if (inputCheck > 0) {
             this.parentElement.classList.add("not-empty")
-        }
-        else {
+        } else {
             this.parentElement.classList.remove("not-empty")
         }
     }
@@ -113,8 +113,7 @@ searchboxToggle.forEach(function (el) {
         var a = search.classList.contains("show")
         if (a) {
             search.classList.remove("show")
-        }
-        else {
+        } else {
             search.classList.add("show")
             search.querySelector(".form-control").focus();
         }
@@ -246,8 +245,7 @@ uploadComponent.forEach(function (el) {
             fileLabel.classList.add('file-uploaded');
             fileLabel.style.backgroundImage = "url(" + tmppath + ")";
             fileLabelText.innerHTML = name;
-        }
-        else {
+        } else {
             fileLabel.classList.remove("file-uploaded")
             fileLabelText.innerHTML = filelabelDefault;
         }
@@ -268,6 +266,7 @@ function closeNotificationBox() {
         el.classList.remove("show")
     })
 }
+
 function notification(target, time) {
     var a = document.getElementById(target);
     closeNotificationBox()
@@ -281,6 +280,7 @@ function notification(target, time) {
         }, time);
     }
 }
+
 // close notification
 notificationCloseButton.forEach(function (el) {
     el.addEventListener("click", function (e) {
@@ -310,6 +310,7 @@ function closeToastBox() {
         el.classList.remove("show")
     })
 }
+
 function toastbox(target, time) {
     var a = document.getElementById(target);
     closeToastBox()
@@ -323,6 +324,7 @@ function toastbox(target, time) {
         }, time);
     }
 }
+
 // close button toast
 toastCloseButton.forEach(function (el) {
     el.addEventListener("click", function (e) {
@@ -349,26 +351,25 @@ function iosAddtoHome() {
     var modal = new bootstrap.Modal(document.getElementById('ios-add-to-home-screen'))
     modal.toggle()
 }
+
 function androidAddtoHome() {
     var modal = new bootstrap.Modal(document.getElementById('android-add-to-home-screen'))
     modal.toggle()
 }
+
 function AddtoHome(time, once) {
     if (once) {
         var AddHomeStatus = localStorage.getItem("MoneyStatsAddtoHome");
         if (AddHomeStatus === "1" || AddHomeStatus === 1) {
             // already showed up
-        }
-        else {
+        } else {
             localStorage.setItem("MoneyStatsAddtoHome", 1)
             window.addEventListener('load', () => {
                 if (navigator.standalone) {
                     // if app installed ios home screen
-                }
-                else if (matchMedia('(display-mode: standalone)').matches) {
+                } else if (matchMedia('(display-mode: standalone)').matches) {
                     // if app installed android home screen
-                }
-                else {
+                } else {
                     // if app is not installed
                     if (androidDetection) {
                         setTimeout(() => {
@@ -383,16 +384,13 @@ function AddtoHome(time, once) {
                 }
             });
         }
-    }
-    else {
+    } else {
         window.addEventListener('load', () => {
             if (navigator.standalone) {
                 // app loaded to ios
-            }
-            else if (matchMedia('(display-mode: standalone)').matches) {
+            } else if (matchMedia('(display-mode: standalone)').matches) {
                 // app loaded to android
-            }
-            else {
+            } else {
                 // app not loaded
                 if (androidDetection) {
                     setTimeout(() => {
@@ -409,6 +407,7 @@ function AddtoHome(time, once) {
     }
 
 }
+
 //-----------------------------------------------------------------------
 
 
@@ -424,17 +423,16 @@ function switchDarkModeCheck(value) {
         el.checked = value
     })
 }
+
 // if dark mode on
 if (checkDarkModeStatus === 1 || checkDarkModeStatus === "1") {
     switchDarkModeCheck(true);
     if (pageBodyActive) {
         // dark mode already activated
-    }
-    else {
+    } else {
         pageBody.classList.add("dark-mode")
     }
-}
-else {
+} else {
     switchDarkModeCheck(false);
 }
 switchDarkMode.forEach(function (el) {
@@ -444,8 +442,7 @@ switchDarkMode.forEach(function (el) {
             pageBody.classList.remove("dark-mode");
             localStorage.setItem("MoneyStatsDarkmode", "0");
             switchDarkModeCheck(false);
-        }
-        else {
+        } else {
             pageBody.classList.add("dark-mode")
             switchDarkModeCheck(true);
             localStorage.setItem("MoneyStatsDarkmode", "1");

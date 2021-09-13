@@ -14,19 +14,20 @@ $(document).ready(function () {
     // Modal Get Wallet List Homepage
     //-------------------------------------------------------------
     getWallet();
-    function getWallet(){
+
+    function getWallet() {
         $.ajax({
             type: "GET",
             url: "/wallet/list",
             contentType: 'application/json',
             dataType: 'json',
             headers: {
-              Authorization: sessionStorage.getItem('accessToken')
+                Authorization: sessionStorage.getItem('accessToken')
             },
-            success: function (resume){
-            const listWallet = $('#listWallet');
-            for (let i = resume.length - 1; i >= 0; i--) {
-                $(`<tr id='riga-${resume[i].id}'>
+            success: function (resume) {
+                const listWallet = $('#listWallet');
+                for (let i = resume.length - 1; i >= 0; i--) {
+                    $(`<tr id='riga-${resume[i].id}'>
                 <td>${resume[i].name}</td>
                 <td>${resume[i].category.name}</td>
                 <td>
@@ -39,10 +40,11 @@ $(document).ready(function () {
                     </div>
                 </td>
             </tr>`).hide().appendTo(listWallet).fadeIn(i * 20);
+                }
             }
-        }
         })
     }
+
     //-------------------------------------------------------------
     // END Modal Get Wallet List Homepage
     //-------------------------------------------------------------
@@ -77,7 +79,7 @@ $(document).ready(function () {
                     title: "Error, Delete process aborted",
                     text: 'Try again.'
                 })
-             }
+            }
         });
     }
 
@@ -96,23 +98,23 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
 
-            $('#editWalletName').val(response.name);
-            $('#catOptionhtml').val(response.categoryEntity.id);
-            
-            $.ajax({
-                type: "GET",
-                url: "/category/list",
-                contentType: 'application/json',
-                dataType: 'json',
-                headers: {
-                    Authorization: sessionStorage.getItem('accessToken')
-                },
-                success: function (resume){
-                    for (let i = resume.length - 1; i >= 0; i--) {
-                    $(`<option id='walletSelect' class="roundedCorner" value="${resume[i].id}">${resume[i].name}</option>`).hide().appendTo(optionCategory).fadeIn(i * 20);
+                $('#editWalletName').val(response.name);
+                $('#catOptionhtml').val(response.categoryEntity.id);
+
+                $.ajax({
+                    type: "GET",
+                    url: "/category/list",
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    headers: {
+                        Authorization: sessionStorage.getItem('accessToken')
+                    },
+                    success: function (resume) {
+                        for (let i = resume.length - 1; i >= 0; i--) {
+                            $(`<option id='walletSelect' class="roundedCorner" value="${resume[i].id}">${resume[i].name}</option>`).hide().appendTo(optionCategory).fadeIn(i * 20);
+                        }
                     }
-                }
-            })
+                })
             }
         });
     });
@@ -137,7 +139,7 @@ $(document).ready(function () {
             }).then((result) => {
                 if (result.isConfirmed) {
                     editWallet(walletEdit);
-                    
+
                 } else if (result.isDenied) {
                     Swal.fire("Wallet don't edited!", '', 'info')
                 }
@@ -157,9 +159,9 @@ $(document).ready(function () {
             type: "DELETE",
             url: `/wallet/delete/${id}`,
             headers: {
-              Authorization: sessionStorage.getItem('accessToken')
+                Authorization: sessionStorage.getItem('accessToken')
             },
-            success: function (response){
+            success: function (response) {
                 swalWithBootstrapButtons.fire(
                     'Cancelled!',
                     'Your walles was successfuly deleted.',
@@ -171,14 +173,14 @@ $(document).ready(function () {
             },
             error: function (authErrorResponseDTO) {
                 var responseDTO = authErrorResponseDTO.responseJSON.message;
-                if (responseDTO === STATEMENT_NOT_FOUND){
+                if (responseDTO === STATEMENT_NOT_FOUND) {
                     Swal.fire({
                         icon: 'error',
                         title: "Error, Delete process aborted",
                         text: 'Try again.'
                     })
                 }
-                if (responseDTO === WALLET_NOT_FOUND){
+                if (responseDTO === WALLET_NOT_FOUND) {
                     Swal.fire({
                         icon: 'error',
                         title: "Error, Delete process aborted",
@@ -229,12 +231,12 @@ $(document).ready(function () {
     //-------------------------------------------------------------
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger',
-          denyButton: 'btn btn-danger'
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger',
+            denyButton: 'btn btn-danger'
         },
         buttonsStyling: false
-      })
+    })
     //-------------------------------------------------------------
     // END Custom Button Swal
     //-------------------------------------------------------------
@@ -242,25 +244,25 @@ $(document).ready(function () {
     //-------------------------------------------------------------
     // Modal Add Wallet Homepage
     //-------------------------------------------------------------
-        $('#aggiungiWallet').click(function () {
-            const wallet = {
-                name: $('#walletName').val(),
-                categoryId: $('#catOptionhtml').val(),
+    $('#aggiungiWallet').click(function () {
+        const wallet = {
+            name: $('#walletName').val(),
+            categoryId: $('#catOptionhtml').val(),
+        }
+        Swal.fire({
+            icon: 'question',
+            title: `Confirm save of ${wallet.name}?`,
+            showDenyButton: true,
+            confirmButtonText: `Save`,
+            denyButtonText: `Don't Save`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                addWallet(wallet);
+            } else if (result.isDenied) {
+                swalWithBootstrapButtons.fire(`Wallet don't added`, '', 'info')
             }
-            Swal.fire({
-                icon: 'question',
-                title: `Confirm save of ${wallet.name}?`,
-                showDenyButton: true,
-                confirmButtonText: `Save`,
-                denyButtonText: `Don't Save`,
-              }).then((result) => {
-                if (result.isConfirmed) {
-                    addWallet(wallet);
-                } else if (result.isDenied) {
-                  swalWithBootstrapButtons.fire(`Wallet don't added`, '', 'info')
-                }
-              })
-            
+        })
+
 
         $('#walletName').val('');
     })
@@ -282,28 +284,28 @@ $(document).ready(function () {
             },
             error: function (authErrorResponseDTO) {
                 var responseDTO = authErrorResponseDTO.responseJSON.message;
-                if (responseDTO === INVALID_TOKEN_DTO){
+                if (responseDTO === INVALID_TOKEN_DTO) {
                     Swal.fire({
                         icon: 'error',
                         title: "Operation Aborted!",
                         text: 'Error during the process.'
                     })
                 }
-                if (responseDTO === TOKEN_REQUIRED){
+                if (responseDTO === TOKEN_REQUIRED) {
                     Swal.fire({
                         icon: 'error',
                         title: "Operation Aborted!",
                         text: 'Error during the process.'
                     })
                 }
-                if (responseDTO === INVALID_WALLET_DTO){
+                if (responseDTO === INVALID_WALLET_DTO) {
                     Swal.fire({
                         icon: 'error',
                         title: "Operation Aborted!",
                         text: 'Error during the process.'
                     })
                 }
-                if (responseDTO === CATEGORY_NOT_FOUND){
+                if (responseDTO === CATEGORY_NOT_FOUND) {
                     Swal.fire({
                         icon: 'error',
                         title: "Operation Aborted!",
@@ -313,6 +315,7 @@ $(document).ready(function () {
             }
         });
     }
+
     //-------------------------------------------------------------
     // END Modal Add Wallet Homepage
     //-------------------------------------------------------------
