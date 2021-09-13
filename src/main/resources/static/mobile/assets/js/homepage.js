@@ -16,7 +16,7 @@ $(document).ready(function () {
         Authorization: sessionStorage.getItem('accessToken')
       },
       success: function (authCredentialDTO){
-        console.log("User Logged with accessToken {}, ", authCredentialDTO.firstName, " username -> ", authCredentialDTO.username);
+        console.log("User Logged with accessToken {} ", authCredentialDTO.firstName, authCredentialDTO.lastName, " username -> ", authCredentialDTO.username);
         $('#usernameMenu').text(`${authCredentialDTO.username}`);
         $('#nameMenu').text(`${authCredentialDTO.firstName} ${authCredentialDTO.lastName}`);
       },
@@ -120,6 +120,7 @@ $(document).ready(function () {
         getGraph(listDate, statementList, listPil);
         getGraphWallet(lastDate);
         getCurrentStatement(lastDate);
+        getDate(listDate);
         //------------------------------------------------------------------------
         // END DATA HOMEPAGE
         //------------------------------------------------------------------------
@@ -309,6 +310,47 @@ $(document).ready(function () {
     }
     /*--------------------------------------------------------------------------
     *  END Splice Slider Effect Carousel Wallet
+    *--------------------------------------------------------------------------*/
+
+    /*--------------------------------------------------------------------------
+    *  Get List Date For Statement By Date
+    *--------------------------------------------------------------------------*/
+   var splitDate = [];
+    function getDate(listDate){
+      splitDate = listDate.split(",");
+      splitDate.pop();
+        const listStatementByDate = $('#dateOption');
+          for (let i = splitDate.length-1; i >= 0; i--) {
+            $(`<li>
+                  <a id='dateTest'>${splitDate[i]}</a>
+                </li>`).hide().appendTo(listStatementByDate).fadeIn(i * 20);
+          }
+          localStorage.setItem('listDate', splitDate)
+  }
+  $('.dataConfirm').click(function () {
+    const data = $('#dateTest').text();
+    localStorage.setItem('date', data);
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+      })
+      
+      Toast.fire({
+        icon: 'success',
+        title: `<span style='color:#2D2C2C'>Date ${data}, redirect...</span>`
+      })
+      setTimeout(function () {
+        window.location.href = "app-statement-by-date.html";
+      }, 1000);
+  })
+  $('.resetCookies').on('click', function resetCookies(){
+    document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+  })
+  /*--------------------------------------------------------------------------
+    *  END Get List Date For Statement By Date
     *--------------------------------------------------------------------------*/
 
     /*--------------------------------------------------------------------------

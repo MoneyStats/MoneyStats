@@ -1,0 +1,131 @@
+<!DOCTYPE html>   
+<html lang='en'>   
+<head>   
+	<link rel='shortcut icon' type='image/x-icon' href='./assets/img/logos/favicon_trasparent.png'> 
+	<meta charset='UTF-8'>   
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>   
+	<meta name='viewport' content='width=device-width, initial-scale=1.0'> 
+  <!-- ========= CSS Homepage ========= -->
+    <!-- Stile Personalizzato Solo per le liste -->  
+	<link rel="stylesheet" href="./assets/css/capitalewallet.css">
+  <!-- CSS Loader -->
+  <link rel="stylesheet" href="./assets/css/plugin/loader.css">
+    <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+  <!-- Google Fonts Roboto -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+  
+  <!-- ========= JS Files =========  -->
+  <script src="./assets/js/plugin/jquery-3.6.0.min.js"></script>
+  <script src="./assets/js/capitalewallet.js"></script>
+  <!-- Loader -->
+  <script src="./assets/js/plugin/loader.js"></script>
+
+	<!-- ========= SEZIONE COLORI SEARCH BAR ========= -->
+	  <!-- Chrome, Firefox OS and Opera -->
+	  <meta name='theme-color' content='#080957'>
+	  <!-- Windows Phone -->
+	  <meta name='msapplication-navbutton-color' content='#080957'>
+	  <!-- iOS Safari -->
+	  <meta name='apple-mobile-web-app-status-bar-style' content='#080957'>
+
+    <!-- ========= BOOTSTRAP ========= -->
+	<!-- CSS only -->
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6' crossorigin='anonymous'>
+    <!-- JavaScript Bundle with Popper -->
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js' integrity='sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf' crossorigin='anonymous'></script>
+	<title id="title">Capitale</title>
+  <!-- ========= Manifest ========= -->
+  <link rel="manifest" href="./__manifest.json">
+</head>
+    <nav class='navbar navbar-expand-lg navbar-dark colorLogo fixed-top'>   
+      <div class='container-fluid'>   
+          <a href="homepage.html"><figure class="hover-rotate"><img src='./assets/img/logos/logo_transparent.png' alt='block' style='width: 200px;'></figure></a>   
+          <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>   
+          <span class='navbar-toggler-icon'></span>   
+          </button>
+              <div class='collapse navbar-collapse' id='navbarSupportedContent'>
+                 <ul class='navbar-nav ms-auto mb-2 mb-lg-0'>
+                   <li class='nav-item'>   
+                    <a class='nav-link active' aria-current='page' href='javascript:history.back()'>Indietro</a>   
+                  </li>
+                  <li class='nav-item dropdown'>   
+                    <a class='nav-link dropdown-toggle' href='#' id='navbarDropdown' role='button' data-bs-toggle='dropdown' aria-expanded='false'>   
+                          Opzioni   
+                    </a>   
+                    <ul class='dropdown-menu dropdown-menu-lg-end' aria-labelledby='navbarDropdown'> 
+                      <li><a class='dropdown-item' id="SwitchMobile">Switch Mobile Mode</a></li>       
+                         <li><a class='dropdown-item' href='/logout'>Logout</a></li>  
+                     </ul>   
+                 </li>
+                 </ul>
+                   
+              
+          </div>   
+      </div>   
+  </nav> 
+  <body class="capitale">
+    <!-- loader -->
+    <div id="loader">
+      <img src="./assets/img/logos/favicon_trasparent.png" alt="icon" class="loading-icon">
+    </div>
+    <!-- * loader -->
+    <div class="main-content">
+        <div class="header pb-8 pt-5 pt-md-8">
+          <div class="container-fluid">
+            <div class="header-body">
+              <div class="row" style="padding-top: 80px; margin-left: 20px; margin-right: 20px;" id="capitalewallet">
+                <!-- STARTING CARD -->
+                <div class="col-xl-3 col-sm-6" style="margin-bottom: 30px;">
+                  <div class="card card-stats mb-4 mb-xl-0">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col">
+                          <h5 class="card-title text-uppercase text-muted mb-0">TOTALE CAPITALI</h5>
+                          <span class="h2 font-weight-bold mb-0" id="totale">€ 0.0</span>
+                        </div>
+                        <div class="col-auto">
+                          <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                            <i class="fas fa-chart-bar"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <p class="mt-3 mb-0 text-muted text-sm">
+                        <span class="performancetot"></span>
+                        <span class="text-nowrap sincetot">Since last month</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6" style="padding-bottom: 30px;">
+                  <div class="card card-stats mb-4 mb-xl-0">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col">
+                          <h5 class="card-title text-uppercase text-muted mb-0">PIL</h5>
+                          <span class="h2 font-weight-bold mb-0" id="pil">£ 0.0</span>
+                        </div>
+                        <div class="col-auto">
+                          <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                            <i class="fas fa-poll"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <p class="mt-3 mb-0 text-muted text-sm">
+                        <span class="performancetot"></span>
+                        <span class="text-nowrap sincetot">Since last month</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <!-- FINISH CARD -->
+                
+        <!-- Page content -->
+      </div>
+      <!--Main layout-->
+            </div>
+          </div>
+        </div>
+      </div>
+  </body>
+  </html>

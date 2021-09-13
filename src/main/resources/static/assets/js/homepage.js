@@ -127,6 +127,7 @@ $(document).ready(function () {
         getGraph(listDate, statementList, listPil);
         getGraphWallet(lastDate);
         getCurrentStatement(listDate, currentYear);
+        getDate(listDate);
         //------------------------------------------------------------------------
         // END DATA HOMEPAGE
         //------------------------------------------------------------------------
@@ -315,23 +316,14 @@ $(document).ready(function () {
     }
   }
 
-  getDate();
-  function getDate(){
-    $.ajax({
-      type: "GET",
-      url: `/statement/listOfDate`,
-      contentType: 'application/json',
-      dataType: 'json',
-      headers: {
-        Authorization: sessionStorage.getItem('accessToken')
-      },
-      success: function (date) {
-        const listDate = $('#dateOption');
-          for (let i = 0; i < date.length; i++) {
-              $(`<option id='dateSelect' value="${date[i]}">${date[i]}</option>`).hide().appendTo(listDate).fadeIn(i * 20);
+  var splitDate = [];
+  function getDate(listDate){
+    splitDate = listDate.split(",");
+      splitDate.pop();
+        const listStatementByDate = $('#dateOption');
+          for (let i = splitDate.length-1; i >= 0; i--) {
+              $(`<option id='dateSelect' value="${splitDate[i]}">${splitDate[i]}</option>`).hide().appendTo(listStatementByDate).fadeIn(i * 20);
           }
-      }
-    })
   }
   $('#dataConfirm').click(function () {
     document.cookie = $('#dateOption').val() + "; path=/";
