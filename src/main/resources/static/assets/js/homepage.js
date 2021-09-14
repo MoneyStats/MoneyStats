@@ -82,7 +82,7 @@ $(document).ready(function () {
                 $('.sincetotalecapitale').text("Since " + statementReportDTO.beforeLastDate);
                 // PIL
                 var statementTotPercent = statementReportDTO.statementTotalPercent;
-                if (statementTotPercent.countDecimals() > 0){
+                if ((statementTotPercent % 1) > 0){
                     statementTotPercent = statementTotPercent.toFixed(2);
                 }
                 if (statementReportDTO.pil > 0) {
@@ -139,14 +139,7 @@ $(document).ready(function () {
             }
         });
     }
-    //------------------------------------------------------------------------------
-    //Check if number has decimal
-    //------------------------------------------------------------------------------
-    Number.prototype.countDecimals = function () {
-        if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
-        return this.toString().split(".")[1].length || 0; 
-    }
-
+    
     //-------------------------------------------------------------
     // Get Line Graph Homepage
     //-------------------------------------------------------------

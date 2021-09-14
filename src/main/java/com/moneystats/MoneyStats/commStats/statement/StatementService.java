@@ -53,12 +53,10 @@ public class StatementService {
       LOG.error("Wallet Not Found, into StatementService, addStatement:55");
       throw new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     }
-
-    String[] date = statementDTO.getDate().split("-");
+    String[] date = statementInputDTO.getDate().split("-");
     String statementDate = date[2] + "-" + date[1] + "-" + date[0];
 
     statementDTO.setValue(statementInputDTO.getValue());
-    statementDTO.setDate(statementInputDTO.getDate());
     statementDTO.setDate(statementDate);
     statementDTO.setUser(utente);
     statementDTO.setWalletEntity(walletEntity);
