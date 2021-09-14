@@ -29,6 +29,12 @@ public class AuthCredentialService {
 
   private static final Logger LOG = LoggerFactory.getLogger(AuthCredentialService.class);
 
+  /**
+   * Process to signUp with a new user
+   * @param userCredential to be stored
+   * @return A response of success
+   * @throws AuthenticationException on invalid input
+   */
   public AuthResponseDTO signUp(AuthCredentialDTO userCredential) throws AuthenticationException {
     userCredential.setRole(SecurityRoles.MONEYSTATS_USER_ROLE);
     AuthenticationValidator.validateAuthCredentialDTO(userCredential);
@@ -45,7 +51,13 @@ public class AuthCredentialService {
     return new AuthResponseDTO(SchemaDescription.USER_ADDED_CORRECT);
   }
 
-  public TokenDTO login(AuthCredentialInputDTO userCredential) throws AuthenticationException, UnknownHostException {
+  /**
+   * Process to login via input
+   * @param userCredential input
+   * @return TokenDTO
+   * @throws AuthenticationException on Token
+   */
+  public TokenDTO login(AuthCredentialInputDTO userCredential) throws AuthenticationException {
     AuthenticationValidator.validateAuthCredentialInputDTO(userCredential);
     AuthCredentialEntity userEntity = authCredentialDAO.getCredential(userCredential);
     if (userEntity == null) {
@@ -75,11 +87,23 @@ public class AuthCredentialService {
     return tokenService.generateToken(userDto);
   }
 
+  /**
+   * Process to return the user logged
+   * @param token to be check
+   * @return An user
+   * @throws AuthenticationException for token
+   */
   public AuthCredentialDTO getUser(TokenDTO token) throws AuthenticationException {
     TokenValidation.validateTokenDTO(token);
     return tokenService.parseToken(token);
   }
 
+  /**
+   * Methods to get all the user
+   * @param token ADMIN param
+   * @return list of user into db
+   * @throws AuthenticationException parsing Token
+   */
   public List<AuthCredentialDTO> getUsers(TokenDTO token) throws AuthenticationException {
     TokenValidation.validateTokenDTO(token);
     AuthCredentialDTO user = tokenService.parseToken(token);

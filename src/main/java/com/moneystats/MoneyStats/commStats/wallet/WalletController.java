@@ -55,6 +55,14 @@ public class WalletController {
     return walletService.deleteWalletEntity(idWallet);
   }
 
+  /**
+   * List used on mobile device
+   * @param jwt for auth
+   * @return List of wallet and List of Statement
+   * @throws WalletException
+   * @throws StatementException
+   * @throws AuthenticationException
+   */
   @GetMapping("/listMobile")
   public WalletStatementDTO walletListMobile(@RequestHeader(value = "Authorization") String jwt)
       throws WalletException, StatementException, AuthenticationException {
@@ -62,6 +70,15 @@ public class WalletController {
     return walletService.myWalletMobile(tokenDTO);
   }
 
+  /**
+   * Wallet To Be Edited
+   * @param jwt for auth
+   * @param walletInputIdDTO wallet in input
+   * @return A response of status
+   * @throws WalletException
+   * @throws AuthenticationException
+   * @throws CategoryException
+   */
   @PutMapping("/editWallet")
   public WalletResponseDTO editWallet(
       @RequestHeader(value = "Authorization") String jwt,
@@ -71,6 +88,12 @@ public class WalletController {
     return walletService.editWallet(walletInputIdDTO, tokenDTO);
   }
 
+  /**
+   * Get single wallet by id
+   * @param idWallet
+   * @return WalletDTO
+   * @throws WalletException
+   */
   @GetMapping("/getById/{idWallet}")
   public WalletDTO getById(@PathVariable long idWallet) throws WalletException {
     return walletService.walletById(idWallet);

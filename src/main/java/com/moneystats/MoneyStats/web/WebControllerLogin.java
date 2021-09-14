@@ -19,7 +19,12 @@ public class WebControllerLogin {
   @Autowired private WebService webService;
   private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
-  /** Methods with no return, it need to check if the token it is still valid */
+  /**
+   * Methods with no return, it need to check if the token it is still valid
+   * @param jwt
+   * @return User
+   * @throws WebException
+   */
   @GetMapping("/check_login")
   public AuthCredentialDTO checkLogin(@RequestHeader(value = "Authorization") String jwt) throws WebException {
     TokenDTO tokenDTO = new TokenDTO(jwt);

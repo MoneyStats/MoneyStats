@@ -45,19 +45,22 @@ public class StatementService {
           throws StatementException, AuthenticationException, WalletException {
     StatementValidator.validateStatementInputDTO(statementInputDTO);
     StatementDTO statementDTO = new StatementDTO();
-    statementDTO.setDate(statementInputDTO.getDate());
-    statementDTO.setValue(statementInputDTO.getValue());
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
-    statementDTO.setUser(utente);
+
     WalletEntity walletEntity =
         walletDAO.findById(statementInputDTO.getWalletId()).orElse(null);
     if (walletEntity == null) {
-      LOG.error("Wallet Not Found, into StatementService, walletDAO.findById:37");
+      LOG.error("Wallet Not Found, into StatementService, addStatement:55");
       throw new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     }
+
     String[] date = statementDTO.getDate().split("-");
     String statementDate = date[2] + "-" + date[1] + "-" + date[0];
+
+    statementDTO.setValue(statementInputDTO.getValue());
+    statementDTO.setDate(statementInputDTO.getDate());
     statementDTO.setDate(statementDate);
+    statementDTO.setUser(utente);
     statementDTO.setWalletEntity(walletEntity);
     StatementEntity statementEntity =
         new StatementEntity(
@@ -82,7 +85,7 @@ public class StatementService {
     List<String> listDate = statementDAO.selectdistinctstatement(utente.getId());
     if (listDate.size() == 0) {
       LOG.error(
-          "Statement Date Not Found, into StatementService, statementDAO.selectdistinctstatement(utente.getId()):61");
+          "Statement Date Not Found, into StatementService, listOfDate:85");
       throw new StatementException(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND);
     }
     return listDate;
@@ -103,26 +106,18 @@ public class StatementService {
         statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date);
     if (statementList.size() == 0) {
       LOG.error(
-          "Statement Not Found, into StatementService, statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date):71");
+          "Statement Not Found, into StatementService, listStatementByDate:106");
       throw new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
     }
     return statementList;
   }
 
-  // public List<String> listByWalletAndValue(TokenDTO tokenDTO)
-  //    throws StatementException, WalletException, AuthenticationException {
-  //  AuthCredentialEntity utente = validateAndCreate(tokenDTO);
-
-  //  List<String> statementsByWallet = statementDAO.findStatementByDateOrdered(utente.getId());
-  //  if (statementsByWallet == null) {
-  //    LOG.error(
-  //        "Statement Not Found, into StatementService,
-  // statementDAO.findStatementByDateOrdered(utente.getId()):83");
-  //    throw new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
-  //  }
-  //  return statementsByWallet;
-  // }
-
+  /**
+   * Check and return user
+   * @param tokenDTO
+   * @return User logged
+   * @throws AuthenticationException
+   */
   private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO)
       throws AuthenticationException {
     TokenValidation.validateTokenDTO(tokenDTO);

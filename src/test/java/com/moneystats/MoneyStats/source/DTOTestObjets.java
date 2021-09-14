@@ -7,6 +7,8 @@ import com.moneystats.MoneyStats.commStats.statement.DTO.StatementInputDTO;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputDTO;
+import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputIdDTO;
+import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletStatementDTO;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.authentication.SecurityRoles;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
@@ -108,4 +110,8 @@ public class DTOTestObjets {
   public static StatementInputDTO statementInputDTO = new StatementInputDTO(10.0, "my-date", 1L);
 
   public static CategoryEntity categoryEntity = new CategoryEntity(1, "my-category-name");
+
+  public static WalletStatementDTO walletStatementDTO = new WalletStatementDTO(walletEntities, statementEntityList);
+
+  public static WalletInputIdDTO walletInputIdDTO = new WalletInputIdDTO(1L, "My-Wallet-Name", 1);
 }

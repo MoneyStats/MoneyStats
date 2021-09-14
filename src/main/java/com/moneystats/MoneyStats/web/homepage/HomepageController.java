@@ -15,6 +15,13 @@ public class HomepageController {
 
   @Autowired private HomepageService homepageService;
 
+  /**
+   * Get report of the Homepage at the start of web app
+   * @param jwt
+   * @return
+   * @throws StatementException
+   * @throws AuthenticationException
+   */
   @GetMapping("/reportHomepage")
   public HomepageReportDTO statementReportHomepage(
       @RequestHeader(value = "Authorization") String jwt)
@@ -23,6 +30,15 @@ public class HomepageController {
     return homepageService.reportHomepage(tokenDTO);
   }
 
+  /**
+   * Get Pie Graph on Homepage
+   * @param jwt for auth
+   * @param date to be searched
+   * @return Data for let me get the graph
+   * @throws WalletException
+   * @throws StatementException
+   * @throws AuthenticationException
+   */
   @GetMapping("/getPieGraph/{date}")
   public HomepagePieChartDTO homepageGraph(
       @RequestHeader(value = "Authorization") String jwt, @PathVariable String date)
