@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class AuthCredentialService {
 
   @Autowired AuthCredentialDAO authCredentialDAO;
   @Autowired TokenService tokenService;
+  @Autowired HttpServletRequest httpServletRequest;
 
   BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
@@ -41,7 +45,7 @@ public class AuthCredentialService {
     return new AuthResponseDTO(SchemaDescription.USER_ADDED_CORRECT);
   }
 
-  public TokenDTO login(AuthCredentialInputDTO userCredential) throws AuthenticationException {
+  public TokenDTO login(AuthCredentialInputDTO userCredential) throws AuthenticationException, UnknownHostException {
     AuthenticationValidator.validateAuthCredentialInputDTO(userCredential);
     AuthCredentialEntity userEntity = authCredentialDAO.getCredential(userCredential);
     if (userEntity == null) {
@@ -54,6 +58,12 @@ public class AuthCredentialService {
       LOG.error("User Not Found, password");
       throw new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL);
     }
+
+    String remoteAddress = httpServletRequest.getRemoteAddr();
+    String userAgent = httpServletRequest.getHeader("Host") + " - " + httpServletRequest.getHeader("User-Agent");
+
+    LOG.warn("IP Address Connected: {} and Hostname: {} and Remote Address {}", httpServletRequest.getRemoteHost(), httpServletRequest.getServerName(), remoteAddress);
+    LOG.warn("IP Address Connected to User Agent: {}", userAgent);
     AuthCredentialDTO userDto =
         new AuthCredentialDTO(
             userEntity.getFirstName(),
@@ -62,7 +72,6 @@ public class AuthCredentialService {
             userEntity.getEmail(),
             userEntity.getUsername(),
             userEntity.getRole());
-
     return tokenService.generateToken(userDto);
   }
 

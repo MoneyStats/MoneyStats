@@ -77,14 +77,18 @@ $(document).ready(function () {
                 $('.sincetotalecapitale').text(" Performance Since " + statementReportDTO.beforeLastDate);
                 $('.sincetotalecapitale1').text(" PIL Since " + statementReportDTO.beforeLastDate);
                 // PIL
+                var statementTotPercent = statementReportDTO.statementTotalPercent;
+                if (statementTotPercent.countDecimals() > 0){
+                    statementTotPercent = statementTotPercent.toFixed(2);
+                }
                 if (statementReportDTO.pil > 0) {
-                    $(`<span class="text-success mr-2"><i class="fa fa-arrow-up"></i> ${statementReportDTO.statementTotalPercent.toFixed(2)}%</span>`).appendTo(`.performanceLastStatement`)
+                    $(`<span class="text-success mr-2"><i class="fa fa-arrow-up"></i> ${statementTotPercent}%</span>`).appendTo(`.performanceLastStatement`)
                     $('#pil').text("€ " + statementReportDTO.pil.toFixed(2)).addClass('text-success');
                 } else if (statementReportDTO.pil === 0) {
-                    $(`<span class="text-warning mr-2"><i class="fa fa-arrow-down"></i> ${statementReportDTO.statementTotalPercent.toFixed(2)}%</span>`).appendTo(`.performanceLastStatement`)
+                    $(`<span class="text-warning mr-2"><i class="fa fa-arrow-down"></i> ${statementTotPercent}%</span>`).appendTo(`.performanceLastStatement`)
                     $('#pil').text("€ " + statementReportDTO.pil.toFixed(2)).addClass('text-warning');
                 } else {
-                    $(`<span class="text-danger mr-2"><i class="fa fa-arrow-down"></i> ${statementReportDTO.statementTotalPercent.toFixed(2)}%</span>`).appendTo(`.performanceLastStatement`)
+                    $(`<span class="text-danger mr-2"><i class="fa fa-arrow-down"></i> ${statementTotPercent}%</span>`).appendTo(`.performanceLastStatement`)
                     $('#pil').text("€ " + statementReportDTO.pil.toFixed(2)).addClass('text-danger');
                 }
                 // PIL TOTALE
@@ -103,14 +107,18 @@ $(document).ready(function () {
                 //-----------------------------------------------------------------------
                 var currentYear = "";
                 var lastDate = "";
-                var listDateForTable;
+                var listDateForTable = [];
+                var newDate = "";
+                var dateFixed = "";
                 for (let i = 0; i < statementReportDTO.listDate.length; i++) {
                     // Calcolo anno corrente(mi serve per la lista di date secondo anno)
-                    currentYear = statementReportDTO.listDate[statementReportDTO.listDate.length - 1].split("-")[0];
+                    currentYear = statementReportDTO.listDate[statementReportDTO.listDate.length - 1].split("-")[2];
                     $('#year').text('Graph ' + currentYear);
+                    dateFixed = statementReportDTO.listDate[i].split("-");
+                    newDate = dateFixed[2] + "-" + dateFixed[1] + "-" + dateFixed[0];
                     listDate += [statementReportDTO.listDate[i] + ","];
                     lastDate = statementReportDTO.listDate[i];
-                    listDateForTable += [statementReportDTO.listDate[i]];
+                    listDateForTable += [newDate + ","];
                 }
                 for (let i = 0; i < statementReportDTO.statementList.length; i++) {
                     statementList += [statementReportDTO.statementList[i] + ","];
@@ -118,7 +126,7 @@ $(document).ready(function () {
                 for (let i = 0; i < statementReportDTO.listPil.length; i++) {
                     listPil += [statementReportDTO.listPil[i] + ","];
                 }
-                getGraph(listDate, statementList, listPil);
+                getGraph(listDateForTable, statementList, listPil);
                 getGraphWallet(lastDate);
                 getCurrentStatement(lastDate);
                 getDate(listDate);
@@ -127,6 +135,13 @@ $(document).ready(function () {
                 //------------------------------------------------------------------------
             }
         });
+    }
+    //------------------------------------------------------------------------------
+    //Check if number has decimal
+    //------------------------------------------------------------------------------
+    Number.prototype.countDecimals = function () {
+        if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
+        return this.toString().split(".")[1].length || 0; 
     }
 
     /*--------------------------------------------------------------------------
@@ -137,8 +152,8 @@ $(document).ready(function () {
     var graphValues = [];
     var graphPIL = [];
 
-    function getGraph(listDate, statementList, listPil) {
-        graphDate = listDate.split(",");
+    function getGraph(listDateForTable, statementList, listPil) {
+        graphDate = listDateForTable.split(",");
         graphValues = statementList.split(",");
         graphPIL = listPil.split(",");
         graphDate.pop();

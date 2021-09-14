@@ -9,6 +9,7 @@ import com.moneystats.MoneyStats.commStats.statement.StatementException;
 import com.moneystats.MoneyStats.commStats.statement.StatementService;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.IWalletDAO;
+import com.moneystats.MoneyStats.commStats.wallet.WalletException;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.MoneyStats.source.DTOTestObjets;
 import com.moneystats.authentication.AuthCredentialDAO;
@@ -107,8 +108,8 @@ public class StatementServiceTest {
     Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
     Mockito.when(statementDAO.save(statementEntity)).thenReturn(statementEntity);
 
-    StatementException expectedException =
-        new StatementException(StatementException.Code.USER_NOT_FOUND);
+    AuthenticationException expectedException =
+        new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND);
     StatementException actualException =
         Assertions.assertThrows(
             StatementException.class, () -> statementService.addStatement(tokenDTO, statementDTO));
@@ -127,8 +128,8 @@ public class StatementServiceTest {
     Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
     Mockito.when(statementDAO.save(statementEntity)).thenReturn(statementEntity);
 
-    StatementException expectedException =
-        new StatementException(StatementException.Code.WALLET_NOT_FOUND);
+    WalletException expectedException =
+        new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     StatementException actualException =
         Assertions.assertThrows(
             StatementException.class, () -> statementService.addStatement(tokenDTO, statementDTO));
@@ -193,8 +194,8 @@ public class StatementServiceTest {
         .thenReturn(authCredentialEntity);
     Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
 
-    StatementException expectedException =
-        new StatementException(StatementException.Code.USER_NOT_FOUND);
+    AuthenticationException expectedException =
+        new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND);
     StatementException actualException =
         Assertions.assertThrows(
             StatementException.class, () -> statementService.listOfDate(tokenDTO));
@@ -213,8 +214,8 @@ public class StatementServiceTest {
     Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
     Mockito.when(statementDAO.selectdistinctstatement(Mockito.any())).thenReturn(listDate);
 
-    StatementException expectedException =
-        new StatementException(StatementException.Code.WALLET_NOT_FOUND);
+    WalletException expectedException =
+        new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     StatementException actualException =
         Assertions.assertThrows(
             StatementException.class, () -> statementService.addStatement(tokenDTO, statementDTO));
@@ -282,8 +283,8 @@ public class StatementServiceTest {
         .thenReturn(authCredentialEntity);
     Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
 
-    StatementException expectedException =
-        new StatementException(StatementException.Code.USER_NOT_FOUND);
+    AuthenticationException expectedException =
+        new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND);
     StatementException actualException =
         Assertions.assertThrows(
             StatementException.class, () -> statementService.listStatementByDate(tokenDTO, date));

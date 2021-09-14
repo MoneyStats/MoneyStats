@@ -1,6 +1,8 @@
 package com.moneystats.MoneyStats.walletTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moneystats.MoneyStats.commStats.category.CategoryException;
+import com.moneystats.MoneyStats.commStats.statement.StatementException;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletResponseDTO;
@@ -176,7 +178,7 @@ public class WalletControllerTest {
     Mockito.when(
             walletService.addWalletEntity(
                 TestSchema.TOKEN_JWT_DTO_ROLE_USER, walletDTO))
-        .thenThrow(new WalletException(WalletException.Code.USER_NOT_FOUND));
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND));
 
     mockMvc
         .perform(MockMvcRequestBuilders.post("/wallet/addWallet"))
@@ -192,7 +194,7 @@ public class WalletControllerTest {
     Mockito.when(
             walletService.addWalletEntity(
                 TestSchema.TOKEN_JWT_DTO_ROLE_USER, walletDTO))
-        .thenThrow(new WalletException(WalletException.Code.CATEGORY_NOT_FOUND));
+        .thenThrow(new CategoryException(CategoryException.Code.CATEGORY_NOT_FOUND));
 
     mockMvc
         .perform(
@@ -233,7 +235,7 @@ public class WalletControllerTest {
     Long idWallet = 1L;
 
     Mockito.when(walletService.deleteWalletEntity(idWallet))
-        .thenThrow(new WalletException(WalletException.Code.STATEMENT_NOT_FOUND));
+        .thenThrow(new StatementException(StatementException.Code.STATEMENT_NOT_FOUND));
 
     mockMvc
         .perform(MockMvcRequestBuilders.delete("/wallet/delete/" + idWallet))

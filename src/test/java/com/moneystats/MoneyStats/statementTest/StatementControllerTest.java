@@ -8,6 +8,7 @@ import com.moneystats.MoneyStats.commStats.statement.StatementController;
 import com.moneystats.MoneyStats.commStats.statement.StatementException;
 import com.moneystats.MoneyStats.commStats.statement.StatementService;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
+import com.moneystats.MoneyStats.commStats.wallet.WalletException;
 import com.moneystats.MoneyStats.source.DTOTestObjets;
 import com.moneystats.authentication.AuthenticationException;
 import com.moneystats.authentication.DTO.TokenDTO;
@@ -115,7 +116,7 @@ public class StatementControllerTest {
     String statementAsString = objectMapper.writeValueAsString(statementDTO);
 
     Mockito.when(statementService.addStatement(Mockito.any(), Mockito.any()))
-        .thenThrow(new StatementException(StatementException.Code.USER_NOT_FOUND));
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND));
 
     mockMvc
         .perform(
@@ -133,7 +134,7 @@ public class StatementControllerTest {
     String statementAsString = objectMapper.writeValueAsString(statementDTO);
 
     Mockito.when(statementService.addStatement(Mockito.any(), Mockito.any()))
-        .thenThrow(new StatementException(StatementException.Code.WALLET_NOT_FOUND));
+        .thenThrow(new WalletException(WalletException.Code.WALLET_NOT_FOUND));
 
     mockMvc
         .perform(
@@ -181,7 +182,7 @@ public class StatementControllerTest {
     String dateAsString = objectMapper.writeValueAsString(date);
 
     Mockito.when(statementService.listOfDate(Mockito.any()))
-            .thenThrow(new StatementException(StatementException.Code.USER_NOT_FOUND));
+            .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND));
 
     mockMvc
             .perform(
@@ -228,7 +229,7 @@ public class StatementControllerTest {
     String date = "2021-06-09";
 
     Mockito.when(statementService.listStatementByDate(Mockito.any(), Mockito.any()))
-            .thenThrow(new StatementException(StatementException.Code.USER_NOT_FOUND));
+            .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND));
 
     mockMvc
             .perform(

@@ -1,5 +1,6 @@
 package com.moneystats.MoneyStats.commStats.wallet;
 
+import com.moneystats.MoneyStats.commStats.category.CategoryException;
 import com.moneystats.MoneyStats.commStats.statement.StatementException;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.*;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
@@ -39,7 +40,7 @@ public class WalletController {
   @PostMapping("/addWallet")
   public WalletResponseDTO addWallet(
       @RequestHeader(value = "Authorization") String jwt, @RequestBody WalletInputDTO walletDTO)
-      throws WalletException, AuthenticationException {
+          throws WalletException, AuthenticationException, CategoryException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return walletService.addWalletEntity(tokenDTO, walletDTO);
   }
@@ -65,7 +66,7 @@ public class WalletController {
   public WalletResponseDTO editWallet(
       @RequestHeader(value = "Authorization") String jwt,
       @RequestBody WalletInputIdDTO walletInputIdDTO)
-      throws WalletException, AuthenticationException {
+          throws WalletException, AuthenticationException, CategoryException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return walletService.editWallet(walletInputIdDTO, tokenDTO);
   }

@@ -1,8 +1,10 @@
 package com.moneystats.MoneyStats.walletTest;
 
+import com.moneystats.MoneyStats.commStats.category.CategoryException;
 import com.moneystats.MoneyStats.commStats.category.ICategoryDAO;
 import com.moneystats.MoneyStats.commStats.category.entity.CategoryEntity;
 import com.moneystats.MoneyStats.commStats.statement.IStatementDAO;
+import com.moneystats.MoneyStats.commStats.statement.StatementException;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputDTO;
@@ -194,8 +196,8 @@ public class WalletServiceTest {
     Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
     Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
 
-    WalletException expectedException =
-        new WalletException(WalletException.Code.CATEGORY_NOT_FOUND);
+    CategoryException expectedException =
+        new CategoryException(CategoryException.Code.CATEGORY_NOT_FOUND);
     WalletException actualException =
         Assertions.assertThrows(
             WalletException.class,
@@ -240,8 +242,8 @@ public class WalletServiceTest {
 
     Mockito.when(walletDAO.findById(idWallet)).thenReturn(walletEntity);
 
-    WalletException expectedException =
-        new WalletException(WalletException.Code.STATEMENT_NOT_FOUND);
+    StatementException expectedException =
+        new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
     WalletException actualException =
         Assertions.assertThrows(
             WalletException.class, () -> walletService.deleteWalletEntity(idWallet));

@@ -1,5 +1,6 @@
 package com.moneystats.MoneyStats.commStats.wallet;
 
+import com.moneystats.MoneyStats.commStats.category.CategoryException;
 import com.moneystats.MoneyStats.commStats.category.ICategoryDAO;
 import com.moneystats.MoneyStats.commStats.category.entity.CategoryEntity;
 import com.moneystats.MoneyStats.commStats.statement.IStatementDAO;
@@ -63,7 +64,7 @@ public class WalletService {
    * @throws AuthenticationException
    */
   public WalletResponseDTO addWalletEntity(TokenDTO tokenDTO, WalletInputDTO walletInputDTO)
-      throws WalletException, AuthenticationException {
+          throws WalletException, AuthenticationException, CategoryException {
     WalletValidator.validateWalletDTO(walletInputDTO);
     WalletDTO walletDTO = new WalletDTO();
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
@@ -71,7 +72,7 @@ public class WalletService {
     CategoryEntity category = categoryDAO.findById(walletInputDTO.getCategoryId()).orElse(null);
     if (category == null) {
       LOG.error("Category Not Found, on addWalletEntity into WalletService:67");
-      throw new WalletException(WalletException.Code.CATEGORY_NOT_FOUND);
+      throw new CategoryException(CategoryException.Code.CATEGORY_NOT_FOUND);
     }
     walletDTO.setName(walletInputDTO.getName());
     walletDTO.setCategoryEntity(category);
@@ -152,14 +153,14 @@ public class WalletService {
   }
 
   public WalletResponseDTO editWallet(WalletInputIdDTO walletInputIdDTO, TokenDTO token)
-      throws WalletException, AuthenticationException {
+          throws WalletException, AuthenticationException, CategoryException {
     WalletValidator.validateWalletInputWithIDDTO(walletInputIdDTO);
     AuthCredentialEntity utente = validateAndCreate(token);
     CategoryEntity categoryEntity =
         categoryDAO.findById(walletInputIdDTO.getIdCategory()).orElse(null);
     if (categoryEntity == null) {
       LOG.error("Category Not Found, on editWallet into WalletService:171");
-      throw new WalletException(WalletException.Code.CATEGORY_NOT_FOUND);
+      throw new CategoryException(CategoryException.Code.CATEGORY_NOT_FOUND);
     }
     WalletEntity walletEntityToEdit =
         new WalletEntity(

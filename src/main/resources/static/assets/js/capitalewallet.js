@@ -67,9 +67,8 @@ $(document).ready(function () {
                 Authorization: sessionStorage.getItem('accessToken')
             },
             success: function (resume) {
-                $('#title').text('MoneyStats - Capitale ' + document.cookie);
+                $('#title').text('MoneyStats - Capitale ' + localStorage.getItem('date'));
                 //   document.cookie.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-                console.log(document.cookie);
                 const listWallet = $('#capitalewallet');
                 for (let i = 0; i < resume.length; i++) {
                     let img = '';
@@ -160,7 +159,7 @@ $(document).ready(function () {
     function getStatement() {
         $.ajax({
             type: "GET",
-            url: `/statement/listStatementDate/${document.cookie}`,
+            url: `/statement/listStatementDate/${localStorage.getItem('date')}`,
             contentType: 'application/json',
             dataType: 'json',
             headers: {
@@ -189,9 +188,8 @@ $(document).ready(function () {
             },
             success: function (date) {
                 for (let i = 0; i < date.length; i++) {
-                    if (date[i] === document.cookie) {
+                    if (date[i] === localStorage.getItem('date')) {
                         dataold = date[i - 1];
-                        console.log(dataold + " Sono Qui")
                         $('.sincetot').text("Since " + dataold);
                     }
                 }
