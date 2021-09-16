@@ -1,114 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel='shortcut icon' type='image/x-icon' href='./assets/img/logos/favicon_trasparent.png'> 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel='shortcut icon' type='image/x-icon' href='./assets/img/logos/favicon_trasparent.png'>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- ========= CSS Homepage ========= -->
-    <!-- CSS Statement -->
-    <link rel="stylesheet" href="./assets/css/statement.css">
-    <!-- CSS Loader -->
-    <link rel="stylesheet" href="./assets/css/plugin/loader.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
-    <!-- Google Fonts Roboto -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
-    
-    <!-- SEZIONE COLORI SEARCH BAR --> 
-    <!-- ========= CSS Homepage ========= -->
-	  <!-- Chrome, Firefox OS and Opera --> 
-	  <meta name='theme-color' content='#080957'> 
-	  <!-- Windows Phone --> 
-	  <meta name='msapplication-navbutton-color' content='#080957'> 
-	  <!-- iOS Safari --> 
-	  <meta name='apple-mobile-web-app-status-bar-style' content='#080957'>
-    
-    <!-- ========= BOOTSTRAP ========= -->
-    <!-- CSS only -->
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6' crossorigin='anonymous'>
-    <!-- JavaScript Bundle with Popper -->
-    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js' integrity='sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf' crossorigin='anonymous'></script>
-    
-    <!-- ========= Manifest ========= -->
-    <link rel="manifest" href="__manifest.json">
-    <title>MoneyStats - Add Statement</title>
+        <!-- ========= CSS Homepage ========= -->
+        <!-- CSS Statement -->
+        <link rel="stylesheet" href="./assets/css/statement.css">
+        <!-- CSS Loader -->
+        <link rel="stylesheet" href="./assets/css/plugin/loader.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
+        <!-- Google Fonts Roboto -->
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"/>
 
-    <!-- ========= JS Files =========  -->
-    <!-- JQuery -->
-    <script src="./assets/js/plugin/jquery-3.6.0.min.js"></script>
-    <!-- JS Homepage -->
-    <script src="./assets/js/statement.js"></script>
-    <!-- SweetAlert -->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- JS Loader Homepage -->
-    <script src="./assets/js/plugin/loader.js"></script>
-    
-</head>
+        <!-- SEZIONE COLORI SEARCH BAR -->
+        <!-- ========= CSS Homepage ========= -->
+        <!-- Chrome, Firefox OS and Opera -->
+        <meta name='theme-color' content='#080957'>
+        <!-- Windows Phone -->
+        <meta name='msapplication-navbutton-color' content='#080957'>
+        <!-- iOS Safari -->
+        <meta name='apple-mobile-web-app-status-bar-style' content='#080957'>
+
+        <!-- ========= BOOTSTRAP ========= -->
+        <!-- CSS only -->
+        <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css' rel='stylesheet'
+              integrity='sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6'
+              crossorigin='anonymous'>
+        <!-- JavaScript Bundle with Popper -->
+        <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js'
+                integrity='sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf'
+                crossorigin='anonymous'></script>
+
+        <!-- ========= Manifest ========= -->
+        <link rel="manifest" href="__manifest.json">
+        <title>MoneyStats - Add Statement</title>
+
+        <!-- ========= JS Files =========  -->
+        <!-- JQuery -->
+        <script src="./assets/js/plugin/jquery-3.6.0.min.js"></script>
+        <!-- JS Homepage -->
+        <script src="./assets/js/statement.js"></script>
+        <!-- SweetAlert -->
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- JS Loader Homepage -->
+        <script src="./assets/js/plugin/loader.js"></script>
+
+    </head>
 <body class="statement">
-   <!-- loader -->
-   <div id="loader">
+<!-- loader -->
+<div id="loader">
     <img src="./assets/img/logos/favicon_trasparent.png" alt="icon" class="loading-icon">
-  </div>
-  <!-- * loader -->
+</div>
+<!-- * loader -->
 
-    <nav class='navbar navbar-expand-lg navbar-dark colorLogo fixed-top'>   
-        <div class='container-fluid'>   
-            <a href="homepage.html" class="resetCookies"><figure class="hover-rotate"><img src='./assets/img/logos/logo_transparent.png' alt='block' style='padding-left: 5px; width: 200px;'></figure></a>   
-            <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>   
-            <span class='navbar-toggler-icon'></span>   
-            </button>   
-                <div class='collapse navbar-collapse' id='navbarSupportedContent'>   
-                   <ul class='navbar-nav ms-auto mb-2 mb-lg-0'>   
-                     <li class='nav-item'>   
-                      <a class='nav-link active resetCookies' aria-current='page' href='javascript:history.back()'>Indietro</a>   
-                    </li>
-                    <li class='nav-item dropdown'>   
-                        <a class='nav-link dropdown-toggle' href='#' id='navbarDropdown' role='button' data-bs-toggle='dropdown' aria-expanded='false'>   
-                              Opzioni   
-                        </a>   
-                        <ul class='dropdown-menu dropdown-menu-lg-end' aria-labelledby='navbarDropdown'> 
-                            <li><a class='dropdown-item' id="SwitchMobile">Switch Mobile Mode</a></li>       
-                             <li><a class='dropdown-item resetCookies' href='/logout'>Logout</a></li>  
-                         </ul>   
-                     </li> 
-                </ul> 
-                
-            </div>   
-        </div>   
-    </nav> 
-    <div class="row row-cols-1 row-cols-md-3 g-4" style="padding-top: 100px; margin-left: 20px; margin-right: 20px;" id="listWallet">
-        <div class="col-xl-3 col-sm-6" style="margin-bottom: 30px;">
-            <div class="card card-stats mb-4 mb-xl-0">
-              <div class="card-body">
+<nav class='navbar navbar-expand-lg navbar-dark colorLogo fixed-top'>
+    <div class='container-fluid'>
+        <a href="homepage.html" class="resetCookies">
+            <figure class="hover-rotate"><img src='./assets/img/logos/logo_transparent.png' alt='block'
+                                              style='padding-left: 5px; width: 200px;'></figure>
+        </a>
+        <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent'
+                aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
+            <span class='navbar-toggler-icon'></span>
+        </button>
+        <div class='collapse navbar-collapse' id='navbarSupportedContent'>
+            <ul class='navbar-nav ms-auto mb-2 mb-lg-0'>
+                <li class='nav-item'>
+                    <a class='nav-link active resetCookies' aria-current='page' href='javascript:history.back()'>Indietro</a>
+                </li>
+                <li class='nav-item dropdown'>
+                    <a class='nav-link dropdown-toggle' href='#' id='navbarDropdown' role='button'
+                       data-bs-toggle='dropdown' aria-expanded='false'>
+                        Opzioni
+                    </a>
+                    <ul class='dropdown-menu dropdown-menu-lg-end' aria-labelledby='navbarDropdown'>
+                        <li><a class='dropdown-item' id="SwitchMobile">Switch Mobile Mode</a></li>
+                        <li><a class='dropdown-item resetCookies' href='/logout'>Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+<div class="row row-cols-1 row-cols-md-3 g-4" style="padding-top: 100px; margin-left: 20px; margin-right: 20px;"
+     id="listWallet">
+    <div class="col-xl-3 col-sm-6" style="margin-bottom: 30px;">
+        <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
                 <div class="row">
-                  <div class="col">
-                    <h5 class="card-title text-uppercase text-muted mb-0">Statement Finanziario</h5>
-                    <hr>
-                    <div class='form-floating mb-3'> 
-                        <input style="background-color: rgba(255, 255, 255, 0.7);" type='date' id="date" name='data' class='form-control roundedCorner mx-auto' placeholder="Inserire Data..." required>
-                        <label for='data'>Inserire Data</label>
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">Statement Finanziario</h5>
+                        <hr>
+                        <div class='form-floating mb-3'>
+                            <input style="background-color: rgba(255, 255, 255, 0.7);" type='date' id="date" name='data'
+                                   class='form-control roundedCorner mx-auto' placeholder="Inserire Data..." required>
+                            <label for='data'>Inserire Data</label>
+                        </div>
                     </div>
-                  </div>
-                  <div class="col-auto">
-                    <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                      <i class="fas fa-chart-bar"></i>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
                     </div>
-                  </div>
                 </div>
                 <p class="mt-3 mb-0 text-muted text-sm">
-                    <p class="mt-3 mb-0 text-muted text-sm">
-                        <span class="text-nowrap sincetot">Inserisci prima i valori</span>
-                        <button type="button" class="btn btn-outline-success float-end" id="aggiungiStatement">Conferma</button>
-                    </p>
+                <p class="mt-3 mb-0 text-muted text-sm">
+                    <span class="text-nowrap sincetot">Inserisci prima i valori</span>
+                    <button type="button" class="btn btn-outline-success float-end" id="aggiungiStatement">Conferma
+                    </button>
                 </p>
-              </div>
+                </p>
             </div>
-          </div>
         </div>
+    </div>
+</div>
 </body>
 </html>

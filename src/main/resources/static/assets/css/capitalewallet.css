@@ -1,13 +1,13 @@
 .capitale {
-    background-image: url('https://carreromortgage.com/wp-content/uploads/2019/10/financial-trade.jpg'); 
-    height: 100vh; 
-    margin: 0px; 
-    background-size: cover; 
+    background-image: url('https://carreromortgage.com/wp-content/uploads/2019/10/financial-trade.jpg');
+    height: 100vh;
+    margin: 0px;
+    background-size: cover;
     background-position: top;
 }
 
-.colorLogo{
-	background-color: #080957 !important;
+.colorLogo {
+    background-color: #080957 !important;
 }
 
 /* EFFETTO ROTAZIONE IMG ON MOUSE */
@@ -17,77 +17,78 @@
     min-width: 240px;
     max-width: 320px;
     width: 100%;
-  }
-  
-  .hover-rotate img {
+}
+
+.hover-rotate img {
     transition: all 0.3s;
     box-sizing: border-box;
     max-width: 100%;
-  }
-  
-  .hover-rotate:hover img {
+}
+
+.hover-rotate:hover img {
     transform: scale(1.3) rotate(5deg);
-  }
+}
+
 /* Fine Hover */
 
-.opacity{
+.opacity {
     opacity: 0.9;
 }
 
 .shadow {
     box-shadow: 0 0 2rem 0 rgba(136, 152, 170, .15) !important;
-  }
-  
-  .mb-0 {
-    margin-bottom: 0 !important;
-  }
-  
-  .mr-2 {
-    margin-right: .5rem !important;
-  }
-  
-  .mt-3 {
-    margin-top: 1rem !important;
-  }
-  
-  .mb-4 {
-    margin-bottom: 1.5rem !important;
-  }
-  
-  .mb-5 {
-    margin-bottom: 3rem !important;
-  }
-  
-  .pt-5 {
-    padding-top: 3rem !important;
-  }
-  
-  .pb-8 {
-    padding-bottom: 8rem !important;
-  }
-  
-  .m-auto {
-    margin: auto !important;
-  }
+}
 
-  .icon {
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.mr-2 {
+    margin-right: .5rem !important;
+}
+
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+.mb-5 {
+    margin-bottom: 3rem !important;
+}
+
+.pt-5 {
+    padding-top: 3rem !important;
+}
+
+.pb-8 {
+    padding-bottom: 8rem !important;
+}
+
+.m-auto {
+    margin: auto !important;
+}
+
+.icon {
     width: 3rem;
     height: 3rem;
-  }
-  
-  .icon i {
+}
+
+.icon i {
     font-size: 2.25rem;
-  }
-  
-  .icon-shape {
+}
+
+.icon-shape {
     display: inline-flex;
     padding: 12px;
     text-align: center;
     border-radius: 50%;
     align-items: center;
     justify-content: center;
-  }
-  
-  .icon-shape i {
+}
+
+.icon-shape i {
     font-size: 1.25rem;
-  }
+}

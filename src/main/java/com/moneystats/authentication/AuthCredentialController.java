@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.net.UnknownHostException;
 import java.util.List;
 
 @RestController
@@ -26,7 +27,7 @@ public class AuthCredentialController {
 
   @PostMapping("/login")
   public TokenDTO loginUser(@RequestBody AuthCredentialInputDTO userCredential)
-      throws AuthenticationException {
+          throws AuthenticationException, UnknownHostException {
     return service.login(userCredential);
   }
 

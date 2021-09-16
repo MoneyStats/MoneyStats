@@ -9,7 +9,7 @@ $(document).ready(function () {
     const DATABASE_ERROR = "DATABASE_ERROR";
 
     // SignUp Process Start
-    function addUser(authCredentialDTO){
+    function addUser(authCredentialDTO) {
         $.ajax({
             type: "POST",
             url: "/credential/signup",
@@ -24,34 +24,34 @@ $(document).ready(function () {
                     showConfirmButton: false,
                     timer: 1000
                 }),
-                setTimeout(function (render) {
-                    window.location.href='app-login.html';
-                }, 1000)
+                    setTimeout(function (render) {
+                        window.location.href = 'app-login.html';
+                    }, 1000)
             },
             error: function (authErrorResponseDTO) {
                 var responseDTO = authErrorResponseDTO.responseJSON.message;
-                if (responseDTO === INVALID_AUTH_CREDENTIAL_DTO){
+                if (responseDTO === INVALID_AUTH_CREDENTIAL_DTO) {
                     Swal.fire({
                         icon: 'error',
                         title: "<span style='color:#2D2C2C'>Errore, Non è possibile aggiungere l'utente!</span>",
                         text: 'Controlla i dati e riprova.'
                     })
                 }
-                if (responseDTO === DATABASE_ERROR){
+                if (responseDTO === DATABASE_ERROR) {
                     Swal.fire({
                         icon: 'error',
                         title: "<span style='color:#2D2C2C'>Errore Interno</span>",
                         text: 'Riprova Più tardi.'
                     })
                 }
-                if (responseDTO === USER_PRESENT){
+                if (responseDTO === USER_PRESENT) {
                     Swal.fire({
                         icon: 'error',
                         title: "<span style='color:#2D2C2C'>Errore, Non è possibile aggiungere l'utente!</span>",
                         text: "Lo username inserito è già presente, riprova con un'altro username."
                     })
                 }
-                if (responseDTO === INTERNAL_SERVER_ERROR){
+                if (responseDTO === INTERNAL_SERVER_ERROR) {
                     Swal.fire({
                         icon: 'error',
                         title: "<span style='color:#2D2C2C'>Errore Interno</span>",
@@ -63,7 +63,7 @@ $(document).ready(function () {
     }
 
     //MOBILE
-    $('#signUpBtn_mobile').click(function (){
+    $('#signUpBtn_mobile').click(function () {
         const authCredentialDTO = {
             firstName: $('#firstName_mobile').val(),
             lastName: $('#lastName_mobile').val(),
@@ -81,8 +81,8 @@ $(document).ready(function () {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Registrati'
         }).then((result) => {
-                if (result.isConfirmed) {
-              addUser(authCredentialDTO);
+            if (result.isConfirmed) {
+                addUser(authCredentialDTO);
             }
         })
 
@@ -100,7 +100,7 @@ $(document).ready(function () {
 
     var userLogged = '';
     // MOBILE
-    $('#loginBtn_mobile').click(function (){
+    $('#loginBtn_mobile').click(function () {
         const authCredentialInputDTO = {
             username: $('#username_login_mobile').val(),
             password: $('#password_login_mobile').val()
@@ -111,60 +111,61 @@ $(document).ready(function () {
         $('#username_login_mobile').val('');
         $('#password_login_mobile').val('');
     })
+
     // Login Process Start
-    function login(authCredentialInputDTO){
-            $.ajax({
-                type: "POST",
-                url: "/credential/login",
-                data: JSON.stringify(authCredentialInputDTO),
-                contentType: 'application/json',
-                dataType: 'json',
-                success: function (tokenDTO) {
-                    var accessToken = tokenDTO.accessToken;
-                    Swal.fire({
-                        icon: 'success',
-                        title: '<span style="color:#2D2C2C">Credenziali corrette!</span>',
-                        text: `Benvenuto ${userLogged}`,
-                        showConfirmButton: false,
-                        timer: 1500
-                    }),
+    function login(authCredentialInputDTO) {
+        $.ajax({
+            type: "POST",
+            url: "/credential/login",
+            data: JSON.stringify(authCredentialInputDTO),
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (tokenDTO) {
+                var accessToken = tokenDTO.accessToken;
+                Swal.fire({
+                    icon: 'success',
+                    title: '<span style="color:#2D2C2C">Credenziali corrette!</span>',
+                    text: `Benvenuto ${userLogged}`,
+                    showConfirmButton: false,
+                    timer: 1500
+                }),
                     sessionStorage.setItem('accessToken', accessToken);
-            
-                    setTimeout(function (render) {
-                        window.location.href='index.html';
-                    }, 3000)
-                },
-                error: function (authErrorResponseDTO) {
-                    var responseDTO = authErrorResponseDTO.responseJSON.message;
-                    if (responseDTO === INVALID_AUTH_INPUT_DTO){
-                        Swal.fire({
-                            icon: 'error',
-                            title: "<span style='color:#2D2C2C'>Errore!</span>",
-                            text: 'Controlla i dati e riprova.'
-                        })
-                    }
-                    if (responseDTO === DATABASE_ERROR){
-                        Swal.fire({
-                            icon: 'error',
-                            title: "<span style='color:#2D2C2C'>Errore Interno</span>",
-                            text: 'Riprova Più tardi.'
-                        })
-                    }
-                    if (responseDTO === WRONG_CREDENTIAL){
-                        Swal.fire({
-                            icon: 'error',
-                            title: "<span style='color:#2D2C2C'>Credenziali Errate</span>",
-                            text: "Username o Password errati, riprova."
-                        })
-                    }
-                    if (responseDTO === INTERNAL_SERVER_ERROR){
-                        Swal.fire({
-                            icon: 'error',
-                            title: "<span style='color:#2D2C2C'>Errore Interno</span>",
-                            text: 'Riprova Più tardi.'
-                        })
-                    }
+
+                setTimeout(function (render) {
+                    window.location.href = 'index.html';
+                }, 3000)
+            },
+            error: function (authErrorResponseDTO) {
+                var responseDTO = authErrorResponseDTO.responseJSON.message;
+                if (responseDTO === INVALID_AUTH_INPUT_DTO) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "<span style='color:#2D2C2C'>Errore!</span>",
+                        text: 'Controlla i dati e riprova.'
+                    })
                 }
-            });
-        }
+                if (responseDTO === DATABASE_ERROR) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "<span style='color:#2D2C2C'>Errore Interno</span>",
+                        text: 'Riprova Più tardi.'
+                    })
+                }
+                if (responseDTO === WRONG_CREDENTIAL) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "<span style='color:#2D2C2C'>Credenziali Errate</span>",
+                        text: "Username o Password errati, riprova."
+                    })
+                }
+                if (responseDTO === INTERNAL_SERVER_ERROR) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "<span style='color:#2D2C2C'>Errore Interno</span>",
+                        text: 'Riprova Più tardi.'
+                    })
+                }
+            }
+        });
+    }
 });

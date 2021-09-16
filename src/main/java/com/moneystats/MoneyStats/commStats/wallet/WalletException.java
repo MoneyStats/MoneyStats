@@ -17,13 +17,10 @@ public class WalletException extends Exception {
   }
 
   public static enum Code {
-    USER_NOT_FOUND,
     WALLET_DTO_NULL,
-    CATEGORY_NOT_FOUND,
     INVALID_WALLET_DTO,
     INVALID_WALLET_INPUT_DTO,
     INVALID_WALLET_INPUT_ID_DTO,
     WALLET_NOT_FOUND,
-    STATEMENT_NOT_FOUND
   }
 }

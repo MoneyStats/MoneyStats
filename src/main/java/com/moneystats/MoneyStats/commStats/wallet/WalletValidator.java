@@ -24,7 +24,7 @@ public class WalletValidator {
     }
   }
 
-  public static void validateWalletDTO(WalletInputDTO walletDTO) throws WalletException {
+  public static void validateWalletInputDTO(WalletInputDTO walletDTO) throws WalletException {
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     Set<ConstraintViolation<WalletInputDTO>> violationSet = validator.validate(walletDTO);
 

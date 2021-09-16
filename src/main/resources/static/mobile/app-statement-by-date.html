@@ -2,10 +2,10 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport"
-        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <!-- ========= Icon ========= -->
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/img/logos/favicon_trasparent.png">
@@ -15,162 +15,161 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/plugin/icon.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
 
     <!-- ========= JS Files ========= -->
     <!-- JQuery -->
     <script src="./assets/js/lib/jquery-3.6.0.min.js"></script>
-     <!-- SweetAlert -->
-     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- SweetAlert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- JS Wallet -->
     <script src="./assets/js/capitalewallet.js"></script>
     <title id="title">MoneyStats - Capitale</title>
 
-    <!-- ========= SEZIONE COLORI SEARCH BAR ========= --> 
-	<!-- Chrome, Firefox OS and Opera --> 
-	<meta name='theme-color' content='#080957'> 
-	<!-- Windows Phone --> 
-	<meta name='msapplication-navbutton-color' content='#080957'> 
-	<!-- iOS Safari --> 
-	<meta name='apple-mobile-web-app-status-bar-style' content='#080957'>
+    <!-- ========= SEZIONE COLORI SEARCH BAR ========= -->
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name='theme-color' content='#080957'>
+    <!-- Windows Phone -->
+    <meta name='msapplication-navbutton-color' content='#080957'>
+    <!-- iOS Safari -->
+    <meta name='apple-mobile-web-app-status-bar-style' content='#080957'>
     <meta name="description" content="MoneyStats HTML Mobile Template">
-    <meta name="keywords" content="bootstrap, wallet, banking, fintech mobile template, cordova, phonegap, mobile, html, responsive" />
-    <!-- ========= MANIFEST ========= --> 
+    <meta name="keywords"
+          content="bootstrap, wallet, banking, fintech mobile template, cordova, phonegap, mobile, html, responsive"/>
+    <!-- ========= MANIFEST ========= -->
     <link rel="manifest" href="../__manifest.json">
 </head>
 
 <body>
 
-    <!-- loader -->
-    <div id="loader">
-        <img src="./assets/img/logos/favicon_trasparent.png" alt="icon" class="loading-icon">
+<!-- loader -->
+<div id="loader">
+    <img src="./assets/img/logos/favicon_trasparent.png" alt="icon" class="loading-icon">
+</div>
+<!-- * loader -->
+
+<!-- App Header -->
+<div class="appHeader">
+    <div class="left">
+        <a href="#" class="headerButton goBack">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </a>
     </div>
-    <!-- * loader -->
-
-    <!-- App Header -->
-    <div class="appHeader">
-        <div class="left">
-            <a href="#" class="headerButton goBack">
-                <ion-icon name="chevron-back-outline"></ion-icon>
-            </a>
-        </div>
-        <div class="pageTitle">
-            Statement on Date
-        </div>
+    <div class="pageTitle">
+        Statement on Date
     </div>
-    <!-- * App Header -->
+</div>
+<!-- * App Header -->
 
 
-    <!-- App Capsule -->
-    <div id="appCapsule">
+<!-- App Capsule -->
+<div id="appCapsule">
 
-        <!-- Report -->
-        <div class="section mt-2">
-            <div class="section-title">Report</div>
-            <div class="transactions">
-                <!-- item -->
-                <a href="#" class="item">
-                    <div class="detail">
-                            <div class="col-auto" style="padding-right: 20px;">
-                                <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                  <i class="fas fa-chart-bar"></i>
-                                </div>
-                              </div>
-                        <div>
-                            <strong>Capital Total</strong>
-                            <p class="sincetot">Since</p>
+    <!-- Report -->
+    <div class="section mt-2">
+        <div class="section-title">Report</div>
+        <div class="transactions">
+            <!-- item -->
+            <a href="#" class="item">
+                <div class="detail">
+                    <div class="col-auto" style="padding-right: 20px;">
+                        <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                            <i class="fas fa-chart-bar"></i>
                         </div>
                     </div>
-                    <div class="right">
-                        <div class="price" id="totale">€ 0.00</div>
-                        <div class="price performancetot"></div>
+                    <div>
+                        <strong>Capital Total</strong>
+                        <p class="sincetot">Since</p>
                     </div>
-                </a>
-                <!-- * item -->
-                <!-- item -->
-                <a href="#" class="item">
-                    <div class="detail">
-                        <div class="col-auto" style="padding-right: 20px;">
-                            <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                                <i class="fas fa-poll"></i>
-                              </div>
-                          </div>
-                        <div>
-                            <strong>PIL</strong>
-                            <p class="sincetot">Since last month</p>
-                        </div>
-                    </div>
-                    <div class="right">
-                        <div class="price" id="pil">€ 0.00</div>
-                        <div class="price performancetot"></div>
-                    </div>
-                </a>
-                <!-- * item -->
-            </div>
-        </div>
-        <!-- * Transactions -->
-
-        <!-- Transactions -->
-        <div class="section mt-2">
-            <div class="section-title">List Statement</div>
-            <div class="transactions row" id="capitalewallet">
-                
-            </div>
-        </div>
-        <!-- * Transactions -->
-
-        
-
-
-    </div>
-    <!-- * App Capsule -->
-
-
-    <!-- App Bottom Menu -->
-    <div class="appBottomMenu">
-        <a href="index.html" class="item active">
-            <div class="col">
-                <ion-icon name="pie-chart-outline"></ion-icon>
-                <strong>Overview</strong>
-            </div>
-        </a>
-        <a href="#" class="item">
-            <div class="col">
-                <ion-icon name="document-text-outline"></ion-icon>
-                <strong>Pages</strong>
-            </div>
-        </a>
-        <a href="#" class="item">
-            <div class="col">
-                <div class="action-button large">
-                    <ion-icon name="arrow-up-outline"></ion-icon>
                 </div>
-            </div>
-        </a>
-        <a href="app-wallet.html" class="item">
-            <div class="col">
-                <ion-icon name="card-outline"></ion-icon>
-                <strong>My Wallet</strong>
-            </div>
-        </a>
-        <a href="#" class="item">
-            <div class="col">
-                <ion-icon name="settings-outline"></ion-icon>
-                <strong>Settings</strong>
-            </div>
-        </a>
+                <div class="right">
+                    <div class="price" id="totale">€ 0.00</div>
+                    <div class="price performancetot"></div>
+                </div>
+            </a>
+            <!-- * item -->
+            <!-- item -->
+            <a href="#" class="item">
+                <div class="detail">
+                    <div class="col-auto" style="padding-right: 20px;">
+                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                            <i class="fas fa-poll"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <strong>PIL</strong>
+                        <p class="sincetot">Since last month</p>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="price" id="pil">€ 0.00</div>
+                    <div class="price performancetot"></div>
+                </div>
+            </a>
+            <!-- * item -->
+        </div>
     </div>
-    <!-- * App Bottom Menu -->
+    <!-- * Transactions -->
 
-    <!-- ========= JS Files =========  -->
-    <!-- Bootstrap -->
-    <script src="./assets/js/lib/bootstrap.bundle.min.js"></script>
-    <!-- Ionicons -->
-    <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
-    <!-- Splide -->
-    <script src="./assets/js/plugin/splide/splide.min.js"></script>
-    <!-- Base Js File -->
-    <script src="./assets/js/plugin/base.js"></script>
+    <!-- Transactions -->
+    <div class="section mt-2">
+        <div class="section-title">List Statement</div>
+        <div class="transactions row" id="capitalewallet">
+
+        </div>
+    </div>
+    <!-- * Transactions -->
+
+
+</div>
+<!-- * App Capsule -->
+
+
+<!-- App Bottom Menu -->
+<div class="appBottomMenu">
+    <a href="index.html" class="item active">
+        <div class="col">
+            <ion-icon name="pie-chart-outline"></ion-icon>
+            <strong>Overview</strong>
+        </div>
+    </a>
+    <a href="#" class="item">
+        <div class="col">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <strong>Pages</strong>
+        </div>
+    </a>
+    <a href="#" class="item">
+        <div class="col">
+            <div class="action-button large">
+                <ion-icon name="arrow-up-outline"></ion-icon>
+            </div>
+        </div>
+    </a>
+    <a href="app-wallet.html" class="item">
+        <div class="col">
+            <ion-icon name="card-outline"></ion-icon>
+            <strong>My Wallet</strong>
+        </div>
+    </a>
+    <a href="#" class="item">
+        <div class="col">
+            <ion-icon name="settings-outline"></ion-icon>
+            <strong>Settings</strong>
+        </div>
+    </a>
+</div>
+<!-- * App Bottom Menu -->
+
+<!-- ========= JS Files =========  -->
+<!-- Bootstrap -->
+<script src="./assets/js/lib/bootstrap.bundle.min.js"></script>
+<!-- Ionicons -->
+<script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
+<!-- Splide -->
+<script src="./assets/js/plugin/splide/splide.min.js"></script>
+<!-- Base Js File -->
+<script src="./assets/js/plugin/base.js"></script>
 
 
 </body>
