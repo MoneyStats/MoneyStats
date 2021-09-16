@@ -224,7 +224,6 @@ public class StatementServiceTest {
   @Test
   void test_listOfDate_shouldBeMappedOnUserNotFound() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    StatementEntity statementEntity = DTOTestObjets.statementEntityList.get(0);
     AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
     AuthCredentialInputDTO authCredentialInputDTO =
         new AuthCredentialInputDTO(authCredentialDTO.getUsername(), authCredentialDTO.getRole());
