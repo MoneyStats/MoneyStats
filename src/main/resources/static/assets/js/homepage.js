@@ -81,26 +81,27 @@ $(document).ready(function () {
                 $('#reportStatement').text('€ ' + statementReportDTO.statementTotal.toFixed(2));
                 $('.sincetotalecapitale').text("Since " + statementReportDTO.beforeLastDate);
                 // PIL
+                var statementTotPercent = statementReportDTO.statementTotalPercent;
                 if (statementReportDTO.pil > 0) {
-                    $(`<span class="text-success mr-2"><i class="fa fa-arrow-up"></i> ${statementReportDTO.statementTotalPercent.toFixed(2)}%</span>`).appendTo(`.performanceLastStatement`)
-                    $('#pil').text("£ " + statementReportDTO.pil.toFixed(2)).addClass('text-success');
+                    $(`<span class="text-success mr-2"><i class="fa fa-arrow-up"></i> ${statementTotPercent}%</span>`).appendTo(`.performanceLastStatement`)
+                    $('#pil').text("€ " + statementReportDTO.pil.toFixed(2)).addClass('text-success');
                 } else if (statementReportDTO.pil === 0) {
-                    $(`<span class="text-warning mr-2"><i class="fa fa-arrow-down"></i> ${statementReportDTO.statementTotalPercent.toFixed(2)}%</span>`).appendTo(`.performanceLastStatement`)
-                    $('#pil').text("£ " + statementReportDTO.pil.toFixed(2)).addClass('text-warning');
+                    $(`<span class="text-warning mr-2"><i class="fa fa-arrow-down"></i> ${statementTotPercent}%</span>`).appendTo(`.performanceLastStatement`)
+                    $('#pil').text("€ " + statementReportDTO.pil.toFixed(2)).addClass('text-warning');
                 } else {
-                    $(`<span class="text-danger mr-2"><i class="fa fa-arrow-down"></i> ${statementReportDTO.statementTotalPercent.toFixed(2)}%</span>`).appendTo(`.performanceLastStatement`)
-                    $('#pil').text("£ " + statementReportDTO.pil.toFixed(2)).addClass('text-danger');
+                    $(`<span class="text-danger mr-2"><i class="fa fa-arrow-down"></i> ${statementTotPercent}%</span>`).appendTo(`.performanceLastStatement`)
+                    $('#pil').text("€ " + statementReportDTO.pil.toFixed(2)).addClass('text-danger');
                 }
                 // PIL TOTALE
                 if (statementReportDTO.pilTotal > 0) {
                     $(`<span class="text-success h2 font-weight-bold mb-0"><i class="fa fa-arrow-up"></i> ${statementReportDTO.pilPerformance.toFixed(0)}%</span>`).appendTo(`.performanceFirstDate`)
-                    $('#pilTotale').text("£ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-success');
+                    $('#pilTotale').text("€ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-success');
                 } else if (statementReportDTO.pilTotal === 0) {
                     $(`<span class="text-warning h2 font-weight-bold mb-0"><i class="fa fa-arrow-down"></i> ${statementReportDTO.pilPerformance.toFixed(0)}%</span>`).appendTo(`.performanceFirstDate`)
-                    $('#pilTotale').text("£ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-warning');
+                    $('#pilTotale').text("€ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-warning');
                 } else {
                     $(`<span class="text-danger h2 font-weight-bold mb-0"><i class="fa fa-arrow-down"></i> ${statementReportDTO.pilPerformance.toFixed(0)}%</span>`).appendTo(`.performanceFirstDate`)
-                    $('#pilTotale').text("£ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-danger');
+                    $('#pilTotale').text("€ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-danger');
                 }
 
                 //-----------------------------------------------------------------------
@@ -111,7 +112,7 @@ $(document).ready(function () {
                 var listDateForTable;
                 for (let i = 0; i < statementReportDTO.listDate.length; i++) {
                     // Calcolo anno corrente(mi serve per la lista di date secondo anno)
-                    currentYear = statementReportDTO.listDate[statementReportDTO.listDate.length - 1].split("-")[0];
+                    currentYear = statementReportDTO.listDate[statementReportDTO.listDate.length - 1].split("-")[2];
                     $('#year').text('Andamento Anno ' + currentYear);
                     $('#listStatement').text('Statement Anno ' + currentYear);
                     listDate += [statementReportDTO.listDate[i] + ","];
@@ -135,7 +136,7 @@ $(document).ready(function () {
             }
         });
     }
-
+    
     //-------------------------------------------------------------
     // Get Line Graph Homepage
     //-------------------------------------------------------------
@@ -315,7 +316,7 @@ $(document).ready(function () {
                         const statTab = $(`#data${i}`)
                         // Fine calcolo
                         for (let y = 0; y < statementTab.length; y++) {
-                            $(`<td>£ ${statementTab[y].value}</td>`).hide().appendTo(statTab).fadeIn(i * 20);
+                            $(`<td>€ ${statementTab[y].value}</td>`).hide().appendTo(statTab).fadeIn(i * 20);
                         }
                     }
                 })
@@ -335,7 +336,8 @@ $(document).ready(function () {
     }
 
     $('#dataConfirm').click(function () {
-        document.cookie = $('#dateOption').val() + "; path=/";
+        const data = $('#dateOption').val();
+        localStorage.setItem('date', data);
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',

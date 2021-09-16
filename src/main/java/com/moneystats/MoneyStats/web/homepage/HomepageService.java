@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class HomepageService {
    * @throws AuthenticationException
    */
   public HomepageReportDTO reportHomepage(TokenDTO tokenDTO)
-      throws StatementException, AuthenticationException {
+      throws StatementException, AuthenticationException, ParseException {
     HomepageReportDTO reportDTO =
         new HomepageReportDTO(0.00D, 0.00D, 0.00D, 0.00D, 0.00, "", "", "", null, null, null);
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
@@ -55,53 +57,65 @@ public class HomepageService {
     String firstDate = "";
     String lastStatementDate = "";
     List<Double> listStatement = new ArrayList<>();
-    for (int i = 0; i < listDate.size(); i++) {
-      firstDate = listDate.get(0);
-      try {
+
+    // Fix Check by date if there is no date into db
+    firstDate = listDate.get(0);
+
+    if (listDate.size() == 2) {
+      for (int i = 0; i < listDate.size(); i++) {
         lastDate = listDate.get(listDate.size() - 1);
-        lastStatementDate = listDate.get(listDate.size() - 2);
-      } catch (IndexOutOfBoundsException e) {
-        firstDate = "";
-        lastStatementDate = "";
-        LOG.error("Out of Bound HomepagService:66 {}", e);
       }
     }
-    Double statementReport = 0D;
+    if (listDate.size() > 2) {
+      for (int i = 0; i < listDate.size(); i++) {
+        lastDate = listDate.get(listDate.size() - 1);
+        lastStatementDate = listDate.get(listDate.size() - 2);
+      }
+    }
+    Double statementReport = 0.00D;
     for (int i = 0; i < listDate.size(); i++) {
       List<StatementEntity> listStatementBylastDate =
           statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), listDate.get(i));
-      statementReport = 0D;
+      statementReport = 0.00D;
       for (int y = 0; y < listStatementBylastDate.size(); y++) {
         statementReport += listStatementBylastDate.get(y).getValue();
       }
       listStatement.add(statementReport);
     }
-    LOG.info("List Statement {}", listStatement);
     List<Double> listPil = new ArrayList<>();
     listPil.add(0.00D);
     for (int i = 1; i < listStatement.size(); i++) {
       Double pil = listStatement.get(i) - listStatement.get(i - 1);
       listPil.add(pil);
     }
-    LOG.info("List PIL {}", listPil);
     List<StatementEntity> listStatementByPreviousDate =
         listStatementReportCalc(utente, lastStatementDate);
 
-    Double previousStatementReport = 0D;
-    for (int i = 0; i < listStatementByPreviousDate.size(); i++) {
-      previousStatementReport += listStatementByPreviousDate.get(i).getValue();
+    Double previousStatementReport = 0.00D;
+    if (listStatementByPreviousDate.size() > 0) {
+      for (StatementEntity statementEntity : listStatementByPreviousDate) {
+        previousStatementReport += statementEntity.getValue();
+      }
     }
 
     List<StatementEntity> listStatementByFirstDate = listStatementReportCalc(utente, firstDate);
 
-    Double firstStatementReport = 0D;
-    for (int i = 0; i < listStatementByFirstDate.size(); i++) {
-      firstStatementReport += listStatementByFirstDate.get(i).getValue();
+    Double firstStatementReport = 0.00D;
+    if (listStatementByFirstDate.size() > 0) {
+      for (StatementEntity statementEntity : listStatementByFirstDate) {
+        firstStatementReport += statementEntity.getValue();
+      }
     }
 
     Double pilPerformance = ((statementReport - firstStatementReport) / firstStatementReport) * 100;
+    DecimalFormat decimalFormat = new DecimalFormat("0.##");
+    String pilPerformanceAsString = decimalFormat.format(pilPerformance);
+    pilPerformance = decimalFormat.parse(pilPerformanceAsString).doubleValue();
+
     Double statementPercent =
         ((statementReport - previousStatementReport) / previousStatementReport) * 100;
+    String statementPercentAsString = decimalFormat.format(statementPercent);
+    statementPercent = decimalFormat.parse(statementPercentAsString).doubleValue();
 
     reportDTO.setStatementTotal(statementReport);
     reportDTO.setStatementTotalPercent(statementPercent);
@@ -162,8 +176,6 @@ public class HomepageService {
     }
     homepagePieChartDTO.setWalletList(walletListGraph);
     homepagePieChartDTO.setStatementList(statementListGraph);
-    LOG.info("List of Wallet on HomepageService:138 {}", homepagePieChartDTO.getWalletList());
-    LOG.info("List of Statement on HomepageService:139 {}", homepagePieChartDTO.getStatementList());
     return homepagePieChartDTO;
   }
 
@@ -181,7 +193,7 @@ public class HomepageService {
         statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date);
     if (list.size() == 0) {
       LOG.error(
-          "Statement Not Found, into StatementService, statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date):71");
+          "Statement Not Found, into HomepageService, statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date):187");
     }
     return list;
   }
@@ -194,8 +206,7 @@ public class HomepageService {
    * @throws AuthenticationException
    * @throws StatementException
    */
-  private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO)
-      throws AuthenticationException, StatementException {
+  private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO) throws AuthenticationException {
     TokenValidation.validateTokenDTO(tokenDTO);
     if (tokenDTO.getAccessToken().equalsIgnoreCase("")) {
       throw new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
@@ -207,7 +218,7 @@ public class HomepageService {
     AuthCredentialEntity utente = authCredentialDAO.getCredential(authCredentialInputDTO);
     if (utente == null) {
       LOG.error("User Not Found, into StatementService, validateAndCreate(TokenDTO):96");
-      throw new StatementException(StatementException.Code.USER_NOT_FOUND);
+      throw new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND);
     }
     return utente;
   }

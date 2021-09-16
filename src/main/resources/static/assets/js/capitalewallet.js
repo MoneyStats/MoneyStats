@@ -67,9 +67,8 @@ $(document).ready(function () {
                 Authorization: sessionStorage.getItem('accessToken')
             },
             success: function (resume) {
-                $('#title').text('MoneyStats - Capitale ' + document.cookie);
+                $('#title').text('MoneyStats - Capitale ' + localStorage.getItem('date'));
                 //   document.cookie.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-                console.log(document.cookie);
                 const listWallet = $('#capitalewallet');
                 for (let i = 0; i < resume.length; i++) {
                     let img = '';
@@ -134,7 +133,7 @@ $(document).ready(function () {
                   <div class="row">
                       <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">${resume[i].name} (${resume[i].category.name})</h5>
-                      <span class="h2 font-weight-bold mb-0" id="tot${resume[i].id}">£ 0.0</span>
+                      <span class="h2 font-weight-bold mb-0" id="tot${resume[i].id}">€ 0.0</span>
                       </div>
                       <div class="col-auto">
                       <div class="icon icon-shape ${color} text-white rounded-circle shadow">
@@ -160,7 +159,7 @@ $(document).ready(function () {
     function getStatement() {
         $.ajax({
             type: "GET",
-            url: `/statement/listStatementDate/${document.cookie}`,
+            url: `/statement/listStatementDate/${localStorage.getItem('date')}`,
             contentType: 'application/json',
             dataType: 'json',
             headers: {
@@ -170,9 +169,9 @@ $(document).ready(function () {
                 for (let i = 0; i < statement.length; i++) {
                     var value = statement[i].value;
                     tot += value;
-                    $(`#tot${statement[i].wallet.id}`).text('£ ' + statement[i].value.toFixed(2)).val(statement[i].value);
+                    $(`#tot${statement[i].wallet.id}`).text('€ ' + statement[i].value.toFixed(2)).val(statement[i].value);
                 }
-                $('#totale').text("£ " + tot).val(tot);
+                $('#totale').text("€ " + tot).val(tot);
                 getDate();
             }
         })
@@ -189,9 +188,8 @@ $(document).ready(function () {
             },
             success: function (date) {
                 for (let i = 0; i < date.length; i++) {
-                    if (date[i] === document.cookie) {
+                    if (date[i] === localStorage.getItem('date')) {
                         dataold = date[i - 1];
-                        console.log(dataold + " Sono Qui")
                         $('.sincetot').text("Since " + dataold);
                     }
                 }
@@ -230,13 +228,13 @@ $(document).ready(function () {
                 var performance = ((tot - totold) / totold) * 100;
                 if (performance > 0) {
                     $(`<span class="text-success mr-2"><i class="fa fa-arrow-up"></i> ${performance.toFixed(2)}%</span>`).appendTo('.performancetot')
-                    $('#pil').text("£ " + pil.toFixed(2)).addClass('text-success');
+                    $('#pil').text("€ " + pil.toFixed(2)).addClass('text-success');
                 } else if (performance === 0) {
                     $(`<span class="text-warning mr-2"><i class="fa fa-arrow-down"></i> ${performance.toFixed(2)}%</span>`).appendTo('.performancetot')
-                    $('#pil').text("£ " + pil.toFixed(2)).addClass('text-warning');
+                    $('#pil').text("€ " + pil.toFixed(2)).addClass('text-warning');
                 } else {
                     $(`<span class="text-danger mr-2"><i class="fa fa-arrow-down"></i> ${performance.toFixed(2)}%</span>`).appendTo('.performancetot')
-                    $('#pil').text("£ " + pil.toFixed(2)).addClass('text-danger');
+                    $('#pil').text("€ " + pil.toFixed(2)).addClass('text-danger');
                 }
             }
         })

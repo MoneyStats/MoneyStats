@@ -26,7 +26,7 @@ public class StatementValidator {
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     Set<ConstraintViolation<StatementInputDTO>> violations = validator.validate(statementDTO);
 
-    if (violations.size() > 0) {
+    if (!violations.isEmpty()) {
       LOG.warn("Invalid Statement Input {}", statementDTO);
       throw new StatementException(StatementException.Code.INVALID_STATEMENT_DTO);
     }

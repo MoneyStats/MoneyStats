@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @SpringBootTest
@@ -27,6 +28,8 @@ public class AuthServiceTest {
   @InjectMocks private AuthCredentialService service;
 
   @Mock TokenService tokenService;
+
+  @Mock HttpServletRequest httpServletRequest;
 
   @Captor ArgumentCaptor<AuthCredentialInputDTO> authCredentialInputDTOArgumentCaptor;
 
@@ -87,6 +90,7 @@ public class AuthServiceTest {
         .thenReturn(TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER);
     Mockito.when(tokenService.generateToken(authCredentialDTOArgumentCaptor.capture()))
         .thenReturn(TestSchema.TOKEN_JWT_DTO_ROLE_USER);
+    Mockito.when(httpServletRequest.getRemoteAddr()).thenReturn("remote-address");
 
     TokenDTO actual = service.login(TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER);
 

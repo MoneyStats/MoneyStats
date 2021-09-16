@@ -127,8 +127,8 @@ $(document).ready(function () {
                     <h5 class="card-title text-uppercase text-muted mb-0">${resume[i].name} (${resume[i].category.name})</h5>
                     <hr>
                     <div class='form-floating mb-3'> 
-                    <input style="background-color: rgba(255, 255, 255, 0.7);" type='number' id="value${resume[i].id}" class='form-control roundedCorner mx-auto' placeholder="Inserire £GBP..." required>
-                    <label for='value'>Inserire £GBP</label>
+                    <input style="background-color: rgba(255, 255, 255, 0.7);" type='number' id="value${resume[i].id}" class='form-control roundedCorner mx-auto' placeholder="Inserire €EUR..." required>
+                    <label for='value'>Inserire €EUR</label>
                 </div>
                     <input type='hidden' id="wallet${resume[i].id}" value="${resume[i].id}">
                     </div>
