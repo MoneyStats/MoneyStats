@@ -102,7 +102,10 @@ public class DTOTestObjets {
   public static WalletInputDTO walletInputDTO = new WalletInputDTO("My-Wallet-Name", 1);
 
   public static List<StatementEntity> statementEntityList =
-      List.of(new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(0)));
+      List.of(new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(0)),
+              new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(1)),
+              new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(2)),
+              new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(3)));
 
   public static StatementDTO statementDTO =
       new StatementDTO("my-date", 10.0, authCredentialEntity, walletEntities.get(0));
@@ -114,4 +117,6 @@ public class DTOTestObjets {
   public static WalletStatementDTO walletStatementDTO = new WalletStatementDTO(walletEntities, statementEntityList);
 
   public static WalletInputIdDTO walletInputIdDTO = new WalletInputIdDTO(1L, "My-Wallet-Name", 1);
+
+  public static List<String> listDate = List.of("01-01-2021", "02-01-2021");
 }

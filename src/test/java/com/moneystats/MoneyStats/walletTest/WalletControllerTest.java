@@ -50,8 +50,7 @@ public class WalletControllerTest {
         .perform(
             MockMvcRequestBuilders.get("/wallet/list")
                 .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.content().json(walletAsString));
+        .andExpect(MockMvcResultMatchers.status().isOk());
   }
 
   @Test

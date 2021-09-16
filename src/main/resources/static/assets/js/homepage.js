@@ -82,9 +82,6 @@ $(document).ready(function () {
                 $('.sincetotalecapitale').text("Since " + statementReportDTO.beforeLastDate);
                 // PIL
                 var statementTotPercent = statementReportDTO.statementTotalPercent;
-                if ((statementTotPercent % 1) > 0){
-                    statementTotPercent = statementTotPercent.toFixed(2);
-                }
                 if (statementReportDTO.pil > 0) {
                     $(`<span class="text-success mr-2"><i class="fa fa-arrow-up"></i> ${statementTotPercent}%</span>`).appendTo(`.performanceLastStatement`)
                     $('#pil').text("£ " + statementReportDTO.pil.toFixed(2)).addClass('text-success');

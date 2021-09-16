@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class HomepageService {
    * @throws AuthenticationException
    */
   public HomepageReportDTO reportHomepage(TokenDTO tokenDTO)
-      throws StatementException, AuthenticationException {
+      throws StatementException, AuthenticationException, ParseException {
     HomepageReportDTO reportDTO =
         new HomepageReportDTO(0.00D, 0.00D, 0.00D, 0.00D, 0.00, "", "", "", null, null, null);
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
@@ -59,12 +61,12 @@ public class HomepageService {
     // Fix Check by date if there is no date into db
     firstDate = listDate.get(0);
 
-    if (listDate.size() == 2){
+    if (listDate.size() == 2) {
       for (int i = 0; i < listDate.size(); i++) {
         lastDate = listDate.get(listDate.size() - 1);
       }
     }
-    if (listDate.size() > 2){
+    if (listDate.size() > 2) {
       for (int i = 0; i < listDate.size(); i++) {
         lastDate = listDate.get(listDate.size() - 1);
         lastStatementDate = listDate.get(listDate.size() - 2);
@@ -90,7 +92,7 @@ public class HomepageService {
         listStatementReportCalc(utente, lastStatementDate);
 
     Double previousStatementReport = 0.00D;
-    if (listStatementByPreviousDate.size() > 0){
+    if (listStatementByPreviousDate.size() > 0) {
       for (StatementEntity statementEntity : listStatementByPreviousDate) {
         previousStatementReport += statementEntity.getValue();
       }
@@ -99,15 +101,21 @@ public class HomepageService {
     List<StatementEntity> listStatementByFirstDate = listStatementReportCalc(utente, firstDate);
 
     Double firstStatementReport = 0.00D;
-    if (listStatementByFirstDate.size() > 0){
+    if (listStatementByFirstDate.size() > 0) {
       for (StatementEntity statementEntity : listStatementByFirstDate) {
         firstStatementReport += statementEntity.getValue();
       }
     }
 
     Double pilPerformance = ((statementReport - firstStatementReport) / firstStatementReport) * 100;
+    DecimalFormat decimalFormat = new DecimalFormat("0.##");
+    String pilPerformanceAsString = decimalFormat.format(pilPerformance);
+    pilPerformance = decimalFormat.parse(pilPerformanceAsString).doubleValue();
+
     Double statementPercent =
         ((statementReport - previousStatementReport) / previousStatementReport) * 100;
+    String statementPercentAsString = decimalFormat.format(statementPercent);
+    statementPercent = decimalFormat.parse(statementPercentAsString).doubleValue();
 
     reportDTO.setStatementTotal(statementReport);
     reportDTO.setStatementTotalPercent(statementPercent);
@@ -198,8 +206,7 @@ public class HomepageService {
    * @throws AuthenticationException
    * @throws StatementException
    */
-  private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO)
-      throws AuthenticationException {
+  private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO) throws AuthenticationException {
     TokenValidation.validateTokenDTO(tokenDTO);
     if (tokenDTO.getAccessToken().equalsIgnoreCase("")) {
       throw new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
