@@ -42,6 +42,10 @@ public class StatementServiceTest {
   @InjectMocks private StatementService statementService;
   @Mock private TokenService tokenService;
 
+  /**
+   * Test addStatement
+   * @throws Exception
+   */
   @Test
   void test_addStatement_shouldAdd() throws Exception {
     StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
@@ -78,7 +82,7 @@ public class StatementServiceTest {
   }
 
   @Test
-  void test_addStatement_shouldThrowsOnInvalidTokenDTO() throws Exception {
+  void test_addStatement_shouldThrowsOnUnauthorized() throws Exception {
     TokenDTO token = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
 
     Mockito.when(tokenService.parseToken(token))
@@ -89,6 +93,22 @@ public class StatementServiceTest {
     AuthenticationException actualException =
         Assertions.assertThrows(
             AuthenticationException.class, () -> tokenService.parseToken(token));
+
+    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
+  }
+
+  @Test
+  void test_addStatement_shouldThrowsOnInvalidTokenDTO() throws Exception {
+    TokenDTO token = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
+
+    Mockito.when(tokenService.parseToken(token))
+            .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+
+    AuthenticationException expectedException =
+            new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
+    AuthenticationException actualException =
+            Assertions.assertThrows(
+                    AuthenticationException.class, () -> tokenService.parseToken(token));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
@@ -137,6 +157,10 @@ public class StatementServiceTest {
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
 
+  /**
+   * Test ListOfDate
+   * @throws Exception
+   */
   @Test
   void test_listOfDate_shouldReturnList() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
@@ -182,6 +206,22 @@ public class StatementServiceTest {
   }
 
   @Test
+  void test_listOfDate_shouldThrowsTokenDTOInvalid() throws Exception {
+    TokenDTO token = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+
+    Mockito.when(tokenService.parseToken(token))
+            .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+
+    AuthenticationException expectedException =
+            new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
+    AuthenticationException actualException =
+            Assertions.assertThrows(
+                    AuthenticationException.class, () -> statementService.listOfDate(token));
+
+    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
+  }
+
+  @Test
   void test_listOfDate_shouldBeMappedOnUserNotFound() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     StatementEntity statementEntity = DTOTestObjets.statementEntityList.get(0);
@@ -204,7 +244,6 @@ public class StatementServiceTest {
 
   @Test
   void test_listOfDate_shouldThrowsOnListNotFound() throws Exception {
-    StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
@@ -214,15 +253,19 @@ public class StatementServiceTest {
     Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
     Mockito.when(statementDAO.selectdistinctstatement(Mockito.any())).thenReturn(listDate);
 
-    WalletException expectedException =
-        new WalletException(WalletException.Code.WALLET_NOT_FOUND);
-    WalletException actualException =
+    StatementException expectedException =
+        new StatementException(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND);
+    StatementException actualException =
         Assertions.assertThrows(
-            WalletException.class, () -> statementService.addStatement(tokenDTO, statementDTO));
+            StatementException.class, () -> statementService.listOfDate(tokenDTO));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
 
+  /**
+   * Test listStatementBYDate
+   * @throws Exception
+   */
   @Test
   void test_listStatementByDate_shouldReturnList() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
@@ -250,6 +293,23 @@ public class StatementServiceTest {
     AuthenticationException actualException =
         Assertions.assertThrows(
             AuthenticationException.class, () -> statementService.listStatementByDate(token, date));
+
+    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
+  }
+
+  @Test
+  void test_listStatementByDate_shouldThrowsTokenDTOInvalid() throws Exception {
+    TokenDTO token = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    String date = "2021-06-09";
+
+    Mockito.when(tokenService.parseToken(token))
+            .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+
+    AuthenticationException expectedException =
+            new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
+    AuthenticationException actualException =
+            Assertions.assertThrows(
+                    AuthenticationException.class, () -> statementService.listStatementByDate(token, date));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
