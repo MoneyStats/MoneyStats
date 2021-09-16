@@ -2,10 +2,10 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport"
-        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <!-- ========= Icon ========= -->
@@ -18,276 +18,340 @@
     <!-- ========= JS Files ========= -->
     <!-- JQuery -->
     <script src="./assets/js/lib/jquery-3.6.0.min.js"></script>
-     <!-- SweetAlert -->
-     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- SweetAlert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- JS Register -->
-     <script src="./assets/js/loginPage.js"></script>
+    <script src="./assets/js/loginPage.js"></script>
 
-    <!-- ========= SEZIONE COLORI SEARCH BAR ========= --> 
-	<!-- Chrome, Firefox OS and Opera --> 
-	<meta name='theme-color' content='#080957'> 
-	<!-- Windows Phone --> 
-	<meta name='msapplication-navbutton-color' content='#080957'> 
-	<!-- iOS Safari --> 
-	<meta name='apple-mobile-web-app-status-bar-style' content='#080957'> 
+    <!-- ========= SEZIONE COLORI SEARCH BAR ========= -->
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name='theme-color' content='#080957'>
+    <!-- Windows Phone -->
+    <meta name='msapplication-navbutton-color' content='#080957'>
+    <!-- iOS Safari -->
+    <meta name='apple-mobile-web-app-status-bar-style' content='#080957'>
 
     <title>MoneyStats - Sign Up</title>
     <meta name="description" content="MoneyStats HTML Mobile Template">
-    <meta name="keywords" content="bootstrap, wallet, banking, fintech mobile template, cordova, phonegap, mobile, html, responsive" />
+    <meta name="keywords"
+          content="bootstrap, wallet, banking, fintech mobile template, cordova, phonegap, mobile, html, responsive"/>
     <link rel="manifest" href="../__manifest.json">
 </head>
 
 <body>
 
-    <!-- loader -->
-    <div id="loader">
-        <img src="./assets/img/logos/favicon_trasparent.png" alt="icon" class="loading-icon">
+<!-- loader -->
+<div id="loader">
+    <img src="./assets/img/logos/favicon_trasparent.png" alt="icon" class="loading-icon">
+</div>
+<!-- * loader -->
+
+<!-- App Header -->
+<div class="appHeader no-border transparent position-absolute">
+    <div class="left">
+        <a href="javascript:;" class="headerButton goBack">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </a>
     </div>
-    <!-- * loader -->
-
-    <!-- App Header -->
-    <div class="appHeader no-border transparent position-absolute">
-        <div class="left">
-            <a href="javascript:;" class="headerButton goBack">
-                <ion-icon name="chevron-back-outline"></ion-icon>
-            </a>
-        </div>
-        <div class="pageTitle"></div>
-        <div class="right">
-            <a href="app-login.html" class="headerButton">
-                Login
-            </a>
-        </div>
+    <div class="pageTitle"></div>
+    <div class="right">
+        <a href="app-login.html" class="headerButton">
+            Login
+        </a>
     </div>
-    <!-- * App Header -->
+</div>
+<!-- * App Header -->
 
-    <!-- App Capsule -->
-    <div id="appCapsule">
+<!-- App Capsule -->
+<div id="appCapsule">
 
-        <div class="section mt-2 text-center">
-            <h1>Register now</h1>
-            <h4>Create an account</h4>
-        </div>
-        <div class="section mb-5 p-2">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="form-group basic">
-                            <div class="input-wrapper">
-                                <label class="label" for="firstName_mobile">First Name</label>
-                                <input type="text" class="form-control" id="firstName_mobile" placeholder="Insert your First Name" required>
-                                <i class="clear-input">
-                                    <ion-icon name="close-circle"></ion-icon>
-                                </i>
-                            </div>
-                        </div>
-                        <div class="form-group basic">
-                            <div class="input-wrapper">
-                                <label class="label" for="lastName_mobile">Last Name</label>
-                                <input type="text" class="form-control" id="lastName_mobile" placeholder="Insert your Last Name" required>
-                                <i class="clear-input">
-                                    <ion-icon name="close-circle"></ion-icon>
-                                </i>
-                            </div>
-                        </div>
-                        <div class="form-group basic">
-                            <div class="input-wrapper">
-                                <label class="label" for="email_mobile">E-mail</label>
-                                <input type="email" class="form-control" id="email_mobile" placeholder="Insert your e-mail" required>
-                                <i class="clear-input">
-                                    <ion-icon name="close-circle"></ion-icon>
-                                </i>
-                            </div>
-                        </div>
-                        <div class="form-group basic">
-                            <div class="input-wrapper">
-                                <label class="label" for="dateOfBirth_mobile">Date Of Birth</label>
-                                <input type="date" class="form-control" id="dateOfBirth_mobile" placeholder="Insert your Date Of Birth" required>
-                                <i class="clear-input">
-                                    <ion-icon name="close-circle"></ion-icon>
-                                </i>
-                            </div>
-                        </div>
-                        <div class="form-group basic">
-                            <div class="input-wrapper">
-                                <label class="label" for="username_mobile">Username</label>
-                                <input type="text" class="form-control" id="username_mobile" placeholder="Insert your Username" required>
-                                <i class="clear-input">
-                                    <ion-icon name="close-circle"></ion-icon>
-                                </i>
-                            </div>
-                        </div>
-
-                        <div class="form-group basic">
-                            <div class="input-wrapper">
-                                <label class="label" for="password_mobile">Password</label>
-                                <input type="password" class="form-control" id="password_mobile" autocomplete="off"
-                                    placeholder="Insert your password" required>
-                                <i class="clear-input">
-                                    <ion-icon name="close-circle"></ion-icon>
-                                </i>
-                            </div>
-                        </div>
-
-                        <!--<div class="form-group basic">
-                            <div class="input-wrapper">
-                                <label class="label" for="password2">Password Again</label>
-                                <input type="password" class="form-control" id="password2" autocomplete="off"
-                                    placeholder="Type password again">
-                                <i class="clear-input">
-                                    <ion-icon name="close-circle"></ion-icon>
-                                </i>
-                            </div>
-                        </div>-->
-
-                        <div class="custom-control custom-checkbox mt-2 mb-1">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="customCheckb1">
-                                <label class="form-check-label" for="customCheckb1">
-                                    I agree <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">terms and
-                                        conditions</a>
-                                </label>
-                            </div>
-                        </div>
-
+    <div class="section mt-2 text-center">
+        <h1>Register now</h1>
+        <h4>Create an account</h4>
+    </div>
+    <div class="section mb-5 p-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="form-group basic">
+                    <div class="input-wrapper">
+                        <label class="label" for="firstName_mobile">First Name</label>
+                        <input type="text" class="form-control" id="firstName_mobile"
+                               placeholder="Insert your First Name" required>
+                        <i class="clear-input">
+                            <ion-icon name="close-circle"></ion-icon>
+                        </i>
+                    </div>
+                </div>
+                <div class="form-group basic">
+                    <div class="input-wrapper">
+                        <label class="label" for="lastName_mobile">Last Name</label>
+                        <input type="text" class="form-control" id="lastName_mobile" placeholder="Insert your Last Name"
+                               required>
+                        <i class="clear-input">
+                            <ion-icon name="close-circle"></ion-icon>
+                        </i>
+                    </div>
+                </div>
+                <div class="form-group basic">
+                    <div class="input-wrapper">
+                        <label class="label" for="email_mobile">E-mail</label>
+                        <input type="email" class="form-control" id="email_mobile" placeholder="Insert your e-mail"
+                               required>
+                        <i class="clear-input">
+                            <ion-icon name="close-circle"></ion-icon>
+                        </i>
+                    </div>
+                </div>
+                <div class="form-group basic">
+                    <div class="input-wrapper">
+                        <label class="label" for="dateOfBirth_mobile">Date Of Birth</label>
+                        <input type="date" class="form-control" id="dateOfBirth_mobile"
+                               placeholder="Insert your Date Of Birth" required>
+                        <i class="clear-input">
+                            <ion-icon name="close-circle"></ion-icon>
+                        </i>
+                    </div>
+                </div>
+                <div class="form-group basic">
+                    <div class="input-wrapper">
+                        <label class="label" for="username_mobile">Username</label>
+                        <input type="text" class="form-control" id="username_mobile" placeholder="Insert your Username"
+                               required>
+                        <i class="clear-input">
+                            <ion-icon name="close-circle"></ion-icon>
+                        </i>
                     </div>
                 </div>
 
-
-
-                <div class="form-button-group transparent">
-                    <button id="signUpBtn_mobile" class="btn btn-primary btn-block btn-lg">Register</button>
+                <div class="form-group basic">
+                    <div class="input-wrapper">
+                        <label class="label" for="password_mobile">Password</label>
+                        <input type="password" class="form-control" id="password_mobile" autocomplete="off"
+                               placeholder="Insert your password" required>
+                        <i class="clear-input">
+                            <ion-icon name="close-circle"></ion-icon>
+                        </i>
+                    </div>
                 </div>
+
+                <!--<div class="form-group basic">
+                    <div class="input-wrapper">
+                        <label class="label" for="password2">Password Again</label>
+                        <input type="password" class="form-control" id="password2" autocomplete="off"
+                            placeholder="Type password again">
+                        <i class="clear-input">
+                            <ion-icon name="close-circle"></ion-icon>
+                        </i>
+                    </div>
+                </div>-->
+
+                <div class="custom-control custom-checkbox mt-2 mb-1">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="customCheckb1">
+                        <label class="form-check-label" for="customCheckb1">
+                            I agree <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">terms and
+                            conditions</a>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
+
+        <div class="form-button-group transparent">
+            <button id="signUpBtn_mobile" class="btn btn-primary btn-block btn-lg">Register</button>
+        </div>
     </div>
-    <!-- * App Capsule -->
+
+</div>
+<!-- * App Capsule -->
 
 
-    <!-- Terms Modal -->
-    <div class="modal fade modalbox" id="termsModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Terms and Conditions</h5>
-                    <a href="javascript:;" data-bs-dismiss="modal">Close</a>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Welcome to MoneyStats!</strong></p>
+<!-- Terms Modal -->
+<div class="modal fade modalbox" id="termsModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Terms and Conditions</h5>
+                <a href="javascript:;" data-bs-dismiss="modal">Close</a>
+            </div>
+            <div class="modal-body">
+                <p><strong>Welcome to MoneyStats!</strong></p>
 
-                    <p>These terms and conditions outline the rules and regulations for the use of MoneyStats's Website, located at Http://localhost:8080.</p>
+                <p>These terms and conditions outline the rules and regulations for the use of MoneyStats's Website,
+                    located at Http://localhost:8080.</p>
 
-                    <p>By accessing this website we assume you accept these terms and conditions. Do not continue to use MoneyStats if you do not agree to take all of the terms and conditions stated on this page.</p>
+                <p>By accessing this website we assume you accept these terms and conditions. Do not continue to use
+                    MoneyStats if you do not agree to take all of the terms and conditions stated on this page.</p>
 
-                    <p>The following terminology applies to these Terms and Conditions, Privacy Statement and Disclaimer Notice and all Agreements: "Client", "You" and "Your" refers to you, the person log on this website and compliant to the Company’s terms and conditions. <br>
-                        "The Company", "Ourselves", "We", "Our" and "Us", refers to our Company. "Party", "Parties", or "Us", refers to both the Client and ourselves. <br>
-                        All terms refer to the offer, acceptance and consideration of payment necessary to undertake the process of our assistance to the Client in the most appropriate manner for the express purpose of meeting the Client’s needs in respect of provision of the Company’s stated services, in accordance with and subject to, prevailing law of Netherlands. Any use of the above terminology or other words in the singular, plural, capitalization and/or he/she or they, are taken as interchangeable and therefore as referring to same.</p>
+                <p>The following terminology applies to these Terms and Conditions, Privacy Statement and Disclaimer
+                    Notice and all Agreements: "Client", "You" and "Your" refers to you, the person log on this website
+                    and compliant to the Company’s terms and conditions. <br>
+                    "The Company", "Ourselves", "We", "Our" and "Us", refers to our Company. "Party", "Parties", or
+                    "Us", refers to both the Client and ourselves. <br>
+                    All terms refer to the offer, acceptance and consideration of payment necessary to undertake the
+                    process of our assistance to the Client in the most appropriate manner for the express purpose of
+                    meeting the Client’s needs in respect of provision of the Company’s stated services, in accordance
+                    with and subject to, prevailing law of Netherlands. Any use of the above terminology or other words
+                    in the singular, plural, capitalization and/or he/she or they, are taken as interchangeable and
+                    therefore as referring to same.</p>
 
-                    <p><strong>Cookies</strong></p>
-                    <p>We employ the use of cookies. By accessing MoneyStats, you agreed to use cookies in agreement with the MoneyStats's Privacy Policy.<br>
-                    Most interactive websites use cookies to let us retrieve the user’s details for each visit. Cookies are used by our website to enable the functionality of certain areas to make it easier for people visiting our website. Some of our affiliate/advertising partners may also use cookies.
+                <p><strong>Cookies</strong></p>
+                <p>We employ the use of cookies. By accessing MoneyStats, you agreed to use cookies in agreement with
+                    the MoneyStats's Privacy Policy.<br>
+                    Most interactive websites use cookies to let us retrieve the user’s details for each visit. Cookies
+                    are used by our website to enable the functionality of certain areas to make it easier for people
+                    visiting our website. Some of our affiliate/advertising partners may also use cookies.
 
-                    <p><strong>License</strong></p>
-                    <p>Unless otherwise stated, MoneyStats and/or its licensors own the intellectual property rights for all material on MoneyStats.<br>
-                        All intellectual property rights are reserved. You may access this from MoneyStats for your own personal use subjected to restrictions set in these terms and conditions.<br>
+                <p><strong>License</strong></p>
+                <p>Unless otherwise stated, MoneyStats and/or its licensors own the intellectual property rights for all
+                    material on MoneyStats.<br>
+                    All intellectual property rights are reserved. You may access this from MoneyStats for your own
+                    personal use subjected to restrictions set in these terms and conditions.<br>
 
-                        <p><strong>You must not:</strong></p>
+                <p><strong>You must not:</strong></p>
 
-                        <p>Republish material from MoneyStats<br>
-                        Sell, rent or sub-license material from MoneyStats<br>
-                        Reproduce, duplicate or copy material from MoneyStats<br>
-                        Redistribute content from MoneyStats<br>
-                        This Agreement shall begin on the date hereof. Our Terms and Conditions were created with the help of the Terms And Conditions Generator.</p>
+                <p>Republish material from MoneyStats<br>
+                    Sell, rent or sub-license material from MoneyStats<br>
+                    Reproduce, duplicate or copy material from MoneyStats<br>
+                    Redistribute content from MoneyStats<br>
+                    This Agreement shall begin on the date hereof. Our Terms and Conditions were created with the help
+                    of the Terms And Conditions Generator.</p>
 
-                        Parts of this website offer an opportunity for users to post and exchange opinions and information in certain areas of the website. MoneyStats does not filter, edit, publish or review Comments prior to their presence on the website. Comments do not reflect the views and opinions of MoneyStats,its agents and/or affiliates.<br>
-                        Comments reflect the views and opinions of the person who post their views and opinions. To the extent permitted by applicable laws, MoneyStats shall not be liable for the Comments or for any liability, damages or expenses caused and/or suffered as a result of any use of and/or posting of and/or appearance of the Comments on this website.<br>
-                        <br>
-                        MoneyStats reserves the right to monitor all Comments and to remove any Comments which can be considered inappropriate, offensive or causes breach of these Terms and Conditions.<br><br>
+                Parts of this website offer an opportunity for users to post and exchange opinions and information in
+                certain areas of the website. MoneyStats does not filter, edit, publish or review Comments prior to
+                their presence on the website. Comments do not reflect the views and opinions of MoneyStats,its agents
+                and/or affiliates.<br>
+                Comments reflect the views and opinions of the person who post their views and opinions. To the extent
+                permitted by applicable laws, MoneyStats shall not be liable for the Comments or for any liability,
+                damages or expenses caused and/or suffered as a result of any use of and/or posting of and/or appearance
+                of the Comments on this website.<br>
+                <br>
+                MoneyStats reserves the right to monitor all Comments and to remove any Comments which can be considered
+                inappropriate, offensive or causes breach of these Terms and Conditions.<br><br>
 
-                        You warrant and represent that:<br>
+                You warrant and represent that:<br>
 
-                        You are entitled to post the Comments on our website and have all necessary licenses and consents to do so;<br>
-                        The Comments do not invade any intellectual property right, including without limitation copyright, patent or trademark of any third party;<br>
-                        The Comments do not contain any defamatory, libelous, offensive, indecent or otherwise unlawful material which is an invasion of privacy<br>
-                        The Comments will not be used to solicit or promote business or custom or present commercial activities or unlawful activity.<br>
-                        You hereby grant MoneyStats a non-exclusive license to use, reproduce, edit and authorize others to use, reproduce and edit any of your Comments in any and all forms, formats or media.<br><br>
+                You are entitled to post the Comments on our website and have all necessary licenses and consents to do
+                so;<br>
+                The Comments do not invade any intellectual property right, including without limitation copyright,
+                patent or trademark of any third party;<br>
+                The Comments do not contain any defamatory, libelous, offensive, indecent or otherwise unlawful material
+                which is an invasion of privacy<br>
+                The Comments will not be used to solicit or promote business or custom or present commercial activities
+                or unlawful activity.<br>
+                You hereby grant MoneyStats a non-exclusive license to use, reproduce, edit and authorize others to use,
+                reproduce and edit any of your Comments in any and all forms, formats or media.<br><br>
 
-                        <p><strong>Hyperlinking to our Content</strong></p>
-                        The following organizations may link to our Website without prior written approval:<br>
-                        <br>
-                        Government agencies;<br>
-                        Search engines;<br>
-                        News organizations;<br>
-                        Online directory distributors may link to our Website in the same manner as they hyperlink to the Websites of other listed businesses; and
-                        System wide Accredited Businesses except soliciting non-profit organizations, charity shopping malls, and charity fundraising groups which may not hyperlink to our Web site.<br>
-                        These organizations may link to our home page, to publications or to other Website information so long as the link: (a) is not in any way deceptive; (b) does not falsely imply sponsorship, endorsement or approval of the linking party and its products and/or services; and (c) fits within the context of the linking party’s site.<br>
-                        <br>
-                        We may consider and approve other link requests from the following types of organizations:<br>
-                        <br>
-                        commonly-known consumer and/or business information sources;<br>
-                        dot.com community sites;<br>
-                        associations or other groups representing charities;<br>
-                        online directory distributors;<br>
-                        internet portals;<br>
-                        accounting, law and consulting firms; and
-                        educational institutions and trade associations.<br>
-                        We will approve link requests from these organizations if we decide that: (a) the link would not make us look unfavorably to ourselves or to our accredited businesses; (b) the organization does not have any negative records with us; (c) the benefit to us from the visibility of the hyperlink compensates the absence of MoneyStats; and (d) the link is in the context of general resource information.<br>
+                <p><strong>Hyperlinking to our Content</strong></p>
+                The following organizations may link to our Website without prior written approval:<br>
+                <br>
+                Government agencies;<br>
+                Search engines;<br>
+                News organizations;<br>
+                Online directory distributors may link to our Website in the same manner as they hyperlink to the
+                Websites of other listed businesses; and
+                System wide Accredited Businesses except soliciting non-profit organizations, charity shopping malls,
+                and charity fundraising groups which may not hyperlink to our Web site.<br>
+                These organizations may link to our home page, to publications or to other Website information so long
+                as the link: (a) is not in any way deceptive; (b) does not falsely imply sponsorship, endorsement or
+                approval of the linking party and its products and/or services; and (c) fits within the context of the
+                linking party’s site.<br>
+                <br>
+                We may consider and approve other link requests from the following types of organizations:<br>
+                <br>
+                commonly-known consumer and/or business information sources;<br>
+                dot.com community sites;<br>
+                associations or other groups representing charities;<br>
+                online directory distributors;<br>
+                internet portals;<br>
+                accounting, law and consulting firms; and
+                educational institutions and trade associations.<br>
+                We will approve link requests from these organizations if we decide that: (a) the link would not make us
+                look unfavorably to ourselves or to our accredited businesses; (b) the organization does not have any
+                negative records with us; (c) the benefit to us from the visibility of the hyperlink compensates the
+                absence of MoneyStats; and (d) the link is in the context of general resource information.<br>
 
-                        These organizations may link to our home page so long as the link: (a) is not in any way deceptive; (b) does not falsely imply sponsorship, endorsement or approval of the linking party and its products or services; and (c) fits within the context of the linking party’s site.<br>
+                These organizations may link to our home page so long as the link: (a) is not in any way deceptive; (b)
+                does not falsely imply sponsorship, endorsement or approval of the linking party and its products or
+                services; and (c) fits within the context of the linking party’s site.<br>
 
-                        If you are one of the organizations listed in paragraph 2 above and are interested in linking to our website, you must inform us by sending an e-mail to MoneyStats. Please include your name, your organization name, contact information as well as the URL of your site, a list of any URLs from which you intend to link to our Website, and a list of the URLs on our site to which you would like to link. Wait 2-3 weeks for a response.<br>
-                        <br>
-                        Approved organizations may hyperlink to our Website as follows:<br>
-                        <br>
-                        By use of our corporate name; or<br>
-                        By use of the uniform resource locator being linked to; or<br>
-                        By use of any other description of our Website being linked to that makes sense within the context and format of content on the linking party’s site.<br>
-                        No use of MoneyStats's logo or other artwork will be allowed for linking absent a trademark license agreement.<br>
-                        <br>
-                        <p><strong>iFrames</strong></p>
-                        Without prior approval and written permission, you may not create frames around our Webpages that alter in any way the visual presentation or appearance of our Website.<br>
-                        <br>
-                        <p><strong>Content Liability</strong></p>
-                        We shall not be hold responsible for any content that appears on your Website. You agree to protect and defend us against all claims that is rising on your Website. No link(s) should appear on any Website that may be interpreted as libelous, obscene or criminal, or which infringes, otherwise violates, or advocates the infringement or other violation of, any third party rights.<br>
-                        <br>
-                        <p><strong>Your Privacy</strong></p>
-                        Please read Privacy Policy<br>
+                If you are one of the organizations listed in paragraph 2 above and are interested in linking to our
+                website, you must inform us by sending an e-mail to MoneyStats. Please include your name, your
+                organization name, contact information as well as the URL of your site, a list of any URLs from which
+                you intend to link to our Website, and a list of the URLs on our site to which you would like to link.
+                Wait 2-3 weeks for a response.<br>
+                <br>
+                Approved organizations may hyperlink to our Website as follows:<br>
+                <br>
+                By use of our corporate name; or<br>
+                By use of the uniform resource locator being linked to; or<br>
+                By use of any other description of our Website being linked to that makes sense within the context and
+                format of content on the linking party’s site.<br>
+                No use of MoneyStats's logo or other artwork will be allowed for linking absent a trademark license
+                agreement.<br>
+                <br>
+                <p><strong>iFrames</strong></p>
+                Without prior approval and written permission, you may not create frames around our Webpages that alter
+                in any way the visual presentation or appearance of our Website.<br>
+                <br>
+                <p><strong>Content Liability</strong></p>
+                We shall not be hold responsible for any content that appears on your Website. You agree to protect and
+                defend us against all claims that is rising on your Website. No link(s) should appear on any Website
+                that may be interpreted as libelous, obscene or criminal, or which infringes, otherwise violates, or
+                advocates the infringement or other violation of, any third party rights.<br>
+                <br>
+                <p><strong>Your Privacy</strong></p>
+                Please read Privacy Policy<br>
 
-                        <p><strong>Reservation of Rights</strong></p>
-                        We reserve the right to request that you remove all links or any particular link to our Website. You approve to immediately remove all links to our Website upon request. We also reserve the right to amen these terms and conditions and it’s linking policy at any time. By continuously linking to our Website, you agree to be bound to and follow these linking terms and conditions.<br>
+                <p><strong>Reservation of Rights</strong></p>
+                We reserve the right to request that you remove all links or any particular link to our Website. You
+                approve to immediately remove all links to our Website upon request. We also reserve the right to amen
+                these terms and conditions and it’s linking policy at any time. By continuously linking to our Website,
+                you agree to be bound to and follow these linking terms and conditions.<br>
 
-                        Removal of links from our website<br>
-                        If you find any link on our Website that is offensive for any reason, you are free to contact and inform us any moment. We will consider requests to remove links but we are not obligated to or so or to respond to you directly.<br>
+                Removal of links from our website<br>
+                If you find any link on our Website that is offensive for any reason, you are free to contact and inform
+                us any moment. We will consider requests to remove links but we are not obligated to or so or to respond
+                to you directly.<br>
 
-                        We do not ensure that the information on this website is correct, we do not warrant its completeness or accuracy; nor do we promise to ensure that the website remains available or that the material on the website is kept up to date.<br>
-                            <br>
-                        <p><strong>Disclaimer</strong></p>
-                        To the maximum extent permitted by applicable law, we exclude all representations, warranties and conditions relating to our website and the use of this website. Nothing in this disclaimer will:<br>
+                We do not ensure that the information on this website is correct, we do not warrant its completeness or
+                accuracy; nor do we promise to ensure that the website remains available or that the material on the
+                website is kept up to date.<br>
+                <br>
+                <p><strong>Disclaimer</strong></p>
+                To the maximum extent permitted by applicable law, we exclude all representations, warranties and
+                conditions relating to our website and the use of this website. Nothing in this disclaimer will:<br>
 
-                        limit or exclude our or your liability for death or personal injury;<br>
-                        limit or exclude our or your liability for fraud or fraudulent misrepresentation;<br>
-                        limit any of our or your liabilities in any way that is not permitted under applicable law; or<br>
-                        exclude any of our or your liabilities that may not be excluded under applicable law.<br>
-                        The limitations and prohibitions of liability set in this Section and elsewhere in this disclaimer: (a) are subject to the preceding paragraph; and (b) govern all liabilities arising under the disclaimer, including liabilities arising in contract, in tort and for breach of statutory duty.<br>
+                limit or exclude our or your liability for death or personal injury;<br>
+                limit or exclude our or your liability for fraud or fraudulent misrepresentation;<br>
+                limit any of our or your liabilities in any way that is not permitted under applicable law; or<br>
+                exclude any of our or your liabilities that may not be excluded under applicable law.<br>
+                The limitations and prohibitions of liability set in this Section and elsewhere in this disclaimer: (a)
+                are subject to the preceding paragraph; and (b) govern all liabilities arising under the disclaimer,
+                including liabilities arising in contract, in tort and for breach of statutory duty.<br>
 
-                        As long as the website and the information and services on the website are provided free of charge, we will not be liable for any loss or damage of any nature.<br>
-                    </p>
-                    
-                </div>
+                As long as the website and the information and services on the website are provided free of charge, we
+                will not be liable for any loss or damage of any nature.<br>
+                </p>
+
             </div>
         </div>
     </div>
-    <!-- * Terms Modal -->
+</div>
+<!-- * Terms Modal -->
 
 
-    <!-- ========= JS Files =========  -->
-    <!-- Bootstrap -->
-    <script src="./assets/js/lib/bootstrap.bundle.min.js"></script>
-    <!-- Ionicons -->
-    <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
-    <!-- Splide -->
-    <script src="./assets/js/plugin/splide/splide.min.js"></script>
-    <!-- Base Js File -->
-    <script src="./assets/js/plugin/base.js"></script>
+<!-- ========= JS Files =========  -->
+<!-- Bootstrap -->
+<script src="./assets/js/lib/bootstrap.bundle.min.js"></script>
+<!-- Ionicons -->
+<script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
+<!-- Splide -->
+<script src="./assets/js/plugin/splide/splide.min.js"></script>
+<!-- Base Js File -->
+<script src="./assets/js/plugin/base.js"></script>
 
 
 </body>

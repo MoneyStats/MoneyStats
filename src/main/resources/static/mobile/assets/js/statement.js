@@ -1,24 +1,24 @@
 $(document).ready(function () {
 
-  var COUNT_ERROR = 0;
+    var COUNT_ERROR = 0;
 
     /*--------------------------------------------------------------------------
     * Get all wallet for the statement
     *--------------------------------------------------------------------------*/
-    function getWallet(){
-      $.ajax({
-        type: "GET",
-        url: "/wallet/list",
-        contentType: 'application/json',
-        dataType: 'json',
-        headers: {
-          Authorization: sessionStorage.getItem('accessToken')
-        },
-        success: function (resume){
-          const listWallet = $('#listWalletStat');
-          for (let i = 0; i < resume.length; i++) {
-              document.cookie = "id"+i+" = " + resume[i].id;
-              $(`<div class="form-group basic animated">
+    function getWallet() {
+        $.ajax({
+            type: "GET",
+            url: "/wallet/list",
+            contentType: 'application/json',
+            dataType: 'json',
+            headers: {
+                Authorization: sessionStorage.getItem('accessToken')
+            },
+            success: function (resume) {
+                const listWallet = $('#listWalletStat');
+                for (let i = 0; i < resume.length; i++) {
+                    document.cookie = "id" + i + " = " + resume[i].id;
+                    $(`<div class="form-group basic animated">
               <div class="input-group input-wrapper">
                   <label class="label" for="value${resume[i].id}">${resume[i].name} (${resume[i].category.name})</label>
                   <span class="input-group-text" id="basic-addona1">€</span>
@@ -30,42 +30,27 @@ $(document).ready(function () {
               </div>
               <div class="input-info">Please enter amount for ${resume[i].name}</div>
           </div>`).hide().appendTo(listWallet).fadeIn(i * 20);
-          }
-        },
-        error: function () {
-          const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1000,
-            timerProgressBar: true,
-          })
-          Toast.fire({
-            icon: 'error',
-            title: '<span style="color:#2D2C2C">Error loading...</span>'
-          })
-          setTimeout(function () {
-            window.location.href = "app-login.html";
-          }, 1000);
-        }
-      })
+                }
+            }
+        })
     }
+
     /*--------------------------------------------------------------------------
     * END Get all wallet for the statement
     *--------------------------------------------------------------------------*/
-      getWallet();
-      var cookiearray = [];
-      var valueCookie;
+    getWallet();
+    var cookiearray = [];
+    var valueCookie;
 
     /*--------------------------------------------------------------------------
     * add statement for each wallet
     *--------------------------------------------------------------------------*/
-      $('#aggiungiStatement').click(function () {
+    $('#aggiungiStatement').click(function () {
         var cookie = document.cookie;
         cookiearray = cookie.split(';');
-        for (let i = 0; i < cookiearray.length; i++){
-          valueCookie = cookiearray[i].split('=')[1];
-          $(`#value${valueCookie}`).prop('required', true);
+        for (let i = 0; i < cookiearray.length; i++) {
+            valueCookie = cookiearray[i].split('=')[1];
+            $(`#value${valueCookie}`).prop('required', true);
         }
         Swal.fire({
             title: '<span style="color:#2D2C2C">Do you want to safe the current Statement?</span>',
@@ -75,9 +60,9 @@ $(document).ready(function () {
             confirmButtonColor: '#3085d6',
             denyButtonColor: '#d33',
             icon: 'question',
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
-                for (let i = 0; i < cookiearray.length; i++){
+                for (let i = 0; i < cookiearray.length; i++) {
                     valueCookie = cookiearray[i].split('=')[1];
                     var statement = {
                         value: $(`#value${valueCookie}`).val(),
@@ -89,59 +74,62 @@ $(document).ready(function () {
                     $(`#value${valueCookie}`).val('');
                     $(`#wallet${valueCookie}`).val('');
                 }
-                if (COUNT_ERROR === 0){
-                  $('#date').val('');
-                  document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
-                  Swal.fire({
-                    title: '<span style="color:#2D2C2C">Saved!</span>',
-                    showDenyButton: false,
-                    icon: 'success'
-                  })
-                  setTimeout(function () {
-                    window.location.href = "index.html";
-                  }, 1000);
-                  
+                if (COUNT_ERROR === 0) {
+                    $('#date').val('');
+                    document.cookie.split(";").forEach(function (c) {
+                        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                    });
+                    Swal.fire({
+                        title: '<span style="color:#2D2C2C">Saved!</span>',
+                        showDenyButton: false,
+                        icon: 'success'
+                    })
+                    setTimeout(function () {
+                        window.location.href = "index.html";
+                    }, 1000);
+
                     // Needs COUNT_ERROR to check the statement process
                     COUNT_ERROR = 0;
                 }
             } else if (result.isDenied) {
-                  Swal.fire(
+                Swal.fire(
                     '<span style="color:#2D2C2C">Aborted</span>',
                     "Statement don'added",
                     'error'
-                    )
-                  }
-          })        
-  })
+                )
+            }
+        })
+    })
 
     function addStatement(statement) {
-      $.ajax({
-        type: "POST",
-        url: "/statement/addStatement",
-        data: JSON.stringify(statement),
-        contentType: 'application/json',
-        headers: {
-          Authorization: sessionStorage.getItem('accessToken')
-        },
-        success: function (statementReportDTO) {
-        },
-        error: function () {
-          const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1000,
-            timerProgressBar: true,
-          })
-          
-          Toast.fire({
-            icon: 'error',
-            title: '<span style="color:#2D2C2C">Error Add Statement...</span>'
-          })
-          COUNT_ERROR++;
-        }
-      });
+        $.ajax({
+            type: "POST",
+            url: "/statement/addStatement",
+            data: JSON.stringify(statement),
+            contentType: 'application/json',
+            headers: {
+                Authorization: sessionStorage.getItem('accessToken')
+            },
+            success: function (statementReportDTO) {
+            },
+            error: function () {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1000,
+                    timerProgressBar: true,
+                })
+
+                Toast.fire({
+                    icon: 'error',
+                    title: '<span style="color:#2D2C2C">Error Add Statement...</span>'
+                })
+                COUNT_ERROR++;
+            }
+        });
     }
+
     /*--------------------------------------------------------------------------
     * END add Statement
     *--------------------------------------------------------------------------*/
@@ -149,8 +137,10 @@ $(document).ready(function () {
     /*--------------------------------------------------------------------------
     * Reset Cookies
     *--------------------------------------------------------------------------*/
-    $('.resetCookies').on('click', function resetCookies(){
-      document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+    $('.resetCookies').on('click', function resetCookies() {
+        document.cookie.split(";").forEach(function (c) {
+            document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
     })
 });
 

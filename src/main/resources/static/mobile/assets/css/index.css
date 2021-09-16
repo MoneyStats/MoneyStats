@@ -4,25 +4,26 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins');
 
 * {
-  font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 #chart {
-  max-width: 760px;
-  margin: 35px auto;
-  opacity: 0.9;
+    max-width: 760px;
+    margin: 35px auto;
+    opacity: 0.9;
 }
 
 #pieChart {
     max-width: 760px;
     margin: 35px auto;
     opacity: 0.9;
-  }
+}
 
 #timeline-chart .apexcharts-toolbar {
-  opacity: 1;
-  border: 0;
+    opacity: 1;
+    border: 0;
 }
+
 /*----------------------------------------------------------
 * End ApexChart
 *----------------------------------------------------------*/
@@ -31,35 +32,36 @@
 * Icon CSS Category
 *----------------------------------------------------------*/
 .icon {
-  width: 3rem;
-  height: 3rem;
+    width: 3rem;
+    height: 3rem;
 }
 
 .icon i {
-  font-size: 2.25rem;
+    font-size: 2.25rem;
 }
 
 .icon-shape {
-  display: inline-flex;
-  padding: 12px;
-  text-align: center;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
+    display: inline-flex;
+    padding: 12px;
+    text-align: center;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
 }
 
 .icon-shape i {
-  font-size: 1.25rem;
+    font-size: 1.25rem;
 }
+
 /*----------------------------------------------------------
 * END Icon CSS Category
 *----------------------------------------------------------*/
 
 .captionCenter {
-  position: absolute;
-  margin: 0;
-  top: 50%;
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
 }
