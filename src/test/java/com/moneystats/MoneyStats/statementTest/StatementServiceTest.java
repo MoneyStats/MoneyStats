@@ -1,7 +1,6 @@
 package com.moneystats.MoneyStats.statementTest;
 
 import com.moneystats.MoneyStats.commStats.category.ICategoryDAO;
-import com.moneystats.MoneyStats.commStats.statement.DTO.StatementDTO;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementInputDTO;
 import com.moneystats.MoneyStats.commStats.statement.DTO.StatementResponseDTO;
 import com.moneystats.MoneyStats.commStats.statement.IStatementDAO;
