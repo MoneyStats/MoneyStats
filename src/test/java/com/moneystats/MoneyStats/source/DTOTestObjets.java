@@ -101,22 +101,28 @@ public class DTOTestObjets {
           statementList);
   public static WalletInputDTO walletInputDTO = new WalletInputDTO("My-Wallet-Name", 1);
 
+  public static CategoryEntity categoryEntity = new CategoryEntity(1, "my-category-name");
+
+  public static WalletEntity walletEntity = new WalletEntity("my-wallet-name", categoryEntity, authCredentialEntity, null);
+
   public static List<StatementEntity> statementEntityList =
-      List.of(new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(0)),
+      List.of(new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntity),
               new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(1)),
               new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(2)),
               new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(3)));
 
   public static StatementDTO statementDTO =
-      new StatementDTO("my-date", 10.0, authCredentialEntity, walletEntities.get(0));
+      new StatementDTO("01-01-2021", 10.0, authCredentialEntity, walletEntities.get(0));
 
-  public static StatementInputDTO statementInputDTO = new StatementInputDTO(10.0, "my-date", 1L);
+  public static StatementInputDTO statementInputDTO = new StatementInputDTO(10.0, "01-01-2021", 1L);
 
-  public static CategoryEntity categoryEntity = new CategoryEntity(1, "my-category-name");
 
   public static WalletStatementDTO walletStatementDTO = new WalletStatementDTO(walletEntities, statementEntityList);
 
   public static WalletInputIdDTO walletInputIdDTO = new WalletInputIdDTO(1L, "My-Wallet-Name", 1);
 
   public static List<String> listDate = List.of("01-01-2021", "02-01-2021");
+
+  public static StatementEntity statementEntity = new StatementEntity(listDate.get(0), 10.00, authCredentialEntity, walletEntity);
+
 }

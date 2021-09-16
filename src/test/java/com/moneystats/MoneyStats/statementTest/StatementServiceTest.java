@@ -46,12 +46,12 @@ public class StatementServiceTest {
   void test_addStatement_shouldAdd() throws Exception {
     StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    StatementEntity statementEntity = DTOTestObjets.statementEntityList.get(0);
+    StatementEntity statementEntity = DTOTestObjets.statementEntity;
     StatementResponseDTO expected =
         new StatementResponseDTO(SchemaDescription.STATEMENT_ADDED_CORRECT);
     AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
-    Optional<WalletEntity> walletEntity = Optional.ofNullable(DTOTestObjets.walletEntities.get(0));
+    Optional<WalletEntity> walletEntity = Optional.ofNullable(DTOTestObjets.walletEntity);
 
     Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
     Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
@@ -110,9 +110,9 @@ public class StatementServiceTest {
 
     AuthenticationException expectedException =
         new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND);
-    StatementException actualException =
+    AuthenticationException actualException =
         Assertions.assertThrows(
-            StatementException.class, () -> statementService.addStatement(tokenDTO, statementDTO));
+            AuthenticationException.class, () -> statementService.addStatement(tokenDTO, statementDTO));
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
 
@@ -130,9 +130,9 @@ public class StatementServiceTest {
 
     WalletException expectedException =
         new WalletException(WalletException.Code.WALLET_NOT_FOUND);
-    StatementException actualException =
+    WalletException actualException =
         Assertions.assertThrows(
-            StatementException.class, () -> statementService.addStatement(tokenDTO, statementDTO));
+            WalletException.class, () -> statementService.addStatement(tokenDTO, statementDTO));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
@@ -196,9 +196,9 @@ public class StatementServiceTest {
 
     AuthenticationException expectedException =
         new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND);
-    StatementException actualException =
+    AuthenticationException actualException =
         Assertions.assertThrows(
-            StatementException.class, () -> statementService.listOfDate(tokenDTO));
+            AuthenticationException.class, () -> statementService.listOfDate(tokenDTO));
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
 
@@ -216,9 +216,9 @@ public class StatementServiceTest {
 
     WalletException expectedException =
         new WalletException(WalletException.Code.WALLET_NOT_FOUND);
-    StatementException actualException =
+    WalletException actualException =
         Assertions.assertThrows(
-            StatementException.class, () -> statementService.addStatement(tokenDTO, statementDTO));
+            WalletException.class, () -> statementService.addStatement(tokenDTO, statementDTO));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
@@ -285,9 +285,9 @@ public class StatementServiceTest {
 
     AuthenticationException expectedException =
         new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND);
-    StatementException actualException =
+    AuthenticationException actualException =
         Assertions.assertThrows(
-            StatementException.class, () -> statementService.listStatementByDate(tokenDTO, date));
+            AuthenticationException.class, () -> statementService.listStatementByDate(tokenDTO, date));
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
 

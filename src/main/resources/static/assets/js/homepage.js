@@ -84,24 +84,24 @@ $(document).ready(function () {
                 var statementTotPercent = statementReportDTO.statementTotalPercent;
                 if (statementReportDTO.pil > 0) {
                     $(`<span class="text-success mr-2"><i class="fa fa-arrow-up"></i> ${statementTotPercent}%</span>`).appendTo(`.performanceLastStatement`)
-                    $('#pil').text("£ " + statementReportDTO.pil.toFixed(2)).addClass('text-success');
+                    $('#pil').text("€ " + statementReportDTO.pil.toFixed(2)).addClass('text-success');
                 } else if (statementReportDTO.pil === 0) {
                     $(`<span class="text-warning mr-2"><i class="fa fa-arrow-down"></i> ${statementTotPercent}%</span>`).appendTo(`.performanceLastStatement`)
-                    $('#pil').text("£ " + statementReportDTO.pil.toFixed(2)).addClass('text-warning');
+                    $('#pil').text("€ " + statementReportDTO.pil.toFixed(2)).addClass('text-warning');
                 } else {
                     $(`<span class="text-danger mr-2"><i class="fa fa-arrow-down"></i> ${statementTotPercent}%</span>`).appendTo(`.performanceLastStatement`)
-                    $('#pil').text("£ " + statementReportDTO.pil.toFixed(2)).addClass('text-danger');
+                    $('#pil').text("€ " + statementReportDTO.pil.toFixed(2)).addClass('text-danger');
                 }
                 // PIL TOTALE
                 if (statementReportDTO.pilTotal > 0) {
                     $(`<span class="text-success h2 font-weight-bold mb-0"><i class="fa fa-arrow-up"></i> ${statementReportDTO.pilPerformance.toFixed(0)}%</span>`).appendTo(`.performanceFirstDate`)
-                    $('#pilTotale').text("£ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-success');
+                    $('#pilTotale').text("€ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-success');
                 } else if (statementReportDTO.pilTotal === 0) {
                     $(`<span class="text-warning h2 font-weight-bold mb-0"><i class="fa fa-arrow-down"></i> ${statementReportDTO.pilPerformance.toFixed(0)}%</span>`).appendTo(`.performanceFirstDate`)
-                    $('#pilTotale').text("£ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-warning');
+                    $('#pilTotale').text("€ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-warning');
                 } else {
                     $(`<span class="text-danger h2 font-weight-bold mb-0"><i class="fa fa-arrow-down"></i> ${statementReportDTO.pilPerformance.toFixed(0)}%</span>`).appendTo(`.performanceFirstDate`)
-                    $('#pilTotale').text("£ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-danger');
+                    $('#pilTotale').text("€ " + statementReportDTO.pilTotal.toFixed(2)).addClass('text-danger');
                 }
 
                 //-----------------------------------------------------------------------
@@ -316,7 +316,7 @@ $(document).ready(function () {
                         const statTab = $(`#data${i}`)
                         // Fine calcolo
                         for (let y = 0; y < statementTab.length; y++) {
-                            $(`<td>£ ${statementTab[y].value}</td>`).hide().appendTo(statTab).fadeIn(i * 20);
+                            $(`<td>€ ${statementTab[y].value}</td>`).hide().appendTo(statTab).fadeIn(i * 20);
                         }
                     }
                 })
