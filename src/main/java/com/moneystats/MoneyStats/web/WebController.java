@@ -2,6 +2,7 @@ package com.moneystats.MoneyStats.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class WebController {
@@ -10,7 +11,7 @@ public class WebController {
    * If tipe localhost:8080/ it returns the login page
    * @return
    */
-  @RequestMapping("/")
+  @RequestMapping(value = "/", method = RequestMethod.GET)
   public String index() {
     return "loginPage.html";
   }
@@ -19,7 +20,7 @@ public class WebController {
    * On press of logout on the html
    * @return loginPage
    */
-  @RequestMapping("/logout")
+  @RequestMapping(value = "/logout", method = RequestMethod.GET)
   public String logout() {
     return "loginPage.html";
   }
