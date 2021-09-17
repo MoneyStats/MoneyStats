@@ -10,6 +10,7 @@ import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputIdDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletStatementDTO;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
+import com.moneystats.MoneyStats.web.homepage.DTO.HomepageReportDTO;
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.SecurityRoles;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
@@ -136,4 +137,18 @@ public class DTOTestObjets {
           authCredentialEntity.getDateOfBirth(),
           authCredentialEntity.getEmail(),
           authCredentialEntity.getUsername());
+
+  public static HomepageReportDTO homepageReportDTO =
+      new HomepageReportDTO(
+          1000.00D,
+          10D,
+          10D,
+          100D,
+          100D,
+          listDate.get(1),
+          listDate.get(0),
+          listDate.get(0),
+          listDate,
+          List.of(900D, 1000D),
+          List.of(0D, 100D));
 }

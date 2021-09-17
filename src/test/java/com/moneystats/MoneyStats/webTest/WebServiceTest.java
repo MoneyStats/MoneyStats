@@ -25,7 +25,7 @@ public class WebServiceTest {
 
     @Mock private AuthCredentialDAO authCredentialDAO;
     @InjectMocks private WebService webService;
-    @InjectMocks private TokenService service;
+    @Mock private TokenService service;
 
     @Value(value = "${jwt.secret}")
     private String secret;
@@ -43,28 +43,6 @@ public class WebServiceTest {
      * Test to checkLogin User
      * @throws Exception
      */
-    @Test
-    void test_checkUser_shouldReturnCurrentUserLogged() throws WebException {
-        AuthCredentialDTO expected =
-                new AuthCredentialDTO(
-                        TestSchema.FIRSTNAME,
-                        TestSchema.LASTNAME,
-                        TestSchema.DATE_OF_BIRTH,
-                        TestSchema.EMAIL,
-                        TestSchema.ROLE_USER_USERNAME,
-                        SecurityRoles.MONEYSTATS_USER_ROLE);
-
-        TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-
-        AuthCredentialDTO actual = webService.checkUser(tokenDTO);
-        Assertions.assertEquals(expected.getFirstName(), actual.getFirstName());
-        Assertions.assertEquals(expected.getLastName(), actual.getLastName());
-        Assertions.assertEquals(expected.getDateOfBirth(), actual.getDateOfBirth());
-        Assertions.assertEquals(expected.getEmail(), actual.getEmail());
-        Assertions.assertEquals(expected.getUsername(), actual.getUsername());
-        Assertions.assertEquals(expected.getRole(), actual.getRole());
-    }
-
     @Test
     void test_checkUser_shouldThrowsOnLoginRequired() throws Exception {
         TokenDTO token = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
