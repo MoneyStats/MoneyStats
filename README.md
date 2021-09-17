@@ -8,27 +8,28 @@ Subsequently, an ADMIN management screen will be implemented. <br>
 First of all, use MySQL and create the database, then start the project, it will create the tables automatically. <br>
 Go back on MySQL and insert the user_admin, then you are ready to start using MoneyStats, just go on <strong>http://localhost:8080/loginPage.html</strong> and create an new user. <br>
 <hr>
-<strong>MySQL Database MoneyStats script</strong>
+<strong>MySQL Database MoneyStats script for testing</strong>
 <hr>
 
 <pre>
 create database moneystats;
 use moneystats;
 
+[Admin not working]
 insert into users(first_name, last_name, date_of_birth, email, username, password, role) values
 ("Admin", "User", "NaN", "admin@email.com", "admin", "admin", "ADMIN");
 select * from users;
 
 insert into categories(name) values
-("Contanti"),
-("Carte di credito"),
-("Carte di debito"),
-("Mutui"),
-("Conto Corrente"),
-("Risparmi"),
-("Cupon"),
-("Investimenti"),
-("Altro");
+('Cash'),
+('Credit Card'),
+('Debit Card'),
+('Recurrence'),
+('Bank Account'),
+('Save'),
+('Coupon'),
+('Investments'),
+('Other');
 select * from categories;
 
 insert into wallets(name, category_id, user_id) values
