@@ -1,0 +1,709 @@
+{
+	"info": {
+		"_postman_id": "8983cd1e-0057-4ed1-b18c-85994c7926ec",
+		"name": "MoneyStats",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Auth_SignUp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"testing-name\",\r\n    \"lastName\": \"testing-lastName\",\r\n    \"dateOfBirth\": \"01-01-1990\",\r\n    \"email\": \"email@email.com\",\r\n    \"username\": \"testing-username\",\r\n    \"password\": \"testing-password\",\r\n    \"role\": \"USER\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/credential/signup",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"credential",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auth_login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"accessToken\", pm.response.json().accessToken)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/credential/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"credential",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auth_login Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"accessToken\", pm.response.json().accessToken)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{ADMIN_USERNAME}}\",\r\n    \"password\": \"{{ADMIN_PASSWORD}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/credential/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"credential",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auth_Token",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/credential/token",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"credential",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auth_admin",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/credential/admin",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"credential",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Category_list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/category/list",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"category",
+								"list"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Wallet",
+			"item": [
+				{
+					"name": "Wallet_list",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/wallet/list",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"wallet",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Wallet_addWallet",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"testing-wallet-1\",\r\n    \"categoryId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/wallet/addWallet",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"wallet",
+								"addWallet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Wallet_deleteWallet",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/wallet/delete/{{idWallet}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"wallet",
+								"delete",
+								"{{idWallet}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Wallet_listMobile",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/wallet/listMobile",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"wallet",
+								"listMobile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Wallet_editWallet",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"my-edited-wallet\",\r\n    \"idCategory\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/wallet/editWallet",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"wallet",
+								"editWallet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Wallet_getWalletById",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/wallet/getById/{{idWallet}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"wallet",
+								"getById",
+								"{{idWallet}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Statement",
+			"item": [
+				{
+					"name": "Statement_add",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"value\": 100,\r\n    \"date\": \"2021-01-01\",\r\n    \"walletId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/statement/addStatement",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"statement",
+								"addStatement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Statement_listOfDate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/statement/listOfDate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"statement",
+								"listOfDate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Stetement_listStatementByDate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/statement/listStatementDate/{{date}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"statement",
+								"listStatementDate",
+								"{{date}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Web",
+			"item": [
+				{
+					"name": "Homepage",
+					"item": [
+						{
+							"name": "Render_Homepage",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/homepage/getPieGraph/{{date}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"homepage",
+										"getPieGraph",
+										"{{date}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Render_PieGraph_Homepage",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/homepage/reportHomepage",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"homepage",
+										"reportHomepage"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "check_login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/check_login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"check_login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mapping Logout",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/logout",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mapping First Page",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.environment.set(\"accessToken\", pm.response.json().accessToken)"
+				]
+			}
+		}
+	]
+}
