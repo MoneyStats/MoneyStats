@@ -561,3 +561,143 @@ paths:
         - url: http://localhost:8080
     servers:
       - url: http://localhost:8080
+  /logout:
+    get:
+      tags:
+      - Web
+      summary: logout page
+      description: Return loginPage
+      responses:
+        '200':
+          description: LoginPage.html
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /check_login:
+    get:
+      tags:
+      - Web
+      summary: Check User Logged
+      description: Return AuthCredentialDTO
+      responses:
+        '200':
+          description: AuthCredentialDTO
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  password: {}
+                  role:
+                    type: string
+                  dateOfBirth:
+                    type: string
+                  email:
+                    type: string
+                  username:
+                    type: string
+              examples:
+                '0':
+                  value: >-
+                    {"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":null,"role":"USER"}
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /homepage/getPieGraph/01-09-2021:
+    get:
+      tags:
+      - Homepage
+      summary: pieGraphHomepage
+      description: Return pieGraphHomepege
+      responses:
+        '200':
+          description: PieGraphDTO
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  walletList:
+                    type: array
+                    items:
+                      type: string
+                  statementList:
+                    type: array
+                    items:
+                      type: number
+              examples:
+                '0':
+                  value: '{"walletList":["my-edited-wallet"],"statementList":[100.0]}'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /homepage/reportHomepage:
+    get:
+      tags:
+      - Homepage
+      summary: report
+      description: Return Report Homepage
+      responses:
+        '200':
+          description: Report Homepage DTO
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pilTotal:
+                    type: number
+                  listDate:
+                    type: array
+                    items:
+                      type: string
+                  pil:
+                    type: number
+                  beforeLastDate:
+                    type: string
+                  statementList:
+                    type: array
+                    items:
+                      type: number
+                  firstDate:
+                    type: string
+                  pilPerformance:
+                    type: number
+                  statementTotalPercent:
+                    type: string
+                  statementTotal:
+                    type: number
+                  listPil:
+                    type: array
+                    items:
+                      type: number
+                  lastDate:
+                    type: string
+              examples:
+                '0':
+                  value: >-
+                    {"statementTotal":200.0,"statementTotalPercent":"Infinity","pilPerformance":0.0,"pil":200.0,"pilTotal":0.0,"lastDate":"","beforeLastDate":"","firstDate":"01-09-2021","listDate":["01-09-2021"],"statementList":[200.0],"listPil":[0.0]}
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /:
+    get:
+      tags:
+      - Web
+      summary: loginPage
+      description: Return loginPage
+      responses:
+        '200':
+          description: default page
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
