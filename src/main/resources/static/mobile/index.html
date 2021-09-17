@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- ========= Icon ========= -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/img/logos/favicon_trasparent.png">
+    <link rel="icon" type="image/png" href="./assets/img/logos/favicon_trasparent.png" sizes="32x32">
+
+    <!-- ========= CSS Files ========= -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
+
+    <!-- ========= JS Files ========= -->
+    <!-- JQuery -->
+    <script src="./assets/js/lib/jquery-3.6.0.min.js"></script>
+    <!-- SweetAlert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- JS Homepage -->
+    <script src="./assets/js/homepage.js"></script>
+    <!-- JS AddStatement -->
+    <script src="./assets/js/statement.js"></script>
+    <!-- JS Category -->
+    <script src="./assets/js/category.js"></script>
+    <!-- JS Wallet -->
+    <script src="./assets/js/wallet.js"></script>
+
+    <!-- ========= SEZIONE COLORI SEARCH BAR ========= -->
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name='theme-color' content='#080957'>
+    <!-- Windows Phone -->
+    <meta name='msapplication-navbutton-color' content='#080957'>
+    <!-- iOS Safari -->
+    <meta name='apple-mobile-web-app-status-bar-style' content='#080957'>
+
+    <title>MoneyStats - Homepage</title>
+    <meta name="description" content="MoneyStats HTML Mobile Template">
+    <meta name="keywords"
+          content="bootstrap, wallet, banking, fintech mobile template, cordova, phonegap, mobile, html, responsive"/>
+
+    <!-- ========= MANIFEST ========= -->
+    <link rel="manifest" href="../__manifest.json">
+</head>
+
+<body>
+
+<!-- loader -->
+<div id="loader">
+    <img src="./assets/img/logos/favicon_trasparent.png" alt="icon" class="loading-icon">
+</div>
+<!-- * loader -->
+
+<!-- App Header -->
+<div class="appHeader bg-primary text-light">
+    <div class="left">
+        <a href="#" class="headerButton" data-bs-toggle="modal" data-bs-target="#sidebarPanel">
+            <ion-icon name="menu-outline"></ion-icon>
+        </a>
+    </div>
+    <div class="pageTitle" style="padding-top: 15px; padding-bottom: 15px;">
+        <a href="index.html" class="logo"><img src="./assets/img/logos/logo_transparent.png" alt="logo"
+                                               class="logo"></a>
+    </div>
+    <div class="right">
+        <a href="#" class="headerButton">
+            <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="imaged w32">
+            <span class="badge badge-danger"></span>
+        </a>
+    </div>
+</div>
+<!-- * App Header -->
+
+
+<!-- App Capsule -->
+<div id="appCapsule">
+
+    <!-- Wallet Card -->
+    <div class="section wallet-card-section pt-1">
+        <div class="wallet-card">
+            <!-- Balance -->
+            <div class="balance">
+                <div class="left">
+                    <span class="title">Total Balance</span>
+                    <h1 id="reportStatement" class="total">€ 0.00</h1>
+                </div>
+                <div class="right">
+                    <a href="#" class="button" data-bs-toggle="modal" data-bs-target="#addStatement">
+                        <ion-icon name="add-outline"></ion-icon>
+                    </a>
+                </div>
+            </div>
+            <!-- * Balance -->
+            <!-- Wallet Footer -->
+            <div class="wallet-footer">
+                <div class="item">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#addWalletActionSheet">
+                        <div class="icon-wrapper bg-danger">
+                            <span>+</span>
+                            <ion-icon name="card-outline"></ion-icon>
+                        </div>
+                        <strong>Add Wallet</strong>
+                    </a>
+                </div>
+                <div class="item">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#categoryActionSheet">
+                        <div class="icon-wrapper">
+                            <ion-icon name="arrow-down-outline"></ion-icon>
+                        </div>
+                        <strong>Category</strong>
+                    </a>
+                </div>
+                <div class="item">
+                    <a href="app-wallet.html">
+                        <div class="icon-wrapper bg-success">
+                            <ion-icon name="card-outline"></ion-icon>
+                        </div>
+                        <strong>Wallet</strong>
+                    </a>
+                </div>
+                <div class="item">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#dateStatementActionSheet">
+                        <div class="icon-wrapper bg-warning">
+                            <ion-icon name="bar-chart-outline"></ion-icon>
+                        </div>
+                        <strong>Statement on Date</strong>
+                    </a>
+                </div>
+
+            </div>
+            <!-- * Wallet Footer -->
+        </div>
+    </div>
+    <!-- Wallet Card -->
+
+    <!-- Stats -->
+    <div class="section">
+        <div class="row mt-2">
+            <div class="col-6">
+                <div class="stat-box">
+                    <div class="title">PIL Performance</div>
+                    <div class="value performanceFirstDate"></div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="stat-box">
+                    <div class="title sincetotalecapitale">Performance Since</div>
+                    <div class="value performanceLastStatement"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-6">
+                <div class="stat-box">
+                    <div class="title sincetotalecapitale1">PIL Since</div>
+                    <div id="pil" class="value"></div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="stat-box">
+                    <div class="title">PIL Totale</div>
+                    <div id="pilTotale" class="value">€ 0.00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- * Stats -->
+
+    <!-- Graph -->
+    <div class="section mt-4">
+        <div class="section-heading">
+            <h2 class="title" id="year">Graph</h2>
+            <a href="#" class="link" onclick="toastbox('soon')">View All</a>
+        </div>
+        <div id="chart">
+            <div id="timeline-chart"></div>
+        </div>
+        <div id="pieChart">
+            <div id="timeline-chart"></div>
+        </div>
+    </div>
+    <!-- * Graph -->
+
+    <!-- my Wallet -->
+    <div class="section full mt-4">
+        <div class="section-heading padding">
+            <h2 class="title">My Wallet</h2>
+            <a href="app-wallet.html" class="link">View All</a>
+        </div>
+
+        <!-- carousel single -->
+        <div class="carousel-wallet splide">
+            <div class="splide__track">
+                <!-- Wallet List Last Statement -->
+                <ul class="splide__list" id="walletList"></ul>
+                <!-- END Wallet List Last Statement -->
+            </div>
+        </div>
+        <!-- * carousel single -->
+
+    </div>
+    <!-- * my wallet -->
+
+    <!-- Switch Desktop Mode -->
+    <div id="appCapsule" style="padding-top: 20px !important; padding-bottom: 20px !important;">
+
+        <div class="section">
+            <div class="section-title">Desktop Mode</div>
+            <div class="card">
+
+                <ul class="listview image-listview transparent flush">
+                    <li>
+                        <div class="item">
+                            <div class="icon-box bg-primary">
+                                <ion-icon name="desktop-outline"></ion-icon>
+                            </div>
+                            <div class="in">
+                                <div>
+                                    Enable Desktop Mode
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="SwitchDesktop">
+                                    <label class="form-check-label" for="SwitchDesktop"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <!-- END Switch Desktop -->
+
+    <!-- app footer -->
+    <div class="appFooter">
+        <div class="footer-title">
+            Copyright © MoneyStats 2021. All Rights Reserved.
+        </div>
+    </div>
+    <!-- * app footer -->
+
+</div>
+<!-- * App Capsule -->
+
+
+<!-- App Bottom Menu -->
+<div class="appBottomMenu">
+    <a href="index.html" class="item active">
+        <div class="col">
+            <ion-icon name="pie-chart-outline"></ion-icon>
+            <strong>Overview</strong>
+        </div>
+    </a>
+    <a href="#" class="item" onclick="toastbox('soon')">
+        <div class="col">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <strong>Pages</strong>
+        </div>
+    </a>
+    <a href="#" class="item" data-bs-toggle="modal" data-bs-target="#infoActionSheet">
+        <div class="col">
+            <div class="action-button large">
+                <ion-icon name="arrow-up-outline"></ion-icon>
+            </div>
+        </div>
+    </a>
+    <a href="app-wallet.html" class="item">
+        <div class="col">
+            <ion-icon name="card-outline"></ion-icon>
+            <strong>My Wallet</strong>
+        </div>
+    </a>
+    <a href="#" class="item" onclick="toastbox('soon')">
+        <div class="col">
+            <ion-icon name="settings-outline"></ion-icon>
+            <strong>Settings</strong>
+        </div>
+    </a>
+</div>
+<!-- * App Bottom Menu -->
+
+<!-- App Sidebar -->
+<div class="modal fade panelbox panelbox-left" id="sidebarPanel" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <!-- profile box -->
+                <div class="profileBox pt-2 pb-2">
+                    <div class="image-wrapper">
+                        <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="imaged  w36">
+                    </div>
+                    <div class="in">
+                        <strong id="nameMenu">Name Surname</strong>
+                        <div id="usernameMenu" class="text-muted">Username</div>
+                    </div>
+                    <a href="#" class="btn btn-link btn-icon sidebar-close" data-bs-dismiss="modal">
+                        <ion-icon name="close-outline"></ion-icon>
+                    </a>
+                </div>
+                <!-- * profile box -->
+                <!-- balance -->
+                <div class="sidebar-balance">
+                    <div class="listview-title">Balance</div>
+                    <div class="in">
+                        <h1 id="reportStatement1" class="amount">€ 0.00</h1>
+                    </div>
+                </div>
+                <!-- * balance -->
+
+                <!-- action group -->
+                <div class="action-group">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#addStatement" class="action-button">
+                        <div class="in">
+                            <div class="iconbox">
+                                <ion-icon name="add-outline"></ion-icon>
+                            </div>
+                            Add Statement
+                        </div>
+                    </a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#addWalletActionSheet" class="action-button">
+                        <div class="in">
+                            <div class="iconbox">
+                                <ion-icon name="add-outline"></ion-icon>
+                            </div>
+                            Add Wallet
+                        </div>
+                    </a>
+                    <a href="#" class="action-button" data-bs-toggle="modal" data-bs-target="#dateStatementActionSheet">
+                        <div class="in">
+                            <div class="iconbox">
+                                <ion-icon name="swap-vertical"></ion-icon>
+                            </div>
+                            Statement on Date
+                        </div>
+                    </a>
+                    <a href="app-wallet.html" class="action-button">
+                        <div class="in">
+                            <div class="iconbox">
+                                <ion-icon name="card-outline"></ion-icon>
+                            </div>
+                            My Wallet
+                        </div>
+                    </a>
+                </div>
+                <!-- * action group -->
+
+                <!-- menu -->
+                <div class="listview-title mt-1">Menu</div>
+                <ul class="listview flush transparent no-line image-listview">
+                    <li>
+                        <a href="index.html" class="item">
+                            <div class="icon-box bg-primary">
+                                <ion-icon name="pie-chart-outline"></ion-icon>
+                            </div>
+                            <div class="in">
+                                Overview
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="app-wallet.html" class="item">
+                            <div class="icon-box bg-primary">
+                                <ion-icon name="card-outline"></ion-icon>
+                            </div>
+                            <div class="in">
+                                My Wallet
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- * menu -->
+
+                <!-- others -->
+                <div class="listview-title mt-1">Others</div>
+                <ul class="listview flush transparent no-line image-listview">
+                    <li>
+                        <a href="#" class="item" onclick="toastbox('soon')">
+                            <div class="icon-box bg-primary">
+                                <ion-icon name="settings-outline"></ion-icon>
+                            </div>
+                            <div class="in">
+                                Settings
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="item" onclick="toastbox('soon')">
+                            <div class="icon-box bg-primary">
+                                <ion-icon name="chatbubble-outline"></ion-icon>
+                            </div>
+                            <div class="in">
+                                Support
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/logout" id="logout" class="item">
+                            <div class="icon-box bg-primary">
+                                <ion-icon name="log-out-outline"></ion-icon>
+                            </div>
+                            <div class="in">
+                                Log out
+                            </div>
+                        </a>
+                    </li>
+
+
+                </ul>
+                <!-- * others -->
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * App Sidebar -->
+
+
+<!-- iOS Add to Home Action Sheet -->
+<div class="modal inset fade action-sheet ios-add-to-home" id="ios-add-to-home-screen" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add to Home Screen</h5>
+                <a href="#" class="close-button" data-bs-dismiss="modal">
+                    <ion-icon name="close"></ion-icon>
+                </a>
+            </div>
+            <div class="modal-body">
+                <div class="action-sheet-content text-center">
+                    <div class="mb-1"><img src="./assets/img/logos/favicon_trasparent.png" alt="image"
+                                           class="imaged w64 mb-2">
+                    </div>
+                    <div>
+                        Install <strong>MoneyStats</strong> on your iPhone's home screen.
+                    </div>
+                    <div>
+                        Tap
+                        <ion-icon name="share-outline"></ion-icon>
+                        and Add to homescreen.
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-primary btn-block" data-bs-dismiss="modal">CLOSE</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * iOS Add to Home Action Sheet -->
+
+
+<!-- Android Add to Home Action Sheet -->
+<div class="modal inset fade action-sheet android-add-to-home" id="android-add-to-home-screen" tabindex="-1"
+     role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add to Home Screen</h5>
+                <a href="#" class="close-button" data-bs-dismiss="modal">
+                    <ion-icon name="close"></ion-icon>
+                </a>
+            </div>
+            <div class="modal-body">
+                <div class="action-sheet-content text-center">
+                    <div class="mb-1">
+                        <img src="./assets/img/logos/favicon_trasparent.png" alt="image" class="imaged w64 mb-2">
+                    </div>
+                    <div>
+                        Install <strong>MoneyStats</strong> on your Android's home screen.
+                    </div>
+                    <div>
+                        Tap
+                        <ion-icon name="ellipsis-vertical"></ion-icon>
+                        and Add to homescreen.
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-primary btn-block" data-bs-dismiss="modal">CLOSE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * Android Add to Home Action Sheet -->
+
+<!-- AddStatement Action Modal -->
+<div class="modal fade modalbox" id="addStatement" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Statement</h5>
+                <a href="javascript:;" data-bs-dismiss="modal">Close</a>
+            </div>
+            <div class="modal-body">
+                <div class="section mt-2">
+                    <div class="section-title">Wallet</div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="listWalletStat"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="section mt-2">
+                    <div class="section-title">Date</div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group basic animated">
+                                <div class="input-group input-wrapper">
+                                    <label class="label" for="date">Date</label>
+                                    <input type="date" class="form-control" id="date" placeholder="Select Date">
+                                    <i class="clear-input">
+                                        <ion-icon name="close-circle"></ion-icon>
+                                    </i>
+                                </div>
+                                <div class="input-info">Please enter a date and then confirm</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-sheet-content">
+                    <div class="form-group basic">
+                        <button id="aggiungiStatement" type="button" class="btn btn-primary btn-block btn-lg"
+                                data-bs-dismiss="modal">Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * AddStatement Action Sheet -->
+
+<!-- Add Wallet Action Sheet -->
+<div class="modal fade action-sheet" id="addWalletActionSheet" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Wallet</h5>
+            </div>
+            <div class="modal-body">
+                <div class="section mt-2">
+                    <div class="section-title">Wallet Name</div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group basic animated">
+                                <div class="input-group input-wrapper">
+                                    <label class="label" for="walletName">Wallet Name</label>
+                                    <input type="text" class="form-control" id="walletName" placeholder="Wallet Name">
+                                    <i class="clear-input">
+                                        <ion-icon name="close-circle"></ion-icon>
+                                    </i>
+                                </div>
+                                <div class="input-info">Please enter name for the new wallet</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="section mt-2">
+                    <div class="section-title">Category</div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group basic animated">
+                                <div class="input-group input-wrapper">
+                                    <label class="label" for="catOptionhtml">Category</label>
+                                    <select class="form-control custom-select" id="catOptionhtml">
+                                    </select>
+                                </div>
+                                <div class="input-info">Please select a category and then confirm</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-sheet-content">
+                    <form>
+                        <div class="form-group basic">
+                            <button id="aggiungiWallet" type="button" class="btn btn-primary btn-block btn-lg"
+                                    data-bs-dismiss="modal">Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * Send Action Sheet -->
+
+<!-- Category list Action Sheet -->
+<div class="modal fade modalbox" id="categoryActionSheet" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Category</h5>
+                <a href="javascript:;" data-bs-dismiss="modal">Close</a>
+            </div>
+            <div class="modal-body">
+                <div class="section mt-2 mb-2">
+                    <div class="card">
+
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <tbody id="listCategory"></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * Category list Action Sheet -->
+
+<!-- Date list Action Sheet -->
+<div class="modal fade modalbox" id="dateStatementActionSheet" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Statement By Date</h5>
+                <a href="javascript:;" data-bs-dismiss="modal">Close</a>
+            </div>
+            <div class="modal-body">
+                <div class="listview-title mt-2">Please Select Date</div>
+                <ul class="listview link-listview inset dataConfirm" id="dateOption">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * Category list Action Sheet -->
+
+<!-- MoneyStats Info Action Sheet -->
+<div class="modal fade modalbox" id="infoActionSheet" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">MoneyStats Info</h5>
+                <a href="javascript:;" data-bs-dismiss="modal">Close</a>
+            </div>
+            <div class="modal-body">
+                <div class="section mt-2 mb-2">
+                    <div class="captionCenter">
+                        <div class="card" style="max-width: 400px;">
+                            <img src="./assets/img/logos/logo_transparent.png" class="responsive"
+                                 alt="logo_transparent">
+                            <hr>
+                            <p class="text-center">MoneyStats V1.0.0</p>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#changelogActionSheet" class="btn btn-text-primary rounded shadowed me-1 mb-1">Changelog</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * MoneyStats Info Action Sheet -->
+
+<!-- MoneyStats Changelog Action Sheet -->
+<div class="modal fade modalbox" id="changelogActionSheet" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">MoneyStats V1.0.0</h5>
+                <a href="javascript:;" data-bs-dismiss="modal">Close</a>
+            </div>
+            <div class="modal-body">
+                <div class="section mt-2 mb-2">
+                    <div class="section-title">Changelog</div>
+                    <div class="accordion" id="accordionChangelog">
+                        <!-- Accordion -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#v1">
+                                    19-09-2021 - MoneyStats V1.0.0
+                                </button>
+                            </h2>
+                            <div id="v1" class="accordion-collapse collapse" data-bs-parent="#accordionChangelog">
+                                <div class="accordion-body">
+                                    <strong class="fs-3">V1.0.0</strong><br>
+                                          - First Release.
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Accordion -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * MoneyStats Info Action Sheet -->
+
+<!-- toast danger -->
+<div id="soon" class="toast-box toast-bottom bg-danger">
+    <div class="in">
+        <div class="text">
+            Available Soon..
+        </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-text-light close-button">OK</button>
+</div>
+<!-- * toast danger -->
+
+
+<!-- ========= JS Files =========  -->
+<!-- Bootstrap -->
+<script src="./assets/js/lib/bootstrap.bundle.min.js"></script>
+<!-- Ionicons -->
+<script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
+<!-- Splide -->
+<script src="./assets/js/plugin/splide/splide.min.js"></script>
+<!-- Chart -->
+<script src="./assets/js/plugin/apexcharts.min.js"></script>
+<!-- Base Js File -->
+<script src="./assets/js/plugin/base.js"></script>
+
+<script>
+    // Add to Home with 2 seconds delay.
+    AddtoHome("2000", "once");
+</script>
+
+</body>
+
+</html>

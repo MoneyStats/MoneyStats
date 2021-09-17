@@ -17,8 +17,8 @@ public class StatementException extends Exception {
 
   public static enum Code {
     INVALID_STATEMENT_DTO,
-    USER_NOT_FOUND,
-    WALLET_NOT_FOUND,
-    STATEMENT_NOT_FOUND
+    INVALID_STATEMENT_INPUT_DTO,
+    STATEMENT_NOT_FOUND,
+    LIST_STATEMENT_DATE_NOT_FOUND
   }
 }

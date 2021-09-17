@@ -1,8 +1,7 @@
 package com.moneystats.authentication.DTO;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 public class AuthCredentialDTO implements Serializable {
 

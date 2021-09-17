@@ -1,19 +1,17 @@
 package com.moneystats.authentication;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
 import com.moneystats.authentication.DTO.AuthResponseDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.net.UnknownHostException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/credential")
@@ -29,7 +27,7 @@ public class AuthCredentialController {
 
   @PostMapping("/login")
   public TokenDTO loginUser(@RequestBody AuthCredentialInputDTO userCredential)
-      throws AuthenticationException {
+          throws AuthenticationException, UnknownHostException {
     return service.login(userCredential);
   }
 

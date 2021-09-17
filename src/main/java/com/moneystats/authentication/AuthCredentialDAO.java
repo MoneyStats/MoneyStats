@@ -1,21 +1,16 @@
 package com.moneystats.authentication;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.moneystats.authentication.DTO.AuthCredentialDTO;
+import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
+import com.moneystats.authentication.entity.AuthCredentialEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import com.moneystats.authentication.DTO.AuthCredentialDTO;
-import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
-import com.moneystats.authentication.entity.AuthCredentialEntity;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class AuthCredentialDAO {

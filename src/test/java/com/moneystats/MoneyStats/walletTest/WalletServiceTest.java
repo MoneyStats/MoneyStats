@@ -1,10 +1,12 @@
 package com.moneystats.MoneyStats.walletTest;
 
+import com.moneystats.MoneyStats.commStats.category.CategoryException;
 import com.moneystats.MoneyStats.commStats.category.ICategoryDAO;
+import com.moneystats.MoneyStats.commStats.category.entity.CategoryEntity;
 import com.moneystats.MoneyStats.commStats.statement.IStatementDAO;
+import com.moneystats.MoneyStats.commStats.statement.StatementException;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
-import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
-import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletResponseDTO;
+import com.moneystats.MoneyStats.commStats.wallet.DTO.*;
 import com.moneystats.MoneyStats.commStats.wallet.IWalletDAO;
 import com.moneystats.MoneyStats.commStats.wallet.WalletException;
 import com.moneystats.MoneyStats.commStats.wallet.WalletService;
@@ -13,21 +15,17 @@ import com.moneystats.MoneyStats.source.DTOTestObjets;
 import com.moneystats.authentication.AuthCredentialDAO;
 import com.moneystats.authentication.AuthenticationException;
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
-import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.authentication.TokenService;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 import com.moneystats.authentication.utils.TestSchema;
 import com.moneystats.generic.SchemaDescription;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,39 +40,33 @@ public class WalletServiceTest {
   @Mock private AuthCredentialDAO authCredentialDAO;
   @InjectMocks private WalletService walletService;
 
-  @Value(value = "${jwt.secret}")
-  private String secret;
-
-  @Value(value = "${jwt.time}")
-  private String expirationTime;
-
   @Mock private TokenService tokenService;
 
-  @BeforeEach
-  void checkField() {
-    ReflectionTestUtils.setField(tokenService, "expirationTime", expirationTime);
-    ReflectionTestUtils.setField(tokenService, "secret", secret);
-  }
-
+  /**
+   * Test walletList
+   *
+   * @throws Exception
+   */
   @Test
   void test_walletDTOlist_shouldReturnTheList() throws Exception {
     List<WalletDTO> walletDTO = DTOTestObjets.walletDTOS;
     List<WalletEntity> walletEntities = DTOTestObjets.walletEntities;
     AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
-    AuthCredentialInputDTO authCredentialInputDTO =
-        new AuthCredentialInputDTO(authCredentialDTO.getUsername(), authCredentialDTO.getRole());
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
 
-    Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
-    Mockito.when(authCredentialDAO.getCredential(authCredentialInputDTO))
-        .thenReturn(authCredentialEntity);
-    Mockito.when(walletDAO.findAllByUserId(authCredentialEntity.getId()))
-        .thenReturn(walletEntities);
+    Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
+    Mockito.when(walletDAO.findAllByUserId(Mockito.any())).thenReturn(walletEntities);
 
-    List<WalletDTO> actual = walletService.getAll(tokenDTO);
+    List<WalletEntity> actual = walletService.getAll(tokenDTO);
     for (int i = 0; i < actual.size(); i++) {
-      Assertions.assertEquals(walletDTO.get(i), actual.get(i));
+      Assertions.assertEquals(walletDTO.get(i).getName(), actual.get(i).getName());
+      Assertions.assertEquals(walletDTO.get(i).getUser(), actual.get(i).getUser());
+      Assertions.assertEquals(
+          walletDTO.get(i).getCategoryEntity().getId(), actual.get(i).getCategory().getId());
+      Assertions.assertEquals(
+          walletDTO.get(i).getCategoryEntity().getName(), actual.get(i).getCategory().getName());
     }
   }
 
@@ -95,10 +87,10 @@ public class WalletServiceTest {
     TokenDTO token = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
 
     Mockito.when(tokenService.parseToken(token))
-        .thenThrow(new AuthenticationException(AuthenticationException.Code.UNAUTHORIZED));
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
 
     AuthenticationException expectedException =
-        new AuthenticationException(AuthenticationException.Code.UNAUTHORIZED);
+        new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
     AuthenticationException actualException =
         Assertions.assertThrows(
             AuthenticationException.class, () -> tokenService.parseToken(token));
@@ -107,27 +99,15 @@ public class WalletServiceTest {
   }
 
   @Test
-  void test_walletDTOList_shouldThrowsOnEmptyTokenDTO() throws Exception {
-    TokenDTO token = new TokenDTO("");
-
-    AuthenticationException expectedException =
-        new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
-    AuthenticationException actualException =
-        Assertions.assertThrows(AuthenticationException.class, () -> walletService.getAll(token));
-
-    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
-  }
-
-  @Test
   void test_walletDTOList_shouldThrowsOnWalletNotFound() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
     List<WalletEntity> list = new ArrayList<>();
-    Long idUser = 1L;
-
-    Mockito.when(walletDAO.findAllByUserId(idUser)).thenReturn(list);
 
     Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
+    Mockito.when(walletDAO.findAllByUserId(Mockito.any())).thenReturn(list);
 
     WalletException expectedException = new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     WalletException actualException =
@@ -136,52 +116,73 @@ public class WalletServiceTest {
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
 
+  /**
+   * Test addWallet
+   *
+   * @throws Exception
+   */
   @Test
   void test_addWallet_shouldAddCorrectly() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    WalletResponseDTO expected = new WalletResponseDTO(SchemaDescription.USER_ADDED_CORRECT);
-    WalletDTO walletDTO = DTOTestObjets.walletDTO;
+    WalletResponseDTO expected = new WalletResponseDTO(SchemaDescription.WALLET_ADDED_CORRECT);
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
+    Optional<CategoryEntity> categoryEntity = Optional.ofNullable(DTOTestObjets.categoryEntity);
+    WalletInputDTO walletDTO = createWalletInputDTO();
     WalletEntity walletEntity = DTOTestObjets.walletEntities.get(0);
-    Integer idCategory = 1;
 
+    Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
+    Mockito.when(categoryDAO.findById(Mockito.any())).thenReturn(categoryEntity);
     Mockito.when(walletDAO.save(walletEntity)).thenReturn(walletEntity);
 
-    Mockito.when(walletService.addWalletEntity(tokenDTO, idCategory, walletDTO))
-        .thenReturn(expected);
-
-    WalletResponseDTO actual = walletService.addWalletEntity(tokenDTO, idCategory, walletDTO);
+    WalletResponseDTO actual = walletService.addWalletEntity(tokenDTO, walletDTO);
     Assertions.assertEquals(expected.getMessage(), actual.getMessage());
   }
 
   @Test
   void test_addWallet_shouldThrowsOnInvalidWallet() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    WalletDTO walletDTO = DTOTestObjets.walletDTO;
+    WalletInputDTO walletDTO = DTOTestObjets.walletInputDTO;
     walletDTO.setName(null);
-    Integer idCategory = 1;
 
     WalletException expectedException =
-        new WalletException(WalletException.Code.INVALID_WALLET_DTO);
+        new WalletException(WalletException.Code.INVALID_WALLET_INPUT_DTO);
     WalletException actualException =
         Assertions.assertThrows(
-            WalletException.class,
-            () -> walletService.addWalletEntity(tokenDTO, idCategory, walletDTO));
+            WalletException.class, () -> walletService.addWalletEntity(tokenDTO, walletDTO));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
 
   @Test
-  void test_addWallet_shouldThrowsTokenDTORequired() throws Exception {
+  void test_addWallet_shouldThrowsOnEmptyTokenDTO() throws Exception {
     TokenDTO token = new TokenDTO("");
-    WalletDTO walletDTO = DTOTestObjets.walletDTO;
-    Integer idCategory = 1;
+
+    Mockito.when(tokenService.parseToken(token))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED));
 
     AuthenticationException expectedException =
         new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
     AuthenticationException actualException =
         Assertions.assertThrows(
-            AuthenticationException.class,
-            () -> walletService.addWalletEntity(token, idCategory, walletDTO));
+            AuthenticationException.class, () -> tokenService.parseToken(token));
+
+    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
+  }
+
+  @Test
+  void test_addWallet_shouldThrowsOnInvalidTokenDTO() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+
+    Mockito.when(tokenService.parseToken(tokenDTO))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+
+    AuthenticationException expectedException =
+        new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
+    AuthenticationException actualException =
+        Assertions.assertThrows(
+            AuthenticationException.class, () -> tokenService.parseToken(tokenDTO));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
@@ -189,23 +190,27 @@ public class WalletServiceTest {
   @Test
   void test_addWallet_shouldThrowsOnCategoryNotFound() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    WalletDTO walletDTO = DTOTestObjets.walletDTO;
-    Integer idCategory = 1;
+    WalletInputDTO walletDTO = createWalletInputDTO();
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
 
-    Mockito.when(authCredentialDAO.getCredential(TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER))
-        .thenReturn(TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER);
-    Mockito.when(categoryDAO.findById(idCategory)).thenReturn(null);
+    Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
 
-    WalletException expectedException =
-        new WalletException(WalletException.Code.CATEGORY_NOT_FOUND);
-    WalletException actualException =
+    CategoryException expectedException =
+        new CategoryException(CategoryException.Code.CATEGORY_NOT_FOUND);
+    CategoryException actualException =
         Assertions.assertThrows(
-            WalletException.class,
-            () -> walletService.addWalletEntity(tokenDTO, idCategory, walletDTO));
+            CategoryException.class, () -> walletService.addWalletEntity(tokenDTO, walletDTO));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
 
+  /**
+   * Test deleteWallet
+   *
+   * @throws Exception
+   */
   @Test
   void test_deleteWallet_shouldDeleteWallet() throws Exception {
     WalletResponseDTO expected = new WalletResponseDTO(SchemaDescription.WALLET_DELETE_CORRECT);
@@ -235,18 +240,226 @@ public class WalletServiceTest {
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
 
+  private WalletInputDTO createWalletInputDTO() {
+    return new WalletInputDTO("my-wallet-name", 1);
+  }
+
+  /**
+   * Test myWalletMobile
+   *
+   * @throws Exception
+   */
   @Test
-  void test_deleteWallet_shouldThrowsOnStatementNotFound() throws Exception {
-    Long idWallet = 1L;
-    Optional<WalletEntity> walletEntity = Optional.ofNullable(DTOTestObjets.walletEntities.get(0));
+  void test_myWalletMobile_shouldReturnCorrectValues() throws Exception {
+    WalletStatementDTO walletStatementDTOExpected = DTOTestObjets.walletStatementDTO;
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
+    List<WalletEntity> walletEntity = DTOTestObjets.walletEntities;
+    List<String> listDate = DTOTestObjets.listDate;
+    List<StatementEntity> statementEntityList = DTOTestObjets.statementEntityList;
 
-    Mockito.when(walletDAO.findById(idWallet)).thenReturn(walletEntity);
+    Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
+    Mockito.when(statementDAO.selectdistinctstatement(Mockito.any())).thenReturn(listDate);
+    Mockito.when(walletDAO.findAllByUserId(Mockito.any())).thenReturn(walletEntity);
+    Mockito.when(statementDAO.findAllByUserIdAndDateOrderByWalletId(Mockito.any(), Mockito.any()))
+        .thenReturn(statementEntityList);
 
-    WalletException expectedException =
-        new WalletException(WalletException.Code.STATEMENT_NOT_FOUND);
+    WalletStatementDTO actual = walletService.myWalletMobile(tokenDTO);
+    Assertions.assertEquals(
+        walletStatementDTOExpected.getStatementEntities(), actual.getStatementEntities());
+    Assertions.assertEquals(
+        walletStatementDTOExpected.getWalletEntities(), actual.getWalletEntities());
+  }
+
+  @Test
+  void test_myWalletMobile_shouldThrowsOnInvalidToken() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+
+    Mockito.when(tokenService.parseToken(Mockito.any()))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+    AuthenticationException expectedException =
+        new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
+    AuthenticationException actualException =
+        Assertions.assertThrows(
+            AuthenticationException.class, () -> tokenService.parseToken(tokenDTO));
+
+    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
+  }
+
+  @Test
+  void test_myWalletMobile_shouldThrowsOnTokenRequired() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+
+    Mockito.when(tokenService.parseToken(Mockito.any()))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED));
+    AuthenticationException expectedException =
+        new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
+    AuthenticationException actualException =
+        Assertions.assertThrows(
+            AuthenticationException.class, () -> tokenService.parseToken(tokenDTO));
+
+    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
+  }
+
+  @Test
+  void test_myWalletMobile_shouldThrowsOnListStatementNotFound() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
+
+    Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
+
+    StatementException expectedException =
+        new StatementException(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND);
+    StatementException actualException =
+        Assertions.assertThrows(
+            StatementException.class, () -> walletService.myWalletMobile(tokenDTO));
+
+    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
+  }
+
+  @Test
+  void test_myWalletMobile_shouldThrowOnWalletNotFound() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
+    List<String> listDate = DTOTestObjets.listDate;
+
+    Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
+    Mockito.when(statementDAO.selectdistinctstatement(Mockito.any())).thenReturn(listDate);
+
+    WalletException expectedException = new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     WalletException actualException =
         Assertions.assertThrows(
-            WalletException.class, () -> walletService.deleteWalletEntity(idWallet));
+            WalletException.class, () -> walletService.myWalletMobile(tokenDTO));
+
+    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
+  }
+
+  @Test
+  void test_myWalletMobile_shouldThrowsOnStatementNotFound() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
+    List<WalletEntity> walletEntity = DTOTestObjets.walletEntities;
+    List<String> listDate = DTOTestObjets.listDate;
+
+    Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
+    Mockito.when(statementDAO.selectdistinctstatement(Mockito.any())).thenReturn(listDate);
+    Mockito.when(walletDAO.findAllByUserId(Mockito.any())).thenReturn(walletEntity);
+
+    StatementException expectedException =
+        new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
+    StatementException actualException =
+        Assertions.assertThrows(
+            StatementException.class, () -> walletService.myWalletMobile(tokenDTO));
+
+    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
+  }
+
+  /**
+   * Test EditWallet
+   * @throws Exception
+   */
+  @Test
+  void test_editWallet_shouldReturnCorrectResponse() throws Exception {
+    WalletResponseDTO expected = new WalletResponseDTO(SchemaDescription.WALLET_EDIT_CORRECT);
+    WalletInputIdDTO walletInputIdDTO = DTOTestObjets.walletInputIdDTO;
+    CategoryEntity categoryEntity = DTOTestObjets.categoryEntity;
+    AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+
+    Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
+    Mockito.when(categoryDAO.findById(walletInputIdDTO.getIdCategory()))
+        .thenReturn(Optional.ofNullable(categoryEntity));
+
+    WalletResponseDTO actual = walletService.editWallet(walletInputIdDTO, tokenDTO);
+    Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  @Test
+  void test_editWallet_shouldThrowsOnInvalidToken() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+
+    Mockito.when(tokenService.parseToken(Mockito.any())).thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+
+    AuthenticationException expectedException =
+            new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
+    AuthenticationException actualException =
+            Assertions.assertThrows(
+                    AuthenticationException.class, () -> tokenService.parseToken(tokenDTO));
+
+    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
+  }
+
+  @Test
+  void test_editWallet_shouldThrowsOnRequiredToken() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+
+    Mockito.when(tokenService.parseToken(Mockito.any())).thenThrow(new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED));
+
+    AuthenticationException expectedException =
+            new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
+    AuthenticationException actualException =
+            Assertions.assertThrows(
+                    AuthenticationException.class, () -> tokenService.parseToken(tokenDTO));
+
+    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
+  }
+
+  @Test
+  void test_editWallet_shouldThrowsOnCategoryNotFound() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    WalletInputIdDTO walletInputIdDTO = DTOTestObjets.walletInputIdDTO;
+
+    Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
+    Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
+
+    CategoryException expectedException =
+            new CategoryException(CategoryException.Code.CATEGORY_NOT_FOUND);
+    CategoryException actualException =
+            Assertions.assertThrows(
+                    CategoryException.class, () -> walletService.editWallet(walletInputIdDTO, tokenDTO));
+
+    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
+  }
+
+  /**
+   * Test WalletById
+   * @throws Exception
+   */
+  @Test
+  void test_WalletById_shouldReturnWallet() throws Exception {
+    Long idWallet = 1L;
+    WalletEntity expected = DTOTestObjets.walletEntities.get(0);
+
+    Mockito.when(walletDAO.findById(Mockito.any())).thenReturn(Optional.ofNullable(expected));
+
+    WalletDTO actual = walletService.walletById(idWallet);
+
+    Assertions.assertEquals(expected.getName(), actual.getName());
+    Assertions.assertEquals(expected.getCategory(), actual.getCategoryEntity());
+    Assertions.assertEquals(expected.getUser(), actual.getUser());
+  }
+
+  @Test
+  void test_WalletById_shouldThrowsOnWalletNotFound() throws Exception {
+    Long idWallet = 1L;
+
+    WalletException expectedException =
+            new WalletException(WalletException.Code.WALLET_NOT_FOUND);
+    WalletException actualException =
+            Assertions.assertThrows(
+                    WalletException.class, () -> walletService.walletById(idWallet));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }

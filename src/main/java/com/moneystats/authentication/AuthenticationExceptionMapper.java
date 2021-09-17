@@ -1,12 +1,11 @@
 package com.moneystats.authentication;
 
+import com.moneystats.authentication.AuthenticationException.Code;
+import com.moneystats.authentication.DTO.AuthErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import com.moneystats.authentication.AuthenticationException.Code;
-import com.moneystats.authentication.DTO.AuthErrorResponseDTO;
 
 @ControllerAdvice
 public class AuthenticationExceptionMapper {
@@ -43,6 +42,9 @@ public class AuthenticationExceptionMapper {
       case USER_PRESENT:
         error.setMessage(Code.USER_PRESENT.toString());
         return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.BAD_REQUEST);
+      case USER_NOT_FOUND:
+        error.setMessage(Code.USER_NOT_FOUND.toString());
+        return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.NOT_FOUND);
       default:
         error.setMessage("INTERNAL_SERVER_ERROR");
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
