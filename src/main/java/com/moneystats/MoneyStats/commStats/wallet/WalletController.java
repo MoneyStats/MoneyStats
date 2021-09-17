@@ -40,7 +40,7 @@ public class WalletController {
   @PostMapping("/addWallet")
   public WalletResponseDTO addWallet(
       @RequestHeader(value = "Authorization") String jwt, @RequestBody WalletInputDTO walletDTO)
-          throws WalletException, AuthenticationException, CategoryException {
+      throws WalletException, AuthenticationException, CategoryException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return walletService.addWalletEntity(tokenDTO, walletDTO);
   }
@@ -57,6 +57,7 @@ public class WalletController {
 
   /**
    * List used on mobile device
+   *
    * @param jwt for auth
    * @return List of wallet and List of Statement
    * @throws WalletException
@@ -72,6 +73,7 @@ public class WalletController {
 
   /**
    * Wallet To Be Edited
+   *
    * @param jwt for auth
    * @param walletInputIdDTO wallet in input
    * @return A response of status
@@ -83,13 +85,14 @@ public class WalletController {
   public WalletResponseDTO editWallet(
       @RequestHeader(value = "Authorization") String jwt,
       @RequestBody WalletInputIdDTO walletInputIdDTO)
-          throws WalletException, AuthenticationException, CategoryException {
+      throws WalletException, AuthenticationException, CategoryException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return walletService.editWallet(walletInputIdDTO, tokenDTO);
   }
 
   /**
    * Get single wallet by id
+   *
    * @param idWallet
    * @return WalletDTO
    * @throws WalletException

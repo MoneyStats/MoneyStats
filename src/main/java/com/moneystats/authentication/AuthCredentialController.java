@@ -7,9 +7,6 @@ import com.moneystats.authentication.DTO.TokenDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.net.UnknownHostException;
 import java.util.List;
 
@@ -27,7 +24,7 @@ public class AuthCredentialController {
 
   @PostMapping("/login")
   public TokenDTO loginUser(@RequestBody AuthCredentialInputDTO userCredential)
-          throws AuthenticationException, UnknownHostException {
+      throws AuthenticationException, UnknownHostException {
     return service.login(userCredential);
   }
 

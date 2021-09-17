@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moneystats.MoneyStats.commStats.category.CategoryController;
 import com.moneystats.MoneyStats.commStats.category.CategoryException;
 import com.moneystats.MoneyStats.commStats.category.CategoryService;
-import com.moneystats.MoneyStats.commStats.category.DTO.CategoryDTO;
 import com.moneystats.MoneyStats.commStats.category.entity.CategoryEntity;
 import com.moneystats.MoneyStats.source.DTOTestObjets;
 import org.junit.jupiter.api.Test;

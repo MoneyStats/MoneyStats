@@ -42,13 +42,12 @@ public class StatementService {
    * @throws AuthenticationException
    */
   public StatementResponseDTO addStatement(TokenDTO tokenDTO, StatementInputDTO statementInputDTO)
-          throws StatementException, AuthenticationException, WalletException {
+      throws StatementException, AuthenticationException, WalletException {
     StatementValidator.validateStatementInputDTO(statementInputDTO);
     StatementDTO statementDTO = new StatementDTO();
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
 
-    WalletEntity walletEntity =
-        walletDAO.findById(statementInputDTO.getWalletId()).orElse(null);
+    WalletEntity walletEntity = walletDAO.findById(statementInputDTO.getWalletId()).orElse(null);
     if (walletEntity == null) {
       LOG.error("Wallet Not Found, into StatementService, addStatement:55");
       throw new WalletException(WalletException.Code.WALLET_NOT_FOUND);
@@ -82,8 +81,7 @@ public class StatementService {
 
     List<String> listDate = statementDAO.selectdistinctstatement(utente.getId());
     if (listDate.size() == 0) {
-      LOG.error(
-          "Statement Date Not Found, into StatementService, listOfDate:85");
+      LOG.error("Statement Date Not Found, into StatementService, listOfDate:85");
       throw new StatementException(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND);
     }
     return listDate;
@@ -103,8 +101,7 @@ public class StatementService {
     List<StatementEntity> statementList =
         statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date);
     if (statementList.size() == 0) {
-      LOG.error(
-          "Statement Not Found, into StatementService, listStatementByDate:106");
+      LOG.error("Statement Not Found, into StatementService, listStatementByDate:106");
       throw new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
     }
     return statementList;
@@ -112,12 +109,12 @@ public class StatementService {
 
   /**
    * Check and return user
+   *
    * @param tokenDTO
    * @return User logged
    * @throws AuthenticationException
    */
-  private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO)
-      throws AuthenticationException {
+  private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO) throws AuthenticationException {
     TokenValidation.validateTokenDTO(tokenDTO);
     if (tokenDTO.getAccessToken().equalsIgnoreCase("")) {
       throw new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);

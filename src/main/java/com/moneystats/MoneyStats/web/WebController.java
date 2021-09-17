@@ -9,6 +9,7 @@ public class WebController {
 
   /**
    * If tipe localhost:8080/ it returns the login page
+   *
    * @return
    */
   @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -18,6 +19,7 @@ public class WebController {
 
   /**
    * On press of logout on the html
+   *
    * @return loginPage
    */
   @RequestMapping(value = "/logout", method = RequestMethod.GET)

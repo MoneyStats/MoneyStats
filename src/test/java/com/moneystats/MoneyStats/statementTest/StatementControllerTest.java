@@ -36,6 +36,7 @@ public class StatementControllerTest {
 
   /**
    * Test AddStatement
+   *
    * @throws Exception
    */
   @Test
@@ -151,6 +152,7 @@ public class StatementControllerTest {
 
   /**
    * Test listOfDate
+   *
    * @throws Exception
    */
   @Test
@@ -176,11 +178,11 @@ public class StatementControllerTest {
     String dateAsString = objectMapper.writeValueAsString(date);
 
     Mockito.when(statementService.listOfDate(tokenDTO))
-            .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
 
     mockMvc
-            .perform(MockMvcRequestBuilders.get("/statement/listOfDate"))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .perform(MockMvcRequestBuilders.get("/statement/listOfDate"))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 
   @Test
@@ -204,13 +206,13 @@ public class StatementControllerTest {
     String dateAsString = objectMapper.writeValueAsString(date);
 
     Mockito.when(statementService.listOfDate(Mockito.any()))
-            .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND));
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND));
 
     mockMvc
-            .perform(
-                    MockMvcRequestBuilders.get("/statement/listOfDate")
-                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
-            .andExpect(MockMvcResultMatchers.status().isNotFound());
+        .perform(
+            MockMvcRequestBuilders.get("/statement/listOfDate")
+                .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 
   @Test
@@ -231,6 +233,7 @@ public class StatementControllerTest {
 
   /**
    * Test listStatementByDate
+   *
    * @throws Exception
    */
   @Test
@@ -255,25 +258,26 @@ public class StatementControllerTest {
     String date = "2021-06-09";
 
     Mockito.when(statementService.listStatementByDate(Mockito.any(), Mockito.any()))
-            .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND));
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND));
 
     mockMvc
-            .perform(
-                    MockMvcRequestBuilders.get("/statement/listStatementDate/" + date)
-                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
-            .andExpect(MockMvcResultMatchers.status().isNotFound());
+        .perform(
+            MockMvcRequestBuilders.get("/statement/listStatementDate/" + date)
+                .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
+
   @Test
   public void testListOfStatementByDate_shouldBeMappedOnTokenRequired() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     String date = "2021-06-09";
 
     Mockito.when(statementService.listOfDate(tokenDTO))
-            .thenThrow(new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED));
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED));
 
     mockMvc
-            .perform(MockMvcRequestBuilders.get("/statement/listStatementDate/" + date))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .perform(MockMvcRequestBuilders.get("/statement/listStatementDate/" + date))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 
   @Test
@@ -282,11 +286,11 @@ public class StatementControllerTest {
     String date = "2021-06-09";
 
     Mockito.when(statementService.listOfDate(tokenDTO))
-            .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
 
     mockMvc
-            .perform(MockMvcRequestBuilders.get("/statement/listStatementDate/" + date))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .perform(MockMvcRequestBuilders.get("/statement/listStatementDate/" + date))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 
   @Test
@@ -295,12 +299,12 @@ public class StatementControllerTest {
     String date = "2021-06-09";
 
     Mockito.when(statementService.listStatementByDate(Mockito.any(), Mockito.any()))
-            .thenThrow(new StatementException(StatementException.Code.STATEMENT_NOT_FOUND));
+        .thenThrow(new StatementException(StatementException.Code.STATEMENT_NOT_FOUND));
 
     mockMvc
-            .perform(
-                    MockMvcRequestBuilders.get("/statement/listStatementDate/" + date)
-                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
-            .andExpect(MockMvcResultMatchers.status().isNotFound());
+        .perform(
+            MockMvcRequestBuilders.get("/statement/listStatementDate/" + date)
+                .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 }
