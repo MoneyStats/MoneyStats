@@ -187,8 +187,7 @@ public class HomepageService {
    * @return
    * @throws StatementException
    */
-  private List<StatementEntity> listStatementReportCalc(AuthCredentialEntity utente, String date)
-      throws StatementException {
+  private List<StatementEntity> listStatementReportCalc(AuthCredentialEntity utente, String date) {
     List<StatementEntity> list =
         statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date);
     if (list.size() == 0) {

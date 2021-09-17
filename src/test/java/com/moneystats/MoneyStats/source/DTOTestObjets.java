@@ -10,6 +10,7 @@ import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputIdDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletStatementDTO;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
+import com.moneystats.MoneyStats.web.homepage.DTO.HomepagePieChartDTO;
 import com.moneystats.MoneyStats.web.homepage.DTO.HomepageReportDTO;
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.SecurityRoles;
@@ -151,4 +152,7 @@ public class DTOTestObjets {
           listDate,
           List.of(900D, 1000D),
           List.of(0D, 100D));
+
+  public static HomepagePieChartDTO homepagePieChartDTO =
+      new HomepagePieChartDTO(List.of("my-wallet-1", "my-wallet-2"), List.of(400D, 600D));
 }
