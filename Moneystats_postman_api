@@ -73,8 +73,6 @@ paths:
                 value: "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n}"
               '1':
                 value: "{\r\n    \"username\": \"testing-username\",\r\n    \"password\": \"testing-password\"\r\n}"
-              '2':
-                value: "{\r\n    \"username\": \"giovannilamarmora\",\r\n    \"password\": \"Innavoig94\"\r\n}"
       responses:
         '200':
           description: TokenDTO
@@ -203,7 +201,7 @@ paths:
                 properties: {}
               examples:
                 '0':
-                  value: '["2021-09-01"]'
+                  value: '["01-09-2021"]'
       servers:
         - url: http://localhost:8080
     servers:
@@ -422,7 +420,7 @@ paths:
               examples:
                 '0':
                   value: >-
-                    {"walletEntities":[{"id":1,"name":"testing-wallet-1","category":{"id":1,"name":"Contanti"},"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"statementList":null}],"statementEntities":[{"id":1,"date":"2021-09-01","value":100.0,"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"wallet":{"id":1,"name":"testing-wallet-1","category":{"id":1,"name":"Contanti"},"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"statementList":null}}]}
+                    {"walletEntities":[{"id":1,"name":"testing-wallet-1","category":{"id":1,"name":"Contanti"},"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"statementList":null}],"statementEntities":[{"id":1,"date":"01-09-2021","value":100.0,"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"wallet":{"id":1,"name":"testing-wallet-1","category":{"id":1,"name":"Contanti"},"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"statementList":null}}]}
       servers:
         - url: http://localhost:8080
     servers:
@@ -506,7 +504,7 @@ paths:
                   type: integer
             examples:
               '0':
-                value: "{\r\n    \"value\": 100,\r\n    \"date\": \"01-09-2021\",\r\n    \"walletId\": 1\r\n}"
+                value: "{\r\n    \"value\": 100,\r\n    \"date\": \"2021-09-01\",\r\n    \"walletId\": 1\r\n}"
       responses:
         '200':
           description: Response
