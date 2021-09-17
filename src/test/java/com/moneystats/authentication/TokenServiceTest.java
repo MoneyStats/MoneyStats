@@ -40,6 +40,7 @@ public class TokenServiceTest {
             SecurityRoles.MONEYSTATS_USER_ROLE);
 
     TokenDTO token = service.generateToken(userDto);
+    System.out.println(token.getAccessToken() + "Fine");
     AuthCredentialDTO parseUser = service.parseToken(token);
 
     Assertions.assertEquals(userDto.getFirstName(), parseUser.getFirstName());

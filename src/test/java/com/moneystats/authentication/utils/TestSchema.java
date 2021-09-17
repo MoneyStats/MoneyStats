@@ -16,7 +16,8 @@ public class TestSchema {
   public static final String ROLE_USER_USERNAME_WRONG = "my-user-username-wrong";
   public static final String ROLE_USER_PASSWORD = "my-user-password";
   public static final String ROLE_USER_PASSWORD_WRONG = "my-user-password-wrong";
-  public static final String ROLE_USER_TOKEN_JWT = "my-user-jwt-token";
+  public static final String ROLE_USER_TOKEN_JWT =
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJteS11c2VyLXVzZXJuYW1lIiwiZmlyc3ROYW1lIjoiZmlyc3ROYW1lIiwibGFzdE5hbWUiOiJsYXN0TmFtZSIsImRhdGVPZkJpcnRoIjoiZGF0ZU9mQmlydGgiLCJlbWFpbCI6ImVtYWlsIiwicm9sZSI6IlVTRVIiLCJleHAiOjE2MzE4NzI2OTh9.X-by_Ixs54pzElmPXb8fsxqrqgfSjtLoQaTaUeifg57FHhuRehJVy1kXym0t3JJCpUDLHKqtTQnhG6WBne6Vxw";
   public static final String ROLE_USER_TOKEN_JWT_WRONG = "my-user-jwt-token-wrong";
   public static final String FIRSTNAME = "firstName";
   public static final String LASTNAME = "lastName";

@@ -10,6 +10,7 @@ import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputIdDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletStatementDTO;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
+import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.SecurityRoles;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 
@@ -103,26 +104,36 @@ public class DTOTestObjets {
 
   public static CategoryEntity categoryEntity = new CategoryEntity(1, "my-category-name");
 
-  public static WalletEntity walletEntity = new WalletEntity("my-wallet-name", categoryEntity, authCredentialEntity, null);
+  public static WalletEntity walletEntity =
+      new WalletEntity("my-wallet-name", categoryEntity, authCredentialEntity, null);
 
   public static List<StatementEntity> statementEntityList =
-      List.of(new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntity),
-              new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(1)),
-              new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(2)),
-              new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(3)));
+      List.of(
+          new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntity),
+          new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(1)),
+          new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(2)),
+          new StatementEntity("my-date", 1.00, authCredentialEntity, walletEntities.get(3)));
 
   public static StatementDTO statementDTO =
       new StatementDTO("01-01-2021", 10.0, authCredentialEntity, walletEntities.get(0));
 
   public static StatementInputDTO statementInputDTO = new StatementInputDTO(10.0, "01-01-2021", 1L);
 
-
-  public static WalletStatementDTO walletStatementDTO = new WalletStatementDTO(walletEntities, statementEntityList);
+  public static WalletStatementDTO walletStatementDTO =
+      new WalletStatementDTO(walletEntities, statementEntityList);
 
   public static WalletInputIdDTO walletInputIdDTO = new WalletInputIdDTO(1L, "My-Wallet-Name", 1);
 
   public static List<String> listDate = List.of("01-01-2021", "02-01-2021");
 
-  public static StatementEntity statementEntity = new StatementEntity(listDate.get(0), 10.00, authCredentialEntity, walletEntity);
+  public static StatementEntity statementEntity =
+      new StatementEntity(listDate.get(0), 10.00, authCredentialEntity, walletEntity);
 
+  public static AuthCredentialDTO authCredentialDTO =
+      new AuthCredentialDTO(
+          authCredentialEntity.getFirstName(),
+          authCredentialEntity.getLastName(),
+          authCredentialEntity.getDateOfBirth(),
+          authCredentialEntity.getEmail(),
+          authCredentialEntity.getUsername());
 }
