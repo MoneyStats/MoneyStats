@@ -364,6 +364,7 @@ public class WalletServiceTest {
 
   /**
    * Test EditWallet
+   *
    * @throws Exception
    */
   @Test
@@ -388,13 +389,14 @@ public class WalletServiceTest {
   void test_editWallet_shouldThrowsOnInvalidToken() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
 
-    Mockito.when(tokenService.parseToken(Mockito.any())).thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+    Mockito.when(tokenService.parseToken(Mockito.any()))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
 
     AuthenticationException expectedException =
-            new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
+        new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
     AuthenticationException actualException =
-            Assertions.assertThrows(
-                    AuthenticationException.class, () -> tokenService.parseToken(tokenDTO));
+        Assertions.assertThrows(
+            AuthenticationException.class, () -> tokenService.parseToken(tokenDTO));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
@@ -403,13 +405,14 @@ public class WalletServiceTest {
   void test_editWallet_shouldThrowsOnRequiredToken() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
 
-    Mockito.when(tokenService.parseToken(Mockito.any())).thenThrow(new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED));
+    Mockito.when(tokenService.parseToken(Mockito.any()))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED));
 
     AuthenticationException expectedException =
-            new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
+        new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
     AuthenticationException actualException =
-            Assertions.assertThrows(
-                    AuthenticationException.class, () -> tokenService.parseToken(tokenDTO));
+        Assertions.assertThrows(
+            AuthenticationException.class, () -> tokenService.parseToken(tokenDTO));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
@@ -425,16 +428,17 @@ public class WalletServiceTest {
     Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
 
     CategoryException expectedException =
-            new CategoryException(CategoryException.Code.CATEGORY_NOT_FOUND);
+        new CategoryException(CategoryException.Code.CATEGORY_NOT_FOUND);
     CategoryException actualException =
-            Assertions.assertThrows(
-                    CategoryException.class, () -> walletService.editWallet(walletInputIdDTO, tokenDTO));
+        Assertions.assertThrows(
+            CategoryException.class, () -> walletService.editWallet(walletInputIdDTO, tokenDTO));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }
 
   /**
    * Test WalletById
+   *
    * @throws Exception
    */
   @Test
@@ -455,11 +459,9 @@ public class WalletServiceTest {
   void test_WalletById_shouldThrowsOnWalletNotFound() throws Exception {
     Long idWallet = 1L;
 
-    WalletException expectedException =
-            new WalletException(WalletException.Code.WALLET_NOT_FOUND);
+    WalletException expectedException = new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     WalletException actualException =
-            Assertions.assertThrows(
-                    WalletException.class, () -> walletService.walletById(idWallet));
+        Assertions.assertThrows(WalletException.class, () -> walletService.walletById(idWallet));
 
     Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
   }

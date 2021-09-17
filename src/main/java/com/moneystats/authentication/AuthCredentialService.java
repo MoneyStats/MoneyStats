@@ -13,8 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +29,7 @@ public class AuthCredentialService {
 
   /**
    * Process to signUp with a new user
+   *
    * @param userCredential to be stored
    * @return A response of success
    * @throws AuthenticationException on invalid input
@@ -53,6 +52,7 @@ public class AuthCredentialService {
 
   /**
    * Process to login via input
+   *
    * @param userCredential input
    * @return TokenDTO
    * @throws AuthenticationException on Token
@@ -72,9 +72,14 @@ public class AuthCredentialService {
     }
 
     String remoteAddress = httpServletRequest.getRemoteAddr();
-    String userAgent = httpServletRequest.getHeader("Host") + " - " + httpServletRequest.getHeader("User-Agent");
+    String userAgent =
+        httpServletRequest.getHeader("Host") + " - " + httpServletRequest.getHeader("User-Agent");
 
-    LOG.warn("IP Address Connected: {} and Hostname: {} and Remote Address {}", httpServletRequest.getRemoteHost(), httpServletRequest.getServerName(), remoteAddress);
+    LOG.warn(
+        "IP Address Connected: {} and Hostname: {} and Remote Address {}",
+        httpServletRequest.getRemoteHost(),
+        httpServletRequest.getServerName(),
+        remoteAddress);
     LOG.warn("IP Address Connected to User Agent: {}", userAgent);
     AuthCredentialDTO userDto =
         new AuthCredentialDTO(
@@ -89,6 +94,7 @@ public class AuthCredentialService {
 
   /**
    * Process to return the user logged
+   *
    * @param token to be check
    * @return An user
    * @throws AuthenticationException for token
@@ -100,6 +106,7 @@ public class AuthCredentialService {
 
   /**
    * Methods to get all the user
+   *
    * @param token ADMIN param
    * @return list of user into db
    * @throws AuthenticationException parsing Token

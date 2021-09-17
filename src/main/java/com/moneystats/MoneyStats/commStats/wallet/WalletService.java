@@ -113,6 +113,7 @@ public class WalletService {
 
   /**
    * Methods to get a list of wallet and list of statement
+   *
    * @param tokenDTO
    * @return List of statement and list of wallet
    * @throws AuthenticationException

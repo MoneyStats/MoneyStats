@@ -17,6 +17,7 @@ public class WebControllerTest {
 
   /**
    * Test FirstPage
+   *
    * @throws Exception
    */
   @Test
@@ -34,6 +35,7 @@ public class WebControllerTest {
 
   /**
    * Test Logout
+   *
    * @throws Exception
    */
   @Test

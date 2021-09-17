@@ -1,9 +1,7 @@
 package com.moneystats.MoneyStats.web;
 
-import com.moneystats.MoneyStats.web.DTO.WebResponseDTO;
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
-import com.moneystats.generic.SchemaDescription;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -30,6 +28,7 @@ public class WebService {
 
   /**
    * Method that check if user is valid
+   *
    * @param token
    * @throws WebException
    */
@@ -42,13 +41,13 @@ public class WebService {
       throw new WebException(WebException.Code.LOGIN_REQUIRED);
     }
     AuthCredentialDTO user =
-            new AuthCredentialDTO(
-                    (@NotNull String) body.get(FIRSTNAME),
-                    (@NotNull String) body.get(LASTNAME),
-                    (@NotNull String) body.get(DATEOFBIRTH),
-                    (@NotNull String) body.get(EMAIL),
-                    body.getSubject(),
-                    (@NotNull String) body.get(ROLE));
+        new AuthCredentialDTO(
+            (@NotNull String) body.get(FIRSTNAME),
+            (@NotNull String) body.get(LASTNAME),
+            (@NotNull String) body.get(DATEOFBIRTH),
+            (@NotNull String) body.get(EMAIL),
+            body.getSubject(),
+            (@NotNull String) body.get(ROLE));
 
     return user;
   }
