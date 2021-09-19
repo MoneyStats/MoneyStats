@@ -41,7 +41,7 @@ $(document).ready(function () {
                     })
                     Toast.fire({
                         icon: 'error',
-                        title: '<span style="color:#2D2C2C">Sessione Scaduta, reinderizzazione...</span>'
+                        title: '<span style="color:#2D2C2C">Session Expired, reidirect...</span>'
                     })
                     setTimeout(function () {
                         window.location.href = "app-login.html";
@@ -67,46 +67,46 @@ $(document).ready(function () {
                 Authorization: sessionStorage.getItem('accessToken')
             },
             success: function (resume) {
-                $('#title').text('MoneyStats - Capitale ' + localStorage.getItem('date'));
+                $('#title').text('MoneyStats - Capital ' + localStorage.getItem('date'));
                 //   document.cookie.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
                 const listWallet = $('#capitalewallet');
                 for (let i = 0; i < resume.length; i++) {
                     let img = '';
                     let color = '';
                     switch (resume[i].category.name) {
-                        case 'Contanti':
+                        case 'Cash':
                             img = 'fas fa-money-bill-wave';
                             color = 'bg-success';
                             break;
-                        case 'Conto Corrente':
+                        case 'Bank Account':
                             img = 'fas fa-landmark';
                             color = 'bg-warning';
                             break;
-                        case 'Carte di Credito':
+                        case 'Credit Card':
                             img = 'far fa-credit-card';
                             color = 'bg-danger';
                             break;
-                        case 'Carte di Debito':
+                        case 'Debit Card':
                             img = 'fas fa-credit-card';
                             color = 'bg-dark';
                             break;
-                        case 'Cupon':
+                        case 'Coupon':
                             img = 'fas fa-receipt';
                             color = 'bg-info';
                             break;
-                        case 'Risparmi':
+                        case 'Safe':
                             img = 'fas fa-piggy-bank';
                             color = 'bg-success';
                             break;
-                        case 'Cash Elettronico':
+                        case 'Cash Electronic':
                             img = 'fas fa-money-bill';
                             color = 'bg-primary';
                             break;
-                        case 'Investimenti':
+                        case 'Investments':
                             img = 'fas fa-chart-line';
                             color = 'bg-primary';
                             break;
-                        case 'Mutui':
+                        case 'Recurrence':
                             img = 'fas fa-balance-scale-left';
                             color = 'bg-danger';
                             break;
@@ -114,11 +114,11 @@ $(document).ready(function () {
                             img = 'fas fa-file-invoice-dollar';
                             color = 'bg-warning';
                             break;
-                        case 'Assegni':
+                        case 'Check':
                             img = 'fas fa-money-check-alt';
                             color = 'bg-info';
                             break;
-                        case 'Altro':
+                        case 'Others':
                             img = 'fas fa-hand-holding-usd';
                             color = 'bg-secondary';
                             break;
@@ -253,7 +253,7 @@ $(document).ready(function () {
         })
         Toast.fire({
             icon: 'info',
-            title: "<span style='color:#2D2C2C'>Reinderizzazione...</span>",
+            title: "<span style='color:#2D2C2C'>Reidirect...</span>",
         })
         setTimeout(function () {
             window.location.href = "mobile/index.html";

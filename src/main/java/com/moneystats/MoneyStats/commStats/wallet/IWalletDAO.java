@@ -11,6 +11,7 @@ public interface IWalletDAO extends JpaRepository<WalletEntity, Long> {
 
   /**
    * not used
+   *
    * @param id
    * @return
    */
@@ -26,6 +27,7 @@ public interface IWalletDAO extends JpaRepository<WalletEntity, Long> {
 
   /**
    * not used
+   *
    * @param id
    * @return
    */

@@ -1,6 +1,5 @@
 package com.moneystats.MoneyStats.commStats.category;
 
-import com.moneystats.MoneyStats.commStats.category.DTO.CategoryDTO;
 import com.moneystats.MoneyStats.commStats.category.entity.CategoryEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +15,6 @@ public class CategoryController {
   @Autowired private CategoryService categoryService;
 
   /**
-   *
    * @return a list of categories
    * @throws CategoryException
    */

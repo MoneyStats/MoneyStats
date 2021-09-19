@@ -25,7 +25,7 @@ $(document).ready(function () {
             },
             success: function (authCredentialDTO) {
                 console.log("User Logged with accessToken {}, ", authCredentialDTO.firstName, authCredentialDTO.lastName, " username -> ", authCredentialDTO.username);
-                $('#options').text(`Opzioni - ${authCredentialDTO.username}`);
+                $('#options').text(`Options - ${authCredentialDTO.username}`);
             },
             error: function (authErrorResponseDTO) {
                 var responseDTO = authErrorResponseDTO.responseJSON.error;
@@ -39,7 +39,7 @@ $(document).ready(function () {
                     })
                     Toast.fire({
                         icon: 'error',
-                        title: 'Sessione Scaduta, reinderizzazione...'
+                        title: 'Session Expired, reidirect...'
                     })
                     setTimeout(function () {
                         window.location.href = "loginPage.html";
@@ -113,13 +113,13 @@ $(document).ready(function () {
                 for (let i = 0; i < statementReportDTO.listDate.length; i++) {
                     // Calcolo anno corrente(mi serve per la lista di date secondo anno)
                     currentYear = statementReportDTO.listDate[statementReportDTO.listDate.length - 1].split("-")[2];
-                    $('#year').text('Andamento Anno ' + currentYear);
-                    $('#listStatement').text('Statement Anno ' + currentYear);
+                    $('#year').text('Year ' + currentYear);
+                    $('#listStatement').text('Statement year ' + currentYear);
                     listDate += [statementReportDTO.listDate[i] + ","];
                     lastDate = statementReportDTO.listDate[i];
                     listDateForTable += [statementReportDTO.listDate[i]];
                 }
-                $('#dataAttuale').text("Grafico Capitali in Data " + lastDate).val(lastDate)
+                $('#dataAttuale').text("Graph in Date " + lastDate).val(lastDate)
                 for (let i = 0; i < statementReportDTO.statementList.length; i++) {
                     statementList += [statementReportDTO.statementList[i] + ","];
                 }
@@ -136,7 +136,7 @@ $(document).ready(function () {
             }
         });
     }
-    
+
     //-------------------------------------------------------------
     // Get Line Graph Homepage
     //-------------------------------------------------------------
@@ -159,7 +159,7 @@ $(document).ready(function () {
                 labels: graphDate,
                 datasets: [
                     {
-                        label: "Capitali Totali",
+                        label: "Total Capital",
                         data: graphValues,
                         backgroundColor: "transparent",
                         borderColor: "#007bff",
@@ -348,7 +348,7 @@ $(document).ready(function () {
 
         Toast.fire({
             icon: 'success',
-            title: 'Data inserite, reinderizzazione...'
+            title: 'Date insert, reidirect...'
         })
         setTimeout(function () {
             window.location.href = "capitalewallet.html";
@@ -373,7 +373,7 @@ $(document).ready(function () {
         })
         Toast.fire({
             icon: 'info',
-            title: "<span style='color:#2D2C2C'>Reinderizzazione...</span>",
+            title: "<span style='color:#2D2C2C'>Reidirect...</span>",
         })
         setTimeout(function () {
             window.location.href = "mobile/index.html";

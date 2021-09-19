@@ -19,6 +19,7 @@ public class HomepageController {
 
   /**
    * Get report of the Homepage at the start of web app
+   *
    * @param jwt
    * @return
    * @throws StatementException
@@ -27,13 +28,14 @@ public class HomepageController {
   @GetMapping("/reportHomepage")
   public HomepageReportDTO statementReportHomepage(
       @RequestHeader(value = "Authorization") String jwt)
-          throws StatementException, AuthenticationException, ParseException {
+      throws StatementException, AuthenticationException, ParseException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return homepageService.reportHomepage(tokenDTO);
   }
 
   /**
    * Get Pie Graph on Homepage
+   *
    * @param jwt for auth
    * @param date to be searched
    * @return Data for let me get the graph

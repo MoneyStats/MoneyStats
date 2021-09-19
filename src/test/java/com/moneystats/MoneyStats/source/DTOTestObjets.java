@@ -154,5 +154,7 @@ public class DTOTestObjets {
           List.of(0D, 0D, 0D));
 
   public static HomepagePieChartDTO homepagePieChartDTO =
-      new HomepagePieChartDTO(List.of("my-wallet-1", "my-wallet-2", "my-wallet-3", "my-wallet-4"), List.of(250D, 250D, 250D, 250D));
+      new HomepagePieChartDTO(
+          List.of("my-wallet-1", "my-wallet-2", "my-wallet-3", "my-wallet-4"),
+          List.of(250D, 250D, 250D, 250D));
 }

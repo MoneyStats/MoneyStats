@@ -3,7 +3,6 @@ package com.moneystats.MoneyStats.webTest;
 import com.moneystats.MoneyStats.source.DTOTestObjets;
 import com.moneystats.MoneyStats.web.WebControllerLogin;
 import com.moneystats.MoneyStats.web.WebException;
-import com.moneystats.MoneyStats.web.WebExceptionMapper;
 import com.moneystats.MoneyStats.web.WebService;
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
@@ -25,6 +24,7 @@ public class WebControllerLoginTest {
 
   /**
    * Test to checkLogin User
+   *
    * @throws Exception
    */
   @Test
@@ -45,11 +45,11 @@ public class WebControllerLoginTest {
   public void testCheckLogin_shoudBeMappedOnError() throws Exception {
     TokenDTO tokenDTO = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
 
-    Mockito.when(webService.checkUser(tokenDTO)).thenThrow(new WebException(WebException.Code.LOGIN_REQUIRED));
+    Mockito.when(webService.checkUser(tokenDTO))
+        .thenThrow(new WebException(WebException.Code.LOGIN_REQUIRED));
 
     mockMvc
-            .perform(
-                    MockMvcRequestBuilders.get("/check_login"))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .perform(MockMvcRequestBuilders.get("/check_login"))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 }

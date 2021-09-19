@@ -1,7 +1,7 @@
 package com.moneystats.MoneyStats.commStats.wallet;
 
-import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletDTO;
+import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputDTO;
 import com.moneystats.MoneyStats.commStats.wallet.DTO.WalletInputIdDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,9 @@ public class WalletValidator {
       throw new WalletException(WalletException.Code.INVALID_WALLET_INPUT_DTO);
     }
   }
-  public static void validateWalletInputWithIDDTO(WalletInputIdDTO walletDTO) throws WalletException {
+
+  public static void validateWalletInputWithIDDTO(WalletInputIdDTO walletDTO)
+      throws WalletException {
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     Set<ConstraintViolation<WalletInputIdDTO>> violationSet = validator.validate(walletDTO);
 

@@ -22,7 +22,9 @@ public class StatementValidator {
       throw new StatementException(StatementException.Code.INVALID_STATEMENT_DTO);
     }
   }
-  public static void validateStatementInputDTO(StatementInputDTO statementDTO) throws StatementException {
+
+  public static void validateStatementInputDTO(StatementInputDTO statementDTO)
+      throws StatementException {
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     Set<ConstraintViolation<StatementInputDTO>> violations = validator.validate(statementDTO);
 
