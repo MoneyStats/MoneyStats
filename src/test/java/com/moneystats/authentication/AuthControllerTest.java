@@ -1,13 +1,10 @@
 package com.moneystats.authentication;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-
-import javax.ws.rs.core.MediaType;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moneystats.authentication.DTO.AuthCredentialDTO;
+import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
+import com.moneystats.authentication.DTO.TokenDTO;
+import com.moneystats.authentication.utils.TestSchema;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,148 +14,207 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moneystats.authentication.DTO.AuthCredentialDTO;
-import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
-import com.moneystats.authentication.DTO.AuthResponseDTO;
-import com.moneystats.authentication.DTO.TokenDTO;
-import com.moneystats.authentication.entity.AuthCredentialEntity;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = AuthCredentialController.class)
 public class AuthControllerTest {
 
-	private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+  private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-	private static final String WRONG_PASSWORD = "giova";
-	private static final String USER_USERNAME = "my-user-username";
-	private static final String USER_PASSWORD = "my-user-password";
-	private static final String USER_JWT = "my-user-jwt-token";
-	private static final String USER_JWT_WRONG = "my-user-jwt-token-wrong";
-	private static final String FIRSTNAME = "firstName";
-	private static final String LASTNAME = "lastName";
-	private static final String DATE_OF_BIRTH = "dateOfBirth";
-	private static final String EMAIL = "email";
-	private static final String USER_PASS_HASHED = bCryptPasswordEncoder.encode(USER_PASSWORD);
+  @MockBean private AuthCredentialService credential;
 
-	private static final AuthCredentialInputDTO USER_USER_CREDENTIAL_DTO = new AuthCredentialInputDTO(USER_USERNAME,
-			USER_PASSWORD);
-	private static final AuthCredentialEntity USER_USER_CREDENTIAL_ENTITY = new AuthCredentialEntity(FIRSTNAME,
-			LASTNAME, DATE_OF_BIRTH, EMAIL, USER_USERNAME, USER_PASS_HASHED, SecurityRoles.MONEYSTATS_USER_ROLE);
-	private static final AuthCredentialDTO USER_USER_DTO = new AuthCredentialDTO(FIRSTNAME, LASTNAME, DATE_OF_BIRTH,
-			EMAIL, USER_USERNAME, USER_PASSWORD, SecurityRoles.MONEYSTATS_USER_ROLE);
-	private static final TokenDTO USER_TOKEN_JWT = new TokenDTO(USER_JWT);
-	private static final AuthResponseDTO AUTH_RESPONSE = new AuthResponseDTO("USER_ADDED");
+  @Autowired private MockMvc mockMvc;
 
-	@MockBean
-	private AuthCredentialService credential;
+  @Autowired private ObjectMapper objectMapper;
 
-	@Autowired
-	private MockMvc mockMvc;
+  @Test
+  void addUser_shouldReturnStatus200AndReturnResponse() throws Exception {
+    String userAsString = objectMapper.writeValueAsString(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
+    String authResponseAsString = objectMapper.writeValueAsString(TestSchema.AUTH_RESPONSE_DTO);
 
-	@Autowired
-	private ObjectMapper objectMapper;
+    Mockito.when(credential.signUp(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER))
+        .thenReturn(TestSchema.AUTH_RESPONSE_DTO);
+    mockMvc
+        .perform(
+            post("/credential/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userAsString))
+        .andExpect(status().isOk());
+  }
 
-	@Test
-	void addUser_shouldReturnStatus200() throws Exception {
-		String userAsString = objectMapper.writeValueAsString(USER_USER_DTO);
+  @Test
+  void addUser_shouldReturnError400OnBadInput() throws Exception {
+    Mockito.doThrow(
+            new AuthenticationException(AuthenticationException.Code.INVALID_AUTH_CREDENTIAL_DTO))
+        .when(credential)
+        .signUp(Mockito.any());
+    mockMvc
+        .perform(
+            post("/credential/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"user\": 30, \"password\": 90}"))
+        .andExpect(status().isBadRequest());
+  }
 
-		Mockito.when(credential.signUp(USER_USER_DTO)).thenReturn(AUTH_RESPONSE);
-		mockMvc.perform(post("/credential/signup").contentType(MediaType.APPLICATION_JSON).content(userAsString))
-				.andExpect(status().isOk());
-	}
+  @Test
+  void addUser_shouldReturnUserPresent() throws Exception {
+    AuthCredentialDTO user = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    String userAsString = objectMapper.writeValueAsString(user);
 
-	@Test
-	void addUser_shouldReturnError400OnBadInput() throws Exception {
-		Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.INVALID_AUTH_CREDENTIAL_DTO))
-				.when(credential).signUp(Mockito.any());
-		mockMvc.perform(post("/credential/signup").contentType(MediaType.APPLICATION_JSON)
-				.content("{\"user\": 30, \"password\": 90}")).andExpect(status().isBadRequest());
-	}
+    Mockito.when(credential.signUp(Mockito.any()))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_PRESENT));
 
-	@Test
-	void login_shouldReturnTokenCorrectly() throws Exception {
-		String userAsString = objectMapper.writeValueAsString(USER_USER_CREDENTIAL_DTO);
-		String tokenAsString = objectMapper.writeValueAsString(USER_TOKEN_JWT);
+    mockMvc
+        .perform(
+            post("/credential/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userAsString))
+        .andExpect(status().isBadRequest());
+  }
 
-		Mockito.doReturn(USER_TOKEN_JWT).when(credential).login(Mockito.any());
-		mockMvc.perform(post("/credential/login").contentType(MediaType.APPLICATION_JSON).content(userAsString))
-				.andExpect(status().isOk()).andExpect(content().json(tokenAsString));
-	}
+  @Test
+  void login_shouldReturnTokenCorrectly() throws Exception {
+    String userAsString =
+        objectMapper.writeValueAsString(TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER);
+    String tokenAsString = objectMapper.writeValueAsString(TestSchema.TOKEN_JWT_DTO_ROLE_USER);
 
-	@Test
-	void login_shouldReturnError400OnBadInput() throws Exception {
-		Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.INVALID_AUTH_INPUT_DTO))
-				.when(credential).login(Mockito.any());
-		mockMvc.perform(post("/credential/login").contentType(MediaType.APPLICATION_JSON)
-				.content("{\"user1\": \"giovanni\", \"password\": 90}")).andExpect(status().isBadRequest());
-	}
+    Mockito.doReturn(TestSchema.TOKEN_JWT_DTO_ROLE_USER).when(credential).login(Mockito.any());
+    mockMvc
+        .perform(
+            post("/credential/login").contentType(MediaType.APPLICATION_JSON).content(userAsString))
+        .andExpect(status().isOk())
+        .andExpect(content().json(tokenAsString));
+  }
 
-	@Test
-	void login_shouldReturnWrongcredential() throws Exception {
-		AuthCredentialInputDTO user = new AuthCredentialInputDTO(USER_USERNAME, WRONG_PASSWORD);
-		String userAsString = objectMapper.writeValueAsString(user);
+  @Test
+  void login_shouldReturnError400OnBadInput() throws Exception {
+    Mockito.doThrow(
+            new AuthenticationException(AuthenticationException.Code.INVALID_AUTH_INPUT_DTO))
+        .when(credential)
+        .login(Mockito.any());
+    mockMvc
+        .perform(
+            post("/credential/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"user1\": \"giovanni\", \"password\": 90}"))
+        .andExpect(status().isBadRequest());
+  }
 
-		Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL)).when(credential)
-				.login(Mockito.any());
-		mockMvc.perform(post("/credential/login").contentType(MediaType.APPLICATION_JSON).content(userAsString))
-				.andExpect(status().is(401));
-	}
+  @Test
+  void login_shouldReturnWrongcredentialOnUsername() throws Exception {
+    AuthCredentialInputDTO user =
+        new AuthCredentialInputDTO(
+            TestSchema.ROLE_USER_USERNAME_WRONG, TestSchema.ROLE_USER_PASSWORD);
+    String userAsString = objectMapper.writeValueAsString(user);
 
-	@Test
-	void tokenUser_shouldReturnUser() throws Exception {
-		String userAsString = objectMapper.writeValueAsString(USER_USER_DTO);
+    Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL))
+        .when(credential)
+        .login(Mockito.any());
+    mockMvc
+        .perform(
+            post("/credential/login").contentType(MediaType.APPLICATION_JSON).content(userAsString))
+        .andExpect(status().is(401));
+  }
 
-		Mockito.doReturn(USER_USER_DTO).when(credential).getUser(Mockito.any());
-		mockMvc.perform(MockMvcRequestBuilders.get("/credential/token").header("Authorization", "Bearer " + USER_JWT))
-				.andExpect(status().isOk()).andExpect(content().json(userAsString));
-	}
+  @Test
+  void login_shouldReturnWrongcredentialOnPassword() throws Exception {
+    AuthCredentialInputDTO user =
+        new AuthCredentialInputDTO(TestSchema.ROLE_USER_USERNAME, TestSchema.WRONG_PASSWORD);
+    String userAsString = objectMapper.writeValueAsString(user);
 
-	@Test
-	void tokenUser_shouldReturnUnauthorized() throws Exception {
-		TokenDTO token = new TokenDTO(USER_JWT_WRONG);
+    Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL))
+        .when(credential)
+        .login(Mockito.any());
+    mockMvc
+        .perform(
+            post("/credential/login").contentType(MediaType.APPLICATION_JSON).content(userAsString))
+        .andExpect(status().is(401));
+  }
 
-		Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.UNAUTHORIZED)).when(credential)
-				.getUser(Mockito.any());
-		mockMvc.perform(MockMvcRequestBuilders.get("/credential/token").header("Authorization",
-				"Bearer " + token.getAccessToken())).andExpect(status().is(401));
-	}
+  @Test
+  void tokenUser_shouldReturnUser() throws Exception {
+    String userAsString = objectMapper.writeValueAsString(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
 
-	@Test
-	void tokenUser_shouldReturnInvalidInput() throws Exception {
-		TokenDTO token = new TokenDTO(null);
+    Mockito.doReturn(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER)
+        .when(credential)
+        .getUser(Mockito.any());
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/credential/token")
+                .header("Authorization", "Bearer " + TestSchema.ROLE_USER_TOKEN_JWT))
+        .andExpect(status().isOk())
+        .andExpect(content().json(userAsString));
+  }
 
-		Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO)).when(credential)
-				.getUser(token);
-		mockMvc.perform(MockMvcRequestBuilders.get("/credential/token")).andExpect(status().isBadRequest());
-	}
+  @Test
+  void tokenUser_shouldReturnUnauthorized() throws Exception {
+    TokenDTO token = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
 
-	@Test
-	void listUsers_adminShouldReceiveTheListCorrectly() throws Exception {
-		List<AuthCredentialDTO> listUsers = List.of(USER_USER_DTO, USER_USER_DTO);
-		String usersAsString = objectMapper.writeValueAsString(listUsers);
+    Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.UNAUTHORIZED))
+        .when(credential)
+        .getUser(Mockito.any());
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/credential/token")
+                .header("Authorization", "Bearer " + token.getAccessToken()))
+        .andExpect(status().is(401));
+  }
 
-		Mockito.doReturn(listUsers).when(credential).getUsers(Mockito.any());
-		mockMvc.perform(MockMvcRequestBuilders.get("/credential/admin").header("Authorization", "Bearer " + USER_JWT))
-				.andExpect(status().isOk()).andExpect(content().json(usersAsString));
-	}
+  @Test
+  void tokenUser_shouldReturnInvalidInput() throws Exception {
+    TokenDTO token = new TokenDTO(null);
 
-	@Test
-	void listUsers_adminShouldReturnNotAllowed() throws Exception {
-		TokenDTO token = new TokenDTO(USER_JWT_WRONG);
+    Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO))
+        .when(credential)
+        .getUser(token);
+    mockMvc
+        .perform(MockMvcRequestBuilders.get("/credential/token"))
+        .andExpect(status().isBadRequest());
+  }
 
-		Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.NOT_ALLOWED)).when(credential)
-				.getUsers(Mockito.any());
-		mockMvc.perform(MockMvcRequestBuilders.get("/credential/admin").header("Authorization",
-				"Bearer " + token.getAccessToken())).andExpect(status().isUnauthorized());
-	}
+  @Test
+  void listUsers_adminShouldReceiveTheListCorrectly() throws Exception {
+    List<AuthCredentialDTO> listUsers =
+        List.of(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER, TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
+    String usersAsString = objectMapper.writeValueAsString(listUsers);
 
-	@Test
-	void listUsers_adminShouldReturnInvalidInput() throws Exception {
-		TokenDTO token = new TokenDTO(null);
+    Mockito.doReturn(listUsers).when(credential).getUsers(Mockito.any());
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/credential/admin")
+                .header("Authorization", "Bearer " + TestSchema.ROLE_USER_TOKEN_JWT))
+        .andExpect(status().isOk())
+        .andExpect(content().json(usersAsString));
+  }
 
-		Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO)).when(credential)
-				.getUsers(token);
-		mockMvc.perform(MockMvcRequestBuilders.get("/credential/admin")).andExpect(status().isBadRequest());
-	}
+  @Test
+  void listUsers_adminShouldReturnNotAllowed() throws Exception {
+    TokenDTO token = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
 
+    Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.NOT_ALLOWED))
+        .when(credential)
+        .getUsers(Mockito.any());
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/credential/admin")
+                .header("Authorization", "Bearer " + token.getAccessToken()))
+        .andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  void listUsers_adminShouldReturnInvalidInput() throws Exception {
+    TokenDTO token = new TokenDTO(null);
+
+    Mockito.doThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO))
+        .when(credential)
+        .getUsers(token);
+    mockMvc
+        .perform(MockMvcRequestBuilders.get("/credential/admin"))
+        .andExpect(status().isBadRequest());
+  }
 }

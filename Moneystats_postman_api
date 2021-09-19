@@ -1,0 +1,703 @@
+openapi: 3.0.1
+info:
+  title: MoneyStats
+  description: MoneyStats commStats API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /credential/signup:
+    post:
+      tags:
+      - Authentication
+      summary: signup process
+      description: Adding New AuthCredentialDTO
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+                dateOfBirth:
+                  type: string
+                email:
+                  type: string
+                username:
+                  type: string
+            examples:
+              '0':
+                value: "{\r\n    \"firstName\": \"testing-name\",\r\n    \"lastName\": \"testing-lastName\",\r\n    \"dateOfBirth\": \"01-01-1990\",\r\n    \"email\": \"email@email.com\",\r\n    \"username\": \"testing-username\",\r\n    \"password\": \"testing-password\",\r\n    \"role\": \"USER\"\r\n}"
+      responses:
+        '200':
+          description: Response to confirm
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                '0':
+                  value: '{"message":"USER_ADDED"}'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /credential/login:
+    post:
+      tags:
+      - Authentication
+      summary: login process
+      description: Return TokenDTO
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                username:
+                  type: string
+            examples:
+              '0':
+                value: "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n}"
+              '1':
+                value: "{\r\n    \"username\": \"testing-username\",\r\n    \"password\": \"testing-password\"\r\n}"
+      responses:
+        '200':
+          description: TokenDTO
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+              examples:
+                '0':
+                  value: >-
+                    {"accessToken":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImZpcnN0TmFtZSI6IkFkbWluIiwibGFzdE5hbWUiOiJBZG1pbiIsImRhdGVPZkJpcnRoIjoiMDEtMDEtMTk5MCIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxNjMxODc4NTY1fQ.KPMaJMazWIrdknw4GpKJzKUHMhLuM-DJaZ2wultCjFzmOQzzwzCg_aYSZN89Mi7ImT_sLusl2HgMAi5LEDkfJA"}
+                '1':
+                  value: >-
+                    {"accessToken":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0aW5nLXVzZXJuYW1lIiwiZmlyc3ROYW1lIjoidGVzdGluZy1uYW1lIiwibGFzdE5hbWUiOiJ0ZXN0aW5nLWxhc3ROYW1lIiwiZGF0ZU9mQmlydGgiOiIwMS0wMS0xOTkwIiwiZW1haWwiOiJlbWFpbEBlbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImV4cCI6MTYzMTg3ODQzMX0.Q92EOEN1TjYyNFEWe_NImIjlFqGmpJU-N9ShcNCaiNOgYBtLUWPffJhSZWMGtiqJiMZMlUSilOHd1CS_4D6v-Q"}
+                '2':
+                  value: >-
+                    {"accessToken":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaW92YW5uaWxhbWFybW9yYSIsImZpcnN0TmFtZSI6Ikdpb3Zhbm5pIiwibGFzdE5hbWUiOiJMYW1hcm1vcmEiLCJkYXRlT2ZCaXJ0aCI6IjE5OTQtMDgtMjUiLCJlbWFpbCI6Imdpby5sYW1hcm1vcmFAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxNjMxODc1ODk2fQ.EgP6re2YEY77nbgFLxOXmQQvBkhSfKbiI-l2iISDygTiE2pXQvGFPqH2s6gFb6IBK5UBuvslqTlnOdm4zOyjIQ"}
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /credential/admin:
+    get:
+      tags:
+      - Authentication
+      summary: admin getAllUser
+      description: Used to get a list of user registered
+      responses:
+        '200':
+          description: List of User Registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '0':
+                  value: >-
+                    [{"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":null,"role":"USER"}]
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  
+  /credential/token:
+    get:
+      tags:
+      - Authentication
+      summary: admin getUser
+      description: Used to get a user logged
+      responses:
+        '200':
+          description: User Logged
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  password: {}
+                  role:
+                    type: string
+                  dateOfBirth:
+                    type: string
+                  email:
+                    type: string
+                  username:
+                    type: string
+              examples:
+                '0':
+                  value: >-
+                    {"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":null,"role":"USER"}
+                '1':
+                  value: >-
+                    {"firstName":"Giovanni","lastName":"Lamarmora","dateOfBirth":"1994-08-25","email":"gio.lamarmora@gmail.com","username":"giovannilamarmora","password":null,"role":"ADMIN"}
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+      
+  /category/list:
+    get:
+      tags:
+      - Category
+      summary: getlistcategory
+      description: list get category
+      responses:
+        '200':
+          description: List of category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '0':
+                  value: >-
+                    [{"id":1,"name":"Contanti"},{"id":2,"name":"Carte di
+                    credito"},{"id":3,"name":"Carte di
+                    debito"},{"id":4,"name":"Mutui"},{"id":5,"name":"Conto
+                    Corrente"},{"id":6,"name":"Risparmi"},{"id":7,"name":"Cupon"},{"id":8,"name":"Investimenti"},{"id":9,"name":"Altro"}]
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+      
+  /statement/listOfDate:
+    get:
+      tags:
+      - Statement
+      summary: getlistofdate
+      description: list of Date
+      responses:
+        '200':
+          description: List of Date
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '0':
+                  value: '["01-09-2021"]'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+      
+  /wallet/delete/3:
+    delete:
+      tags:
+      - Wallet
+      summary: deletewallet
+      description: Delete Wallet
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                '0':
+                  value: '{"message":"WALLET_DELETED"}'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /wallet/getById/1:
+    get:
+      tags:
+      - Wallet
+      summary: getwalletbyid
+      description: param idWaller
+      responses:
+        '200':
+          description: Return WalletDTO
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categoryEntity:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      id:
+                        type: integer
+                  name:
+                    type: string
+                  statementEntityList: {}
+                  user:
+                    type: object
+                    properties:
+                      firstName:
+                        type: string
+                      lastName:
+                        type: string
+                      password:
+                        type: string
+                      role:
+                        type: string
+                      dateOfBirth:
+                        type: string
+                      id:
+                        type: integer
+                      email:
+                        type: string
+                      username:
+                        type: string
+              examples:
+                '0':
+                  value: >-
+                    {"name":"my-edited-wallet","categoryEntity":{"id":1,"name":"Contanti"},"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"statementEntityList":null}
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /wallet/list:
+    get:
+      tags:
+      - Wallet
+      summary: getlistWallet
+      description: list of Wallet
+      responses:
+        '200':
+          description: getListOfWallet
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '0':
+                  value: >-
+                    [{"id":1,"name":"testing-wallet-1","category":{"id":1,"name":"Contanti"},"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"statementList":null},{"id":2,"name":"testing-wallet-2","category":{"id":1,"name":"Contanti"},"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"statementList":null}]
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /wallet/listMobile:
+    get:
+      tags:
+      - Wallet
+      summary: getlistMobile
+      description: list Mobile Device
+      responses:
+        '200':
+          description: Returned List
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statementEntities:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                        wallet:
+                          type: object
+                          properties:
+                            statementList: {}
+                            name:
+                              type: string
+                            id:
+                              type: integer
+                            category:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                id:
+                                  type: integer
+                            user:
+                              type: object
+                              properties:
+                                firstName:
+                                  type: string
+                                lastName:
+                                  type: string
+                                password:
+                                  type: string
+                                role:
+                                  type: string
+                                dateOfBirth:
+                                  type: string
+                                id:
+                                  type: integer
+                                email:
+                                  type: string
+                                username:
+                                  type: string
+                        id:
+                          type: integer
+                        value:
+                          type: number
+                        user:
+                          type: object
+                          properties:
+                            firstName:
+                              type: string
+                            lastName:
+                              type: string
+                            password:
+                              type: string
+                            role:
+                              type: string
+                            dateOfBirth:
+                              type: string
+                            id:
+                              type: integer
+                            email:
+                              type: string
+                            username:
+                              type: string
+                  walletEntities:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        statementList: {}
+                        name:
+                          type: string
+                        id:
+                          type: integer
+                        category:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            id:
+                              type: integer
+                        user:
+                          type: object
+                          properties:
+                            firstName:
+                              type: string
+                            lastName:
+                              type: string
+                            password:
+                              type: string
+                            role:
+                              type: string
+                            dateOfBirth:
+                              type: string
+                            id:
+                              type: integer
+                            email:
+                              type: string
+                            username:
+                              type: string
+              examples:
+                '0':
+                  value: >-
+                    {"walletEntities":[{"id":1,"name":"testing-wallet-1","category":{"id":1,"name":"Contanti"},"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"statementList":null}],"statementEntities":[{"id":1,"date":"01-09-2021","value":100.0,"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"wallet":{"id":1,"name":"testing-wallet-1","category":{"id":1,"name":"Contanti"},"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"statementList":null}}]}
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /wallet/addWallet:
+    post:
+      tags:
+      - Wallet
+      summary: addWalletEntity
+      description: Add a New Wallet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                categoryId:
+                  type: integer
+            examples:
+              '0':
+                value: "{\r\n    \"name\": \"testing-wallet-1\",\r\n    \"categoryId\": 1\r\n}"
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                '0':
+                  value: '{"message":"WALLET_ADDED"}'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /statement/listStatementDate/01-09-2021:
+    get:
+      tags:
+      - Statement
+      summary: getlistStatementBydate
+      description: list By Date
+      responses:
+        '200':
+          description: List of Statement
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '0':
+                  value: >-
+                    [{"id":1,"date":"01-09-2021","value":100.0,"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"wallet":{"id":1,"name":"my-edited-wallet","category":{"id":1,"name":"Contanti"},"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"statementList":null}},{"id":2,"date":"01-09-2021","value":100.0,"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"wallet":{"id":1,"name":"my-edited-wallet","category":{"id":1,"name":"Contanti"},"user":{"id":2,"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":"$2a$10$HRsWVvYYS2r3aeCqJHG0k.YppKabbdk4blyyuNxU.u7pLR.gA3aR.","role":"USER"},"statementList":null}}]
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  
+  /statement/addStatement:
+    post:
+      tags:
+      - Statement
+      summary: addStatement
+      description: Add new Statement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                walletId:
+                  type: integer
+                value:
+                  type: integer
+            examples:
+              '0':
+                value: "{\r\n    \"value\": 100,\r\n    \"date\": \"2021-09-01\",\r\n    \"walletId\": 1\r\n}"
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                '0':
+                  value: '{"message":"STATEMENT_ADDED"}'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  
+  /wallet/editWallet:
+    put:
+      tags:
+      - Wallet
+      summary: editWallet
+      description: Wallet to be edited
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                id:
+                  type: integer
+                idCategory:
+                  type: integer
+            examples:
+              '0':
+                value: "{\r\n    \"id\": 1,\r\n    \"name\": \"my-edited-wallet\",\r\n    \"idCategory\": 1\r\n}"
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                '0':
+                  value: '{"message":"WALLET_EDITED"}'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /logout:
+    get:
+      tags:
+      - Web
+      summary: logout page
+      description: Return loginPage
+      responses:
+        '200':
+          description: LoginPage.html
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /check_login:
+    get:
+      tags:
+      - Web
+      summary: Check User Logged
+      description: Return AuthCredentialDTO
+      responses:
+        '200':
+          description: AuthCredentialDTO
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  password: {}
+                  role:
+                    type: string
+                  dateOfBirth:
+                    type: string
+                  email:
+                    type: string
+                  username:
+                    type: string
+              examples:
+                '0':
+                  value: >-
+                    {"firstName":"testing-name","lastName":"testing-lastName","dateOfBirth":"01-01-1990","email":"email@email.com","username":"testing-username","password":null,"role":"USER"}
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /homepage/getPieGraph/01-09-2021:
+    get:
+      tags:
+      - Homepage
+      summary: pieGraphHomepage
+      description: Return pieGraphHomepege
+      responses:
+        '200':
+          description: PieGraphDTO
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  walletList:
+                    type: array
+                    items:
+                      type: string
+                  statementList:
+                    type: array
+                    items:
+                      type: number
+              examples:
+                '0':
+                  value: '{"walletList":["my-edited-wallet"],"statementList":[100.0]}'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /homepage/reportHomepage:
+    get:
+      tags:
+      - Homepage
+      summary: report
+      description: Return Report Homepage
+      responses:
+        '200':
+          description: Report Homepage DTO
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pilTotal:
+                    type: number
+                  listDate:
+                    type: array
+                    items:
+                      type: string
+                  pil:
+                    type: number
+                  beforeLastDate:
+                    type: string
+                  statementList:
+                    type: array
+                    items:
+                      type: number
+                  firstDate:
+                    type: string
+                  pilPerformance:
+                    type: number
+                  statementTotalPercent:
+                    type: string
+                  statementTotal:
+                    type: number
+                  listPil:
+                    type: array
+                    items:
+                      type: number
+                  lastDate:
+                    type: string
+              examples:
+                '0':
+                  value: >-
+                    {"statementTotal":200.0,"statementTotalPercent":"Infinity","pilPerformance":0.0,"pil":200.0,"pilTotal":0.0,"lastDate":"","beforeLastDate":"","firstDate":"01-09-2021","listDate":["01-09-2021"],"statementList":[200.0],"listPil":[0.0]}
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /:
+    get:
+      tags:
+      - Web
+      summary: loginPage
+      description: Return loginPage
+      responses:
+        '200':
+          description: default page
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080

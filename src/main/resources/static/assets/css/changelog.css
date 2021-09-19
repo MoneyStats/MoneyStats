@@ -1,0 +1,36 @@
+.loginpage {
+    background-image: url('https://wallpaperaccess.com/full/1104818.jpg');
+    height: 100vh;
+    margin: 0px;
+    background-size: cover;
+    background-position: top;
+}
+
+.colorLogo {
+    background-color: #080957 !important;
+}
+
+/* EFFETTO ROTAZIONE IMG ON MOUSE */
+.hover-rotate {
+    overflow: hidden;
+    margin: 8px;
+    min-width: 240px;
+    max-width: 320px;
+    width: 100%;
+}
+
+.hover-rotate img {
+    transition: all 0.3s;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.hover-rotate:hover img {
+    transform: scale(1.3) rotate(5deg);
+}
+
+/* Fine Hover */
+
+.opacity {
+    opacity: 0.9;
+}
