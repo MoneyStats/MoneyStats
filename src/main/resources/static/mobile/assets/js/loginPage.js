@@ -19,8 +19,8 @@ $(document).ready(function () {
             success: function (response) {
                 Swal.fire({
                     icon: 'success',
-                    title: '<span style="color:#2D2C2C">INSERITO!</span>',
-                    text: 'Utente inserito Correttamente',
+                    title: '<span style="color:#2D2C2C">Insert!</span>',
+                    text: 'User insert correctly',
                     showConfirmButton: false,
                     timer: 1000
                 }),
@@ -33,29 +33,29 @@ $(document).ready(function () {
                 if (responseDTO === INVALID_AUTH_CREDENTIAL_DTO) {
                     Swal.fire({
                         icon: 'error',
-                        title: "<span style='color:#2D2C2C'>Errore, Non è possibile aggiungere l'utente!</span>",
-                        text: 'Controlla i dati e riprova.'
+                        title: "<span style='color:#2D2C2C'>Error, is not possible to add the User</span>",
+                        text: 'Check Data and try again.'
                     })
                 }
                 if (responseDTO === DATABASE_ERROR) {
                     Swal.fire({
                         icon: 'error',
-                        title: "<span style='color:#2D2C2C'>Errore Interno</span>",
-                        text: 'Riprova Più tardi.'
+                        title: "<span style='color:#2D2C2C'>Internal Error</span>",
+                        text: 'Try later.'
                     })
                 }
                 if (responseDTO === USER_PRESENT) {
                     Swal.fire({
                         icon: 'error',
-                        title: "<span style='color:#2D2C2C'>Errore, Non è possibile aggiungere l'utente!</span>",
-                        text: "Lo username inserito è già presente, riprova con un'altro username."
+                        title: "<span style='color:#2D2C2C'>Error, is not possible to add the Use</span>r",
+                        text: "The username isert is already present, try with another username."
                     })
                 }
                 if (responseDTO === INTERNAL_SERVER_ERROR) {
                     Swal.fire({
                         icon: 'error',
-                        title: "<span style='color:#2D2C2C'>Errore Interno</span>",
-                        text: 'Riprova Più tardi.'
+                        title: "<span style='color:#2D2C2C'>Internal Error</span>",
+                        text: 'Try later.'
                     })
                 }
             }
@@ -73,13 +73,13 @@ $(document).ready(function () {
             password: $('#password_mobile').val()
         }
         Swal.fire({
-            title: 'Sicuro di Salvare?',
-            text: "Confermare registrazione?",
+            title: 'Are you sure to Save?',
+            text: "Confirm Signup Current User?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Registrati'
+            confirmButtonText: 'Sign up'
         }).then((result) => {
             if (result.isConfirmed) {
                 addUser(authCredentialDTO);
@@ -124,8 +124,8 @@ $(document).ready(function () {
                 var accessToken = tokenDTO.accessToken;
                 Swal.fire({
                     icon: 'success',
-                    title: '<span style="color:#2D2C2C">Credenziali corrette!</span>',
-                    text: `Benvenuto ${userLogged}`,
+                    title: '<span style="color:#2D2C2C">Correct Credential!</span>',
+                    text: `Welcome ${userLogged}`,
                     showConfirmButton: false,
                     timer: 1500
                 }),
@@ -140,29 +140,29 @@ $(document).ready(function () {
                 if (responseDTO === INVALID_AUTH_INPUT_DTO) {
                     Swal.fire({
                         icon: 'error',
-                        title: "<span style='color:#2D2C2C'>Errore!</span>",
-                        text: 'Controlla i dati e riprova.'
+                        title: "<span style='color:#2D2C2C'>Error!</span>",
+                        text: 'Check your data and try again.'
                     })
                 }
                 if (responseDTO === DATABASE_ERROR) {
                     Swal.fire({
                         icon: 'error',
-                        title: "<span style='color:#2D2C2C'>Errore Interno</span>",
-                        text: 'Riprova Più tardi.'
+                        title: "<span style='color:#2D2C2C'>Internal Error</span>",
+                        text: 'Try again later.'
                     })
                 }
                 if (responseDTO === WRONG_CREDENTIAL) {
                     Swal.fire({
                         icon: 'error',
-                        title: "<span style='color:#2D2C2C'>Credenziali Errate</span>",
-                        text: "Username o Password errati, riprova."
+                        title: "<span style='color:#2D2C2C'>Wrong Credential</span>",
+                        text: "Username o Password missmatch, try again."
                     })
                 }
                 if (responseDTO === INTERNAL_SERVER_ERROR) {
                     Swal.fire({
                         icon: 'error',
-                        title: "<span style='color:#2D2C2C'>Errore Interno</span>",
-                        text: 'Riprova Più tardi.'
+                        title: "<span style='color:#2D2C2C'>Internal Error</span>",
+                        text: 'Try again later.'
                     })
                 }
             }

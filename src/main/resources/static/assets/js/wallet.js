@@ -32,10 +32,10 @@ $(document).ready(function () {
                 <td>${resume[i].category.name}</td>
                 <td>
                     <div class="btn-group roundedCorner" role="group">
-                        <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary roundedCorner dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Opzioni</button>
+                        <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary roundedCorner dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Options</button>
                             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                <li><a class="dropdown-item btn-modifica-wallet" data-bs-toggle="modal" data-bs-target="#editWallet" data-id='${resume[i].id}'>Modifica</a></li>
-                                <li><a class="dropdown-item btn-elimina-wallet" data-id='${resume[i].id}'>Elimina</a></li>
+                                <li><a class="dropdown-item btn-modifica-wallet" data-bs-toggle="modal" data-bs-target="#editWallet" data-id='${resume[i].id}'>Edit Wallet</a></li>
+                                <li><a class="dropdown-item btn-elimina-wallet" data-id='${resume[i].id}'>Delete</a></li>
                             </ul>
                     </div>
                 </td>

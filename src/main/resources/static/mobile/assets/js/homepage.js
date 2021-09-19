@@ -33,7 +33,7 @@ $(document).ready(function () {
                     })
                     Toast.fire({
                         icon: 'error',
-                        title: "<span style='color:#2D2C2C'>Sessione Scaduta, reinderizzazione...</span>",
+                        title: "<span style='color:#2D2C2C'>Session Expired, reidirect...</span>",
                     })
                     setTimeout(function () {
                         window.location.href = "app-login.html";
@@ -151,7 +151,7 @@ $(document).ready(function () {
         // Graph
         var options = {
             series: [{
-                name: 'Capitali Totali',
+                name: 'Toral Capital ',
                 data: graphValues,
             }, {
                 name: 'PIL',
@@ -381,7 +381,7 @@ $(document).ready(function () {
         })
         Toast.fire({
             icon: 'info',
-            title: "<span style='color:#2D2C2C'>Reinderizzazione...</span>",
+            title: "<span style='color:#2D2C2C'>Reidirect...</span>",
         })
         setTimeout(function () {
             window.location.href = "../homepage.html";
