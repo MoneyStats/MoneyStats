@@ -9,7 +9,7 @@ VALUES ('Cash'),
        ('Debit Card'),
        ('Recurrence'),
        ('Bank Account'),
-       ('Save'),
+       ('Safe'),
        ('Coupon'),
        ('Investments'),
        ('Other');

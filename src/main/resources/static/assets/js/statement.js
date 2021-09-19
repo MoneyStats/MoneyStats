@@ -40,7 +40,7 @@ $(document).ready(function () {
                     })
                     Toast.fire({
                         icon: 'error',
-                        title: 'Sessione Scaduta, reinderizzazione...'
+                        title: 'Expired Session, reidirect...'
                     })
                     setTimeout(function () {
                         window.location.href = "loginPage.html";
@@ -66,39 +66,39 @@ $(document).ready(function () {
                     let img = '';
                     let color = '';
                     switch (resume[i].category.name) {
-                        case 'Contanti':
+                        case 'Cash':
                             img = 'fas fa-money-bill-wave';
                             color = 'bg-success';
                             break;
-                        case 'Conto Corrente':
+                        case 'Bank Account':
                             img = 'fas fa-landmark';
                             color = 'bg-warning';
                             break;
-                        case 'Carte di Credito':
+                        case 'Credit Card':
                             img = 'far fa-credit-card';
                             color = 'bg-danger';
                             break;
-                        case 'Carte di Debito':
+                        case 'Debit Card':
                             img = 'fas fa-credit-card';
                             color = 'bg-dark';
                             break;
-                        case 'Cupon':
+                        case 'Coupon':
                             img = 'fas fa-receipt';
                             color = 'bg-info';
                             break;
-                        case 'Risparmi':
+                        case 'Safe':
                             img = 'fas fa-piggy-bank';
                             color = 'bg-success';
                             break;
-                        case 'Cash Elettronico':
+                        case 'Cash Electronic':
                             img = 'fas fa-money-bill';
                             color = 'bg-primary';
                             break;
-                        case 'Investimenti':
+                        case 'Investments':
                             img = 'fas fa-chart-line';
                             color = 'bg-primary';
                             break;
-                        case 'Mutui':
+                        case 'Recurrence':
                             img = 'fas fa-balance-scale-left';
                             color = 'bg-danger';
                             break;
@@ -106,11 +106,11 @@ $(document).ready(function () {
                             img = 'fas fa-file-invoice-dollar';
                             color = 'bg-warning';
                             break;
-                        case 'Assegni':
+                        case 'Check':
                             img = 'fas fa-money-check-alt';
                             color = 'bg-info';
                             break;
-                        case 'Altro':
+                        case 'Others':
                             img = 'fas fa-hand-holding-usd';
                             color = 'bg-secondary';
                             break;
@@ -127,8 +127,8 @@ $(document).ready(function () {
                     <h5 class="card-title text-uppercase text-muted mb-0">${resume[i].name} (${resume[i].category.name})</h5>
                     <hr>
                     <div class='form-floating mb-3'> 
-                    <input style="background-color: rgba(255, 255, 255, 0.7);" type='number' id="value${resume[i].id}" class='form-control roundedCorner mx-auto' placeholder="Inserire €EUR..." required>
-                    <label for='value'>Inserire €EUR</label>
+                    <input style="background-color: rgba(255, 255, 255, 0.7);" type='number' id="value${resume[i].id}" class='form-control roundedCorner mx-auto' placeholder="Insert €EUR..." required>
+                    <label for='value'>Insert €EUR</label>
                 </div>
                     <input type='hidden' id="wallet${resume[i].id}" value="${resume[i].id}">
                     </div>
@@ -139,7 +139,7 @@ $(document).ready(function () {
                         </div>
                   </div>
                   <p class="mt-3 mb-0 text-muted text-sm">
-                  <span class="text-nowrap sincetot">Inserire Valori</span>
+                  <span class="text-nowrap sincetot">Insert Value</span>
                     </p>
                     </div>
               `).hide().appendTo(listWallet).fadeIn(i * 20);
@@ -291,7 +291,7 @@ $(document).ready(function () {
         })
         Toast.fire({
             icon: 'info',
-            title: "<span style='color:#2D2C2C'>Reinderizzazione...</span>",
+            title: "<span style='color:#2D2C2C'>Reidirect...</span>",
         })
         setTimeout(function () {
             window.location.href = "mobile/index.html";
