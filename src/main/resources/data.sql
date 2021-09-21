@@ -1,3 +1,8 @@
+/*
+insert into users(first_name, last_name, date_of_birth, email, username, password, role) values
+("Admin", "User", "NaN", "admin@email.com", "admin", "$2a$10$0IZ9z7sahojAvMyEQYess.BMpOpXaOsrCxqPiaMaaXVYGH3jlDPuq", "ADMIN");
+ */
+
 SET @n_category = 10;
 
 INSERT INTO categories (name)
