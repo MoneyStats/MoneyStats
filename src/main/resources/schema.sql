@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS categories
+(
+    id   int primary key auto_increment,
+    name varchar(50)
+);

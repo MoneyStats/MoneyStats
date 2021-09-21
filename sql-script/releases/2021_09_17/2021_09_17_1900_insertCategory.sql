@@ -1,4 +1,4 @@
-CREATE TABLE categories
+CREATE TABLE IF NOT EXISTS categories
 (
     id   int primary key auto_increment,
     name varchar(50)
@@ -12,5 +12,5 @@ VALUES ('Cash'),
        ('Safe'),
        ('Coupon'),
        ('Investments'),
-       ('Other');
+       ('Others');
 
