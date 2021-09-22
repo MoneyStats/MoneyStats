@@ -62,6 +62,7 @@ $(document).ready(function () {
     // Modal Get Wallet List Homepage
     //-------------------------------------------------------------
     function getWallet() {
+        const listWallet = $('#listWallet');
         $.ajax({
             type: "GET",
             url: "/wallet/listMobile",
@@ -71,7 +72,6 @@ $(document).ready(function () {
                 Authorization: sessionStorage.getItem('accessToken')
             },
             success: function (resume) {
-                const listWallet = $('#listWallet');
                 for (let i = resume.walletEntities.length - 1; i >= 0; i--) {
                     var defaultValue = 0.00;
                     let img = '';
@@ -178,6 +178,43 @@ $(document).ready(function () {
                 </div>
                 <!-- * card block -->`).hide().appendTo(listWallet).fadeIn(i * 20);
                 }
+            },
+            error: function () {
+                $(`<!-- card block -->
+                <div class="card-block bg-dark mb-2">
+                    <div class="card-main">
+                        <div class="card-button dropdown">
+                            <button type="button" class="btn btn-link btn-icon" data-bs-toggle="dropdown">
+                                <ion-icon name="ellipsis-horizontal"></ion-icon>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item btn-modifica-wallet" data-bs-toggle="modal" data-bs-target="#editWalletActionSheet">
+                                    <ion-icon name="pencil-outline"></ion-icon>Edit
+                                </a>
+                                <a class="dropdown-item btn-elimina-wallet">
+                                    <ion-icon name="close-outline"></ion-icon>Remove
+                                </a>
+                            </div>
+                        </div>
+                        <div class="balance">
+                            <span class="label">BALANCE</span>
+                            <h1 class="title">€ 0.00</h1>
+                        </div>
+                        <div class="in">
+                            <div class="card-number">
+                                <span class="label">Wallet Name</span>
+                                Insert Statement to get The Data
+                            </div>
+                            <div class="bottom">
+                                <div class="card-expiry">
+                                    <span class="label">Category</span>
+                                    Insert Wallet to get The Category
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- * card block -->`).appendTo(listWallet);
             }
         })
     }

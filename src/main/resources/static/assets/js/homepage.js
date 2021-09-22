@@ -133,6 +133,9 @@ $(document).ready(function () {
                 //------------------------------------------------------------------------
                 // END DATA HOMEPAGE
                 //------------------------------------------------------------------------
+            },
+            error: function () {
+                $(`<span class="text-warning h2 font-weight-bold mb-0"><i class="fa fa-arrow-down"></i> 0%</span>`).appendTo(`.performanceFirstDate`)
             }
         });
     }
