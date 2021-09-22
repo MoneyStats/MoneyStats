@@ -52,7 +52,7 @@ $(document).ready(function () {
                     Swal.fire({
                         icon: 'error',
                         title: "Error",
-                        text: "The username isert is already present, try with another username."
+                        text: "The username is already present, try with another username."
                     })
                     return;
                 }
@@ -103,12 +103,12 @@ $(document).ready(function () {
         }
         Swal.fire({
             title: 'Do you want to save?',
-            text: "Confirm to Sign up",
+            text: "Confirm to register Current User",
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Register'
+            confirmButtonText: 'Sign up'
         }).then((result) => {
             if (result.isConfirmed) {
                 addUser(authCredentialDTO);
@@ -118,6 +118,7 @@ $(document).ready(function () {
                 $('#email_desktop').val('');
                 $('#username_desktop').val('');
                 $('#password_desktop').val('');
+                $('#check_password_desktop').val('');
             } else {
                 return;
             }
@@ -154,7 +155,7 @@ $(document).ready(function () {
                 var accessToken = tokenDTO.accessToken;
                 Swal.fire({
                     icon: 'success',
-                    title: 'Correct credential!',
+                    title: 'Correct Credential!',
                     text: `Welcome ${userLogged}`,
                     showConfirmButton: false,
                     timer: 1500
@@ -185,8 +186,9 @@ $(document).ready(function () {
                     Swal.fire({
                         icon: 'error',
                         title: "Wrong Credential",
-                        text: "Wrong Username o Password, try again."
+                        text: "Wrong username or password, try again."
                     })
+                    return;
                 }
                 if (responseDTO === INTERNAL_SERVER_ERROR) {
                     Swal.fire({

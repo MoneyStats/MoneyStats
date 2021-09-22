@@ -14,7 +14,7 @@ public class WebController {
    */
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public String index() {
-    return "loginPage.html";
+    return "loginpage.html";
   }
 
   /**
@@ -24,6 +24,6 @@ public class WebController {
    */
   @RequestMapping(value = "/logout", method = RequestMethod.GET)
   public String logout() {
-    return "loginPage.html";
+    return "loginpage.html";
   }
 }

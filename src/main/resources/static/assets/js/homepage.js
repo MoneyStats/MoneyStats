@@ -10,7 +10,7 @@ $(document).ready(function () {
     function isValidated() {
         const token = sessionStorage.getItem('accessToken');
         if (token === null) {
-            window.location.href = 'loginPage.html';
+            window.location.href = 'loginpage.html';
         }
         //-------------------------------------------------------------
         // Check if session is validated with a user
@@ -42,7 +42,7 @@ $(document).ready(function () {
                         title: 'Session Expired, reidirect...'
                     })
                     setTimeout(function () {
-                        window.location.href = "loginPage.html";
+                        window.location.href = "loginpage.html";
                     }, 1500);
                 }
             }

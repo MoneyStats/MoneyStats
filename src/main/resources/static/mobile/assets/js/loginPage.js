@@ -72,9 +72,33 @@ $(document).ready(function () {
             username: $('#username_mobile').val(),
             password: $('#password_mobile').val()
         }
+        var checkPassword = $('#password2').val();
+        var emptyValue = "";
+        if (authCredentialDTO.firstName === emptyValue || authCredentialDTO.lastName === emptyValue || authCredentialDTO.dateOfBirth === emptyValue || authCredentialDTO.email === emptyValue){
+            return;
+        }
+        if (authCredentialDTO.password != checkPassword){
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'center',
+                showConfirmButton: false,
+                timer: 1000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+              
+              Toast.fire({
+                icon: 'error',
+                title: "<span style='color:#2D2C2C'>Password don't match, try again</span>"
+              })
+              return;
+        }
         Swal.fire({
-            title: 'Are you sure to Save?',
-            text: "Confirm Signup Current User?",
+            title: "<span style='color:#2D2C2C'>Do you want to save?</span>",
+            text: "Confirm to register Current User",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -83,15 +107,17 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 addUser(authCredentialDTO);
+                $('#firstName_mobile').val('');
+                $('#lastName_mobile').val('');
+                $('#dateOfBirth_mobile').val('');
+                $('#email_mobile').val('');
+                $('#username_mobile').val('');
+                $('#password_mobile').val('');
+                $('#password2').val('');
             }
         })
 
-        $('#firstName_mobile').val('');
-        $('#lastName_mobile').val('');
-        $('#dateOfBirth_mobile').val('');
-        $('#email_mobile').val('');
-        $('#username_mobile').val('');
-        $('#password_mobile').val('');
+        
     })
 // SignUp process end
 
