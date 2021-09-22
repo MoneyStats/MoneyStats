@@ -9,6 +9,7 @@ $(document).ready(function () {
     const INVALID_AUTH_INPUT_DTO = "INVALID_AUTH_INPUT_DTO";
     const INVALID_AUTH_CREDENTIAL_DTO = "INVALID_AUTH_CREDENTIAL_DTO";
     const DATABASE_ERROR = "DATABASE_ERROR";
+    const EMAIL_PRESENT = "EMAIL_PRESENT";
 
     /*--------------------------------------------------------------------------
     *  SignUp Process Start
@@ -20,15 +21,15 @@ $(document).ready(function () {
             data: JSON.stringify(authCredentialDTO),
             contentType: 'application/json',
             dataType: 'json',
-            success: function (response) {
+            success: function () {
                 Swal.fire({
                     icon: 'success',
                     title: 'Insert!',
                     text: 'User Added Correctly',
                     showConfirmButton: false,
                     timer: 1000
-                }),
-                    setTimeout(function (render) {
+                })
+                    setTimeout(function () {
                         window.location.href = 'loginpage.html';
                     }, 1000)
             },
@@ -54,13 +55,19 @@ $(document).ready(function () {
                         title: "Error",
                         text: "The username is already present, try with another username."
                     })
-                    return;
                 }
                 if (responseDTO === INTERNAL_SERVER_ERROR) {
                     Swal.fire({
                         icon: 'error',
                         title: "Internal Error",
                         text: 'Try later.'
+                    })
+                }
+                if (responseDTO === EMAIL_PRESENT) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "Email Present",
+                        text: 'Try with another one.'
                     })
                 }
             }
@@ -82,7 +89,7 @@ $(document).ready(function () {
         if (authCredentialDTO.firstName === emptyValue || authCredentialDTO.lastName === emptyValue || authCredentialDTO.dateOfBirth === emptyValue || authCredentialDTO.email === emptyValue) {
             return;
         }
-        if (authCredentialDTO.password != checkPassword) {
+        if (authCredentialDTO.password !== checkPassword) {
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'center',
@@ -159,10 +166,10 @@ $(document).ready(function () {
                     text: `Welcome ${userLogged}`,
                     showConfirmButton: false,
                     timer: 1500
-                }),
+                })
                     sessionStorage.setItem('accessToken', accessToken);
 
-                setTimeout(function (render) {
+                setTimeout(function () {
                     window.location.href = 'homepage.html';
                 }, 3000)
             },
