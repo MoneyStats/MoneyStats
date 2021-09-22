@@ -45,6 +45,9 @@ public class AuthenticationExceptionMapper {
       case USER_NOT_FOUND:
         error.setMessage(Code.USER_NOT_FOUND.toString());
         return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.NOT_FOUND);
+      case EMAIL_PRESENT:
+        error.setMessage(Code.EMAIL_PRESENT.toString());
+        return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.BAD_REQUEST);
       default:
         error.setMessage("INTERNAL_SERVER_ERROR");
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);

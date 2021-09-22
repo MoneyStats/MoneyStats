@@ -20,6 +20,7 @@ public class AuthCredentialDAO {
   private static final String SELECT_FROM_USERS_WHERE_ROLE =
       "SELECT * FROM users WHERE role = 'USER'";
   private static final String SELECT_FROM_USERS = "SELECT * FROM users WHERE username = ?";
+  private static final String FIND_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
   private static final String INSERT_INTO_USERS =
       "INSERT INTO users (first_name, last_name, date_of_birth, email, username, password, role) VALUES (?, ?, ?, ?, ?, ?, 'USER')";
   private String dbAddress;
@@ -74,6 +75,34 @@ public class AuthCredentialDAO {
                 rs.getString("username"),
                 rs.getString("password"),
                 rs.getString("role"));
+      }
+    } catch (SQLException e) {
+      LOG.error("Database Error in getCredential");
+      throw new AuthenticationException(AuthenticationException.Code.DATABASE_ERROR);
+    }
+    return userCredential;
+  }
+
+  public AuthCredentialEntity findByEmail(String email)
+          throws AuthenticationException {
+    AuthCredentialEntity userCredential = null;
+    try {
+      Connection connection = DriverManager.getConnection(dbAddress, username, password);
+      String sqlCommand = FIND_BY_EMAIL;
+      PreparedStatement pstm = connection.prepareStatement(sqlCommand);
+      pstm.setString(1, email);
+      ResultSet rs = pstm.executeQuery();
+      if (rs.next()) {
+        userCredential =
+                new AuthCredentialEntity(
+                        rs.getLong("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("date_of_birth"),
+                        rs.getString("email"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("role"));
       }
     } catch (SQLException e) {
       LOG.error("Database Error in getCredential");

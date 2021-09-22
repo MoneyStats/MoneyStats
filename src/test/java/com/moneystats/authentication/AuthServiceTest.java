@@ -85,6 +85,18 @@ public class AuthServiceTest {
   }
 
   @Test
+  void signUpUser_shouldReturEmailPresent() throws Exception {
+    AuthCredentialDTO user = new AuthCredentialDTO(TestSchema.ROLE_USER_USERNAME, null);
+
+    AuthenticationException expected =
+            new AuthenticationException(AuthenticationException.Code.EMAIL_PRESENT);
+    AuthenticationException actual =
+            Assertions.assertThrows(AuthenticationException.class, () -> service.signUp(user));
+
+    Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  @Test
   void login_shouldReturnTokenCorrectly() throws Exception {
     Mockito.when(dao.getCredential(TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER))
         .thenReturn(TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER);
