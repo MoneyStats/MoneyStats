@@ -51,9 +51,10 @@ $(document).ready(function () {
                 if (responseDTO === USER_PRESENT) {
                     Swal.fire({
                         icon: 'error',
-                        title: "Error, is not possible to add the User",
-                        text: "The username isert is already present, try with another username."
+                        title: "Error",
+                        text: "The username is already present, try with another username."
                     })
+                    return;
                 }
                 if (responseDTO === INTERNAL_SERVER_ERROR) {
                     Swal.fire({
@@ -76,26 +77,52 @@ $(document).ready(function () {
             username: $('#username_desktop').val(),
             password: $('#password_desktop').val()
         }
+        var checkPassword = $('#check_password_desktop').val();
+        var emptyValue = "";
+        if (authCredentialDTO.firstName === emptyValue || authCredentialDTO.lastName === emptyValue || authCredentialDTO.dateOfBirth === emptyValue || authCredentialDTO.email === emptyValue) {
+            return;
+        }
+        if (authCredentialDTO.password != checkPassword) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'center',
+                showConfirmButton: false,
+                timer: 1000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'error',
+                title: "Password don't match, try again"
+            })
+            return;
+        }
         Swal.fire({
-            title: 'Are you sure to save?',
-            text: "Confirm register?",
-            icon: 'warning',
+            title: 'Do you want to save?',
+            text: "Confirm to register Current User",
+            icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Register'
+            confirmButtonText: 'Sign up'
         }).then((result) => {
             if (result.isConfirmed) {
                 addUser(authCredentialDTO);
+                $('#firstName_desktop').val('');
+                $('#lastName_desktop').val('');
+                $('#dateOfBirth_desktop').val('');
+                $('#email_desktop').val('');
+                $('#username_desktop').val('');
+                $('#password_desktop').val('');
+                $('#check_password_desktop').val('');
+            } else {
+                return;
             }
         })
-
-        $('#firstName_desktop').val('');
-        $('#lastName_desktop').val('');
-        $('#dateOfBirth_desktop').val('');
-        $('#email_desktop').val('');
-        $('#username_desktop').val('');
-        $('#password_desktop').val('');
     })
     // SignUp process end
 
@@ -128,7 +155,7 @@ $(document).ready(function () {
                 var accessToken = tokenDTO.accessToken;
                 Swal.fire({
                     icon: 'success',
-                    title: 'Correct credential!',
+                    title: 'Correct Credential!',
                     text: `Welcome ${userLogged}`,
                     showConfirmButton: false,
                     timer: 1500
@@ -159,8 +186,9 @@ $(document).ready(function () {
                     Swal.fire({
                         icon: 'error',
                         title: "Wrong Credential",
-                        text: "Wrong Username o Password, try again."
+                        text: "Wrong username or password, try again."
                     })
+                    return;
                 }
                 if (responseDTO === INTERNAL_SERVER_ERROR) {
                     Swal.fire({

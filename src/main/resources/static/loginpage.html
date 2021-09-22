@@ -11,6 +11,7 @@
     <meta name='apple-mobile-web-app-status-bar-style' content='#080957'>
     <!-- Login Page Style -->
     <link rel="stylesheet" href="./assets/css/loginPage.css">
+    <link href="./assets/scss/loginpage.scss" rel="stylesheet/scss">
     <!-- JQuery Library -->
     <script src="./assets/js/plugin/jquery-3.6.0.min.js"></script>
     <!-- Login Page Script -->
@@ -45,14 +46,21 @@
         <!-- Sign Up form code Desktop -->
         <div class="form-container sign-up-container">
             <form action="#">
-                <h1>Sign Up</h1>
-                <br>
-                <input type="text" id="firstName_desktop" placeholder="First Name" required/>
-                <input type="text" id="lastName_desktop" placeholder="Last Name" required/>
-                <input type="date" id="dateOfBirth_desktop" placeholder="Date Of Birth" required/>
-                <input type="email" id="email_desktop" placeholder="Email" required/>
-                <input type="text" id="username_desktop" placeholder="Username" required/>
-                <input type="password" id="password_desktop" placeholder="Password" required/>
+                <h2>Sign Up</h2>
+                <input type="text" id="firstName_desktop" style="height: 30px; border-radius: 100px;"
+                       placeholder="First Name" required/>
+                <input type="text" id="lastName_desktop" style="height: 30px; border-radius: 100px;"
+                       placeholder="Last Name" required/>
+                <input type="date" id="dateOfBirth_desktop" style="height: 30px; border-radius: 100px;"
+                       placeholder="Date Of Birth" required/>
+                <input type="email" id="email_desktop" style="height: 30px; border-radius: 100px;" placeholder="Email"
+                       required/>
+                <input type="text" id="username_desktop" style="height: 30px; border-radius: 100px;"
+                       placeholder="Username" required/>
+                <input type="password" id="password_desktop" style="height: 30px; border-radius: 100px;"
+                       placeholder="Password" required/>
+                <input type="password" id="check_password_desktop" style="height: 30px; border-radius: 100px;"
+                       placeholder="Insert Password Again" required/>
                 <button id="signUpBtn_desktop">Sign Up</button>
             </form>
         </div>
@@ -66,8 +74,10 @@
                     <a href="#" class="social"><i class="fa fa-linkedin"></i></a>
                 </div>
                 <span style="padding-left: 95px;">or use your Account</span>
-                <input type="text" name="username" id="username_login_desktop" class="username" placeholder="Username"/>
-                <input type="password" id="password_login_desktop" name="password" placeholder="Password"/>
+                <input type="text" name="username" style="border-radius: 100px;" id="username_login_desktop"
+                       class="username" placeholder="Username"/>
+                <input type="password" style="border-radius: 100px;" id="password_login_desktop" name="password"
+                       placeholder="Password"/>
                 <a href="#" style="padding-left: 90px;">Forgot Password?</a>
                 <div style="padding-left: 80px; padding-top: 10px;">
                     <button id="loginBtn_desktop">Log In</button>
