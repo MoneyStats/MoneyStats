@@ -79,10 +79,10 @@ $(document).ready(function () {
         }
         var checkPassword = $('#check_password_desktop').val();
         var emptyValue = "";
-        if (authCredentialDTO.firstName === emptyValue || authCredentialDTO.lastName === emptyValue || authCredentialDTO.dateOfBirth === emptyValue || authCredentialDTO.email === emptyValue){
+        if (authCredentialDTO.firstName === emptyValue || authCredentialDTO.lastName === emptyValue || authCredentialDTO.dateOfBirth === emptyValue || authCredentialDTO.email === emptyValue) {
             return;
         }
-        if (authCredentialDTO.password != checkPassword){
+        if (authCredentialDTO.password != checkPassword) {
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'center',
@@ -90,16 +90,16 @@ $(document).ready(function () {
                 timer: 1000,
                 timerProgressBar: true,
                 didOpen: (toast) => {
-                  toast.addEventListener('mouseenter', Swal.stopTimer)
-                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
                 }
-              })
-              
-              Toast.fire({
+            })
+
+            Toast.fire({
                 icon: 'error',
                 title: "Password don't match, try again"
-              })
-              return;
+            })
+            return;
         }
         Swal.fire({
             title: 'Do you want to save?',

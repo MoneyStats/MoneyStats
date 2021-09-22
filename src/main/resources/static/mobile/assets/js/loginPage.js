@@ -74,10 +74,10 @@ $(document).ready(function () {
         }
         var checkPassword = $('#password2').val();
         var emptyValue = "";
-        if (authCredentialDTO.firstName === emptyValue || authCredentialDTO.lastName === emptyValue || authCredentialDTO.dateOfBirth === emptyValue || authCredentialDTO.email === emptyValue){
+        if (authCredentialDTO.firstName === emptyValue || authCredentialDTO.lastName === emptyValue || authCredentialDTO.dateOfBirth === emptyValue || authCredentialDTO.email === emptyValue) {
             return;
         }
-        if (authCredentialDTO.password != checkPassword){
+        if (authCredentialDTO.password != checkPassword) {
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'center',
@@ -85,16 +85,16 @@ $(document).ready(function () {
                 timer: 1000,
                 timerProgressBar: true,
                 didOpen: (toast) => {
-                  toast.addEventListener('mouseenter', Swal.stopTimer)
-                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
                 }
-              })
-              
-              Toast.fire({
+            })
+
+            Toast.fire({
                 icon: 'error',
                 title: "<span style='color:#2D2C2C'>Password don't match, try again</span>"
-              })
-              return;
+            })
+            return;
         }
         Swal.fire({
             title: "<span style='color:#2D2C2C'>Do you want to save?</span>",
@@ -117,7 +117,7 @@ $(document).ready(function () {
             }
         })
 
-        
+
     })
 // SignUp process end
 
