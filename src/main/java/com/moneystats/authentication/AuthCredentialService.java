@@ -39,12 +39,22 @@ public class AuthCredentialService {
     AuthenticationValidator.validateAuthCredentialDTO(userCredential);
     AuthCredentialInputDTO authCredentialInputDTO =
         new AuthCredentialInputDTO(userCredential.getUsername(), userCredential.getPassword());
+
+    // Check if the username is present5
     AuthCredentialEntity authCredentialEntity =
-        authCredentialDAO.getCredential(authCredentialInputDTO);
+            authCredentialDAO.getCredential(authCredentialInputDTO);
     if (authCredentialEntity != null) {
       LOG.error("Username Present, needs different");
       throw new AuthenticationException(AuthenticationException.Code.USER_PRESENT);
     }
+
+    // Check if Email is present
+    AuthCredentialEntity checkEmail = authCredentialDAO.findByEmail(userCredential.getEmail());
+    if (checkEmail != null){
+      LOG.error("Email Present, need another one");
+      throw new AuthenticationException(AuthenticationException.Code.EMAIL_PRESENT);
+    }
+
     userCredential.setPassword(bCryptPasswordEncoder.encode(userCredential.getPassword()));
     authCredentialDAO.insertUserCredential(userCredential);
     return new AuthResponseDTO(SchemaDescription.USER_ADDED_CORRECT);

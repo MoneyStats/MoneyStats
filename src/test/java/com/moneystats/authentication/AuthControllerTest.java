@@ -78,6 +78,22 @@ public class AuthControllerTest {
   }
 
   @Test
+  void addUser_shouldReturnEmailPresent() throws Exception {
+    AuthCredentialDTO user = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    String userAsString = objectMapper.writeValueAsString(user);
+
+    Mockito.when(credential.signUp(Mockito.any()))
+            .thenThrow(new AuthenticationException(AuthenticationException.Code.EMAIL_PRESENT));
+
+    mockMvc
+            .perform(
+                    post("/credential/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(userAsString))
+            .andExpect(status().isBadRequest());
+  }
+
+  @Test
   void login_shouldReturnTokenCorrectly() throws Exception {
     String userAsString =
         objectMapper.writeValueAsString(TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER);
