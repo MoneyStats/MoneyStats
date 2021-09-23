@@ -46,12 +46,6 @@
         <div class="pageTitle">
             Settings
         </div>
-        <div class="right">
-            <a href="app-notifications.html" class="headerButton">
-                <ion-icon class="icon" name="notifications-outline"></ion-icon>
-                <span class="badge badge-danger">4</span>
-            </a>
-        </div>
     </div>
     <!-- * App Header -->
 
@@ -86,9 +80,17 @@
             </li>
         </ul>
 
-        <div class="listview-title mt-1">Notifications</div>
+        <div class="listview-title mt-1">MoneyStats</div>
         <ul class="listview image-listview text inset">
             <li>
+                <a href="app-wallet.html" class="item">
+                    <div class="in">
+                        <div>Wallet</div>
+                        <span class="text-primary">Edit</span>
+                    </div>
+                </a>
+            </li>
+            <!-- <li>
                 <div class="item">
                     <div class="in">
                         <div>
@@ -103,42 +105,34 @@
                         </div>
                     </div>
                 </div>
-            </li>
-            <li>
+            </li> -->
+            <!-- <li>
                 <a href="#" class="item">
                     <div class="in">
                         <div>Notification Sound</div>
                         <span class="text-primary">Beep</span>
                     </div>
                 </a>
-            </li>
+            </li> -->
         </ul>
 
         <div class="listview-title mt-1">Profile Settings</div>
         <ul class="listview image-listview text inset">
             <li>
-                <a href="#" class="item">
+                <a href="#" class="item" onclick="toastbox('soon')">
                     <div class="in">
                         <div>Change Username</div>
                     </div>
                 </a>
             </li>
             <li>
-                <a href="#" class="item">
+                <a href="#" class="item" onclick="toastbox('soon')">
                     <div class="in">
                         <div>Update E-mail</div>
                     </div>
                 </a>
             </li>
-            <li>
-                <a href="#" class="item">
-                    <div class="in">
-                        <div>Address</div>
-                        <span class="text-primary">Edit</span>
-                    </div>
-                </a>
-            </li>
-            <li>
+            <!-- <li>
                 <div class="item">
                     <div class="in">
                         <div>
@@ -150,19 +144,19 @@
                         </div>
                     </div>
                 </div>
-            </li>
+            </li> -->
         </ul>
 
         <div class="listview-title mt-1">Security</div>
         <ul class="listview image-listview text mb-2 inset">
             <li>
-                <a href="#" class="item">
+                <a href="#" class="item" onclick="toastbox('soon')">
                     <div class="in">
                         <div>Update Password</div>
                     </div>
                 </a>
             </li>
-            <li>
+            <!-- <li>
                 <div class="item">
                     <div class="in">
                         <div>
@@ -174,11 +168,11 @@
                         </div>
                     </div>
                 </div>
-            </li>
+            </li> -->
             <li>
-                <a href="#" class="item">
+                <a href="/logout" class="item">
                     <div class="in">
-                        <div>Log out all devices</div>
+                        <div>Log out</div>
                     </div>
                 </a>
             </li>
@@ -224,6 +218,17 @@
         </a>
     </div>
     <!-- * App Bottom Menu -->
+
+    <!-- toast danger -->
+<div id="soon" class="toast-box toast-bottom bg-danger">
+    <div class="in">
+        <div class="text">
+            Available Soon..
+        </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-text-light close-button">OK</button>
+</div>
+<!-- * toast danger -->
 
     <!-- ========= JS Files =========  -->
 <!-- Bootstrap -->
