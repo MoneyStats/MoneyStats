@@ -1,20 +1,24 @@
 package com.moneystats.authentication;
 
-import com.moneystats.authentication.DTO.AuthCredentialDTO;
-import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
-import com.moneystats.authentication.DTO.AuthResponseDTO;
-import com.moneystats.authentication.DTO.TokenDTO;
-import com.moneystats.authentication.entity.AuthCredentialEntity;
-import com.moneystats.generic.SchemaDescription;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
+import com.moneystats.authentication.AuthenticationException.Code;
+import com.moneystats.authentication.DTO.AuthCredentialDTO;
+import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
+import com.moneystats.authentication.DTO.AuthCredentialToUpdateDTO;
+import com.moneystats.authentication.DTO.AuthResponseDTO;
+import com.moneystats.authentication.DTO.TokenDTO;
+import com.moneystats.authentication.entity.AuthCredentialEntity;
+import com.moneystats.generic.SchemaDescription;
 
 @Service
 public class AuthCredentialService {
@@ -42,7 +46,7 @@ public class AuthCredentialService {
 
     // Check if the username is present5
     AuthCredentialEntity authCredentialEntity =
-            authCredentialDAO.getCredential(authCredentialInputDTO);
+        authCredentialDAO.getCredential(authCredentialInputDTO);
     if (authCredentialEntity != null) {
       LOG.error("Username Present, needs different");
       throw new AuthenticationException(AuthenticationException.Code.USER_PRESENT);
@@ -50,7 +54,7 @@ public class AuthCredentialService {
 
     // Check if Email is present
     AuthCredentialEntity checkEmail = authCredentialDAO.findByEmail(userCredential.getEmail());
-    if (checkEmail != null){
+    if (checkEmail != null) {
       LOG.error("Email Present, need another one");
       throw new AuthenticationException(AuthenticationException.Code.EMAIL_PRESENT);
     }
@@ -142,5 +146,23 @@ public class AuthCredentialService {
               authCredentialEntity.getRole()));
     }
     return listUsers;
+  }
+
+  public AuthResponseDTO updateUser(
+      AuthCredentialToUpdateDTO authCredentialToUpdateDTO, TokenDTO tokenDTO)
+      throws AuthenticationException {
+    TokenValidation.validateTokenDTO(tokenDTO);
+    AuthenticationValidator.validateAuthCredentiaToUpdateDTO(authCredentialToUpdateDTO);
+    AuthCredentialDTO user = tokenService.parseToken(tokenDTO);
+
+    if (!authCredentialToUpdateDTO.getUsername().equalsIgnoreCase(user.getUsername())) {
+      LOG.error(
+          "Username does not match AuthCredentialService updateUser:158 {}",
+          authCredentialToUpdateDTO.getUsername());
+      throw new AuthenticationException(Code.USER_NOT_MATCH);
+    }
+
+    authCredentialDAO.updateUserById(authCredentialToUpdateDTO);
+    return new AuthResponseDTO(SchemaDescription.USER_UPDATED);
   }
 }
