@@ -18,6 +18,8 @@ import com.moneystats.authentication.DTO.AuthCredentialToUpdateDTO;
 import com.moneystats.authentication.DTO.AuthResponseDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
 
+import javax.validation.constraints.NotNull;
+
 @RestController
 @RequestMapping("/credential")
 public class AuthCredentialController {
@@ -53,7 +55,7 @@ public class AuthCredentialController {
   @PutMapping("/update")
   public AuthResponseDTO updateUser(
       @RequestHeader(value = "Authorization") String jwt,
-      AuthCredentialToUpdateDTO authCredentialToUpdateDTO)
+      @RequestBody AuthCredentialToUpdateDTO authCredentialToUpdateDTO)
       throws AuthenticationException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return service.updateUser(authCredentialToUpdateDTO, tokenDTO);

@@ -5,7 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='shortcut icon' type='image/x-icon' href='./assets/img/logos/favicon_trasparent.png'>
-    <!-- ========= CSS Settings ========= -->
+    <!-- ========= JS Files =========  -->
+    <!-- JQuery -->
+    <script src="./assets/js/plugin/jquery-3.6.0.min.js"></script>
+    <!-- JS Settigns -->
+    <script src="./assets/js/settings.js"></script>
+    <!-- JS Loader -->
+    <script src="./assets/js/plugin/loader.js"></script>
+	<!-- SweetAlert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	
+	<!-- ========= CSS Settings ========= -->
     <!-- CSS Settings -->
     <link rel="stylesheet" href="./assets/css/settings.css">
     <!-- CSS Loader -->
@@ -31,13 +41,6 @@
     <!-- ========= Manifest ========= -->
     <link rel="manifest" href="__manifest.json">
     <title>Settings</title>
-    <!-- ========= JS Files =========  -->
-    <!-- JQuery -->
-    <script src="./assets/js/plugin/jquery-3.6.0.min.js"></script>
-    <!-- JS Settigns -->
-    <script src="./assets/js/settings.js"></script>
-    <!-- JS Loader -->
-    <script src="./assets/js/plugin/loader.js"></script>
 
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -122,13 +125,13 @@
 							<div class="col-md-6">
 								<div class="form-group">
 								  	<label>Date Of Birth</label>
-								  	<input type="date" id="dateOfBirthSettings" class="form-control" value="01-01-1990">
+								  	<input type="date" id="dateOfBirthSettings" class="form-control" value="1990-01-01">
 								</div>
 							</div>
 						</div>
 						<div>
 							<button class="btn btn-primary" id="updateAuthBtn">Update</button>
-							<button class="btn btn-light">Cancel</button>
+							<a href="homepage.html"><button class="btn btn-light">Cancel</button></a>
 						</div>
 					</div>
 					<div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
@@ -165,8 +168,6 @@
 		</div>
 	</section>
 
-
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>

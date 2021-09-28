@@ -12,6 +12,14 @@
     <!-- ========= CSS Files ========= -->
     <link rel="stylesheet" href="assets/css/style.css">
 
+    <!-- ========= JS Files =========  -->
+    <!-- JQuery -->
+    <script src="./assets/js/lib/jquery-3.6.0.min.js"></script>
+    <!-- JS Settigns -->
+    <script src="./assets/js/settings.js"></script>
+    <!-- SweetAlert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- ========= SEZIONE COLORI SEARCH BAR ========= -->
     <!-- Chrome, Firefox OS and Opera -->
     <meta name='theme-color' content='#080957'>
@@ -224,7 +232,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Update Account</h5>
+                <h5 class="modal-title" id="nameSurname">Update Account</h5>
                 <a href="javascript:;" data-bs-dismiss="modal">Close</a>
             </div>
             <div class="modal-body">
@@ -234,8 +242,8 @@
                         <div class="card-body">
                             <div class="form-group basic animated">
                                 <div class="input-group input-wrapper">
-                                    <label class="label" for="firstName">Firstname</label>
-                                    <input type="text" class="form-control" id="firstName" placeholder="Firstname">
+                                    <label class="label" for="nameSettings">Firstname</label>
+                                    <input type="text" class="form-control" id="nameSettings" placeholder="Firstname">
                                     <i class="clear-input">
                                         <ion-icon name="close-circle"></ion-icon>
                                     </i>
@@ -251,8 +259,8 @@
                         <div class="card-body">
                             <div class="form-group basic animated">
                                 <div class="input-group input-wrapper">
-                                    <label class="label" for="lastName">Lastname</label>
-                                    <input type="text" class="form-control" id="lastName" placeholder="Lastname">
+                                    <label class="label" for="surnameSettings">Lastname</label>
+                                    <input type="text" class="form-control" id="surnameSettings" placeholder="Lastname">
                                     <i class="clear-input">
                                         <ion-icon name="close-circle"></ion-icon>
                                     </i>
@@ -268,8 +276,8 @@
                         <div class="card-body">
                             <div class="form-group basic animated">
                                 <div class="input-group input-wrapper">
-                                    <label class="label" for="dateOfBirth">Date of Birth</label>
-                                    <input type="text" class="form-control" id="dateOfBirth" placeholder="Date of Birth">
+                                    <label class="label" for="dateOfBirthSettings">Date of Birth</label>
+                                    <input type="date" class="form-control" id="dateOfBirthSettings" placeholder="Date of Birth">
                                     <i class="clear-input">
                                         <ion-icon name="close-circle"></ion-icon>
                                     </i>
@@ -282,7 +290,7 @@
                 <div class="action-sheet-content">
                     <form>
                         <div class="form-group basic">
-                            <button id="updateAccount" type="button" class="btn btn-primary btn-block btn-lg"
+                            <button id="updateAuthBtn" type="button" class="btn btn-primary btn-block btn-lg"
                                     data-bs-dismiss="modal">Update
                             </button>
                         </div>
@@ -383,8 +391,8 @@
                         <div class="card-body">
                             <div class="form-group basic animated">
                                 <div class="input-group input-wrapper">
-                                    <label class="label" for="email">Email Address</label>
-                                    <input type="email" class="form-control" id="email" placeholder="Insert new Email">
+                                    <label class="label" for="emailsSettings">Email Address</label>
+                                    <input type="email" class="form-control" id="emailsSettings" placeholder="Insert new Email">
                                     <i class="clear-input">
                                         <ion-icon name="close-circle"></ion-icon>
                                     </i>

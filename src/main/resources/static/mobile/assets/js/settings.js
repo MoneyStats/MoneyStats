@@ -24,7 +24,7 @@ $(document).ready(function () {
                 Authorization: sessionStorage.getItem('accessToken')
             },
             success: function (authCredentialDTO) {
-                $('#nameSurname').text(`${authCredentialDTO.firstName} ${authCredentialDTO.lastName}`);
+                $('#nameSurname').text(`Update ${authCredentialDTO.firstName} ${authCredentialDTO.lastName}`);
                 $('#nameSettings').val(`${authCredentialDTO.firstName}`);
                 $('#surnameSettings').val(`${authCredentialDTO.lastName}`);
                 $('#emailsSettings').val(`${authCredentialDTO.email}`);
@@ -43,10 +43,10 @@ $(document).ready(function () {
                     })
                     Toast.fire({
                         icon: 'error',
-                        title: 'Expired Session, reidirect...'
+                        title: '<span style="color:#2D2C2C">Expired Session, reidirect...</span>'
                     })
                     setTimeout(function () {
-                        window.location.href = "loginpage.html";
+                        window.location.href = "app-login.html";
                     }, 1500);
                 }
             }
@@ -57,6 +57,12 @@ $(document).ready(function () {
     // On click of Update user it will take all the information need it
     //------------------------------------------------------------------------------------
     $('#updateAuthBtn').click(function () {
+        updateUser();
+    });
+    $('#updateEmail').click(function () {
+        updateUser();
+    });
+    function updateUser() {
         editMode = true;
         const authCredentialToUpdateDTO = {
             firstName: $('#nameSettings').val(),
@@ -68,7 +74,7 @@ $(document).ready(function () {
         if (editMode) {
             Swal.fire({
                 icon: 'question',
-                title: 'Do you want to save?',
+                title: '<span style="color:#2D2C2C">Do you want to save?</span>',
                 showDenyButton: true,
                 showCancelButton: true,
                 confirmButtonText: `Save`,
@@ -77,11 +83,11 @@ $(document).ready(function () {
                 if (result.isConfirmed) {
                     editUser(authCredentialToUpdateDTO);
                 } else if (result.isDenied) {
-                    Swal.fire("Operation Aborted!", '', 'info')
+                    Swal.fire('<span style="color:#2D2C2C">Operation Aborted!</span>', '', 'info')
                 }
             })
         }
-    })
+    }
     //-------------------------------------------------------------
     // END On click of Update user it will take all the information need it
     //-------------------------------------------------------------
@@ -101,17 +107,17 @@ $(document).ready(function () {
             success: function () {
                 editMode = false;
                 Swal.fire({
-                    title: 'Edited!',
+                    title: '<span style="color:#2D2C2C">Edited!</span>',
                     icon: 'success',
                 showConfirmButton: false})
                 setTimeout(function () {
-                    window.location.href = 'homepage.html';
+                    window.location.href = 'index.html';
                 }, 1000);
             },
             error: function (error) {
                 Swal.fire({
                     icon: 'error',
-                    title: "Error",
+                    title: '<span style="color:#2D2C2C">Error</span>',
                     text: 'Process aborted, try again.'
                 })
             }
