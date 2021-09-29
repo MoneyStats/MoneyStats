@@ -1,24 +1,18 @@
 package com.moneystats.authentication;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.moneystats.authentication.AuthenticationException.Code;
+import com.moneystats.authentication.DTO.*;
+import com.moneystats.authentication.entity.AuthCredentialEntity;
+import com.moneystats.generic.SchemaDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.moneystats.authentication.AuthenticationException.Code;
-import com.moneystats.authentication.DTO.AuthCredentialDTO;
-import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
-import com.moneystats.authentication.DTO.AuthCredentialToUpdateDTO;
-import com.moneystats.authentication.DTO.AuthResponseDTO;
-import com.moneystats.authentication.DTO.TokenDTO;
-import com.moneystats.authentication.entity.AuthCredentialEntity;
-import com.moneystats.generic.SchemaDescription;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AuthCredentialService {
