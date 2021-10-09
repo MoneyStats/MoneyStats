@@ -1,10 +1,9 @@
 package com.moneystats.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moneystats.authentication.DTO.AuthCredentialDTO;
-import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
-import com.moneystats.authentication.DTO.TokenDTO;
+import com.moneystats.authentication.DTO.*;
 import com.moneystats.authentication.utils.TestSchema;
+import com.moneystats.generic.SchemaDescription;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,14 +82,14 @@ public class AuthControllerTest {
     String userAsString = objectMapper.writeValueAsString(user);
 
     Mockito.when(credential.signUp(Mockito.any()))
-            .thenThrow(new AuthenticationException(AuthenticationException.Code.EMAIL_PRESENT));
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.EMAIL_PRESENT));
 
     mockMvc
-            .perform(
-                    post("/credential/signup")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(userAsString))
-            .andExpect(status().isBadRequest());
+        .perform(
+            post("/credential/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userAsString))
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -231,6 +230,99 @@ public class AuthControllerTest {
         .getUsers(token);
     mockMvc
         .perform(MockMvcRequestBuilders.get("/credential/admin"))
+        .andExpect(status().isBadRequest());
+  }
+
+  /** Test Update User */
+  @Test
+  void updateUser_shouldUpdateUsercorrectly() throws Exception {
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    AuthCredentialToUpdateDTO authCredentialToUpdateDTOExpected =
+        TestSchema.AUTH_CREDENTIAL_TO_UPDATE_DTO;
+    String authCredentialToUpdateDTOAsString =
+        objectMapper.writeValueAsString(authCredentialToUpdateDTOExpected);
+    AuthResponseDTO authResponseDTOExpected = new AuthResponseDTO(SchemaDescription.USER_UPDATED);
+
+    Mockito.when(credential.updateUser(authCredentialToUpdateDTOExpected, tokenDTO))
+        .thenReturn(authResponseDTOExpected);
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.put("/credential/update")
+                .header("Authorization", "Bearer " + TestSchema.ROLE_USER_TOKEN_JWT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(authCredentialToUpdateDTOAsString))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  void updateUser_shouldThrowsOnInvalidTokenDTO() throws Exception {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
+    AuthCredentialToUpdateDTO authCredentialToUpdateDTOExpected =
+        TestSchema.AUTH_CREDENTIAL_TO_UPDATE_DTO;
+    String authCredentialToUpdateDTOAsString =
+        objectMapper.writeValueAsString(authCredentialToUpdateDTOExpected);
+
+    Mockito.when(credential.updateUser(authCredentialToUpdateDTOExpected, tokenDTO))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.put("/credential/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(authCredentialToUpdateDTOAsString))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void updateUser_shouldThrowsOnTokenDTONotFound() throws Exception {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
+    AuthCredentialToUpdateDTO authCredentialToUpdateDTOExpected =
+        TestSchema.AUTH_CREDENTIAL_TO_UPDATE_DTO;
+    String authCredentialToUpdateDTOAsString =
+        objectMapper.writeValueAsString(authCredentialToUpdateDTOExpected);
+
+    Mockito.when(credential.updateUser(authCredentialToUpdateDTOExpected, tokenDTO))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED));
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.put("/credential/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(authCredentialToUpdateDTOAsString))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void updateUser_shouldThrowsOnInvalidAuthcredentialToUpdateDTO() throws Exception {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT);
+    AuthCredentialToUpdateDTO authCredentialToUpdateDTOExpected = null;
+    String authCredentialToUpdateDTOAsString = objectMapper.writeValueAsString(null);
+
+    Mockito.when(credential.updateUser(authCredentialToUpdateDTOExpected, tokenDTO))
+        .thenThrow(
+            new AuthenticationException(
+                AuthenticationException.Code.INVALID_AUTH_CREDENTIAL_TO_UPDATE_DTO));
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.put("/credential/update")
+                .header("Authorization", "Bearer " + TestSchema.ROLE_USER_TOKEN_JWT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(authCredentialToUpdateDTOAsString))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void updateUser_shouldThrowsOnUserDontMatch() throws Exception {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT);
+    AuthCredentialToUpdateDTO authCredentialToUpdateDTOExpected = null;
+    String authCredentialToUpdateDTOAsString = objectMapper.writeValueAsString(null);
+
+    Mockito.when(credential.updateUser(authCredentialToUpdateDTOExpected, tokenDTO))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_NOT_MATCH));
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.put("/credential/update")
+                .header("Authorization", "Bearer " + TestSchema.ROLE_USER_TOKEN_JWT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(authCredentialToUpdateDTOAsString))
         .andExpect(status().isBadRequest());
   }
 }

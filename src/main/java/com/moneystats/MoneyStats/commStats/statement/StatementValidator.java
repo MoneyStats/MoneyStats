@@ -30,7 +30,7 @@ public class StatementValidator {
 
     if (!violations.isEmpty()) {
       LOG.warn("Invalid Statement Input {}", statementDTO);
-      throw new StatementException(StatementException.Code.INVALID_STATEMENT_DTO);
+      throw new StatementException(StatementException.Code.INVALID_STATEMENT_INPUT_DTO);
     }
   }
 }

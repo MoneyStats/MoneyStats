@@ -1,9 +1,6 @@
 package com.moneystats.authentication;
 
-import com.moneystats.authentication.DTO.AuthCredentialDTO;
-import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
-import com.moneystats.authentication.DTO.AuthResponseDTO;
-import com.moneystats.authentication.DTO.TokenDTO;
+import com.moneystats.authentication.DTO.*;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 import com.moneystats.authentication.utils.TestSchema;
 import com.moneystats.generic.SchemaDescription;
@@ -89,9 +86,9 @@ public class AuthServiceTest {
     AuthCredentialDTO user = new AuthCredentialDTO(TestSchema.ROLE_USER_USERNAME, null);
 
     AuthenticationException expected =
-            new AuthenticationException(AuthenticationException.Code.EMAIL_PRESENT);
+        new AuthenticationException(AuthenticationException.Code.EMAIL_PRESENT);
     AuthenticationException actual =
-            Assertions.assertThrows(AuthenticationException.class, () -> service.signUp(user));
+        Assertions.assertThrows(AuthenticationException.class, () -> service.signUp(user));
 
     Assertions.assertEquals(expected.getMessage(), actual.getMessage());
   }
@@ -243,5 +240,82 @@ public class AuthServiceTest {
             AuthenticationException.class, () -> service.getUsers(TestSchema.TOKEN_DTO_ROLE_ADMIN));
 
     Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  /**
+   * UPDATE USER TEST
+   *
+   * @throws Exception
+   */
+  @Test
+  void update_shouldUpdateUserCorrectly() throws Exception {
+    AuthResponseDTO expected = new AuthResponseDTO(SchemaDescription.USER_UPDATED);
+    AuthCredentialToUpdateDTO authCredentialToUpdateDTO = createValidAuthCredentialDTOToUpdate();
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+
+    Mockito.when(tokenService.parseToken(tokenDTO))
+            .thenReturn(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
+    Mockito.doNothing().when(dao).updateUserById(authCredentialToUpdateDTO);
+
+    AuthResponseDTO actualResponseDTO = service.updateUser(authCredentialToUpdateDTO, tokenDTO);
+
+    Assertions.assertEquals(expected.getMessage(), actualResponseDTO.getMessage());
+  }
+
+  @Test
+  void update_shouldThrowInvalidAuthCredentialDTOToUpdate() throws Exception {
+    TokenDTO token = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    AuthCredentialToUpdateDTO authCredentialToUpdateDTO = createValidAuthCredentialDTOToUpdate();
+    authCredentialToUpdateDTO.setFirstName(null);
+    authCredentialToUpdateDTO.setEmail(null);
+
+    Mockito.when(tokenService.parseToken(token))
+            .thenReturn(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
+
+    AuthenticationException expected =
+            new AuthenticationException(AuthenticationException.Code.INVALID_AUTH_CREDENTIAL_TO_UPDATE_DTO);
+    AuthenticationException actual =
+            Assertions.assertThrows(AuthenticationException.class, () -> service.updateUser(authCredentialToUpdateDTO, token));
+
+    Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  @Test
+  void update_shouldThrowInvalidInput() throws Exception {
+    TokenDTO token = new TokenDTO(null);
+    AuthCredentialToUpdateDTO authCredentialToUpdateDTO = createValidAuthCredentialDTOToUpdate();
+
+    Mockito.when(tokenService.parseToken(token))
+            .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+
+    AuthenticationException expected =
+        new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
+    AuthenticationException actual =
+        Assertions.assertThrows(AuthenticationException.class, () -> service.updateUser(authCredentialToUpdateDTO, token));
+
+    Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  @Test
+  void update_shouldThrowUserNotMatch() throws Exception {
+    TokenDTO token = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    AuthCredentialToUpdateDTO authCredentialToUpdateDTO = createValidAuthCredentialDTOToUpdate();
+    authCredentialToUpdateDTO.setUsername(null);
+
+    Mockito.when(tokenService.parseToken(token))
+            .thenReturn(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
+
+    AuthenticationException expected =
+            new AuthenticationException(AuthenticationException.Code.USER_NOT_MATCH);
+    AuthenticationException actual =
+            Assertions.assertThrows(AuthenticationException.class, () -> service.updateUser(authCredentialToUpdateDTO, token));
+
+    Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  // VALID INPUT
+  private AuthCredentialToUpdateDTO createValidAuthCredentialDTOToUpdate() {
+    return new AuthCredentialToUpdateDTO(
+            "my-first-name", "my-last-name", "1990-01-01", "email@email.com", "my-user-username");
   }
 }
