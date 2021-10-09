@@ -18,7 +18,9 @@ public class AuthenticationException extends Exception {
     TOKEN_REQUIRED,
     USER_NOT_FOUND,
     USER_PRESENT,
-    EMAIL_PRESENT;
+    EMAIL_PRESENT,
+    INVALID_AUTH_CREDENTIAL_TO_UPDATE_DTO,
+    USER_NOT_MATCH;
   }
 
   public AuthenticationException(Code code) {

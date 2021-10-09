@@ -9,12 +9,6 @@
 //-----------------------------------------------------------------------
 
 //-----------------------------------------------------------------------
-// DARK MODE
-//-----------------------------------------------------------------------
-localStorage.setItem("MoneyStatsDarkmode", "1");
-//-----------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
 // Page Loader with preload
 //----------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', function () {
@@ -410,9 +404,9 @@ function AddtoHome(time, once) {
 
 //-----------------------------------------------------------------------
 
-
 //-----------------------------------------------------------------------
-// Dark Mode
+// DARK MODE
+//-----------------------------------------------------------------------
 var checkDarkModeStatus = localStorage.getItem("MoneyStatsDarkmode");
 var switchDarkMode = document.querySelectorAll(".dark-mode-switch");
 var pageBody = document.querySelector("body");
@@ -425,7 +419,7 @@ function switchDarkModeCheck(value) {
 }
 
 // if dark mode on
-if (checkDarkModeStatus === 1 || checkDarkModeStatus === "1") {
+if (checkDarkModeStatus === 0 || checkDarkModeStatus === "0") {
     switchDarkModeCheck(true);
     if (pageBodyActive) {
         // dark mode already activated
@@ -438,14 +432,14 @@ if (checkDarkModeStatus === 1 || checkDarkModeStatus === "1") {
 switchDarkMode.forEach(function (el) {
     el.addEventListener("click", function () {
         var darkmodeCheck = localStorage.getItem("MoneyStatsDarkmode");
-        if (darkmodeCheck === 1 || darkmodeCheck === "1") {
+        if (darkmodeCheck === 0 || darkmodeCheck === "0") {
             pageBody.classList.remove("dark-mode");
-            localStorage.setItem("MoneyStatsDarkmode", "0");
+            localStorage.setItem("MoneyStatsDarkmode", "1");
             switchDarkModeCheck(false);
         } else {
             pageBody.classList.add("dark-mode")
             switchDarkModeCheck(true);
-            localStorage.setItem("MoneyStatsDarkmode", "1");
+            localStorage.setItem("MoneyStatsDarkmode", "0");
         }
     })
 })

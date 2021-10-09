@@ -76,7 +76,7 @@ $(document).ready(function () {
             error: function (error) {
                 Swal.fire({
                     icon: 'error',
-                    title: "Error, Delete process aborted",
+                    title: "Error, Edit process aborted",
                     text: 'Try again.'
                 })
             }

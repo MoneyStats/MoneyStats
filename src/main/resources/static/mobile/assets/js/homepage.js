@@ -207,7 +207,7 @@ $(document).ready(function () {
         // Graph
         var options = {
             series: [{
-                name: 'Toral Capital ',
+                name: 'Total Capital ',
                 data: graphValues,
             }, {
                 name: 'PIL',
