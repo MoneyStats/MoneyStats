@@ -67,21 +67,6 @@ public class StatementServiceTest {
   }
 
   @Test
-  void test_addStatement_shouldThrowsTokenDTORequired() throws Exception {
-    TokenDTO token = new TokenDTO("");
-    StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
-
-    AuthenticationException expectedException =
-        new AuthenticationException(AuthenticationException.Code.TOKEN_REQUIRED);
-    AuthenticationException actualException =
-        Assertions.assertThrows(
-            AuthenticationException.class,
-            () -> statementService.addStatement(token, statementDTO));
-
-    Assertions.assertEquals(expectedException.getCode(), actualException.getCode());
-  }
-
-  @Test
   void test_addStatement_shouldThrowsOnUnauthorized() throws Exception {
     TokenDTO token = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
 

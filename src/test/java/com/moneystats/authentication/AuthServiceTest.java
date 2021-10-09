@@ -247,40 +247,68 @@ public class AuthServiceTest {
    *
    * @throws Exception
    */
-  /*@Test
+  @Test
   void update_shouldUpdateUserCorrectly() throws Exception {
     AuthResponseDTO expected = new AuthResponseDTO(SchemaDescription.USER_UPDATED);
     AuthCredentialToUpdateDTO authCredentialToUpdateDTO = createValidAuthCredentialDTOToUpdate();
+    TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
 
+    Mockito.when(tokenService.parseToken(tokenDTO))
+            .thenReturn(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
     Mockito.doNothing().when(dao).updateUserById(authCredentialToUpdateDTO);
 
-    List<AuthCredentialDTO> actuals = service.getUsers(TestSchema.TOKEN_DTO_ROLE_ADMIN);
+    AuthResponseDTO actualResponseDTO = service.updateUser(authCredentialToUpdateDTO, tokenDTO);
 
-    Assertions.assertEquals(listUsers.size(), actuals.size());
-    for (int i = 0; i < actuals.size(); i++) {
-      AuthCredentialDTO actual = actuals.get(i);
-      AuthCredentialEntity expected = listUsers.get(i);
-
-      Assertions.assertEquals(expected.getFirstName(), actual.getFirstName());
-      Assertions.assertEquals(expected.getLastName(), actual.getLastName());
-      Assertions.assertEquals(expected.getDateOfBirth(), actual.getDateOfBirth());
-      Assertions.assertEquals(expected.getEmail(), actual.getEmail());
-      Assertions.assertEquals(expected.getUsername(), actual.getUsername());
-      Assertions.assertEquals(expected.getRole(), actual.getRole());
-    }
-  }*/
+    Assertions.assertEquals(expected.getMessage(), actualResponseDTO.getMessage());
+  }
 
   @Test
-  void update_adminShouldThrowInvalidInput() throws Exception {
-    TokenDTO token = new TokenDTO(null);
+  void update_shouldThrowInvalidAuthCredentialDTOToUpdate() throws Exception {
+    TokenDTO token = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    AuthCredentialToUpdateDTO authCredentialToUpdateDTO = createValidAuthCredentialDTOToUpdate();
+    authCredentialToUpdateDTO.setFirstName(null);
+    authCredentialToUpdateDTO.setEmail(null);
 
     Mockito.when(tokenService.parseToken(token))
-        .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+            .thenReturn(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
+
+    AuthenticationException expected =
+            new AuthenticationException(AuthenticationException.Code.INVALID_AUTH_CREDENTIAL_TO_UPDATE_DTO);
+    AuthenticationException actual =
+            Assertions.assertThrows(AuthenticationException.class, () -> service.updateUser(authCredentialToUpdateDTO, token));
+
+    Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  @Test
+  void update_shouldThrowInvalidInput() throws Exception {
+    TokenDTO token = new TokenDTO(null);
+    AuthCredentialToUpdateDTO authCredentialToUpdateDTO = createValidAuthCredentialDTOToUpdate();
+
+    Mockito.when(tokenService.parseToken(token))
+            .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
 
     AuthenticationException expected =
         new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
     AuthenticationException actual =
-        Assertions.assertThrows(AuthenticationException.class, () -> service.getUsers(token));
+        Assertions.assertThrows(AuthenticationException.class, () -> service.updateUser(authCredentialToUpdateDTO, token));
+
+    Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  @Test
+  void update_shouldThrowUserNotMatch() throws Exception {
+    TokenDTO token = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
+    AuthCredentialToUpdateDTO authCredentialToUpdateDTO = createValidAuthCredentialDTOToUpdate();
+    authCredentialToUpdateDTO.setUsername(null);
+
+    Mockito.when(tokenService.parseToken(token))
+            .thenReturn(TestSchema.USER_CREDENTIAL_DTO_ROLE_USER);
+
+    AuthenticationException expected =
+            new AuthenticationException(AuthenticationException.Code.USER_NOT_MATCH);
+    AuthenticationException actual =
+            Assertions.assertThrows(AuthenticationException.class, () -> service.updateUser(authCredentialToUpdateDTO, token));
 
     Assertions.assertEquals(expected.getMessage(), actual.getMessage());
   }
