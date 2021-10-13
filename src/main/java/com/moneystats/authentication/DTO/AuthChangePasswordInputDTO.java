@@ -10,6 +10,8 @@ public class AuthChangePasswordInputDTO implements Serializable {
   @NotNull private String newPassword;
   @NotNull private String confirmNewPassword;
 
+  public AuthChangePasswordInputDTO() {}
+
   public AuthChangePasswordInputDTO(
       String username, String oldPassword, String newPassword, String confirmNewPassword) {
     this.username = username;

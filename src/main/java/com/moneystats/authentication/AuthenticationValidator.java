@@ -62,7 +62,7 @@ public class AuthenticationValidator {
             validator.validate(authChangePasswordInputDTO);
     if (!violations.isEmpty()) {
       LOG.warn("Invalid AuthChangePasswordInputDTO {}", authChangePasswordInputDTO);
-      throw new AuthenticationException(Code.INVALID_AUTH_CREDENTIAL_TO_UPDATE_DTO);
+      throw new AuthenticationException(Code.INVALID_AUTH_CHANGE_PASSWORD_INPUT_DTO);
     }
   }
 }
