@@ -6,6 +6,7 @@ public class ResponseMapping {
   public static final String USER_ADDED_CORRECT = "USER_ADDED";
   public static final String USER_FOUND = "USER_FOUND";
   public static final String USER_UPDATED = "USER_UPDATED";
+  public static final String PASSWORD_UPDATED = "PASSWORD_UPDATED";
 
   // Wallet Schema
   public static final String WALLET_ADDED_CORRECT = "WALLET_ADDED";
