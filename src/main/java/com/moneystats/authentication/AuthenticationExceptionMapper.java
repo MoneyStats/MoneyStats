@@ -55,6 +55,12 @@ public class AuthenticationExceptionMapper {
       case USER_NOT_MATCH:
         error.setMessage(Code.USER_NOT_MATCH.toString());
         return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.BAD_REQUEST);
+      case INVALID_AUTH_CHANGE_PASSWORD_INPUT_DTO:
+        error.setMessage(Code.INVALID_AUTH_CHANGE_PASSWORD_INPUT_DTO.toString());
+        return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.BAD_REQUEST);
+      case PASSWORD_NOT_MATCH:
+        error.setMessage(Code.PASSWORD_NOT_MATCH.toString());
+        return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.BAD_REQUEST);
       default:
         error.setMessage("INTERNAL_SERVER_ERROR");
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);

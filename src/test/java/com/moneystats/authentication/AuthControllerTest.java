@@ -352,11 +352,127 @@ public class AuthControllerTest {
     TokenDTO tokenDTO = new TokenDTO(null);
 
     Mockito.when(credential.getUpdateUser(Mockito.any()))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/credential/getCurrentUser")
+                .header("Authorization", "Bearer " + tokenDTO))
+        .andExpect(status().isBadRequest());
+  }
+
+  /** Test getUpdateUser */
+  @Test
+  void updatePassword_shouldUpdatePasswordCorrectly() throws Exception {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
+    AuthResponseDTO response = new AuthResponseDTO(ResponseMapping.PASSWORD_UPDATED);
+    AuthChangePasswordInputDTO authChangePasswordInputDTO =
+        TestSchema.AUTH_CHANGE_PASSWORD_INPUT_DTO;
+    String authChangePasswordInputDTOAsString =
+        objectMapper.writeValueAsString(authChangePasswordInputDTO);
+
+    Mockito.when(credential.updatePassword(authChangePasswordInputDTO, tokenDTO))
+        .thenReturn(response);
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.put("/credential/update/password")
+                .header("Authorization", "Bearer " + tokenDTO.getAccessToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(authChangePasswordInputDTOAsString))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  void updatePassword_shouldThrowsOnInvalidToken() throws Exception {
+    TokenDTO tokenDTO = new TokenDTO(null);
+    AuthChangePasswordInputDTO authChangePasswordInputDTO =
+            TestSchema.AUTH_CHANGE_PASSWORD_INPUT_DTO;
+    String authChangePasswordInputDTOAsString =
+            objectMapper.writeValueAsString(authChangePasswordInputDTO);
+
+    Mockito.when(credential.updatePassword(authChangePasswordInputDTO, tokenDTO))
             .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
     mockMvc
             .perform(
-                    MockMvcRequestBuilders.get("/credential/getCurrentUser")
-                            .header("Authorization", "Bearer " + tokenDTO))
+                    MockMvcRequestBuilders.put("/credential/update/password")
+                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(authChangePasswordInputDTOAsString))
+            .andExpect(status().isOk());
+  }
+
+  @Test
+  void updatePassword_shouldThrowsOnInvalidAuthChangePasswordInput() throws Exception {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
+    AuthChangePasswordInputDTO authChangePasswordInputDTO =
+            TestSchema.AUTH_CHANGE_PASSWORD_INPUT_DTO;
+    authChangePasswordInputDTO.setConfirmNewPassword(null);
+
+    Mockito.when(credential.updatePassword(authChangePasswordInputDTO, tokenDTO))
+            .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_AUTH_CHANGE_PASSWORD_INPUT_DTO));
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.put("/credential/update/password")
+                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken()))
             .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void updatePassword_shouldThrowsOnPasswordDontMatch() throws Exception {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
+    AuthChangePasswordInputDTO authChangePasswordInputDTO =
+            TestSchema.AUTH_CHANGE_PASSWORD_INPUT_DTO;
+    authChangePasswordInputDTO.setNewPassword("my-password");
+    String authChangePasswordInputDTOAsString =
+            objectMapper.writeValueAsString(authChangePasswordInputDTO);
+
+    Mockito.when(credential.updatePassword(Mockito.any(), Mockito.any()))
+            .thenThrow(new AuthenticationException(AuthenticationException.Code.PASSWORD_NOT_MATCH));
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.put("/credential/update/password")
+                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(authChangePasswordInputDTOAsString))
+            .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void updatePassword_shouldThrowsOnUserDontMatch() throws Exception {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
+    AuthChangePasswordInputDTO authChangePasswordInputDTO =
+            TestSchema.AUTH_CHANGE_PASSWORD_INPUT_DTO;
+    authChangePasswordInputDTO.setUsername("new-user");
+    String authChangePasswordInputDTOAsString =
+            objectMapper.writeValueAsString(authChangePasswordInputDTO);
+
+    Mockito.when(credential.updatePassword(Mockito.any(), Mockito.any()))
+            .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_NOT_MATCH));
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.put("/credential/update/password")
+                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(authChangePasswordInputDTOAsString))
+            .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void updatePassword_shouldThrowsOnWrongCredential() throws Exception {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
+    AuthChangePasswordInputDTO authChangePasswordInputDTO =
+            TestSchema.AUTH_CHANGE_PASSWORD_INPUT_DTO;
+    authChangePasswordInputDTO.setOldPassword("wrong-password");
+    String authChangePasswordInputDTOAsString =
+            objectMapper.writeValueAsString(authChangePasswordInputDTO);
+
+    Mockito.when(credential.updatePassword(Mockito.any(), Mockito.any()))
+            .thenThrow(new AuthenticationException(AuthenticationException.Code.WRONG_CREDENTIAL));
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.put("/credential/update/password")
+                            .header("Authorization", "Bearer " + tokenDTO.getAccessToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(authChangePasswordInputDTOAsString))
+            .andExpect(status().isUnauthorized());
   }
 }

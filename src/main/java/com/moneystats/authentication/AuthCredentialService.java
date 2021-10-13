@@ -144,6 +144,7 @@ public class AuthCredentialService {
 
   /**
    * Method used to get the user updated after the update process
+   *
    * @param tokenDTO param required to get the current user logged
    * @return the user logged updated
    * @throws AuthenticationException
@@ -174,6 +175,7 @@ public class AuthCredentialService {
 
   /**
    * Method that allow to update the user (Not let you update the username, or password)
+   *
    * @param authCredentialToUpdateDTO input to update
    * @param tokenDTO valid for validator
    * @return A response of success
@@ -195,5 +197,62 @@ public class AuthCredentialService {
 
     authCredentialDAO.updateUserById(authCredentialToUpdateDTO);
     return new AuthResponseDTO(ResponseMapping.USER_UPDATED);
+  }
+
+  /**
+   * Method to update the password of the current user, it will check first if the new password is
+   * equals with the second password insert. Then it will get the authCredentialEntity from the db
+   * to match with the old password insert. Then, if the password matches, it would proceed to
+   * encode and update the password into the db.
+   *
+   * @param authChangePasswordInputDTO params in insert
+   * @param tokenDTO for authentications
+   * @return
+   * @throws AuthenticationException
+   */
+  public AuthResponseDTO updatePassword(
+      AuthChangePasswordInputDTO authChangePasswordInputDTO, TokenDTO tokenDTO)
+      throws AuthenticationException {
+    TokenValidation.validateTokenDTO(tokenDTO);
+    AuthenticationValidator.validateAuthChangePasswordInputDTO(authChangePasswordInputDTO);
+
+    if (!authChangePasswordInputDTO
+        .getNewPassword()
+        .equalsIgnoreCase(authChangePasswordInputDTO.getConfirmNewPassword())) {
+      LOG.error(
+          "Password don't match, at updatePassword:204, AuthCredentialService, password 1: {}, 2: {}",
+          authChangePasswordInputDTO.getNewPassword(),
+          authChangePasswordInputDTO.getConfirmNewPassword());
+      throw new AuthenticationException(Code.PASSWORD_NOT_MATCH);
+    }
+
+    AuthCredentialDTO user = tokenService.parseToken(tokenDTO);
+    if (user == null) {
+      LOG.error("Username does not match chagePassword:210 {}", user.getUsername());
+      throw new AuthenticationException(Code.USER_NOT_MATCH);
+    }
+
+    AuthCredentialInputDTO inputGetCredential =
+        new AuthCredentialInputDTO(authChangePasswordInputDTO.getUsername(), null);
+    AuthCredentialEntity authCredentialEntity = authCredentialDAO.getCredential(inputGetCredential);
+    if (authCredentialEntity == null) {
+      LOG.error(
+          "An error occured during getCredential():226, at AuthCredentialService is {}",
+          authCredentialEntity);
+      throw new AuthenticationException(Code.USER_NOT_FOUND);
+    }
+
+    boolean matches =
+        bCryptPasswordEncoder.matches(
+            authChangePasswordInputDTO.getOldPassword(), authCredentialEntity.getPassword());
+    if (!matches) {
+      LOG.error(
+          "Old password don't match, needs to try again, updatePassword():234, at AuthCredentialService");
+      throw new AuthenticationException(Code.WRONG_CREDENTIAL);
+    }
+
+    String newPassword = bCryptPasswordEncoder.encode(authChangePasswordInputDTO.getNewPassword());
+    authCredentialDAO.updatePasswordUserById(authChangePasswordInputDTO.getUsername(), newPassword);
+    return new AuthResponseDTO(ResponseMapping.PASSWORD_UPDATED);
   }
 }

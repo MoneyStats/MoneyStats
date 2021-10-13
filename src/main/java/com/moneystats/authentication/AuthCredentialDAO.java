@@ -27,12 +27,15 @@ public class AuthCredentialDAO {
 
   private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
+  private static final String UPDATE_PASSWORD =
+          "UPDATE users SET password = ? WHERE username = ?";
   private static final String SELECT_FROM_USERS_WHERE_ROLE =
       "SELECT * FROM users WHERE role = 'USER'";
   private static final String SELECT_FROM_USERS = "SELECT * FROM users WHERE username = ?";
   private static final String FIND_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
   private static final String INSERT_INTO_USERS =
       "INSERT INTO users (first_name, last_name, date_of_birth, email, username, password, role) VALUES (?, ?, ?, ?, ?, ?, 'USER')";
+
   private String dbAddress;
   private String username;
   private String password;
@@ -158,6 +161,21 @@ public class AuthCredentialDAO {
       pstm.setString(3, authCredentialToUpdateDTO.getDateOfBirth());
       pstm.setString(4, authCredentialToUpdateDTO.getEmail());
       pstm.setString(5, authCredentialToUpdateDTO.getUsername());
+      pstm.execute();
+    } catch (SQLException e) {
+      LOG.error("Process aborted during update {}", e);
+      throw new AuthenticationException(Code.DATABASE_ERROR);
+    }
+  }
+
+  public void updatePasswordUserById(String username, String password)
+          throws AuthenticationException {
+    try {
+      Connection connection = DriverManager.getConnection(dbAddress, username, password);
+      String sqlCommand = UPDATE_PASSWORD;
+      PreparedStatement pstm = connection.prepareStatement(sqlCommand);
+      pstm.setString(1, password);
+      pstm.setString(2, username);
       pstm.execute();
     } catch (SQLException e) {
       LOG.error("Process aborted during update {}", e);

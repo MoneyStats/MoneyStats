@@ -115,7 +115,8 @@ public class AuthServiceTest {
 
   @Test
   void login_shouldThrowInvalidInput() throws Exception {
-    AuthCredentialInputDTO user = new AuthCredentialInputDTO(TestSchema.STRING_USERNAME_ROLE_USER, null);
+    AuthCredentialInputDTO user =
+        new AuthCredentialInputDTO(TestSchema.STRING_USERNAME_ROLE_USER, null);
 
     AuthenticationException expected =
         new AuthenticationException(AuthenticationException.Code.INVALID_AUTH_INPUT_DTO);
@@ -128,8 +129,7 @@ public class AuthServiceTest {
   @Test
   void login_shouldThrowWrongPassword() throws Exception {
     AuthCredentialInputDTO user =
-        new AuthCredentialInputDTO(
-            TestSchema.STRING_USERNAME_ROLE_USER, "my-wrong-password");
+        new AuthCredentialInputDTO(TestSchema.STRING_USERNAME_ROLE_USER, "my-wrong-password");
 
     Mockito.when(dao.getCredential(user)).thenReturn(TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER);
 
@@ -244,8 +244,7 @@ public class AuthServiceTest {
     AuthCredentialToUpdateDTO authCredentialToUpdateDTO = createValidAuthCredentialDTOToUpdate();
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
 
-    Mockito.when(tokenService.parseToken(tokenDTO))
-        .thenReturn(TestSchema.USER_CREDENTIAL_DTO);
+    Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(TestSchema.USER_CREDENTIAL_DTO);
     Mockito.doNothing().when(dao).updateUserById(authCredentialToUpdateDTO);
 
     AuthResponseDTO actualResponseDTO = service.updateUser(authCredentialToUpdateDTO, tokenDTO);
@@ -260,8 +259,7 @@ public class AuthServiceTest {
     authCredentialToUpdateDTO.setFirstName(null);
     authCredentialToUpdateDTO.setEmail(null);
 
-    Mockito.when(tokenService.parseToken(token))
-        .thenReturn(TestSchema.USER_CREDENTIAL_DTO);
+    Mockito.when(tokenService.parseToken(token)).thenReturn(TestSchema.USER_CREDENTIAL_DTO);
 
     AuthenticationException expected =
         new AuthenticationException(
@@ -298,8 +296,7 @@ public class AuthServiceTest {
     AuthCredentialToUpdateDTO authCredentialToUpdateDTO = createValidAuthCredentialDTOToUpdate();
     authCredentialToUpdateDTO.setUsername(null);
 
-    Mockito.when(tokenService.parseToken(token))
-        .thenReturn(TestSchema.USER_CREDENTIAL_DTO);
+    Mockito.when(tokenService.parseToken(token)).thenReturn(TestSchema.USER_CREDENTIAL_DTO);
 
     AuthenticationException expected =
         new AuthenticationException(AuthenticationException.Code.USER_NOT_MATCH);
@@ -311,6 +308,10 @@ public class AuthServiceTest {
     Assertions.assertEquals(expected.getMessage(), actual.getMessage());
   }
 
+  /**
+   * Test updateUser()
+   * @throws AuthenticationException
+   */
   @Test
   void getUpdateUser_shouldReturnUpdateUser() throws AuthenticationException {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
@@ -334,15 +335,12 @@ public class AuthServiceTest {
   void getUpdateUser_shouldThrowUserNotMatch() throws Exception {
     TokenDTO token = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
 
-    Mockito.when(tokenService.parseToken(token))
-            .thenReturn(TestSchema.USER_CREDENTIAL_DTO);
+    Mockito.when(tokenService.parseToken(token)).thenReturn(TestSchema.USER_CREDENTIAL_DTO);
 
     AuthenticationException expected =
-            new AuthenticationException(AuthenticationException.Code.USER_NOT_MATCH);
+        new AuthenticationException(AuthenticationException.Code.USER_NOT_MATCH);
     AuthenticationException actual =
-            Assertions.assertThrows(
-                    AuthenticationException.class,
-                    () -> service.getUpdateUser(token));
+        Assertions.assertThrows(AuthenticationException.class, () -> service.getUpdateUser(token));
 
     Assertions.assertEquals(expected.getMessage(), actual.getMessage());
   }
@@ -352,19 +350,180 @@ public class AuthServiceTest {
     TokenDTO token = new TokenDTO(null);
 
     Mockito.when(tokenService.parseToken(token))
-            .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
 
     AuthenticationException expected =
-            new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
+        new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
+    AuthenticationException actual =
+        Assertions.assertThrows(AuthenticationException.class, () -> service.getUpdateUser(token));
+
+    Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  /**
+   * Test updatePassword
+   *
+   * @return
+   */
+  @Test
+  void changePassword_shouldChangePasswordCorrectly() throws AuthenticationException {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
+    AuthCredentialDTO authCredentialDTO = createValidAuthCredentialDTO();
+    AuthChangePasswordInputDTO authChangePasswordInputDTO = createValidAuthChangePasswordInputDTO();
+    AuthResponseDTO expectedResponse = new AuthResponseDTO(ResponseMapping.PASSWORD_UPDATED);
+
+    Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
+    AuthCredentialDTO actualAuthCredentialDTO = tokenService.parseToken(tokenDTO);
+
+    Assertions.assertEquals(authCredentialDTO.getUsername(), actualAuthCredentialDTO.getUsername());
+    Assertions.assertEquals(authCredentialDTO.getPassword(), actualAuthCredentialDTO.getPassword());
+    Assertions.assertEquals(
+        authCredentialDTO.getDateOfBirth(), actualAuthCredentialDTO.getDateOfBirth());
+    Assertions.assertEquals(authCredentialDTO.getEmail(), actualAuthCredentialDTO.getEmail());
+
+    AuthCredentialEntity authCredentialEntity = createValidAuthCredentialEntity();
+    Mockito.when(dao.getCredential(authCredentialInputDTOArgumentCaptor.capture()))
+        .thenReturn(authCredentialEntity);
+
+    Assertions.assertEquals(authCredentialDTO.getUsername(), authCredentialEntity.getUsername());
+    Assertions.assertEquals(
+        authCredentialDTO.getDateOfBirth(), authCredentialEntity.getDateOfBirth());
+    Assertions.assertEquals(authCredentialDTO.getEmail(), authCredentialEntity.getEmail());
+
+    AuthResponseDTO actual = service.updatePassword(authChangePasswordInputDTO, tokenDTO);
+    Assertions.assertEquals(expectedResponse.getMessage(), actual.getMessage());
+  }
+
+  @Test
+  void changePassword_shouldThrowOnInvalidTokenDTO() throws AuthenticationException {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
+    AuthChangePasswordInputDTO authChangePasswordInputDTO = createValidAuthChangePasswordInputDTO();
+
+    Mockito.when(tokenService.parseToken(tokenDTO))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO));
+
+    AuthenticationException expected =
+        new AuthenticationException(AuthenticationException.Code.INVALID_TOKEN_DTO);
+    AuthenticationException actual =
+        Assertions.assertThrows(
+            AuthenticationException.class,
+            () -> service.updatePassword(authChangePasswordInputDTO, tokenDTO));
+
+    Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  @Test
+  void changePassword_shouldThrowOnInvalidAuthChangePasswordInput() throws AuthenticationException {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
+    AuthChangePasswordInputDTO authChangePasswordInputDTO = createValidAuthChangePasswordInputDTO();
+    authChangePasswordInputDTO.setUsername(null);
+    authChangePasswordInputDTO.setOldPassword(null);
+
+    Mockito.when(tokenService.parseToken(tokenDTO))
+        .thenThrow(
+            new AuthenticationException(
+                AuthenticationException.Code.INVALID_AUTH_CHANGE_PASSWORD_INPUT_DTO));
+
+    AuthenticationException expected =
+        new AuthenticationException(
+            AuthenticationException.Code.INVALID_AUTH_CHANGE_PASSWORD_INPUT_DTO);
+    AuthenticationException actual =
+        Assertions.assertThrows(
+            AuthenticationException.class,
+            () -> service.updatePassword(authChangePasswordInputDTO, tokenDTO));
+
+    Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  @Test
+  void changePassword_shouldThrowOnDiffertentPassword() throws AuthenticationException {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
+    AuthChangePasswordInputDTO authChangePasswordInputDTO = createValidAuthChangePasswordInputDTO();
+    authChangePasswordInputDTO.setConfirmNewPassword("different-password");
+
+    Mockito.when(tokenService.parseToken(tokenDTO))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.PASSWORD_NOT_MATCH));
+
+    AuthenticationException expected =
+        new AuthenticationException(AuthenticationException.Code.PASSWORD_NOT_MATCH);
+    AuthenticationException actual =
+        Assertions.assertThrows(
+            AuthenticationException.class,
+            () -> service.updatePassword(authChangePasswordInputDTO, tokenDTO));
+
+    Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  @Test
+  void changePassword_shouldThrowOnUserNotmatch() throws AuthenticationException {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
+    AuthChangePasswordInputDTO authChangePasswordInputDTO = createValidAuthChangePasswordInputDTO();
+    authChangePasswordInputDTO.setConfirmNewPassword("different-password");
+
+    Mockito.when(tokenService.parseToken(tokenDTO))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_NOT_MATCH));
+
+    AuthenticationException expected =
+        new AuthenticationException(AuthenticationException.Code.USER_NOT_MATCH);
+    AuthenticationException actual =
+        Assertions.assertThrows(
+            AuthenticationException.class,
+            () -> service.updatePassword(authChangePasswordInputDTO, tokenDTO));
+
+    Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  @Test
+  void changePassword_shouldThrowOnAuthCredentialEntityNotFound() throws AuthenticationException {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
+    AuthChangePasswordInputDTO authChangePasswordInputDTO = createValidAuthChangePasswordInputDTO();
+    authChangePasswordInputDTO.setConfirmNewPassword("different-password");
+
+    Mockito.when(tokenService.parseToken(tokenDTO))
+        .thenThrow(new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND));
+
+    AuthenticationException expected =
+        new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND);
+    AuthenticationException actual =
+        Assertions.assertThrows(
+            AuthenticationException.class,
+            () -> service.updatePassword(authChangePasswordInputDTO, tokenDTO));
+
+    Assertions.assertEquals(expected.getMessage(), actual.getMessage());
+  }
+
+  @Test
+  void changePassword_shouldThrowOnDiffertentPasswordOLD() throws AuthenticationException {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
+    AuthChangePasswordInputDTO authChangePasswordInputDTO = createValidAuthChangePasswordInputDTO();
+    authChangePasswordInputDTO.setOldPassword("different-password");
+
+    Mockito.when(tokenService.parseToken(tokenDTO))
+            .thenThrow(
+                    new AuthenticationException(
+                            AuthenticationException.Code.WRONG_CREDENTIAL));
+
+    AuthenticationException expected =
+            new AuthenticationException(
+                    AuthenticationException.Code.WRONG_CREDENTIAL);
     AuthenticationException actual =
             Assertions.assertThrows(
                     AuthenticationException.class,
-                    () -> service.getUpdateUser(token));
+                    () -> service.updatePassword(authChangePasswordInputDTO, tokenDTO));
 
     Assertions.assertEquals(expected.getMessage(), actual.getMessage());
   }
 
   // VALID INPUT
+
+  private AuthChangePasswordInputDTO createValidAuthChangePasswordInputDTO() {
+    return new AuthChangePasswordInputDTO(
+        TestSchema.STRING_USERNAME_ROLE_USER,
+        TestSchema.STRING_PASSWORD_ROLE_USER,
+        TestSchema.STRING_PASSWORD_ROLE_USER,
+        TestSchema.STRING_PASSWORD_ROLE_USER);
+  }
+
   private AuthCredentialToUpdateDTO createValidAuthCredentialDTOToUpdate() {
     return new AuthCredentialToUpdateDTO(
         TestSchema.FIRSTNAME,
