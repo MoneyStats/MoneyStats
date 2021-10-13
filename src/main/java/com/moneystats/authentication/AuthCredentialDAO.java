@@ -168,14 +168,14 @@ public class AuthCredentialDAO {
     }
   }
 
-  public void updatePasswordUserById(String username, String password)
+  public void updatePasswordUserById(String usernameDB, String passwordDB)
           throws AuthenticationException {
     try {
       Connection connection = DriverManager.getConnection(dbAddress, username, password);
       String sqlCommand = UPDATE_PASSWORD;
       PreparedStatement pstm = connection.prepareStatement(sqlCommand);
-      pstm.setString(1, password);
-      pstm.setString(2, username);
+      pstm.setString(1, passwordDB);
+      pstm.setString(2, usernameDB);
       pstm.execute();
     } catch (SQLException e) {
       LOG.error("Process aborted during update {}", e);

@@ -173,12 +173,12 @@ $(document).ready(function () {
             success: function () {
                 editMode = false;
                 Swal.fire({
-                    title: 'Edited!',
+                    title: '<span style="color:#2D2C2C">Edited!</span>',
                     icon: 'success',
                     showConfirmButton: false
                 })
                 setTimeout(function () {
-                    window.location.href = 'homepage.html';
+                    window.location.href = 'app-settings.html';
                 }, 1000);
             },
             error: function (authErrorResponseDTO) {
@@ -210,4 +210,27 @@ $(document).ready(function () {
     //-------------------------------------------------------------
     // END Update Password User
     //-------------------------------------------------------------
+
+    /*--------------------------------------------------------------------------
+    *  Switch Desktop Mode
+    *--------------------------------------------------------------------------*/
+    $('#SwitchDesktop').click(function () {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1000,
+            timerProgressBar: true,
+        })
+        Toast.fire({
+            icon: 'info',
+            title: "<span style='color:#2D2C2C'>Reidirect...</span>",
+        })
+        setTimeout(function () {
+            window.location.href = "../homepage.html";
+        }, 1000);
+    });
+    /*--------------------------------------------------------------------------
+     *  Switch Desktop Mode
+     *--------------------------------------------------------------------------*/
 });
