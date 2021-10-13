@@ -199,6 +199,17 @@ public class AuthCredentialService {
     return new AuthResponseDTO(ResponseMapping.USER_UPDATED);
   }
 
+  /**
+   * Method to update the password of the current user, it will check first if the new password is
+   * equals with the second password insert. Then it will get the authCredentialEntity from the db
+   * to match with the old password insert. Then, if the password matches, it would proceed to
+   * encode and update the password into the db.
+   *
+   * @param authChangePasswordInputDTO params in insert
+   * @param tokenDTO for authentications
+   * @return
+   * @throws AuthenticationException
+   */
   public AuthResponseDTO updatePassword(
       AuthChangePasswordInputDTO authChangePasswordInputDTO, TokenDTO tokenDTO)
       throws AuthenticationException {
@@ -224,15 +235,19 @@ public class AuthCredentialService {
     AuthCredentialInputDTO inputGetCredential =
         new AuthCredentialInputDTO(authChangePasswordInputDTO.getUsername(), null);
     AuthCredentialEntity authCredentialEntity = authCredentialDAO.getCredential(inputGetCredential);
-    if (authCredentialEntity == null){
-      LOG.error("An error occured during getCredential():226, at AuthCredentialService is {}", authCredentialEntity);
+    if (authCredentialEntity == null) {
+      LOG.error(
+          "An error occured during getCredential():226, at AuthCredentialService is {}",
+          authCredentialEntity);
       throw new AuthenticationException(Code.USER_NOT_FOUND);
     }
 
     boolean matches =
-            bCryptPasswordEncoder.matches(authChangePasswordInputDTO.getOldPassword(), authCredentialEntity.getPassword());
+        bCryptPasswordEncoder.matches(
+            authChangePasswordInputDTO.getOldPassword(), authCredentialEntity.getPassword());
     if (!matches) {
-      LOG.error("Old password don't match, needs to try again, updatePassword():234, at AuthCredentialService");
+      LOG.error(
+          "Old password don't match, needs to try again, updatePassword():234, at AuthCredentialService");
       throw new AuthenticationException(Code.WRONG_CREDENTIAL);
     }
 
