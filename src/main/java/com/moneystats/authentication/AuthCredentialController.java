@@ -1,10 +1,12 @@
 package com.moneystats.authentication;
 
 import com.moneystats.authentication.DTO.*;
+import com.moneystats.generic.SchemaDescription;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.UnknownHostException;
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RestController
@@ -13,16 +15,29 @@ public class AuthCredentialController {
 
   @Autowired private AuthCredentialService service;
 
+  @PostMapping("/login")
+  @RolesAllowed({
+          SecurityRoles.MONEYSTATS_ADMIN_ROLE,
+          SecurityRoles.MONEYSTATS_USER_ROLE
+  })
+  @Operation(
+          summary = SchemaDescription.POST_LOGIN_SUMMARY,
+          description = SchemaDescription.POST_LOGIN_DESCRIPTION,
+          tags = "Credential"
+  )
+  public TokenDTO loginUser(@RequestBody AuthCredentialInputDTO userCredential)
+          throws AuthenticationException {
+    return service.login(userCredential);
+  }
+
   @PostMapping("/signup")
+  @RolesAllowed({
+          SecurityRoles.MONEYSTATS_ADMIN_ROLE,
+          SecurityRoles.MONEYSTATS_USER_ROLE
+  })
   public AuthResponseDTO addUser(@RequestBody AuthCredentialDTO userCredential)
       throws AuthenticationException {
     return service.signUp(userCredential);
-  }
-
-  @PostMapping("/login")
-  public TokenDTO loginUser(@RequestBody AuthCredentialInputDTO userCredential)
-      throws AuthenticationException, UnknownHostException {
-    return service.login(userCredential);
   }
 
   @GetMapping("/token")
@@ -46,5 +61,12 @@ public class AuthCredentialController {
       throws AuthenticationException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return service.updateUser(authCredentialToUpdateDTO, tokenDTO);
+  }
+
+  @GetMapping("/getCurrentUser")
+  public AuthCredentialDTO getCurrentUser(@RequestHeader(value = "Authorization") String jwt)
+      throws AuthenticationException {
+    TokenDTO tokenDTO = new TokenDTO(jwt);
+      return service.getUpdateUser(tokenDTO);
   }
 }

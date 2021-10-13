@@ -3,7 +3,7 @@ package com.moneystats.authentication;
 import com.moneystats.authentication.AuthenticationException.Code;
 import com.moneystats.authentication.DTO.*;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
-import com.moneystats.generic.SchemaDescription;
+import com.moneystats.generic.ResponseMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class AuthCredentialService {
 
     userCredential.setPassword(bCryptPasswordEncoder.encode(userCredential.getPassword()));
     authCredentialDAO.insertUserCredential(userCredential);
-    return new AuthResponseDTO(SchemaDescription.USER_ADDED_CORRECT);
+    return new AuthResponseDTO(ResponseMapping.USER_ADDED_CORRECT);
   }
 
   /**
@@ -142,6 +142,43 @@ public class AuthCredentialService {
     return listUsers;
   }
 
+  /**
+   * Method used to get the user updated after the update process
+   * @param tokenDTO param required to get the current user logged
+   * @return the user logged updated
+   * @throws AuthenticationException
+   */
+  public AuthCredentialDTO getUpdateUser(TokenDTO tokenDTO) throws AuthenticationException {
+    TokenValidation.validateTokenDTO(tokenDTO);
+    AuthCredentialDTO parseToken = tokenService.parseToken(tokenDTO);
+
+    AuthCredentialInputDTO authCredentialInputDTO =
+        new AuthCredentialInputDTO(parseToken.getUsername(), null);
+    AuthCredentialEntity authCredentialEntity =
+        authCredentialDAO.getCredential(authCredentialInputDTO);
+    if (authCredentialEntity == null) {
+      LOG.error(
+          "An error occured during AuthCredentialService getCredential:154 authCredentialEntity is {}",
+          authCredentialEntity);
+      throw new AuthenticationException(Code.USER_NOT_MATCH);
+    }
+
+    return new AuthCredentialDTO(
+        authCredentialEntity.getFirstName(),
+        authCredentialEntity.getLastName(),
+        authCredentialEntity.getDateOfBirth(),
+        authCredentialEntity.getEmail(),
+        authCredentialEntity.getUsername(),
+        null);
+  }
+
+  /**
+   * Method that allow to update the user (Not let you update the username, or password)
+   * @param authCredentialToUpdateDTO input to update
+   * @param tokenDTO valid for validator
+   * @return A response of success
+   * @throws AuthenticationException
+   */
   public AuthResponseDTO updateUser(
       AuthCredentialToUpdateDTO authCredentialToUpdateDTO, TokenDTO tokenDTO)
       throws AuthenticationException {
@@ -157,6 +194,6 @@ public class AuthCredentialService {
     }
 
     authCredentialDAO.updateUserById(authCredentialToUpdateDTO);
-    return new AuthResponseDTO(SchemaDescription.USER_UPDATED);
+    return new AuthResponseDTO(ResponseMapping.USER_UPDATED);
   }
 }

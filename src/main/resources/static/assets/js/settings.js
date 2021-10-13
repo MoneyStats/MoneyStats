@@ -17,7 +17,7 @@ $(document).ready(function () {
         //-------------------------------------------------------------
         $.ajax({
             type: "GET",
-            url: "/check_login",
+            url: "credential/getCurrentUser",
             contentType: 'application/json',
             dataType: 'json',
             headers: {
