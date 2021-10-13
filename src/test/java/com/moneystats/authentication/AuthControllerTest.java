@@ -359,4 +359,18 @@ public class AuthControllerTest {
                             .header("Authorization", "Bearer " + tokenDTO))
             .andExpect(status().isBadRequest());
   }
+
+  /** Test getUpdateUser */
+  @Test
+  void getUpdateUser_shouldGetUserCorrectly() throws Exception {
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
+    AuthCredentialDTO authCredentialDTOExpected = TestSchema.USER_CREDENTIAL_DTO;
+
+    Mockito.when(credential.getUpdateUser(tokenDTO)).thenReturn(authCredentialDTOExpected);
+    mockMvc
+            .perform(
+                    MockMvcRequestBuilders.get("/credential/getCurrentUser")
+                            .header("Authorization", "Bearer " + tokenDTO))
+            .andExpect(status().isOk());
+  }
 }

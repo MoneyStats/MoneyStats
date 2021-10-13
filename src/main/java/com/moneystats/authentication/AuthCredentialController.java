@@ -21,7 +21,7 @@ public class AuthCredentialController {
   @Operation(
       summary = SchemaDescription.POST_LOGIN_SUMMARY,
       description = SchemaDescription.POST_LOGIN_DESCRIPTION,
-      tags = "Credential")
+      tags = "AuthCredential")
   public TokenDTO loginUser(@RequestBody AuthCredentialInputDTO userCredential)
       throws AuthenticationException {
     return service.login(userCredential);
@@ -68,7 +68,8 @@ public class AuthCredentialController {
   @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE, SecurityRoles.MONEYSTATS_USER_ROLE})
   @Operation(
       summary = SchemaDescription.POST_UPDATE_PASSWORD_SUMMARY,
-      description = SchemaDescription.POST_UPDATE_PASSWORD_DESCRIPTION)
+      description = SchemaDescription.POST_UPDATE_PASSWORD_DESCRIPTION,
+      tags = "AuthCredential")
   public AuthResponseDTO updatePassword(
       @RequestHeader(value = "Authorization") String jwt,
       @RequestBody AuthChangePasswordInputDTO authChangePasswordInputDTO)
