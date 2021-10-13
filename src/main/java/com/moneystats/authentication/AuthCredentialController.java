@@ -1,5 +1,6 @@
 package com.moneystats.authentication;
 
+import antlr.Token;
 import com.moneystats.authentication.DTO.*;
 import com.moneystats.generic.SchemaDescription;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,25 +17,18 @@ public class AuthCredentialController {
   @Autowired private AuthCredentialService service;
 
   @PostMapping("/login")
-  @RolesAllowed({
-          SecurityRoles.MONEYSTATS_ADMIN_ROLE,
-          SecurityRoles.MONEYSTATS_USER_ROLE
-  })
+  @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE, SecurityRoles.MONEYSTATS_USER_ROLE})
   @Operation(
-          summary = SchemaDescription.POST_LOGIN_SUMMARY,
-          description = SchemaDescription.POST_LOGIN_DESCRIPTION,
-          tags = "Credential"
-  )
+      summary = SchemaDescription.POST_LOGIN_SUMMARY,
+      description = SchemaDescription.POST_LOGIN_DESCRIPTION,
+      tags = "Credential")
   public TokenDTO loginUser(@RequestBody AuthCredentialInputDTO userCredential)
-          throws AuthenticationException {
+      throws AuthenticationException {
     return service.login(userCredential);
   }
 
   @PostMapping("/signup")
-  @RolesAllowed({
-          SecurityRoles.MONEYSTATS_ADMIN_ROLE,
-          SecurityRoles.MONEYSTATS_USER_ROLE
-  })
+  @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE, SecurityRoles.MONEYSTATS_USER_ROLE})
   public AuthResponseDTO addUser(@RequestBody AuthCredentialDTO userCredential)
       throws AuthenticationException {
     return service.signUp(userCredential);
@@ -67,6 +61,19 @@ public class AuthCredentialController {
   public AuthCredentialDTO getCurrentUser(@RequestHeader(value = "Authorization") String jwt)
       throws AuthenticationException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
-      return service.getUpdateUser(tokenDTO);
+    return service.getUpdateUser(tokenDTO);
+  }
+
+  @PutMapping("/update/password")
+  @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE, SecurityRoles.MONEYSTATS_USER_ROLE})
+  @Operation(
+      summary = SchemaDescription.POST_UPDATE_PASSWORD_SUMMARY,
+      description = SchemaDescription.POST_UPDATE_PASSWORD_DESCRIPTION)
+  public AuthResponseDTO updatePassword(
+      @RequestHeader(value = "Authorization") String jwt,
+      @RequestBody AuthChangePasswordInputDTO authChangePasswordInputDTO)
+      throws AuthenticationException {
+    TokenDTO tokenDTO = new TokenDTO(jwt);
+    return service.updatePassword(authChangePasswordInputDTO, tokenDTO);
   }
 }
