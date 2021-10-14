@@ -51,7 +51,9 @@ public class WalletService {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
     List<WalletEntity> walletEntities = walletDAO.findAllByUserId(utente.getId());
     if (walletEntities.size() == 0) {
-      LOG.error("Wallet Not Found on getAll, WalletService:41");
+      LOG.error(
+          "Wallet Not Found on getAll, WalletService:54, Exception {}",
+          WalletException.Code.WALLET_NOT_FOUND.toString());
       throw new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     }
     return walletEntities;
@@ -75,7 +77,9 @@ public class WalletService {
     walletDTO.setUser(utente);
     CategoryEntity category = categoryDAO.findById(walletInputDTO.getCategoryId()).orElse(null);
     if (category == null) {
-      LOG.error("Category Not Found, on addWalletEntity into WalletService:67");
+      LOG.error(
+          "Category Not Found, on addWalletEntity into WalletService:67, Exception {}",
+          CategoryException.Code.CATEGORY_NOT_FOUND.toString());
       throw new CategoryException(CategoryException.Code.CATEGORY_NOT_FOUND);
     }
     walletDTO.setName(walletInputDTO.getName());
@@ -101,12 +105,14 @@ public class WalletService {
   public WalletResponseDTO deleteWalletEntity(Long idWallet) throws WalletException {
     WalletEntity wallet = walletDAO.findById(idWallet).orElse(null);
     if (wallet == null) {
-      LOG.error("Wallet Not Found, on deleteWalletEntity into WalletService:84");
+      LOG.error(
+          "Wallet Not Found, on deleteWalletEntity into WalletService:108, Exception {}",
+          WalletException.Code.WALLET_NOT_FOUND.toString());
       throw new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     }
     List<StatementEntity> statementEntities = statementDAO.findStatementByWalletId(wallet.getId());
     if (statementEntities.size() == 0) {
-      LOG.error("No Statement Found, on deleteWalletEntity into WalletService:90");
+      LOG.error("No Statement Found, on deleteWalletEntity into WalletService:115, No Exception Throws");
     }
     wallet.setStatementList(statementEntities);
     for (StatementEntity statementEntity : wallet.getStatementList()) {
@@ -134,23 +140,24 @@ public class WalletService {
     List<String> listDate = statementDAO.selectdistinctstatement(utente.getId());
     if (listDate.size() == 0) {
       LOG.error(
-          "List Date Not Found, into WalletService, myWalletMobile:122 {}",
+          "List Date Not Found, into WalletService, myWalletMobile:143, Exception {}",
           StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND.toString());
       throw new StatementException(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND);
     }
     String date = listDate.get(listDate.size() - 1);
-    LOG.info("Date my wallet mobile {}", date);
 
     List<WalletEntity> walletEntities = walletDAO.findAllByUserId(utente.getId());
     if (walletEntities.size() == 0) {
-      LOG.error("Wallet Not Found on getAll, WalletService:41");
+      LOG.error(
+          "Wallet Not Found on getAll, WalletService:151, Exception {}",
+          WalletException.Code.WALLET_NOT_FOUND.toString());
       throw new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     }
     List<StatementEntity> statementList =
         statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date);
     if (statementList.size() == 0) {
       LOG.error(
-          "Statement Not Found, into WalletService, List statement entity ordered by walletID:137 {}",
+          "Statement Not Found, into WalletService, List statement entity ordered by walletID:160, Exception {}",
           StatementException.Code.STATEMENT_NOT_FOUND.toString());
       throw new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
     }
@@ -187,7 +194,9 @@ public class WalletService {
     CategoryEntity categoryEntity =
         categoryDAO.findById(walletInputIdDTO.getIdCategory()).orElse(null);
     if (categoryEntity == null) {
-      LOG.error("Category Not Found, on editWallet into WalletService:171");
+      LOG.error(
+          "Category Not Found, on editWallet into WalletService:197, Exception {}",
+          CategoryException.Code.CATEGORY_NOT_FOUND.toString());
       throw new CategoryException(CategoryException.Code.CATEGORY_NOT_FOUND);
     }
     WalletEntity walletEntityToEdit =
@@ -208,7 +217,9 @@ public class WalletService {
   public WalletDTO walletById(Long idWallet) throws WalletException {
     WalletEntity walletEntity = walletDAO.findById(idWallet).orElse(null);
     if (walletEntity == null) {
-      LOG.error("WalletEntity Not Found, on walletById into WalletService:182");
+      LOG.error(
+          "WalletEntity Not Found, on walletById into WalletService:220, Exception {}",
+          WalletException.Code.WALLET_NOT_FOUND.toString());
       throw new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     }
     WalletDTO walletDTO =
