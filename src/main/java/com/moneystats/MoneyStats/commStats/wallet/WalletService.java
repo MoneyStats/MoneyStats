@@ -17,6 +17,8 @@ import com.moneystats.authentication.TokenService;
 import com.moneystats.authentication.TokenValidation;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 import com.moneystats.generic.ResponseMapping;
+import com.moneystats.timeTracker.LogTimeTracker;
+import com.moneystats.timeTracker.LoggerMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,7 @@ public class WalletService {
    * @throws WalletException
    * @throws AuthenticationException
    */
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public List<WalletEntity> getAll(TokenDTO tokenDTO)
       throws WalletException, AuthenticationException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
@@ -63,6 +66,7 @@ public class WalletService {
    * @throws WalletException
    * @throws AuthenticationException
    */
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public WalletResponseDTO addWalletEntity(TokenDTO tokenDTO, WalletInputDTO walletInputDTO)
       throws WalletException, AuthenticationException, CategoryException {
     WalletValidator.validateWalletInputDTO(walletInputDTO);
@@ -93,6 +97,7 @@ public class WalletService {
    * @return response of status
    * @throws WalletException
    */
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public WalletResponseDTO deleteWalletEntity(Long idWallet) throws WalletException {
     WalletEntity wallet = walletDAO.findById(idWallet).orElse(null);
     if (wallet == null) {
@@ -120,6 +125,7 @@ public class WalletService {
    * @throws StatementException
    * @throws WalletException
    */
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public WalletStatementDTO myWalletMobile(TokenDTO tokenDTO)
       throws AuthenticationException, StatementException, WalletException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
@@ -173,6 +179,7 @@ public class WalletService {
    * @throws AuthenticationException
    * @throws CategoryException
    */
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public WalletResponseDTO editWallet(WalletInputIdDTO walletInputIdDTO, TokenDTO token)
       throws WalletException, AuthenticationException, CategoryException {
     WalletValidator.validateWalletInputWithIDDTO(walletInputIdDTO);
@@ -197,6 +204,7 @@ public class WalletService {
    * @return WalletDTO
    * @throws WalletException
    */
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public WalletDTO walletById(Long idWallet) throws WalletException {
     WalletEntity walletEntity = walletDAO.findById(idWallet).orElse(null);
     if (walletEntity == null) {
@@ -219,6 +227,7 @@ public class WalletService {
    * @return an user
    * @throws AuthenticationException
    */
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO) throws AuthenticationException {
     TokenValidation.validateTokenDTO(tokenDTO);
     if (tokenDTO.getAccessToken().equalsIgnoreCase("")) {

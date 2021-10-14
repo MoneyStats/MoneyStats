@@ -197,8 +197,9 @@ public class AuthCredentialService {
 
     if (!authCredentialToUpdateDTO.getUsername().equalsIgnoreCase(user.getUsername())) {
       LOG.error(
-          "Username does not match AuthCredentialService updateUser:158 {}",
-          authCredentialToUpdateDTO.getUsername());
+          "Username does not match AuthCredentialService updateUser:158 {} Exception {}",
+          authCredentialToUpdateDTO.getUsername(),
+          Code.USER_NOT_MATCH.toString());
       throw new AuthenticationException(Code.USER_NOT_MATCH);
     }
 
@@ -228,15 +229,19 @@ public class AuthCredentialService {
         .getNewPassword()
         .equalsIgnoreCase(authChangePasswordInputDTO.getConfirmNewPassword())) {
       LOG.error(
-          "Password don't match, at updatePassword:204, AuthCredentialService, password 1: {}, 2: {}",
+          "Password don't match, at updatePassword:204, AuthCredentialService, password 1: {}, 2: {}, Exception {}",
           authChangePasswordInputDTO.getNewPassword(),
-          authChangePasswordInputDTO.getConfirmNewPassword());
+          authChangePasswordInputDTO.getConfirmNewPassword(),
+          Code.PASSWORD_NOT_MATCH.toString());
       throw new AuthenticationException(Code.PASSWORD_NOT_MATCH);
     }
 
     AuthCredentialDTO user = tokenService.parseToken(tokenDTO);
     if (user == null) {
-      LOG.error("Username does not match chagePassword:210 {}", user.getUsername());
+      LOG.error(
+          "Username does not match chagePassword:210 {}, Exception {}",
+          user.getUsername(),
+          Code.USER_NOT_MATCH.toString());
       throw new AuthenticationException(Code.USER_NOT_MATCH);
     }
 
@@ -245,8 +250,9 @@ public class AuthCredentialService {
     AuthCredentialEntity authCredentialEntity = authCredentialDAO.getCredential(inputGetCredential);
     if (authCredentialEntity == null) {
       LOG.error(
-          "An error occured during getCredential():226, at AuthCredentialService is {}",
-          authCredentialEntity);
+          "An error occured during getCredential():226, at AuthCredentialService is {}, Exception {}",
+          authCredentialEntity,
+          Code.USER_NOT_FOUND.toString());
       throw new AuthenticationException(Code.USER_NOT_FOUND);
     }
 
@@ -255,7 +261,8 @@ public class AuthCredentialService {
             authChangePasswordInputDTO.getOldPassword(), authCredentialEntity.getPassword());
     if (!matches) {
       LOG.error(
-          "Old password don't match, needs to try again, updatePassword():234, at AuthCredentialService");
+          "Old password don't match, needs to try again, updatePassword():234, at AuthCredentialService, Exception {}",
+          Code.WRONG_CREDENTIAL.toString());
       throw new AuthenticationException(Code.WRONG_CREDENTIAL);
     }
 
