@@ -17,4 +17,8 @@ public class SchemaDescription {
     public static final String PUT_UPDATE_USER_DESCRIPTION = "Method that allow you to update the current user";
     public static final String GET_CURRENT_USER_SUMMARY = "Return current user";
     public static final String GET_CURRENT_USER_DESCRIPTION = "Method that allow you to get the current user";
+
+    // Category
+    public static final String GET_CATEGORY_SUMMARY = "Get all Category";
+    public static final String GET_CATEGORY_DESCRIPTION = "Method that return a list of category";
 }

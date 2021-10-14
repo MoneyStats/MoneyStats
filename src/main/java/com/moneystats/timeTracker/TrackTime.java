@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 import com.moneystats.timeTracker.LogTimeTracker.ActionType;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.METHOD})
 public @interface TrackTime {
 
   ActionType type();
