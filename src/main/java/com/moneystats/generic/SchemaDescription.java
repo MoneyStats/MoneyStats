@@ -43,4 +43,10 @@ public class SchemaDescription {
     public static final String PUT_UPDATE_WALLET_DESCRIPTION = "Methods that allow the user to update the Wallet";
     public static final String GET_WALLET_BY_ID_SUMMARY = "Wallet By ID";
     public static final String GET_WALLET_BY_ID_DESCRIPTION = "Method that allow the user to get the wallet by ID";
+
+    // Homapage
+    public static final String GET_REPORT_HOMEPAGE_SUMMARY = "Render Homepage";
+    public static final String GET_REPORT_HOMEPAGE_DESCRIPTION = "Method that allow the user to render the Homepage";
+    public static final String GET_PIE_GRAPH_SUMMARY = "Get the Pie Graph";
+    public static final String GET_PIE_GRAPH_DESCRIPTION = "Method that allow the user to get the pieGraph into the Homepage";
 }
