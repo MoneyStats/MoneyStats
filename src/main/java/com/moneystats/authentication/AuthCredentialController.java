@@ -1,6 +1,5 @@
 package com.moneystats.authentication;
 
-import antlr.Token;
 import com.moneystats.authentication.DTO.*;
 import com.moneystats.generic.SchemaDescription;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -32,12 +31,21 @@ public class AuthCredentialController {
 
   @PostMapping("/signup")
   @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE, SecurityRoles.MONEYSTATS_USER_ROLE})
+  @Operation(
+      summary = SchemaDescription.POST_SIGN_UP_SUMMARY,
+      description = SchemaDescription.POST_SIGN_UP_DESCRIPTION,
+      tags = "AuthCredential")
   public AuthResponseDTO addUser(@RequestBody AuthCredentialDTO userCredential)
       throws AuthenticationException {
     return service.signUp(userCredential);
   }
 
   @GetMapping("/token")
+  @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE, SecurityRoles.MONEYSTATS_USER_ROLE})
+  @Operation(
+      summary = SchemaDescription.GET_USER_WITH_TOKEN_SUMMARY,
+      description = SchemaDescription.GET_USER_WITH_TOKEN_DESCRIPTION,
+      tags = "AuthCredential")
   public AuthCredentialDTO tokenUser(@RequestHeader(value = "Authorization") String jwt)
       throws AuthenticationException {
     TokenDTO token = new TokenDTO(jwt);
@@ -45,6 +53,11 @@ public class AuthCredentialController {
   }
 
   @GetMapping("/admin")
+  @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE})
+  @Operation(
+      summary = SchemaDescription.GET_ADMIN_USER_SUMMARY,
+      description = SchemaDescription.GET_ADMIN_USER_DESCRIPTION,
+      tags = "AuthCredential")
   public List<AuthCredentialDTO> adminListUsers(@RequestHeader(value = "Authorization") String jwt)
       throws AuthenticationException {
     TokenDTO token = new TokenDTO(jwt);
@@ -52,6 +65,11 @@ public class AuthCredentialController {
   }
 
   @PutMapping("/update")
+  @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE, SecurityRoles.MONEYSTATS_USER_ROLE})
+  @Operation(
+      summary = SchemaDescription.PUT_UPDATE_USER_SUMMARY,
+      description = SchemaDescription.PUT_UPDATE_USER_DESCRIPTION,
+      tags = "AuthCredential")
   public AuthResponseDTO updateUser(
       @RequestHeader(value = "Authorization") String jwt,
       @RequestBody AuthCredentialToUpdateDTO authCredentialToUpdateDTO)
@@ -61,6 +79,11 @@ public class AuthCredentialController {
   }
 
   @GetMapping("/getCurrentUser")
+  @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE, SecurityRoles.MONEYSTATS_USER_ROLE})
+  @Operation(
+      summary = SchemaDescription.GET_CURRENT_USER_SUMMARY,
+      description = SchemaDescription.GET_CURRENT_USER_DESCRIPTION,
+      tags = "AuthCredential")
   public AuthCredentialDTO getCurrentUser(@RequestHeader(value = "Authorization") String jwt)
       throws AuthenticationException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
