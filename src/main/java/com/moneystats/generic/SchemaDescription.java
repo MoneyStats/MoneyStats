@@ -49,4 +49,10 @@ public class SchemaDescription {
     public static final String GET_REPORT_HOMEPAGE_DESCRIPTION = "Method that allow the user to render the Homepage";
     public static final String GET_PIE_GRAPH_SUMMARY = "Get the Pie Graph";
     public static final String GET_PIE_GRAPH_DESCRIPTION = "Method that allow the user to get the pieGraph into the Homepage";
+
+    // Web Controller
+    public static final String GET_LOGINPAGE_SUMMARY = "loginpage.html";
+    public static final String GET_LOGINPAGE_DESCRIPTION = "return the HTML page";
+    public static final String GET_LOGOUT_SUMMARY = "logout";
+    public static final String GET_LOGOUT_DESCRIPTION = "get logout from server";
 }
