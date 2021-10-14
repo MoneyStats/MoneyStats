@@ -21,11 +21,11 @@ public class LoggerInterceptor {
   private final Logger LOG = LoggerFactory.getLogger(this.getClass());
   @Autowired private HttpServletRequest request;
 
-  @Around("@annotation(TrackTime)")
+  @Around("@annotation(LoggerMethod)")
   public Object trace(ProceedingJoinPoint joinPoint) throws Throwable {
     MethodSignature signature = (MethodSignature) joinPoint.getSignature();
     Method method = signature.getMethod();
-    TrackTime annotations = method.getAnnotation(TrackTime.class);
+    LoggerMethod annotations = method.getAnnotation(LoggerMethod.class);
 
     if (annotations == null) {
       return joinPoint.proceed();
