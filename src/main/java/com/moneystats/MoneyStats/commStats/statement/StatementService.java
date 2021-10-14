@@ -52,7 +52,9 @@ public class StatementService {
 
     WalletEntity walletEntity = walletDAO.findById(statementInputDTO.getWalletId()).orElse(null);
     if (walletEntity == null) {
-      LOG.error("Wallet Not Found, into StatementService, addStatement:55");
+      LOG.error(
+          "Wallet Not Found, into StatementService, addStatement:55, Exception {}",
+          WalletException.Code.WALLET_NOT_FOUND.toString());
       throw new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     }
     String[] date = statementInputDTO.getDate().split("-");
@@ -85,7 +87,9 @@ public class StatementService {
 
     List<String> listDate = statementDAO.selectdistinctstatement(utente.getId());
     if (listDate.size() == 0) {
-      LOG.error("Statement Date Not Found, into StatementService, listOfDate:85");
+      LOG.error(
+          "Statement Date Not Found, into StatementService, listOfDate:90, Exception {}",
+          StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND.toString());
       throw new StatementException(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND);
     }
     return listDate;
@@ -106,7 +110,9 @@ public class StatementService {
     List<StatementEntity> statementList =
         statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date);
     if (statementList.size() == 0) {
-      LOG.error("Statement Not Found, into StatementService, listStatementByDate:106");
+      LOG.error(
+          "Statement Not Found, into StatementService, listStatementByDate:113, Exception {}",
+          StatementException.Code.STATEMENT_NOT_FOUND.toString());
       throw new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
     }
     return statementList;
@@ -131,7 +137,9 @@ public class StatementService {
             authCredentialDTO.getUsername(), authCredentialDTO.getPassword());
     AuthCredentialEntity utente = authCredentialDAO.getCredential(authCredentialInputDTO);
     if (utente == null) {
-      LOG.error("User Not Found, into StatementService, validateAndCreate(TokenDTO):96");
+      LOG.error(
+          "User Not Found, into StatementService, validateAndCreate(TokenDTO):140, Exception {}",
+          AuthenticationException.Code.USER_NOT_FOUND.toString());
       throw new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND);
     }
     return utente;

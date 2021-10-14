@@ -27,7 +27,9 @@ public class CategoryService {
   public List<CategoryEntity> categoryDTOList() throws CategoryException {
     List<CategoryEntity> categoryEntities = categoryDAO.findAll();
     if (categoryEntities.size() == 0) {
-      LOG.error("Category Not Found, Not present into DB");
+      LOG.error(
+          "Category Not Found, Not present into DB, at CategoryService, categoryDTOList: 29, Exception {}",
+          CategoryException.Code.CATEGORY_NOT_FOUND.toString());
       throw new CategoryException(CategoryException.Code.CATEGORY_NOT_FOUND);
     }
     return categoryEntities;
