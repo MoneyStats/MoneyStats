@@ -1,6 +1,5 @@
 package com.moneystats.timeTracker;
 
-import com.moneystats.authentication.DTO.TokenDTO;
 import org.slf4j.Logger;
 
 import java.time.Instant;
@@ -24,10 +23,9 @@ public class LogTimeTracker {
 
   public void trackFailure(Logger LOG, Exception e) {
     LOG.error(
-        "action_type: {}, method: {}, parameters: {}, correlation_id: {}, time_tracker: {}, status: KO, exception: {}, description: {}",
+        "ACTION_TYPE: {}, METHOD: {}, CORRELATION_ID: {}, TIME_PROCESS: {}, STATUS: KO, EXCEPTION: {}, DESCRIPTION: {}",
         this.actionType,
         this.methodName,
-        this.parameters,
         this.correlationId,
         getDeltaInMilli(),
         e.getClass().getName(),
@@ -36,12 +34,12 @@ public class LogTimeTracker {
 
   public void trackSuccess(Logger LOG) {
     LOG.info(
-        "action_type: {}, method: {}, parameters: {}, correlation_id: {}, time_tracker: {}, status: OK",
+        "ACTION_TYPE: {}, METHOD: {}, CORRELATION_ID: {}, TIME_PROCESS: {}, STATUS: OK, PARAMETERS: {}",
         this.actionType,
         this.methodName,
-        this.parameters,
         this.correlationId,
-        getDeltaInMilli());
+        getDeltaInMilli(),
+        this.parameters);
   }
 
   private long getDeltaInMilli() {
@@ -49,13 +47,14 @@ public class LogTimeTracker {
   }
 
   public static LogTimeTracker startInvocation(
-      ActionType type, String methodName, String parameters, String correlationId) {
-    return new LogTimeTracker(type, methodName, parameters, correlationId);
+      ActionType type, String methodName, String correlationId, String parameters) {
+    return new LogTimeTracker(type, methodName, correlationId, parameters);
   }
 
   public static enum ActionType {
-    APP_ENDPOINT,
-    APP_LOGIC,
-    APP_EXTERNAL
+    APP_DATABASE_ENDPOINT,
+    APP_SERVICE_LOGIC,
+    APP_WEB_SERVICE,
+    APP_TOKEN_SERVICE
   }
 }

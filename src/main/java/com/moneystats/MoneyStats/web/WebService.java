@@ -3,8 +3,6 @@ package com.moneystats.MoneyStats.web;
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.timeTracker.LogTimeTracker;
-import com.moneystats.timeTracker.Logged;
-import com.moneystats.timeTracker.TrackTime;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 
-@Logged
 @Service
 public class WebService {
 
@@ -36,7 +33,6 @@ public class WebService {
    * @param token
    * @throws WebException
    */
-  @TrackTime(type = LogTimeTracker.ActionType.APP_LOGIC)
   public AuthCredentialDTO checkUser(TokenDTO token) throws WebException {
     Claims body;
     try {

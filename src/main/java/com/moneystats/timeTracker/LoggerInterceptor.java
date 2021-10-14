@@ -1,17 +1,16 @@
 package com.moneystats.timeTracker;
 
-import com.moneystats.generic.CorrelationIdUtils;
+import com.moneystats.generic.CorrelationIDUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 
@@ -24,8 +23,8 @@ public class LoggerInterceptor {
 
   @Around("@annotation(TrackTime)")
   public Object trace(ProceedingJoinPoint joinPoint) throws Throwable {
-    LOG.error("Method {}", request.getMethod());
-    Method method = joinPoint.getClass().getMethod(request.getMethod());
+    MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+    Method method = signature.getMethod();
     TrackTime annotations = method.getAnnotation(TrackTime.class);
 
     if (annotations == null) {
@@ -37,10 +36,7 @@ public class LoggerInterceptor {
 
     LogTimeTracker tracker =
         LogTimeTracker.startInvocation(
-            annotations.type(),
-            methodName,
-            parameters,
-            CorrelationIdUtils.getCorrelationIdThreadLocal());
+            annotations.type(), methodName, parameters, CorrelationIDUtils.getCorrelationId());
     Object obj;
     try {
       obj = joinPoint.proceed();

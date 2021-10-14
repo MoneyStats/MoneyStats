@@ -5,9 +5,6 @@ import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
 import com.moneystats.authentication.DTO.AuthCredentialToUpdateDTO;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
-import com.moneystats.timeTracker.LogTimeTracker.ActionType;
-import com.moneystats.timeTracker.Logged;
-import com.moneystats.timeTracker.TrackTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +14,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Logged
 @Repository
 public class AuthCredentialDAO {
 
@@ -48,7 +44,6 @@ public class AuthCredentialDAO {
     this.password = password;
   }
 
-  @TrackTime(type = ActionType.APP_EXTERNAL)
   public void insertUserCredential(AuthCredentialDTO user) throws AuthenticationException {
     try {
       Connection connection = DriverManager.getConnection(dbAddress, username, password);
@@ -67,7 +62,6 @@ public class AuthCredentialDAO {
     }
   }
 
-  @TrackTime(type = ActionType.APP_EXTERNAL)
   public AuthCredentialEntity getCredential(AuthCredentialInputDTO user)
       throws AuthenticationException {
     AuthCredentialEntity userCredential = null;
@@ -95,8 +89,6 @@ public class AuthCredentialDAO {
     }
     return userCredential;
   }
-
-  @TrackTime(type = ActionType.APP_EXTERNAL)
   public AuthCredentialEntity findByEmail(String email) throws AuthenticationException {
     AuthCredentialEntity userCredential = null;
     try {
@@ -124,7 +116,6 @@ public class AuthCredentialDAO {
     return userCredential;
   }
 
-  @TrackTime(type = ActionType.APP_EXTERNAL)
   public List<AuthCredentialEntity> getUsers() throws AuthenticationException {
     List<AuthCredentialEntity> listUser = new ArrayList<AuthCredentialEntity>();
     try {
@@ -152,7 +143,6 @@ public class AuthCredentialDAO {
     return listUser;
   }
 
-  @TrackTime(type = ActionType.APP_EXTERNAL)
   public void updateUserById(AuthCredentialToUpdateDTO authCredentialToUpdateDTO)
       throws AuthenticationException {
     try {
@@ -171,7 +161,6 @@ public class AuthCredentialDAO {
     }
   }
 
-  @TrackTime(type = ActionType.APP_EXTERNAL)
   public void updatePasswordUserById(String usernameDB, String passwordDB)
       throws AuthenticationException {
     try {

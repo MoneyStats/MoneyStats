@@ -4,9 +4,6 @@ import com.moneystats.authentication.AuthenticationException.Code;
 import com.moneystats.authentication.DTO.*;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 import com.moneystats.generic.ResponseMapping;
-import com.moneystats.timeTracker.LogTimeTracker.ActionType;
-import com.moneystats.timeTracker.Logged;
-import com.moneystats.timeTracker.TrackTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-@Logged
 @Service
 public class AuthCredentialService {
 
@@ -36,7 +32,6 @@ public class AuthCredentialService {
    * @return A response of success
    * @throws AuthenticationException on invalid input
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
   public AuthResponseDTO signUp(AuthCredentialDTO userCredential) throws AuthenticationException {
     userCredential.setRole(SecurityRoles.MONEYSTATS_USER_ROLE);
     AuthenticationValidator.validateAuthCredentialDTO(userCredential);
@@ -70,7 +65,6 @@ public class AuthCredentialService {
    * @return TokenDTO
    * @throws AuthenticationException on Token
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
   public TokenDTO login(AuthCredentialInputDTO userCredential) throws AuthenticationException {
     AuthenticationValidator.validateAuthCredentialInputDTO(userCredential);
     AuthCredentialEntity userEntity = authCredentialDAO.getCredential(userCredential);
@@ -113,7 +107,6 @@ public class AuthCredentialService {
    * @return An user
    * @throws AuthenticationException for token
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
   public AuthCredentialDTO getUser(TokenDTO token) throws AuthenticationException {
     TokenValidation.validateTokenDTO(token);
     return tokenService.parseToken(token);
@@ -126,7 +119,6 @@ public class AuthCredentialService {
    * @return list of user into db
    * @throws AuthenticationException parsing Token
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
   public List<AuthCredentialDTO> getUsers(TokenDTO token) throws AuthenticationException {
     TokenValidation.validateTokenDTO(token);
     AuthCredentialDTO user = tokenService.parseToken(token);
@@ -157,7 +149,6 @@ public class AuthCredentialService {
    * @return the user logged updated
    * @throws AuthenticationException
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
   public AuthCredentialDTO getUpdateUser(TokenDTO tokenDTO) throws AuthenticationException {
     TokenValidation.validateTokenDTO(tokenDTO);
     AuthCredentialDTO parseToken = tokenService.parseToken(tokenDTO);
@@ -190,7 +181,6 @@ public class AuthCredentialService {
    * @return A response of success
    * @throws AuthenticationException
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
   public AuthResponseDTO updateUser(
       AuthCredentialToUpdateDTO authCredentialToUpdateDTO, TokenDTO tokenDTO)
       throws AuthenticationException {
@@ -220,7 +210,6 @@ public class AuthCredentialService {
    * @return
    * @throws AuthenticationException
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
   public AuthResponseDTO updatePassword(
       AuthChangePasswordInputDTO authChangePasswordInputDTO, TokenDTO tokenDTO)
       throws AuthenticationException {
