@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.moneystats.timeTracker.LogTimeTracker;
+import com.moneystats.timeTracker.Logged;
+import com.moneystats.timeTracker.TrackTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +23,7 @@ import com.moneystats.authentication.DTO.AuthCredentialToUpdateDTO;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 
 @Repository
+@Logged
 public class AuthCredentialDAO {
 
   private static final String UPDATE_USERS =
@@ -168,6 +172,7 @@ public class AuthCredentialDAO {
     }
   }
 
+  @TrackTime(type = LogTimeTracker.ActionType.APP_EXTERNAL)
   public void updatePasswordUserById(String usernameDB, String passwordDB)
           throws AuthenticationException {
     try {

@@ -3,7 +3,9 @@ package com.moneystats.authentication;
 import antlr.Token;
 import com.moneystats.authentication.DTO.*;
 import com.moneystats.generic.SchemaDescription;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/credential")
+@OpenAPIDefinition(tags = {@Tag(name = "MoneyStats", description = "")})
 public class AuthCredentialController {
 
   @Autowired private AuthCredentialService service;
