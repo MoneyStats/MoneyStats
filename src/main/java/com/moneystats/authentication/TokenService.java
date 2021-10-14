@@ -2,6 +2,9 @@ package com.moneystats.authentication;
 
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
+import com.moneystats.timeTracker.LogTimeTracker;
+import com.moneystats.timeTracker.Logged;
+import com.moneystats.timeTracker.TrackTime;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+@Logged
 @Service
 public class TokenService {
 
@@ -31,6 +35,7 @@ public class TokenService {
   @Value(value = "${jwt.time}")
   private String expirationTime;
 
+  @TrackTime(type = LogTimeTracker.ActionType.APP_ENDPOINT)
   public TokenDTO generateToken(AuthCredentialDTO user) {
     Claims claims = Jwts.claims().setSubject(user.getUsername());
     claims.put(FIRSTNAME, user.getFirstName());
@@ -49,6 +54,7 @@ public class TokenService {
     return new TokenDTO(token);
   }
 
+  @TrackTime(type = LogTimeTracker.ActionType.APP_ENDPOINT)
   public AuthCredentialDTO parseToken(TokenDTO token) throws AuthenticationException {
     Claims body;
     try {

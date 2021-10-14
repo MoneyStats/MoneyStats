@@ -4,7 +4,6 @@ import com.moneystats.authentication.AuthenticationException.Code;
 import com.moneystats.authentication.DTO.*;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 import com.moneystats.generic.ResponseMapping;
-import com.moneystats.timeTracker.LogTimeTracker;
 import com.moneystats.timeTracker.LogTimeTracker.ActionType;
 import com.moneystats.timeTracker.Logged;
 import com.moneystats.timeTracker.TrackTime;
@@ -18,8 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 @Logged
+@Service
 public class AuthCredentialService {
 
   @Autowired AuthCredentialDAO authCredentialDAO;
