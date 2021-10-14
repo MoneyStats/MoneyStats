@@ -2,6 +2,8 @@ package com.moneystats.authentication;
 
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
+import com.moneystats.timeTracker.LogTimeTracker;
+import com.moneystats.timeTracker.LoggerMethod;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -31,6 +33,7 @@ public class TokenService {
   @Value(value = "${jwt.time}")
   private String expirationTime;
 
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_TOKEN_SERVICE)
   public TokenDTO generateToken(AuthCredentialDTO user) {
     Claims claims = Jwts.claims().setSubject(user.getUsername());
     claims.put(FIRSTNAME, user.getFirstName());
@@ -49,6 +52,7 @@ public class TokenService {
     return new TokenDTO(token);
   }
 
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_TOKEN_SERVICE)
   public AuthCredentialDTO parseToken(TokenDTO token) throws AuthenticationException {
     Claims body;
     try {
