@@ -29,4 +29,18 @@ public class SchemaDescription {
     public static final String GET_LIST_OF_DATE_DESCRIPTION = "Process that allow to get all the date";
     public static final String GET_LIST_STATEMENT_BY_DATE_SUMMARY = "List Statement By date";
     public static final String GET_LIST_STATEMENT_BY_DATE_DESCRIPTION = "Method that return a list of all Statement into that params date";
+
+    // Wallet
+    public static final String GET_ALL_WALLET_SUMMARY = "Get all Wallet List";
+    public static final String GET_ALL_WALLET_DESCRIPTION = "Method that return a list of Wallet by user";
+    public static final String POST_ADD_WALLET_SUMMARY = "Add Wallet";
+    public static final String POST_ADD_WALLET_DESCRIPTION = "Method that allow the user to add a new Wallet";
+    public static final String DELETE_WALLET_SUMMARY = "Delete Wallet";
+    public static final String DELETE_WALLET_DESCRIPTION = "Method that allow the User to Delete a Wallet";
+    public static final String GET_WALLET_STATEMENT_SUMMARY = "Get Wallet and Statement";
+    public static final String GET_WALLET_STATEMENT_DESCRIPTION = "Methods that allow the user to get Wallet and Statement";
+    public static final String PUT_UPDATE_WALLET_SUMMARY = "Update Wallet";
+    public static final String PUT_UPDATE_WALLET_DESCRIPTION = "Methods that allow the user to update the Wallet";
+    public static final String GET_WALLET_BY_ID_SUMMARY = "Wallet By ID";
+    public static final String GET_WALLET_BY_ID_DESCRIPTION = "Method that allow the user to get the wallet by ID";
 }

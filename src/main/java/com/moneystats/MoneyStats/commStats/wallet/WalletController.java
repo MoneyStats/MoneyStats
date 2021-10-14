@@ -6,13 +6,20 @@ import com.moneystats.MoneyStats.commStats.wallet.DTO.*;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.authentication.AuthenticationException;
 import com.moneystats.authentication.DTO.TokenDTO;
+import com.moneystats.authentication.SecurityRoles;
+import com.moneystats.generic.SchemaDescription;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RestController
 @RequestMapping("/wallet")
+@OpenAPIDefinition(tags = {@Tag(name = "Wallet", description = "")})
 public class WalletController {
 
   @Autowired private WalletService walletService;
@@ -24,6 +31,11 @@ public class WalletController {
    * @throws AuthenticationException
    */
   @GetMapping("/list")
+  @RolesAllowed({SecurityRoles.MONEYSTATS_USER_ROLE, SecurityRoles.MONEYSTATS_ADMIN_ROLE})
+  @Operation(
+      summary = SchemaDescription.GET_ALL_WALLET_SUMMARY,
+      description = SchemaDescription.GET_ALL_WALLET_DESCRIPTION,
+      tags = "Wallet")
   public List<WalletEntity> getAll(@RequestHeader(value = "Authorization") String jwt)
       throws WalletException, AuthenticationException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
@@ -38,6 +50,11 @@ public class WalletController {
    * @throws AuthenticationException
    */
   @PostMapping("/addWallet")
+  @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE, SecurityRoles.MONEYSTATS_USER_ROLE})
+  @Operation(
+      summary = SchemaDescription.POST_ADD_WALLET_SUMMARY,
+      description = SchemaDescription.POST_ADD_WALLET_DESCRIPTION,
+      tags = "Wallet")
   public WalletResponseDTO addWallet(
       @RequestHeader(value = "Authorization") String jwt, @RequestBody WalletInputDTO walletDTO)
       throws WalletException, AuthenticationException, CategoryException {
@@ -51,6 +68,11 @@ public class WalletController {
    * @throws WalletException
    */
   @DeleteMapping("/delete/{idWallet}")
+  @RolesAllowed({SecurityRoles.MONEYSTATS_USER_ROLE, SecurityRoles.MONEYSTATS_ADMIN_ROLE})
+  @Operation(
+      summary = SchemaDescription.DELETE_WALLET_SUMMARY,
+      description = SchemaDescription.DELETE_WALLET_DESCRIPTION,
+      tags = "Wallet")
   public WalletResponseDTO deleteWallet(@PathVariable long idWallet) throws WalletException {
     return walletService.deleteWalletEntity(idWallet);
   }
@@ -65,6 +87,11 @@ public class WalletController {
    * @throws AuthenticationException
    */
   @GetMapping("/listMobile")
+  @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE, SecurityRoles.MONEYSTATS_USER_ROLE})
+  @Operation(
+      summary = SchemaDescription.GET_WALLET_STATEMENT_SUMMARY,
+      description = SchemaDescription.GET_WALLET_STATEMENT_DESCRIPTION,
+      tags = "Wallet")
   public WalletStatementDTO walletListMobile(@RequestHeader(value = "Authorization") String jwt)
       throws WalletException, StatementException, AuthenticationException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
@@ -82,6 +109,11 @@ public class WalletController {
    * @throws CategoryException
    */
   @PutMapping("/editWallet")
+  @RolesAllowed({SecurityRoles.MONEYSTATS_USER_ROLE, SecurityRoles.MONEYSTATS_ADMIN_ROLE})
+  @Operation(
+      summary = SchemaDescription.PUT_UPDATE_WALLET_SUMMARY,
+      description = SchemaDescription.PUT_UPDATE_WALLET_DESCRIPTION,
+      tags = "Wallet")
   public WalletResponseDTO editWallet(
       @RequestHeader(value = "Authorization") String jwt,
       @RequestBody WalletInputIdDTO walletInputIdDTO)
@@ -98,6 +130,11 @@ public class WalletController {
    * @throws WalletException
    */
   @GetMapping("/getById/{idWallet}")
+  @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE, SecurityRoles.MONEYSTATS_USER_ROLE})
+  @Operation(
+      summary = SchemaDescription.GET_WALLET_BY_ID_SUMMARY,
+      description = SchemaDescription.GET_WALLET_BY_ID_DESCRIPTION,
+      tags = "Wallet")
   public WalletDTO getById(@PathVariable long idWallet) throws WalletException {
     return walletService.walletById(idWallet);
   }

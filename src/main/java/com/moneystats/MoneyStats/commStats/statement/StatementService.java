@@ -16,6 +16,8 @@ import com.moneystats.authentication.TokenService;
 import com.moneystats.authentication.TokenValidation;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 import com.moneystats.generic.ResponseMapping;
+import com.moneystats.timeTracker.LogTimeTracker;
+import com.moneystats.timeTracker.LoggerMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,7 @@ public class StatementService {
    * @throws StatementException
    * @throws AuthenticationException
    */
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public StatementResponseDTO addStatement(TokenDTO tokenDTO, StatementInputDTO statementInputDTO)
       throws StatementException, AuthenticationException, WalletException {
     StatementValidator.validateStatementInputDTO(statementInputDTO);
@@ -75,6 +78,7 @@ public class StatementService {
    * @throws StatementException
    * @throws AuthenticationException
    */
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public List<String> listOfDate(TokenDTO tokenDTO)
       throws StatementException, AuthenticationException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
@@ -94,6 +98,7 @@ public class StatementService {
    * @throws StatementException
    * @throws AuthenticationException
    */
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public List<StatementEntity> listStatementByDate(TokenDTO tokenDTO, String date)
       throws StatementException, AuthenticationException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
@@ -114,6 +119,7 @@ public class StatementService {
    * @return User logged
    * @throws AuthenticationException
    */
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO) throws AuthenticationException {
     TokenValidation.validateTokenDTO(tokenDTO);
     if (tokenDTO.getAccessToken().equalsIgnoreCase("")) {
