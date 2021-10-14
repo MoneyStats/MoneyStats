@@ -3,7 +3,11 @@ package com.moneystats.authentication;
 import com.moneystats.authentication.AuthenticationException.Code;
 import com.moneystats.authentication.DTO.*;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
-import com.moneystats.generic.SchemaDescription;
+import com.moneystats.generic.ResponseMapping;
+import com.moneystats.timeTracker.LogTimeTracker;
+import com.moneystats.timeTracker.LogTimeTracker.ActionType;
+import com.moneystats.timeTracker.Logged;
+import com.moneystats.timeTracker.TrackTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Logged
 public class AuthCredentialService {
 
   @Autowired AuthCredentialDAO authCredentialDAO;
@@ -32,6 +37,7 @@ public class AuthCredentialService {
    * @return A response of success
    * @throws AuthenticationException on invalid input
    */
+  @TrackTime(type = ActionType.APP_LOGIC)
   public AuthResponseDTO signUp(AuthCredentialDTO userCredential) throws AuthenticationException {
     userCredential.setRole(SecurityRoles.MONEYSTATS_USER_ROLE);
     AuthenticationValidator.validateAuthCredentialDTO(userCredential);
@@ -55,7 +61,7 @@ public class AuthCredentialService {
 
     userCredential.setPassword(bCryptPasswordEncoder.encode(userCredential.getPassword()));
     authCredentialDAO.insertUserCredential(userCredential);
-    return new AuthResponseDTO(SchemaDescription.USER_ADDED_CORRECT);
+    return new AuthResponseDTO(ResponseMapping.USER_ADDED_CORRECT);
   }
 
   /**
@@ -65,6 +71,7 @@ public class AuthCredentialService {
    * @return TokenDTO
    * @throws AuthenticationException on Token
    */
+  @TrackTime(type = ActionType.APP_LOGIC)
   public TokenDTO login(AuthCredentialInputDTO userCredential) throws AuthenticationException {
     AuthenticationValidator.validateAuthCredentialInputDTO(userCredential);
     AuthCredentialEntity userEntity = authCredentialDAO.getCredential(userCredential);
@@ -107,6 +114,7 @@ public class AuthCredentialService {
    * @return An user
    * @throws AuthenticationException for token
    */
+  @TrackTime(type = ActionType.APP_LOGIC)
   public AuthCredentialDTO getUser(TokenDTO token) throws AuthenticationException {
     TokenValidation.validateTokenDTO(token);
     return tokenService.parseToken(token);
@@ -119,6 +127,7 @@ public class AuthCredentialService {
    * @return list of user into db
    * @throws AuthenticationException parsing Token
    */
+  @TrackTime(type = ActionType.APP_LOGIC)
   public List<AuthCredentialDTO> getUsers(TokenDTO token) throws AuthenticationException {
     TokenValidation.validateTokenDTO(token);
     AuthCredentialDTO user = tokenService.parseToken(token);
@@ -142,6 +151,47 @@ public class AuthCredentialService {
     return listUsers;
   }
 
+  /**
+   * Method used to get the user updated after the update process
+   *
+   * @param tokenDTO param required to get the current user logged
+   * @return the user logged updated
+   * @throws AuthenticationException
+   */
+  @TrackTime(type = ActionType.APP_LOGIC)
+  public AuthCredentialDTO getUpdateUser(TokenDTO tokenDTO) throws AuthenticationException {
+    TokenValidation.validateTokenDTO(tokenDTO);
+    AuthCredentialDTO parseToken = tokenService.parseToken(tokenDTO);
+
+    AuthCredentialInputDTO authCredentialInputDTO =
+        new AuthCredentialInputDTO(parseToken.getUsername(), null);
+    AuthCredentialEntity authCredentialEntity =
+        authCredentialDAO.getCredential(authCredentialInputDTO);
+    if (authCredentialEntity == null) {
+      LOG.error(
+          "An error occured during AuthCredentialService getCredential:154 authCredentialEntity is {}",
+          authCredentialEntity);
+      throw new AuthenticationException(Code.USER_NOT_MATCH);
+    }
+
+    return new AuthCredentialDTO(
+        authCredentialEntity.getFirstName(),
+        authCredentialEntity.getLastName(),
+        authCredentialEntity.getDateOfBirth(),
+        authCredentialEntity.getEmail(),
+        authCredentialEntity.getUsername(),
+        null);
+  }
+
+  /**
+   * Method that allow to update the user (Not let you update the username, or password)
+   *
+   * @param authCredentialToUpdateDTO input to update
+   * @param tokenDTO valid for validator
+   * @return A response of success
+   * @throws AuthenticationException
+   */
+  @TrackTime(type = ActionType.APP_LOGIC)
   public AuthResponseDTO updateUser(
       AuthCredentialToUpdateDTO authCredentialToUpdateDTO, TokenDTO tokenDTO)
       throws AuthenticationException {
@@ -157,6 +207,64 @@ public class AuthCredentialService {
     }
 
     authCredentialDAO.updateUserById(authCredentialToUpdateDTO);
-    return new AuthResponseDTO(SchemaDescription.USER_UPDATED);
+    return new AuthResponseDTO(ResponseMapping.USER_UPDATED);
+  }
+
+  /**
+   * Method to update the password of the current user, it will check first if the new password is
+   * equals with the second password insert. Then it will get the authCredentialEntity from the db
+   * to match with the old password insert. Then, if the password matches, it would proceed to
+   * encode and update the password into the db.
+   *
+   * @param authChangePasswordInputDTO params in insert
+   * @param tokenDTO for authentications
+   * @return
+   * @throws AuthenticationException
+   */
+  @TrackTime(type = ActionType.APP_LOGIC)
+  public AuthResponseDTO updatePassword(
+      AuthChangePasswordInputDTO authChangePasswordInputDTO, TokenDTO tokenDTO)
+      throws AuthenticationException {
+    TokenValidation.validateTokenDTO(tokenDTO);
+    AuthenticationValidator.validateAuthChangePasswordInputDTO(authChangePasswordInputDTO);
+
+    if (!authChangePasswordInputDTO
+        .getNewPassword()
+        .equalsIgnoreCase(authChangePasswordInputDTO.getConfirmNewPassword())) {
+      LOG.error(
+          "Password don't match, at updatePassword:204, AuthCredentialService, password 1: {}, 2: {}",
+          authChangePasswordInputDTO.getNewPassword(),
+          authChangePasswordInputDTO.getConfirmNewPassword());
+      throw new AuthenticationException(Code.PASSWORD_NOT_MATCH);
+    }
+
+    AuthCredentialDTO user = tokenService.parseToken(tokenDTO);
+    if (user == null) {
+      LOG.error("Username does not match chagePassword:210 {}", user.getUsername());
+      throw new AuthenticationException(Code.USER_NOT_MATCH);
+    }
+
+    AuthCredentialInputDTO inputGetCredential =
+        new AuthCredentialInputDTO(authChangePasswordInputDTO.getUsername(), null);
+    AuthCredentialEntity authCredentialEntity = authCredentialDAO.getCredential(inputGetCredential);
+    if (authCredentialEntity == null) {
+      LOG.error(
+          "An error occured during getCredential():226, at AuthCredentialService is {}",
+          authCredentialEntity);
+      throw new AuthenticationException(Code.USER_NOT_FOUND);
+    }
+
+    boolean matches =
+        bCryptPasswordEncoder.matches(
+            authChangePasswordInputDTO.getOldPassword(), authCredentialEntity.getPassword());
+    if (!matches) {
+      LOG.error(
+          "Old password don't match, needs to try again, updatePassword():234, at AuthCredentialService");
+      throw new AuthenticationException(Code.WRONG_CREDENTIAL);
+    }
+
+    String newPassword = bCryptPasswordEncoder.encode(authChangePasswordInputDTO.getNewPassword());
+    authCredentialDAO.updatePasswordUserById(authChangePasswordInputDTO.getUsername(), newPassword);
+    return new AuthResponseDTO(ResponseMapping.PASSWORD_UPDATED);
   }
 }

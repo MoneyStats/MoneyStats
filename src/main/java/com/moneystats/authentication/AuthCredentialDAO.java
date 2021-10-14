@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.moneystats.timeTracker.LogTimeTracker;
+import com.moneystats.timeTracker.Logged;
+import com.moneystats.timeTracker.TrackTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +23,7 @@ import com.moneystats.authentication.DTO.AuthCredentialToUpdateDTO;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 
 @Repository
+@Logged
 public class AuthCredentialDAO {
 
   private static final String UPDATE_USERS =
@@ -27,12 +31,15 @@ public class AuthCredentialDAO {
 
   private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
+  private static final String UPDATE_PASSWORD =
+          "UPDATE users SET password = ? WHERE username = ?";
   private static final String SELECT_FROM_USERS_WHERE_ROLE =
       "SELECT * FROM users WHERE role = 'USER'";
   private static final String SELECT_FROM_USERS = "SELECT * FROM users WHERE username = ?";
   private static final String FIND_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
   private static final String INSERT_INTO_USERS =
       "INSERT INTO users (first_name, last_name, date_of_birth, email, username, password, role) VALUES (?, ?, ?, ?, ?, ?, 'USER')";
+
   private String dbAddress;
   private String username;
   private String password;
@@ -158,6 +165,22 @@ public class AuthCredentialDAO {
       pstm.setString(3, authCredentialToUpdateDTO.getDateOfBirth());
       pstm.setString(4, authCredentialToUpdateDTO.getEmail());
       pstm.setString(5, authCredentialToUpdateDTO.getUsername());
+      pstm.execute();
+    } catch (SQLException e) {
+      LOG.error("Process aborted during update {}", e);
+      throw new AuthenticationException(Code.DATABASE_ERROR);
+    }
+  }
+
+  @TrackTime(type = LogTimeTracker.ActionType.APP_EXTERNAL)
+  public void updatePasswordUserById(String usernameDB, String passwordDB)
+          throws AuthenticationException {
+    try {
+      Connection connection = DriverManager.getConnection(dbAddress, username, password);
+      String sqlCommand = UPDATE_PASSWORD;
+      PreparedStatement pstm = connection.prepareStatement(sqlCommand);
+      pstm.setString(1, passwordDB);
+      pstm.setString(2, usernameDB);
       pstm.execute();
     } catch (SQLException e) {
       LOG.error("Process aborted during update {}", e);

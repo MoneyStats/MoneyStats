@@ -19,7 +19,7 @@ import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.authentication.TokenService;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 import com.moneystats.authentication.utils.TestSchema;
-import com.moneystats.generic.SchemaDescription;
+import com.moneystats.generic.ResponseMapping;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -52,8 +52,8 @@ public class StatementServiceTest {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     StatementEntity statementEntity = DTOTestObjets.statementEntity;
     StatementResponseDTO expected =
-        new StatementResponseDTO(SchemaDescription.STATEMENT_ADDED_CORRECT);
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+        new StatementResponseDTO(ResponseMapping.STATEMENT_ADDED_CORRECT);
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
     Optional<WalletEntity> walletEntity = Optional.ofNullable(DTOTestObjets.walletEntity);
 
@@ -103,7 +103,7 @@ public class StatementServiceTest {
     StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     StatementEntity statementEntity = DTOTestObjets.statementEntityList.get(0);
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialInputDTO authCredentialInputDTO =
         new AuthCredentialInputDTO(authCredentialDTO.getUsername(), authCredentialDTO.getRole());
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
@@ -127,7 +127,7 @@ public class StatementServiceTest {
     StatementInputDTO statementDTO = DTOTestObjets.statementInputDTO;
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     StatementEntity statementEntity = DTOTestObjets.statementEntityList.get(0);
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
 
     Mockito.when(authCredentialDAO.getCredential(Mockito.any())).thenReturn(authCredentialEntity);
@@ -150,7 +150,7 @@ public class StatementServiceTest {
   @Test
   void test_listOfDate_shouldReturnList() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
     List<String> listDateExpected = List.of("2021-06-09");
 
@@ -210,7 +210,7 @@ public class StatementServiceTest {
   @Test
   void test_listOfDate_shouldBeMappedOnUserNotFound() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialInputDTO authCredentialInputDTO =
         new AuthCredentialInputDTO(authCredentialDTO.getUsername(), authCredentialDTO.getRole());
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
@@ -230,7 +230,7 @@ public class StatementServiceTest {
   @Test
   void test_listOfDate_shouldThrowsOnListNotFound() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
     List<String> listDate = new ArrayList<>();
 
@@ -255,7 +255,7 @@ public class StatementServiceTest {
   @Test
   void test_listStatementByDate_shouldReturnList() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
     List<StatementEntity> listStatementExpected = DTOTestObjets.statementEntityList;
     String date = "2021-06-09";
@@ -319,7 +319,7 @@ public class StatementServiceTest {
   @Test
   void test_listStatementByDate_shouldBeMappedOnUserNotFound() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialInputDTO authCredentialInputDTO =
         new AuthCredentialInputDTO(authCredentialDTO.getUsername(), authCredentialDTO.getRole());
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
@@ -341,7 +341,7 @@ public class StatementServiceTest {
   @Test
   void test_listStatementByDate_shouldThrowsOnListNotFound() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
     List<StatementEntity> listStatementDate = new ArrayList<>();
     String date = "2021-06-09";

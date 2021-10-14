@@ -36,7 +36,7 @@ public class TokenServiceTest {
             TestSchema.LASTNAME,
             TestSchema.DATE_OF_BIRTH,
             TestSchema.EMAIL,
-            TestSchema.ROLE_USER_USERNAME,
+            TestSchema.STRING_USERNAME_ROLE_USER,
             SecurityRoles.MONEYSTATS_USER_ROLE);
 
     TokenDTO token = service.generateToken(userDto);
@@ -53,7 +53,7 @@ public class TokenServiceTest {
 
   @Test
   void parseToken_shouldThrowUnauthorizedOnInvalidToken() throws Exception {
-    TokenDTO token = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT_WRONG);
+    TokenDTO token = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
 
     AuthenticationException expectedException =
         new AuthenticationException(AuthenticationException.Code.UNAUTHORIZED);

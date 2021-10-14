@@ -44,7 +44,7 @@ public class HomepageServiceTest {
   public void test_statementReportHomepage_ok() throws Exception {
     HomepageReportDTO homepageReportDTO = DTOTestObjets.homepageReportDTO;
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
     List<String> listDate = DTOTestObjets.listDate;
     List<StatementEntity> statementEntityList = DTOTestObjets.statementEntityList;
@@ -115,7 +115,7 @@ public class HomepageServiceTest {
   @Test
   public void test_statementReportHomepage_shouldThowsOnListStatementNotFound() throws Exception {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
 
     Mockito.when(tokenService.parseToken(Mockito.any())).thenReturn(authCredentialDTO);
@@ -140,7 +140,7 @@ public class HomepageServiceTest {
     HomepagePieChartDTO expected = DTOTestObjets.homepagePieChartDTO;
     String date = DTOTestObjets.listDate.get(1);
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
     List<String> listDate = DTOTestObjets.listDate;
     List<StatementEntity> statementEntityList = DTOTestObjets.statementEntityList;
@@ -200,7 +200,7 @@ public class HomepageServiceTest {
   public void test_homepageGraph_shouldBeMappedOnStatementNotFound() throws Exception {
     String date = DTOTestObjets.listDate.get(1);
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
     List<String> listDate = DTOTestObjets.listDate;
     List<StatementEntity> statementEntityList = DTOTestObjets.statementEntityList;
@@ -224,7 +224,7 @@ public class HomepageServiceTest {
   public void test_homepageGraph_shouldBeMappedOnWalletNotFound() throws Exception {
     String date = DTOTestObjets.listDate.get(1);
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
-    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO_ROLE_USER;
+    AuthCredentialDTO authCredentialDTO = TestSchema.USER_CREDENTIAL_DTO;
     AuthCredentialEntity authCredentialEntity = TestSchema.USER_CREDENTIAL_ENTITY_ROLE_USER;
     List<String> listDate = DTOTestObjets.listDate;
     List<StatementEntity> statementEntityList = DTOTestObjets.statementEntityList;

@@ -2,16 +2,9 @@ package com.moneystats.generic;
 
 public class SchemaDescription {
 
-  // User Schema
-  public static final String USER_ADDED_CORRECT = "USER_ADDED";
-  public static final String USER_FOUND = "USER_FOUND";
-  public static final String USER_UPDATED = "USER_UPDATED";
-
-  // Wallet Schema
-  public static final String WALLET_ADDED_CORRECT = "WALLET_ADDED";
-  public static final String WALLET_DELETE_CORRECT = "WALLET_DELETED";
-  public static final String WALLET_EDIT_CORRECT = "WALLET_EDITED";
-
-  // Statement Schema
-  public static final String STATEMENT_ADDED_CORRECT = "STATEMENT_ADDED";
+    // Authentication
+    public static final String POST_LOGIN_SUMMARY = "Process to get logged into the MoneyStats Platform";
+    public static final String POST_LOGIN_DESCRIPTION = "It use a AuthCredentialInput with username and password to get logged";
+    public static final String POST_UPDATE_PASSWORD_SUMMARY = "Process to update the password";
+    public static final String POST_UPDATE_PASSWORD_DESCRIPTION = "It use to update the password of the current user";
 }

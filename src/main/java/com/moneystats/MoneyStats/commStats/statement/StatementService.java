@@ -15,7 +15,7 @@ import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.authentication.TokenService;
 import com.moneystats.authentication.TokenValidation;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
-import com.moneystats.generic.SchemaDescription;
+import com.moneystats.generic.ResponseMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ public class StatementService {
             statementDTO.getUser(),
             statementDTO.getWalletEntity());
     statementDAO.save(statementEntity);
-    return new StatementResponseDTO(SchemaDescription.STATEMENT_ADDED_CORRECT);
+    return new StatementResponseDTO(ResponseMapping.STATEMENT_ADDED_CORRECT);
   }
 
   /**

@@ -12,7 +12,7 @@ import com.moneystats.MoneyStats.source.DTOTestObjets;
 import com.moneystats.authentication.AuthenticationException;
 import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.authentication.utils.TestSchema;
-import com.moneystats.generic.SchemaDescription;
+import com.moneystats.generic.ResponseMapping;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +107,7 @@ public class WalletControllerTest {
     WalletDTO walletDTO = DTOTestObjets.walletDTO;
     String walletDTOasString = objectMapper.writeValueAsString(walletDTO);
     WalletResponseDTO response =
-        new WalletResponseDTO(SchemaDescription.WALLET_ADDED_CORRECT.toString());
+        new WalletResponseDTO(ResponseMapping.WALLET_ADDED_CORRECT.toString());
     String responseAsString = objectMapper.writeValueAsString(response);
 
     Mockito.when(walletService.addWalletEntity(Mockito.any(), Mockito.any())).thenReturn(response);
@@ -196,7 +196,7 @@ public class WalletControllerTest {
   public void testDeleteWallet_OK() throws Exception {
     Long idWallet = 1L;
     WalletResponseDTO response =
-        new WalletResponseDTO(SchemaDescription.WALLET_DELETE_CORRECT.toString());
+        new WalletResponseDTO(ResponseMapping.WALLET_DELETE_CORRECT.toString());
     String responseAsString = objectMapper.writeValueAsString(response);
 
     Mockito.when(walletService.deleteWalletEntity(idWallet)).thenReturn(response);
@@ -319,7 +319,7 @@ public class WalletControllerTest {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     String walletDTOasString = objectMapper.writeValueAsString(walletInputIdDTO);
     WalletResponseDTO response =
-        new WalletResponseDTO(SchemaDescription.WALLET_EDIT_CORRECT.toString());
+        new WalletResponseDTO(ResponseMapping.WALLET_EDIT_CORRECT.toString());
 
     Mockito.when(walletService.editWallet(walletInputIdDTO, tokenDTO)).thenReturn(response);
 

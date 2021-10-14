@@ -16,6 +16,9 @@ import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.authentication.TokenService;
 import com.moneystats.authentication.TokenValidation;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
+import com.moneystats.timeTracker.LogTimeTracker;
+import com.moneystats.timeTracker.Logged;
+import com.moneystats.timeTracker.TrackTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Logged
 @Service
 public class HomepageService {
 
@@ -41,6 +45,7 @@ public class HomepageService {
    * @throws StatementException
    * @throws AuthenticationException
    */
+  @TrackTime(type = LogTimeTracker.ActionType.APP_LOGIC)
   public HomepageReportDTO reportHomepage(TokenDTO tokenDTO)
       throws StatementException, AuthenticationException, ParseException {
     HomepageReportDTO reportDTO =
@@ -141,6 +146,7 @@ public class HomepageService {
    * @throws AuthenticationException
    * @throws WalletException
    */
+  @TrackTime(type = LogTimeTracker.ActionType.APP_LOGIC)
   public HomepagePieChartDTO getGraph(String date, TokenDTO tokenDTO)
       throws StatementException, AuthenticationException, WalletException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);

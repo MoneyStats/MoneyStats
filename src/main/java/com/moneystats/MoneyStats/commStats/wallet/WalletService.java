@@ -16,7 +16,7 @@ import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.authentication.TokenService;
 import com.moneystats.authentication.TokenValidation;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
-import com.moneystats.generic.SchemaDescription;
+import com.moneystats.generic.ResponseMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +83,7 @@ public class WalletService {
             walletDTO.getUser(),
             walletDTO.getStatementEntityList());
     walletDAO.save(walletEntity);
-    return new WalletResponseDTO(SchemaDescription.WALLET_ADDED_CORRECT);
+    return new WalletResponseDTO(ResponseMapping.WALLET_ADDED_CORRECT);
   }
 
   /**
@@ -108,7 +108,7 @@ public class WalletService {
       statementDAO.deleteById(statementEntity.getId());
     }
     walletDAO.deleteById(idWallet);
-    return new WalletResponseDTO(SchemaDescription.WALLET_DELETE_CORRECT);
+    return new WalletResponseDTO(ResponseMapping.WALLET_DELETE_CORRECT);
   }
 
   /**
@@ -187,7 +187,7 @@ public class WalletService {
         new WalletEntity(
             walletInputIdDTO.getId(), walletInputIdDTO.getName(), categoryEntity, utente, null);
     walletDAO.save(walletEntityToEdit);
-    return new WalletResponseDTO(SchemaDescription.WALLET_EDIT_CORRECT);
+    return new WalletResponseDTO(ResponseMapping.WALLET_EDIT_CORRECT);
   }
 
   /**
