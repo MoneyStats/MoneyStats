@@ -20,7 +20,9 @@ public class AuthenticationException extends Exception {
     USER_PRESENT,
     EMAIL_PRESENT,
     INVALID_AUTH_CREDENTIAL_TO_UPDATE_DTO,
-    USER_NOT_MATCH;
+    USER_NOT_MATCH,
+    INVALID_AUTH_CHANGE_PASSWORD_INPUT_DTO,
+    PASSWORD_NOT_MATCH;
   }
 
   public AuthenticationException(Code code) {

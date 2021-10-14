@@ -4,4 +4,4 @@ info:
   version: "2.0.0"
   description: |
     **Glossary**
-    - *Credential*: a container of messages
+    - *AuthCredential*: a container of messages

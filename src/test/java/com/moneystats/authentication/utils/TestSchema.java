@@ -15,18 +15,26 @@ public class TestSchema {
   public static final String STRING_USERNAME_ROLE_USER = "my-user-username";
   public static final String STRING_PASSWORD_ROLE_USER = "my-user-password";
   public static final String WRONG_PASSWORD = "giova";
-  public static final String STRING_TOKEN_JWT_ROLE_USER = bCryptPasswordEncoder.encode(STRING_PASSWORD_ROLE_USER);
+  public static final String STRING_TOKEN_JWT_ROLE_USER =
+      bCryptPasswordEncoder.encode(STRING_PASSWORD_ROLE_USER);
   public static final String ROLE_USER_TOKEN_JWT_WRONG = "my-user-jwt-token-wrong";
 
   public static final AuthCredentialDTO USER_CREDENTIAL_DTO =
-          new AuthCredentialDTO(
-                  FIRSTNAME,
-                  LASTNAME,
-                  DATE_OF_BIRTH,
-                  EMAIL,
-                  STRING_USERNAME_ROLE_USER,
-                  STRING_PASSWORD_ROLE_USER,
-                  SecurityRoles.MONEYSTATS_USER_ROLE);
+      new AuthCredentialDTO(
+          FIRSTNAME,
+          LASTNAME,
+          DATE_OF_BIRTH,
+          EMAIL,
+          STRING_USERNAME_ROLE_USER,
+          STRING_PASSWORD_ROLE_USER,
+          SecurityRoles.MONEYSTATS_USER_ROLE);
+
+  public static final AuthChangePasswordInputDTO AUTH_CHANGE_PASSWORD_INPUT_DTO =
+      new AuthChangePasswordInputDTO(
+          STRING_USERNAME_ROLE_USER,
+          STRING_PASSWORD_ROLE_USER,
+          STRING_PASSWORD_ROLE_USER,
+          STRING_PASSWORD_ROLE_USER);
 
   // Has To Be verified
 
@@ -40,11 +48,9 @@ public class TestSchema {
           LASTNAME,
           DATE_OF_BIRTH,
           EMAIL,
-              STRING_USERNAME_ROLE_USER,
+          STRING_USERNAME_ROLE_USER,
           STRING_TOKEN_JWT_ROLE_USER,
           SecurityRoles.MONEYSTATS_USER_ROLE);
-
-
 
   public static final TokenDTO TOKEN_JWT_DTO_ROLE_USER = new TokenDTO(STRING_TOKEN_JWT_ROLE_USER);
 
@@ -71,5 +77,6 @@ public class TestSchema {
       new AuthResponseDTO(ResponseMapping.USER_ADDED_CORRECT);
 
   public static final AuthCredentialToUpdateDTO AUTH_CREDENTIAL_TO_UPDATE_DTO =
-      new AuthCredentialToUpdateDTO(FIRSTNAME, LASTNAME, DATE_OF_BIRTH, EMAIL, STRING_USERNAME_ROLE_USER);
+      new AuthCredentialToUpdateDTO(
+          FIRSTNAME, LASTNAME, DATE_OF_BIRTH, EMAIL, STRING_USERNAME_ROLE_USER);
 }

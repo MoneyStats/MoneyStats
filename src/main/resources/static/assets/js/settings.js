@@ -103,7 +103,8 @@ $(document).ready(function () {
                 Swal.fire({
                     title: 'Edited!',
                     icon: 'success',
-                showConfirmButton: false})
+                    showConfirmButton: false
+                })
                 setTimeout(function () {
                     window.location.href = 'homepage.html';
                 }, 1000);
@@ -118,4 +119,87 @@ $(document).ready(function () {
         });
         localStorage.removeItem('username');
     }
+
+    //-------------------------------------------------------------
+    // Update Password User
+    //-------------------------------------------------------------
+    const PASSWORD_NOT_MATCH = "PASSWORD_NOT_MATCH";
+    const WRONG_CREDENTIAL = "WRONG_CREDENTIAL";
+
+    $('#updatePassBtn').click(function () {
+        editMode = true;
+        const authChangePasswordInputDTO = {
+            username: localStorage.getItem('username'),
+            oldPassword: $('#oldPassword').val(),
+            newPassword: $('#newPassword').val(),
+            confirmNewPassword: $('#newPasswordCheck').val()
+        }
+        if (editMode) {
+            Swal.fire({
+                icon: 'question',
+                title: 'Do you want to save the current Password?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: `Save`,
+                denyButtonText: `Don't Save`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    changePassword(authChangePasswordInputDTO);
+                } else if (result.isDenied) {
+                    Swal.fire("Operation Aborted!", '', 'info')
+                }
+            })
+        }
+    })
+
+    function changePassword(authChangePasswordInputDTO) {
+        $.ajax({
+            type: "PUT",
+            url: `/credential/update/password`,
+            data: JSON.stringify(authChangePasswordInputDTO),
+            contentType: 'application/json',
+            dataType: 'json',
+            headers: {
+                Authorization: sessionStorage.getItem('accessToken')
+            },
+            success: function () {
+                editMode = false;
+                Swal.fire({
+                    title: 'Edited!',
+                    icon: 'success',
+                    showConfirmButton: false
+                })
+                setTimeout(function () {
+                    window.location.href = 'homepage.html';
+                }, 1000);
+            },
+            error: function (authErrorResponseDTO) {
+                var responseDTO = authErrorResponseDTO.responseJSON.message;
+                if (responseDTO === PASSWORD_NOT_MATCH) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "Error!",
+                        text: "The password insert don't match"
+                    })
+                }
+                if (responseDTO === WRONG_CREDENTIAL) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "Error!",
+                        text: "The password insert is not equal to the old password"
+                    })
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "Error",
+                        text: 'Process aborted, try again.'
+                    })
+                }
+            }
+        });
+    }
+
+    //-------------------------------------------------------------
+    // END Update Password User
+    //-------------------------------------------------------------
 });

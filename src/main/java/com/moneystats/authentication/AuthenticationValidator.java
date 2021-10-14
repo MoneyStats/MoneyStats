@@ -7,6 +7,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import com.moneystats.authentication.DTO.AuthChangePasswordInputDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +51,18 @@ public class AuthenticationValidator {
     if (!violations.isEmpty()) {
       LOG.warn("Invalid AuthCredentialToUpdateDTO {}", authCredentialToUpdateDTO);
       throw new AuthenticationException(Code.INVALID_AUTH_CREDENTIAL_TO_UPDATE_DTO);
+    }
+  }
+
+  public static void validateAuthChangePasswordInputDTO(
+          AuthChangePasswordInputDTO authChangePasswordInputDTO) throws AuthenticationException {
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    Validator validator = factory.getValidator();
+    Set<ConstraintViolation<AuthChangePasswordInputDTO>> violations =
+            validator.validate(authChangePasswordInputDTO);
+    if (!violations.isEmpty()) {
+      LOG.warn("Invalid AuthChangePasswordInputDTO {}", authChangePasswordInputDTO);
+      throw new AuthenticationException(Code.INVALID_AUTH_CHANGE_PASSWORD_INPUT_DTO);
     }
   }
 }
