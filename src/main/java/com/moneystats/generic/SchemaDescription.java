@@ -21,4 +21,12 @@ public class SchemaDescription {
     // Category
     public static final String GET_CATEGORY_SUMMARY = "Get all Category";
     public static final String GET_CATEGORY_DESCRIPTION = "Method that return a list of category";
+
+    // Statement
+    public static final String POST_ADD_STATEMENT_SUMMARY = "Add new Statement";
+    public static final String POST_ADD_STATEMENT_DESCRIPTION = "Process that allow an Statement add";
+    public static final String GET_LIST_OF_DATE_SUMMARY = "Get List of all Date";
+    public static final String GET_LIST_OF_DATE_DESCRIPTION = "Process that allow to get all the date";
+    public static final String GET_LIST_STATEMENT_BY_DATE_SUMMARY = "List Statement By date";
+    public static final String GET_LIST_STATEMENT_BY_DATE_DESCRIPTION = "Method that return a list of all Statement into that params date";
 }
