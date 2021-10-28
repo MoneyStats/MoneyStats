@@ -5,9 +5,7 @@ import com.moneystats.authentication.DTO.*;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 import com.moneystats.generic.ResponseMapping;
 import com.moneystats.timeTracker.LogTimeTracker;
-import com.moneystats.timeTracker.LogTimeTracker.ActionType;
-import com.moneystats.timeTracker.Logged;
-import com.moneystats.timeTracker.TrackTime;
+import com.moneystats.timeTracker.LoggerMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Logged
 public class AuthCredentialService {
 
   @Autowired AuthCredentialDAO authCredentialDAO;
@@ -37,7 +34,7 @@ public class AuthCredentialService {
    * @return A response of success
    * @throws AuthenticationException on invalid input
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public AuthResponseDTO signUp(AuthCredentialDTO userCredential) throws AuthenticationException {
     userCredential.setRole(SecurityRoles.MONEYSTATS_USER_ROLE);
     AuthenticationValidator.validateAuthCredentialDTO(userCredential);
@@ -71,7 +68,7 @@ public class AuthCredentialService {
    * @return TokenDTO
    * @throws AuthenticationException on Token
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public TokenDTO login(AuthCredentialInputDTO userCredential) throws AuthenticationException {
     AuthenticationValidator.validateAuthCredentialInputDTO(userCredential);
     AuthCredentialEntity userEntity = authCredentialDAO.getCredential(userCredential);
@@ -114,7 +111,7 @@ public class AuthCredentialService {
    * @return An user
    * @throws AuthenticationException for token
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public AuthCredentialDTO getUser(TokenDTO token) throws AuthenticationException {
     TokenValidation.validateTokenDTO(token);
     return tokenService.parseToken(token);
@@ -127,7 +124,6 @@ public class AuthCredentialService {
    * @return list of user into db
    * @throws AuthenticationException parsing Token
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
   public List<AuthCredentialDTO> getUsers(TokenDTO token) throws AuthenticationException {
     TokenValidation.validateTokenDTO(token);
     AuthCredentialDTO user = tokenService.parseToken(token);
@@ -158,7 +154,7 @@ public class AuthCredentialService {
    * @return the user logged updated
    * @throws AuthenticationException
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public AuthCredentialDTO getUpdateUser(TokenDTO tokenDTO) throws AuthenticationException {
     TokenValidation.validateTokenDTO(tokenDTO);
     AuthCredentialDTO parseToken = tokenService.parseToken(tokenDTO);
@@ -191,7 +187,7 @@ public class AuthCredentialService {
    * @return A response of success
    * @throws AuthenticationException
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public AuthResponseDTO updateUser(
       AuthCredentialToUpdateDTO authCredentialToUpdateDTO, TokenDTO tokenDTO)
       throws AuthenticationException {
@@ -201,8 +197,9 @@ public class AuthCredentialService {
 
     if (!authCredentialToUpdateDTO.getUsername().equalsIgnoreCase(user.getUsername())) {
       LOG.error(
-          "Username does not match AuthCredentialService updateUser:158 {}",
-          authCredentialToUpdateDTO.getUsername());
+          "Username does not match AuthCredentialService updateUser:158 {} Exception {}",
+          authCredentialToUpdateDTO.getUsername(),
+          Code.USER_NOT_MATCH.toString());
       throw new AuthenticationException(Code.USER_NOT_MATCH);
     }
 
@@ -221,7 +218,7 @@ public class AuthCredentialService {
    * @return
    * @throws AuthenticationException
    */
-  @TrackTime(type = ActionType.APP_LOGIC)
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public AuthResponseDTO updatePassword(
       AuthChangePasswordInputDTO authChangePasswordInputDTO, TokenDTO tokenDTO)
       throws AuthenticationException {
@@ -232,15 +229,19 @@ public class AuthCredentialService {
         .getNewPassword()
         .equalsIgnoreCase(authChangePasswordInputDTO.getConfirmNewPassword())) {
       LOG.error(
-          "Password don't match, at updatePassword:204, AuthCredentialService, password 1: {}, 2: {}",
+          "Password don't match, at updatePassword:204, AuthCredentialService, password 1: {}, 2: {}, Exception {}",
           authChangePasswordInputDTO.getNewPassword(),
-          authChangePasswordInputDTO.getConfirmNewPassword());
+          authChangePasswordInputDTO.getConfirmNewPassword(),
+          Code.PASSWORD_NOT_MATCH.toString());
       throw new AuthenticationException(Code.PASSWORD_NOT_MATCH);
     }
 
     AuthCredentialDTO user = tokenService.parseToken(tokenDTO);
     if (user == null) {
-      LOG.error("Username does not match chagePassword:210 {}", user.getUsername());
+      LOG.error(
+          "Username does not match chagePassword:210 {}, Exception {}",
+          user.getUsername(),
+          Code.USER_NOT_MATCH.toString());
       throw new AuthenticationException(Code.USER_NOT_MATCH);
     }
 
@@ -249,8 +250,9 @@ public class AuthCredentialService {
     AuthCredentialEntity authCredentialEntity = authCredentialDAO.getCredential(inputGetCredential);
     if (authCredentialEntity == null) {
       LOG.error(
-          "An error occured during getCredential():226, at AuthCredentialService is {}",
-          authCredentialEntity);
+          "An error occured during getCredential():226, at AuthCredentialService is {}, Exception {}",
+          authCredentialEntity,
+          Code.USER_NOT_FOUND.toString());
       throw new AuthenticationException(Code.USER_NOT_FOUND);
     }
 
@@ -259,7 +261,8 @@ public class AuthCredentialService {
             authChangePasswordInputDTO.getOldPassword(), authCredentialEntity.getPassword());
     if (!matches) {
       LOG.error(
-          "Old password don't match, needs to try again, updatePassword():234, at AuthCredentialService");
+          "Old password don't match, needs to try again, updatePassword():234, at AuthCredentialService, Exception {}",
+          Code.WRONG_CREDENTIAL.toString());
       throw new AuthenticationException(Code.WRONG_CREDENTIAL);
     }
 

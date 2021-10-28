@@ -2,7 +2,7 @@ package com.moneystats.generic;
 
 import java.util.UUID;
 
-public class CorrelationIdUtils {
+public class CorrelationIDUtils {
   public static String generateCorrelationId() {
     return UUID.randomUUID().toString();
   }
@@ -11,15 +11,15 @@ public class CorrelationIdUtils {
       new ThreadLocal<String>() {
         @Override
         protected String initialValue() {
-          return null;
+          return generateCorrelationId();
         }
       };
 
-  public static void setCorrelationIdThreadLocal(String correlationId) {
+  public static void setCorrelationId(String correlationId) {
     correlationIdThreadLocal.set(correlationId);
   }
 
-  public static String getCorrelationIdThreadLocal() {
+  public static String getCorrelationId() {
     return correlationIdThreadLocal.get();
   }
 }

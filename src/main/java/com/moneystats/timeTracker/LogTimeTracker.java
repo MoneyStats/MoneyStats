@@ -1,6 +1,5 @@
 package com.moneystats.timeTracker;
 
-import com.moneystats.authentication.DTO.TokenDTO;
 import org.slf4j.Logger;
 
 import java.time.Instant;
@@ -8,26 +7,25 @@ import java.time.Instant;
 public class LogTimeTracker {
   private ActionType actionType;
   private String methodName;
-  private String userId;
+  private String parameters;
   private String correlationId;
   private long start;
 
   public LogTimeTracker(
-      ActionType actionType, String methodName, String userId, String correlationId) {
+      ActionType actionType, String methodName, String parameters, String correlationId) {
     super();
     this.actionType = actionType;
     this.methodName = methodName;
-    this.userId = userId;
+    this.parameters = parameters;
     this.correlationId = correlationId;
     this.start = Instant.now().toEpochMilli();
   }
 
   public void trackFailure(Logger LOG, Exception e) {
     LOG.error(
-        "action_type: {}, method: {}, user: {}, correlation_id: {}, time_tracker: {}, status: KO, exception: {}, description: {}",
+        "ACTION_TYPE: {}, METHOD: {}, CORRELATION_ID: {}, TIME_PROCESS: {}, STATUS: KO, EXCEPTION: {}, DESCRIPTION: {}",
         this.actionType,
         this.methodName,
-        this.userId,
         this.correlationId,
         getDeltaInMilli(),
         e.getClass().getName(),
@@ -36,12 +34,12 @@ public class LogTimeTracker {
 
   public void trackSuccess(Logger LOG) {
     LOG.info(
-        "action_type: {}, method: {}, user: {}, correlation_id: {}, time_tracker: {}, status: OK",
+        "ACTION_TYPE: {}, METHOD: {}, CORRELATION_ID: {}, TIME_PROCESS: {}, STATUS: OK, PARAMETERS: {}",
         this.actionType,
         this.methodName,
-        this.userId,
         this.correlationId,
-        getDeltaInMilli());
+        getDeltaInMilli(),
+        this.parameters);
   }
 
   private long getDeltaInMilli() {
@@ -49,13 +47,14 @@ public class LogTimeTracker {
   }
 
   public static LogTimeTracker startInvocation(
-      ActionType type, String methodName, String userId, String correlationId) {
-    return new LogTimeTracker(type, methodName, userId, correlationId);
+      ActionType type, String methodName, String correlationId, String parameters) {
+    return new LogTimeTracker(type, methodName, correlationId, parameters);
   }
 
   public static enum ActionType {
-    APP_ENDPOINT,
-    APP_LOGIC,
-    APP_EXTERNAL
+    APP_DATABASE_ENDPOINT,
+    APP_SERVICE_LOGIC,
+    APP_WEB_SERVICE,
+    APP_TOKEN_SERVICE
   }
 }

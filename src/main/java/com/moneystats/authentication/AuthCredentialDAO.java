@@ -1,29 +1,22 @@
 package com.moneystats.authentication;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.moneystats.timeTracker.LogTimeTracker;
-import com.moneystats.timeTracker.Logged;
-import com.moneystats.timeTracker.TrackTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
-
 import com.moneystats.authentication.AuthenticationException.Code;
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
 import com.moneystats.authentication.DTO.AuthCredentialToUpdateDTO;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
+import com.moneystats.timeTracker.LogTimeTracker;
+import com.moneystats.timeTracker.LoggerMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
-@Logged
 public class AuthCredentialDAO {
 
   private static final String UPDATE_USERS =
@@ -31,8 +24,7 @@ public class AuthCredentialDAO {
 
   private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
-  private static final String UPDATE_PASSWORD =
-          "UPDATE users SET password = ? WHERE username = ?";
+  private static final String UPDATE_PASSWORD = "UPDATE users SET password = ? WHERE username = ?";
   private static final String SELECT_FROM_USERS_WHERE_ROLE =
       "SELECT * FROM users WHERE role = 'USER'";
   private static final String SELECT_FROM_USERS = "SELECT * FROM users WHERE username = ?";
@@ -54,6 +46,7 @@ public class AuthCredentialDAO {
     this.password = password;
   }
 
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
   public void insertUserCredential(AuthCredentialDTO user) throws AuthenticationException {
     try {
       Connection connection = DriverManager.getConnection(dbAddress, username, password);
@@ -72,6 +65,7 @@ public class AuthCredentialDAO {
     }
   }
 
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
   public AuthCredentialEntity getCredential(AuthCredentialInputDTO user)
       throws AuthenticationException {
     AuthCredentialEntity userCredential = null;
@@ -100,6 +94,7 @@ public class AuthCredentialDAO {
     return userCredential;
   }
 
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
   public AuthCredentialEntity findByEmail(String email) throws AuthenticationException {
     AuthCredentialEntity userCredential = null;
     try {
@@ -127,6 +122,7 @@ public class AuthCredentialDAO {
     return userCredential;
   }
 
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
   public List<AuthCredentialEntity> getUsers() throws AuthenticationException {
     List<AuthCredentialEntity> listUser = new ArrayList<AuthCredentialEntity>();
     try {
@@ -154,6 +150,7 @@ public class AuthCredentialDAO {
     return listUser;
   }
 
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
   public void updateUserById(AuthCredentialToUpdateDTO authCredentialToUpdateDTO)
       throws AuthenticationException {
     try {
@@ -172,9 +169,9 @@ public class AuthCredentialDAO {
     }
   }
 
-  @TrackTime(type = LogTimeTracker.ActionType.APP_EXTERNAL)
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
   public void updatePasswordUserById(String usernameDB, String passwordDB)
-          throws AuthenticationException {
+      throws AuthenticationException {
     try {
       Connection connection = DriverManager.getConnection(dbAddress, username, password);
       String sqlCommand = UPDATE_PASSWORD;
