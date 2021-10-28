@@ -22,7 +22,7 @@ public class WebControllerTest {
    */
   @Test
   public void testFirstPage_shouldReturnLoginPage() throws Exception {
-    String expectedPath = "loginPage.html";
+    String expectedPath = "loginpage.html";
 
     String actual = webController.index();
 
@@ -40,7 +40,7 @@ public class WebControllerTest {
    */
   @Test
   public void testLogout_shouldReturnLoginPage() throws Exception {
-    String expectedPath = "loginPage.html";
+    String expectedPath = "loginpage.html";
 
     String actual = webController.logout();
 

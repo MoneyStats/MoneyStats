@@ -10,7 +10,7 @@ $(document).ready(function () {
     function isValidated() {
         const token = sessionStorage.getItem('accessToken');
         if (token === null) {
-            window.location.href = 'loginPage.html';
+            window.location.href = 'loginpage.html';
         }
         //-------------------------------------------------------------
         // Check if session is validated with a user
@@ -42,7 +42,7 @@ $(document).ready(function () {
                         title: 'Session Expired, reidirect...'
                     })
                     setTimeout(function () {
-                        window.location.href = "loginPage.html";
+                        window.location.href = "loginpage.html";
                     }, 1500);
                 }
             }
@@ -133,6 +133,9 @@ $(document).ready(function () {
                 //------------------------------------------------------------------------
                 // END DATA HOMEPAGE
                 //------------------------------------------------------------------------
+            },
+            error: function () {
+                $(`<span class="text-warning h2 font-weight-bold mb-0"><i class="fa fa-arrow-down"></i> 0%</span>`).appendTo(`.performanceFirstDate`)
             }
         });
     }

@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover"/>
+    <!-- ========= Icon ========= -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/img/logos/favicon_trasparent.png">
+    <link rel="icon" type="image/png" href="./assets/img/logos/favicon_trasparent.png" sizes="32x32">
+
+    <!-- ========= CSS Files ========= -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- ========= JS Files =========  -->
+    <!-- JQuery -->
+    <script src="./assets/js/lib/jquery-3.6.0.min.js"></script>
+    <!-- JS Settigns -->
+    <script src="./assets/js/settings.js"></script>
+    <!-- SweetAlert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- ========= SEZIONE COLORI SEARCH BAR ========= -->
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name='theme-color' content='#080957'>
+    <!-- Windows Phone -->
+    <meta name='msapplication-navbutton-color' content='#080957'>
+    <!-- iOS Safari -->
+    <meta name='apple-mobile-web-app-status-bar-style' content='#080957'>
+
+    <title>Settings</title>
+
+    <meta name="description" content="MoneyStats HTML Mobile Template">
+    <meta name="keywords"
+          content="bootstrap, wallet, banking, fintech mobile template, cordova, phonegap, mobile, html, responsive"/>
+    <!-- ========= MANIFEST ========= -->
+    <link rel="manifest" href="../__manifest.json">
+</head>
+
+<body>
+
+<!-- loader -->
+<div id="loader">
+    <img src="./assets/img/logos/favicon_trasparent.png" alt="icon" class="loading-icon">
+</div>
+<!-- * loader -->
+
+<!-- App Header -->
+<div class="appHeader">
+    <div class="left">
+        <a href="#" class="headerButton goBack">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </a>
+    </div>
+    <div class="pageTitle">
+        Settings
+    </div>
+</div>
+<!-- * App Header -->
+
+<!-- App Capsule -->
+<div id="appCapsule">
+
+    <div class="section mt-3 text-center">
+        <div class="avatar-section">
+            <a href="#">
+                <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w100 rounded">
+                <span class="button">
+                        <ion-icon name="camera-outline"></ion-icon>
+                    </span>
+            </a>
+        </div>
+    </div>
+
+    <div class="listview-title mt-1">Theme</div>
+    <ul class="listview image-listview text inset">
+        <li>
+            <div class="item">
+                <div class="in">
+                    <div>
+                        Dark Mode
+                    </div>
+                    <div class="form-check form-switch  ms-2">
+                        <input class="form-check-input dark-mode-switch" type="checkbox" id="darkmodeSwitch">
+                        <label class="form-check-label" for="darkmodeSwitch"></label>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="item">
+                <div class="in">
+                    <div>
+                        Switch to Desktop Mode
+                    </div>
+                    <div class="form-check form-switch  ms-2">
+                        <input class="form-check-input" type="checkbox" id="SwitchDesktop">
+                        <label class="form-check-label" for="SwitchDesktop"></label>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <div class="listview-title mt-1">MoneyStats</div>
+    <ul class="listview image-listview text inset">
+        <li>
+            <a href="app-wallet.html" class="item">
+                <div class="in">
+                    <div>Wallet</div>
+                    <span class="text-primary">Edit</span>
+                </div>
+            </a>
+        </li>
+        <!-- <li>
+            <div class="item">
+                <div class="in">
+                    <div>
+                        Payment Alert
+                        <div class="text-muted">
+                            Send notification when new payment received
+                        </div>
+                    </div>
+                    <div class="form-check form-switch  ms-2">
+                        <input class="form-check-input" type="checkbox" id="SwitchCheckDefault1">
+                        <label class="form-check-label" for="SwitchCheckDefault1"></label>
+                    </div>
+                </div>
+            </div>
+        </li> -->
+        <!-- <li>
+            <a href="#" class="item">
+                <div class="in">
+                    <div>Notification Sound</div>
+                    <span class="text-primary">Beep</span>
+                </div>
+            </a>
+        </li> -->
+    </ul>
+
+    <div class="listview-title mt-1">Profile Settings</div>
+    <ul class="listview image-listview text inset">
+        <li>
+            <a href="#" class="item" data-bs-toggle="modal" data-bs-target="#updateAccountActionSheet">
+                <div class="in">
+                    <div>Update Account</div>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="item" data-bs-toggle="modal" data-bs-target="#updateEmailActionSheet">
+                <div class="in">
+                    <div>Update E-mail</div>
+                </div>
+            </a>
+        </li>
+        <!-- <li>
+            <div class="item">
+                <div class="in">
+                    <div>
+                        Private Profile
+                    </div>
+                    <div class="form-check form-switch ms-2">
+                        <input class="form-check-input" type="checkbox" id="SwitchCheckDefault2">
+                        <label class="form-check-label" for="SwitchCheckDefault2"></label>
+                    </div>
+                </div>
+            </div>
+        </li> -->
+    </ul>
+
+    <div class="listview-title mt-1">Security</div>
+    <ul class="listview image-listview text mb-2 inset">
+        <li>
+            <a href="#" class="item" data-bs-toggle="modal" data-bs-target="#changePasswordActionSheet">
+                <div class="in">
+                    <div>Update Password</div>
+                </div>
+            </a>
+        </li>
+        <!-- <li>
+            <div class="item">
+                <div class="in">
+                    <div>
+                        2 Step Verification
+                    </div>
+                    <div class="form-check form-switch ms-2">
+                        <input class="form-check-input" type="checkbox" id="SwitchCheckDefault3" checked />
+                        <label class="form-check-label" for="SwitchCheckDefault3"></label>
+                    </div>
+                </div>
+            </div>
+        </li> -->
+        <li>
+            <a href="/logout" class="item">
+                <div class="in">
+                    <div>Log out</div>
+                </div>
+            </a>
+        </li>
+    </ul>
+
+
+</div>
+<!-- * App Capsule -->
+
+
+<!-- App Bottom Menu -->
+<div class="appBottomMenu">
+    <a href="index.html" class="item">
+        <div class="col">
+            <ion-icon name="pie-chart-outline"></ion-icon>
+            <strong>Overview</strong>
+        </div>
+    </a>
+    <a href="#" class="item">
+        <div class="col">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <strong>Pages</strong>
+        </div>
+    </a>
+    <a href="#" class="item" data-bs-toggle="modal" data-bs-target="#infoActionSheet">
+        <div class="col">
+            <div class="action-button large">
+                <ion-icon name="arrow-up-outline"></ion-icon>
+            </div>
+        </div>
+    </a>
+    <a href="app-wallet.html" class="item">
+        <div class="col">
+            <ion-icon name="card-outline"></ion-icon>
+            <strong>My Wallet</strong>
+        </div>
+    </a>
+    <a href="app-settings.html" class="item active">
+        <div class="col">
+            <ion-icon name="settings-outline"></ion-icon>
+            <strong>Settings</strong>
+        </div>
+    </a>
+</div>
+<!-- * App Bottom Menu -->
+
+<!-- Update Account Action Sheet -->
+<div class="modal fade modalbox" id="updateAccountActionSheet" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="nameSurname">Update Account</h5>
+                <a href="javascript:;" data-bs-dismiss="modal">Close</a>
+            </div>
+            <div class="modal-body">
+                <div class="section mt-2">
+                    <div class="section-title">Firstname</div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group basic animated">
+                                <div class="input-group input-wrapper">
+                                    <label class="label" for="nameSettings">Firstname</label>
+                                    <input type="text" class="form-control" id="nameSettings" placeholder="Firstname">
+                                    <i class="clear-input">
+                                        <ion-icon name="close-circle"></ion-icon>
+                                    </i>
+                                </div>
+                                <div class="input-info">Please enter name for the new user</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section mt-2">
+                    <div class="section-title">Lastname</div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group basic animated">
+                                <div class="input-group input-wrapper">
+                                    <label class="label" for="surnameSettings">Lastname</label>
+                                    <input type="text" class="form-control" id="surnameSettings" placeholder="Lastname">
+                                    <i class="clear-input">
+                                        <ion-icon name="close-circle"></ion-icon>
+                                    </i>
+                                </div>
+                                <div class="input-info">Please enter surname for the new user</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section mt-2">
+                    <div class="section-title">Date of Birth</div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group basic animated">
+                                <div class="input-group input-wrapper">
+                                    <label class="label" for="dateOfBirthSettings">Date of Birth</label>
+                                    <input type="date" class="form-control" id="dateOfBirthSettings"
+                                           placeholder="Date of Birth">
+                                    <i class="clear-input">
+                                        <ion-icon name="close-circle"></ion-icon>
+                                    </i>
+                                </div>
+                                <div class="input-info">Please enter date of birth for the new user</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-sheet-content">
+                    <form>
+                        <div class="form-group basic">
+                            <button id="updateAuthBtn" type="button" class="btn btn-primary btn-block btn-lg"
+                                    data-bs-dismiss="modal">Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * Update User Action Sheet -->
+
+<!-- Change Password Action Sheet -->
+<div class="modal fade modalbox" id="changePasswordActionSheet" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Password</h5>
+                <a href="javascript:;" data-bs-dismiss="modal">Close</a>
+            </div>
+            <div class="modal-body">
+                <div class="section mt-2">
+                    <div class="section-title">Old Password</div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group basic animated">
+                                <div class="input-group input-wrapper">
+                                    <label class="label" for="oldPassword">Old Password</label>
+                                    <input type="password" class="form-control" id="oldPassword" placeholder="Old Password">
+                                    <i class="clear-input">
+                                        <ion-icon name="close-circle"></ion-icon>
+                                    </i>
+                                </div>
+                                <div class="input-info">Please enter the old password for the user</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section mt-2">
+                    <div class="section-title">New Password</div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group basic animated">
+                                <div class="input-group input-wrapper">
+                                    <label class="label" for="newPassword">New Password</label>
+                                    <input type="password" class="form-control" id="newPassword" placeholder="New Password">
+                                    <i class="clear-input">
+                                        <ion-icon name="close-circle"></ion-icon>
+                                    </i>
+                                </div>
+                                <div class="input-info">Please enter the new password for the user</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section mt-2">
+                    <div class="section-title">Repeat New Password</div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group basic animated">
+                                <div class="input-group input-wrapper">
+                                    <label class="label" for="newPasswordCheck">Repeat New Password</label>
+                                    <input type="password" class="form-control" id="newPasswordCheck"
+                                           placeholder="Repeat New Password">
+                                    <i class="clear-input">
+                                        <ion-icon name="close-circle"></ion-icon>
+                                    </i>
+                                </div>
+                                <div class="input-info">Please enter the new password again</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-sheet-content">
+                    <form>
+                        <div class="form-group basic">
+                            <button id="updatePassBtn" type="button" class="btn btn-primary btn-block btn-lg"
+                                    data-bs-dismiss="modal">Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * Send Action Sheet -->
+
+<!-- Update Account Action Sheet -->
+<div class="modal fade action-sheet" id="updateEmailActionSheet" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Email</h5>
+            </div>
+            <div class="modal-body">
+                <div class="section mt-2">
+                    <div class="section-title">Insert New Email</div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group basic animated">
+                                <div class="input-group input-wrapper">
+                                    <label class="label" for="emailsSettings">Email Address</label>
+                                    <input type="email" class="form-control" id="emailsSettings"
+                                           placeholder="Insert new Email">
+                                    <i class="clear-input">
+                                        <ion-icon name="close-circle"></ion-icon>
+                                    </i>
+                                </div>
+                                <div class="input-info">Please insert email and then confirm</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-sheet-content">
+                    <form>
+                        <div class="form-group basic">
+                            <button id="updateEmail" type="button" class="btn btn-primary btn-block btn-lg"
+                                    data-bs-dismiss="modal">Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * Update User Action Sheet -->
+
+<!-- toast danger -->
+<div id="soon" class="toast-box toast-bottom bg-danger">
+    <div class="in">
+        <div class="text">
+            Available Soon..
+        </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-text-light close-button">OK</button>
+</div>
+<!-- * toast danger -->
+
+<!-- ========= JS Files =========  -->
+<!-- Bootstrap -->
+<script src="./assets/js/lib/bootstrap.bundle.min.js"></script>
+<!-- Ionicons -->
+<script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
+<!-- Splide -->
+<script src="./assets/js/plugin/splide/splide.min.js"></script>
+<!-- Chart -->
+<script src="./assets/js/plugin/apexcharts.min.js"></script>
+<!-- Base Js File -->
+<script src="./assets/js/plugin/base.js"></script>
+
+
+</body>
+
+</html>

@@ -130,6 +130,62 @@ $(document).ready(function () {
                 //------------------------------------------------------------------------
                 // END DATA HOMEPAGE
                 //------------------------------------------------------------------------
+            },
+            error: function () {
+                $(`<span class="text-warning h2 font-weight-bold mb-0"><i class="fa fa-arrow-down"></i> 0%</span>`).appendTo(`.performanceFirstDate`)
+                $(`<span class="text-warning mr-2"><i class="fa fa-arrow-down"></i> 0%</span>`).appendTo(`.performanceLastStatement`)
+                $(`<span class="text-danger mr-2">Insert Data to get the Graph</span>`).appendTo(`#chart`)
+                $('#pil').text("€ 0.00").addClass('text-warning');
+                $(`<li class="splide__slide">
+                <div class="card-block bg-dark">
+                <div class="card-main">
+                    <div class="card-button">
+                      <ion-icon name="ellipsis-horizontal"></ion-icon>
+                    </div>
+                    <div class="balance">
+                        <span class="label">BALANCE</span>
+                        <h1 class="title">€ 0.00</h1>
+                    </div>
+                    <div class="in">
+                        <div class="card-number">
+                            <span class="label">Wallet Name</span>
+                            Insert Date to get Wallet
+                        </div>
+                        <div class="bottom">
+                            <div class="card-expiry">
+                                <span class="label">Date Statement</span>
+                                Insert Statement to get The Data
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>`).appendTo("#walletList");
+                /*--------------------------------------------------------------------------
+                * Splice Slider Effect Carousel Wallet
+                *--------------------------------------------------------------------------*/
+                var elms = document.getElementsByClassName('carousel-wallet');
+                for (var i = 0, len = elms.length; i < len; i++) {
+                    new Splide(elms[i], {
+                        perPage: 3,
+                        rewind: true,
+                        gap: 16,
+                        padding: 16,
+                        arrows: false,
+                        pagination: false,
+                        breakpoints: {
+                            768: {
+                                perPage: 1
+                            },
+                            991: {
+                                perPage: 2
+                            }
+                        }
+                    }).mount();
+                }
+                /*--------------------------------------------------------------------------
+                * END Splice Slider Effect Carousel Wallet
+                *--------------------------------------------------------------------------*/
             }
         });
     }
@@ -151,7 +207,7 @@ $(document).ready(function () {
         // Graph
         var options = {
             series: [{
-                name: 'Toral Capital ',
+                name: 'Total Capital ',
                 data: graphValues,
             }, {
                 name: 'PIL',

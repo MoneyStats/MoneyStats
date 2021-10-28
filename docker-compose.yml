@@ -1,0 +1,21 @@
+version: "3"
+services:
+  moneystats:
+    image: moneystats
+    ports:
+    - "8080:8080"
+    networks:
+      - moneystats
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8
+    networks:
+      - moneystats
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=moneystats
+
+  networks:
+    moneystats:

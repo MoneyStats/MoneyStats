@@ -1,11 +1,12 @@
 package com.moneystats.authentication;
 
-import com.moneystats.authentication.AuthenticationException.Code;
-import com.moneystats.authentication.DTO.AuthErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import com.moneystats.authentication.AuthenticationException.Code;
+import com.moneystats.authentication.DTO.AuthErrorResponseDTO;
 
 @ControllerAdvice
 public class AuthenticationExceptionMapper {
@@ -45,6 +46,21 @@ public class AuthenticationExceptionMapper {
       case USER_NOT_FOUND:
         error.setMessage(Code.USER_NOT_FOUND.toString());
         return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.NOT_FOUND);
+      case EMAIL_PRESENT:
+        error.setMessage(Code.EMAIL_PRESENT.toString());
+        return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.BAD_REQUEST);
+      case INVALID_AUTH_CREDENTIAL_TO_UPDATE_DTO:
+        error.setMessage(Code.INVALID_AUTH_CREDENTIAL_TO_UPDATE_DTO.toString());
+        return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.BAD_REQUEST);
+      case USER_NOT_MATCH:
+        error.setMessage(Code.USER_NOT_MATCH.toString());
+        return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.BAD_REQUEST);
+      case INVALID_AUTH_CHANGE_PASSWORD_INPUT_DTO:
+        error.setMessage(Code.INVALID_AUTH_CHANGE_PASSWORD_INPUT_DTO.toString());
+        return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.BAD_REQUEST);
+      case PASSWORD_NOT_MATCH:
+        error.setMessage(Code.PASSWORD_NOT_MATCH.toString());
+        return new ResponseEntity<AuthErrorResponseDTO>(error, HttpStatus.BAD_REQUEST);
       default:
         error.setMessage("INTERNAL_SERVER_ERROR");
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);

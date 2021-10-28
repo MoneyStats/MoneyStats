@@ -13,7 +13,7 @@ import com.moneystats.MoneyStats.source.DTOTestObjets;
 import com.moneystats.authentication.AuthenticationException;
 import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.authentication.utils.TestSchema;
-import com.moneystats.generic.SchemaDescription;
+import com.moneystats.generic.ResponseMapping;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class StatementControllerTest {
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
     StatementDTO statementDTO = DTOTestObjets.statementDTO;
     StatementResponseDTO statementResponseDTO =
-        new StatementResponseDTO(SchemaDescription.STATEMENT_ADDED_CORRECT);
+        new StatementResponseDTO(ResponseMapping.STATEMENT_ADDED_CORRECT);
     String statementAsString = objectMapper.writeValueAsString(statementDTO);
     String responseAsString = objectMapper.writeValueAsString(statementResponseDTO);
 

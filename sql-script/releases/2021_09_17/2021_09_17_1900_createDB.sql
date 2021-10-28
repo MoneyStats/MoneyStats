@@ -1,1 +1,1 @@
-CREATE database moneystats;
+CREATE database IF NOT EXISTS moneystats;

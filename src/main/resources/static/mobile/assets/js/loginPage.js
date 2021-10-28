@@ -7,6 +7,7 @@ $(document).ready(function () {
     const INVALID_AUTH_INPUT_DTO = "INVALID_AUTH_INPUT_DTO";
     const INVALID_AUTH_CREDENTIAL_DTO = "INVALID_AUTH_CREDENTIAL_DTO";
     const DATABASE_ERROR = "DATABASE_ERROR";
+    const EMAIL_PRESENT = "EMAIL_PRESENT";
 
     // SignUp Process Start
     function addUser(authCredentialDTO) {
@@ -16,15 +17,15 @@ $(document).ready(function () {
             data: JSON.stringify(authCredentialDTO),
             contentType: 'application/json',
             dataType: 'json',
-            success: function (response) {
+            success: function () {
                 Swal.fire({
                     icon: 'success',
                     title: '<span style="color:#2D2C2C">Insert!</span>',
                     text: 'User insert correctly',
                     showConfirmButton: false,
                     timer: 1000
-                }),
-                    setTimeout(function (render) {
+                })
+                    setTimeout(function () {
                         window.location.href = 'app-login.html';
                     }, 1000)
             },
@@ -58,6 +59,13 @@ $(document).ready(function () {
                         text: 'Try later.'
                     })
                 }
+                if (responseDTO === EMAIL_PRESENT) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "<span style='color:#2D2C2C'>Email Present</span>",
+                        text: 'Try with another one.'
+                    })
+                }
             }
         });
     }
@@ -72,9 +80,33 @@ $(document).ready(function () {
             username: $('#username_mobile').val(),
             password: $('#password_mobile').val()
         }
+        var checkPassword = $('#password2').val();
+        var emptyValue = "";
+        if (authCredentialDTO.firstName === emptyValue || authCredentialDTO.lastName === emptyValue || authCredentialDTO.dateOfBirth === emptyValue || authCredentialDTO.email === emptyValue) {
+            return;
+        }
+        if (authCredentialDTO.password !== checkPassword) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'center',
+                showConfirmButton: false,
+                timer: 1000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'error',
+                title: "<span style='color:#2D2C2C'>Password don't match, try again</span>"
+            })
+            return;
+        }
         Swal.fire({
-            title: 'Are you sure to Save?',
-            text: "Confirm Signup Current User?",
+            title: "<span style='color:#2D2C2C'>Do you want to save?</span>",
+            text: "Confirm to register Current User",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -83,15 +115,17 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 addUser(authCredentialDTO);
+                $('#firstName_mobile').val('');
+                $('#lastName_mobile').val('');
+                $('#dateOfBirth_mobile').val('');
+                $('#email_mobile').val('');
+                $('#username_mobile').val('');
+                $('#password_mobile').val('');
+                $('#password2').val('');
             }
         })
 
-        $('#firstName_mobile').val('');
-        $('#lastName_mobile').val('');
-        $('#dateOfBirth_mobile').val('');
-        $('#email_mobile').val('');
-        $('#username_mobile').val('');
-        $('#password_mobile').val('');
+
     })
 // SignUp process end
 
@@ -128,10 +162,10 @@ $(document).ready(function () {
                     text: `Welcome ${userLogged}`,
                     showConfirmButton: false,
                     timer: 1500
-                }),
+                })
                     sessionStorage.setItem('accessToken', accessToken);
 
-                setTimeout(function (render) {
+                setTimeout(function () {
                     window.location.href = 'index.html';
                 }, 3000)
             },

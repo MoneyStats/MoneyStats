@@ -16,6 +16,8 @@ import com.moneystats.authentication.DTO.TokenDTO;
 import com.moneystats.authentication.TokenService;
 import com.moneystats.authentication.TokenValidation;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
+import com.moneystats.timeTracker.LogTimeTracker.ActionType;
+import com.moneystats.timeTracker.LoggerMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,7 @@ public class HomepageService {
    * @throws StatementException
    * @throws AuthenticationException
    */
+  @LoggerMethod(type = ActionType.APP_WEB_SERVICE)
   public HomepageReportDTO reportHomepage(TokenDTO tokenDTO)
       throws StatementException, AuthenticationException, ParseException {
     HomepageReportDTO reportDTO =
@@ -50,7 +53,8 @@ public class HomepageService {
     List<String> listDate = statementDAO.selectdistinctstatement(utente.getId());
     if (listDate.size() == 0) {
       LOG.error(
-          "Statement Date Not Found, into StatementService, statementDAO.selectdistinctstatement(utente.getId()):61");
+          "Statement Date Not Found, into StatementService, statementDAO.selectdistinctstatement(utente.getId()):57, Exception {}",
+          StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND.toString());
       throw new StatementException(StatementException.Code.LIST_STATEMENT_DATE_NOT_FOUND);
     }
     String lastDate = "";
@@ -141,6 +145,7 @@ public class HomepageService {
    * @throws AuthenticationException
    * @throws WalletException
    */
+  @LoggerMethod(type = ActionType.APP_WEB_SERVICE)
   public HomepagePieChartDTO getGraph(String date, TokenDTO tokenDTO)
       throws StatementException, AuthenticationException, WalletException {
     AuthCredentialEntity utente = validateAndCreate(tokenDTO);
@@ -149,12 +154,15 @@ public class HomepageService {
         statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date);
     if (statementList.size() == 0) {
       LOG.error(
-          "Statement Not Found, into StatementService, statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date):71");
+          "Statement Not Found, into HomepageService, statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date):157, Exception {}",
+          StatementException.Code.STATEMENT_NOT_FOUND.toString());
       throw new StatementException(StatementException.Code.STATEMENT_NOT_FOUND);
     }
     List<WalletEntity> walletEntities = walletDAO.findAllByUserId(utente.getId());
     if (walletEntities.size() == 0) {
-      LOG.error("Wallet Not Found on getAll, WalletService:41");
+      LOG.error(
+          "Wallet Not Found on getGraph, HomepageService:163, Exception {}",
+          WalletException.Code.WALLET_NOT_FOUND.toString());
       throw new WalletException(WalletException.Code.WALLET_NOT_FOUND);
     }
     List<String> walletListGraph = new ArrayList<>();
@@ -187,6 +195,7 @@ public class HomepageService {
    * @return
    * @throws StatementException
    */
+  @LoggerMethod(type = ActionType.APP_WEB_SERVICE)
   private List<StatementEntity> listStatementReportCalc(AuthCredentialEntity utente, String date) {
     List<StatementEntity> list =
         statementDAO.findAllByUserIdAndDateOrderByWalletId(utente.getId(), date);
@@ -205,6 +214,7 @@ public class HomepageService {
    * @throws AuthenticationException
    * @throws StatementException
    */
+  @LoggerMethod(type = ActionType.APP_WEB_SERVICE)
   private AuthCredentialEntity validateAndCreate(TokenDTO tokenDTO) throws AuthenticationException {
     TokenValidation.validateTokenDTO(tokenDTO);
     if (tokenDTO.getAccessToken().equalsIgnoreCase("")) {
@@ -216,7 +226,9 @@ public class HomepageService {
             authCredentialDTO.getUsername(), authCredentialDTO.getPassword());
     AuthCredentialEntity utente = authCredentialDAO.getCredential(authCredentialInputDTO);
     if (utente == null) {
-      LOG.error("User Not Found, into StatementService, validateAndCreate(TokenDTO):96");
+      LOG.error(
+          "User Not Found, into HomepageService, validateAndCreate(TokenDTO):229, Exception {}",
+          AuthenticationException.Code.USER_NOT_FOUND.toString());
       throw new AuthenticationException(AuthenticationException.Code.USER_NOT_FOUND);
     }
     return utente;

@@ -30,7 +30,7 @@ public class WebControllerLoginTest {
   @Test
   public void testCheckLogin() throws Exception {
     AuthCredentialDTO authCredentialDTO = DTOTestObjets.authCredentialDTO;
-    TokenDTO tokenDTO = new TokenDTO(TestSchema.ROLE_USER_TOKEN_JWT);
+    TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
 
     Mockito.when(webService.checkUser(tokenDTO)).thenReturn(authCredentialDTO);
 

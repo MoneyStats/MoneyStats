@@ -70,7 +70,7 @@
                                                class="logo"></a>
     </div>
     <div class="right">
-        <a href="#" class="headerButton">
+        <a href="app-settings.html" class="headerButton">
             <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="imaged w32">
             <span class="badge badge-danger"></span>
         </a>
@@ -179,7 +179,7 @@
             <h2 class="title" id="year">Graph</h2>
             <a href="#" class="link" onclick="toastbox('soon')">View All</a>
         </div>
-        <div id="chart">
+        <div id="chart" class=" text-center">
             <div id="timeline-chart"></div>
         </div>
         <div id="pieChart">
@@ -278,7 +278,7 @@
             <strong>My Wallet</strong>
         </div>
     </a>
-    <a href="#" class="item" onclick="toastbox('soon')">
+    <a href="app-settings.html" class="item">
         <div class="col">
             <ion-icon name="settings-outline"></ion-icon>
             <strong>Settings</strong>
@@ -382,7 +382,7 @@
                 <div class="listview-title mt-1">Others</div>
                 <ul class="listview flush transparent no-line image-listview">
                     <li>
-                        <a href="#" class="item" onclick="toastbox('soon')">
+                        <a href="app-settings.html" class="item">
                             <div class="icon-box bg-primary">
                                 <ion-icon name="settings-outline"></ion-icon>
                             </div>
@@ -657,7 +657,7 @@
                             <img src="./assets/img/logos/logo_transparent.png" class="responsive"
                                  alt="logo_transparent">
                             <hr>
-                            <p class="text-center">MoneyStats V1.0.0</p>
+                            <p class="text-center">MoneyStats V1.5.0</p>
                             <button type="button" data-bs-toggle="modal" data-bs-target="#changelogActionSheet"
                                     class="btn btn-text-primary rounded shadowed me-1 mb-1">Changelog
                             </button>
@@ -675,13 +675,36 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">MoneyStats V1.0.0</h5>
+                <h5 class="modal-title">MoneyStats V1.5.0</h5>
                 <a href="javascript:;" data-bs-dismiss="modal">Close</a>
             </div>
             <div class="modal-body">
                 <div class="section mt-2 mb-2">
                     <div class="section-title">Changelog</div>
                     <div class="accordion" id="accordionChangelog">
+                        <!-- Accordion -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#v150">
+                                    25-09-2021 - MoneyStats V1.5.0
+                                </button>
+                            </h2>
+                            <div id="v150" class="accordion-collapse collapse show" data-bs-parent="#accordionChangelog">
+                                <div class="accordion-body">
+                                    <strong class="fs-3">V1.5.0</strong><br>
+                                    - Added 2 password verification on Sign up. <br>
+                                    - Fixed Sign up if don't put all values. <br>
+                                    - Added email check, if email is already present it would give an error. <br>
+                                    - Fixed homepage style on first boot. <br>
+                                    - Update Changelog to V1.5.0. <br>
+                                    - Added Settings page. <br>
+                                    - Added options to let you edit your profile (Name, Surname, Date of birth, email). <br>
+                                    - Small Bug Fixed.<br>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Accordion -->
                         <!-- Accordion -->
                         <div class="accordion-item">
                             <h2 class="accordion-header">
