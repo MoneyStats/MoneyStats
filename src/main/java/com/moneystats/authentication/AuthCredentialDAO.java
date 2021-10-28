@@ -5,8 +5,8 @@ import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
 import com.moneystats.authentication.DTO.AuthCredentialToUpdateDTO;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
-import com.moneystats.timeTracker.LogTimeTracker;
-import com.moneystats.timeTracker.LoggerMethod;
+import com.moneystats.generic.timeTracker.LogTimeTracker;
+import com.moneystats.generic.timeTracker.LoggerMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +28,7 @@ public class AuthCredentialDAO {
   private static final String SELECT_FROM_USERS_WHERE_ROLE =
       "SELECT * FROM users WHERE role = 'USER'";
   private static final String SELECT_FROM_USERS = "SELECT * FROM users WHERE username = ?";
+  private static final String FIND_ALL = "SELECT * FROM users";
   private static final String FIND_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
   private static final String INSERT_INTO_USERS =
       "INSERT INTO users (first_name, last_name, date_of_birth, email, username, password, role) VALUES (?, ?, ?, ?, ?, ?, 'USER')";
@@ -183,5 +184,33 @@ public class AuthCredentialDAO {
       LOG.error("Process aborted during update {}", e);
       throw new AuthenticationException(Code.DATABASE_ERROR);
     }
+  }
+
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
+  public List<AuthCredentialEntity> getAllUsers() throws AuthenticationException {
+    List<AuthCredentialEntity> listUser = new ArrayList<AuthCredentialEntity>();
+    try {
+      Connection connection = DriverManager.getConnection(dbAddress, username, password);
+      String sqlCommand = FIND_ALL;
+      PreparedStatement pstm = connection.prepareStatement(sqlCommand);
+      ResultSet rs = pstm.executeQuery();
+
+      while (rs.next()) {
+        listUser.add(
+                new AuthCredentialEntity(
+                        rs.getLong("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("date_of_birth"),
+                        rs.getString("email"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("role")));
+      }
+    } catch (SQLException e) {
+      LOG.error("Database Error in getAllUser");
+      throw new AuthenticationException(AuthenticationException.Code.DATABASE_ERROR);
+    }
+    return listUser;
   }
 }

@@ -1,4 +1,4 @@
-package com.moneystats.timeTracker;
+package com.moneystats.generic.timeTracker;
 
 import org.slf4j.Logger;
 
@@ -29,7 +29,7 @@ public class LogTimeTracker {
         this.correlationId,
         getDeltaInMilli(),
         e.getClass().getName(),
-        e.getMessage());
+        e.getLocalizedMessage());
   }
 
   public void trackSuccess(Logger LOG) {
@@ -55,6 +55,7 @@ public class LogTimeTracker {
     APP_DATABASE_ENDPOINT,
     APP_SERVICE_LOGIC,
     APP_WEB_SERVICE,
-    APP_TOKEN_SERVICE
+    APP_TOKEN_SERVICE,
+    APP_VALIDATOR,
   }
 }
