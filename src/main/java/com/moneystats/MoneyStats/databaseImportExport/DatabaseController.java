@@ -36,4 +36,18 @@ public class DatabaseController {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return databaseService.backupDatabase(databaseCommandDTO, tokenDTO);
   }
+
+  @PostMapping("/importDatabase")
+  @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE})
+  @Operation(
+          summary = SchemaDescription.POST_EXPORT_DATABASE_SUMMARY,
+          description = SchemaDescription.POST_EXPORT_DATABASE_DESCRIPTION,
+          tags = "Database")
+  public DatabaseResponseDTO importDatabase(
+          @RequestHeader(value = "Authorization") String jwt,
+          @RequestBody DatabaseCommandDTO databaseCommandDTO)
+          throws AuthenticationException, DatabaseException, TemplateException {
+    TokenDTO tokenDTO = new TokenDTO(jwt);
+    return databaseService.restoreDatabase(databaseCommandDTO, tokenDTO);
+  }
 }

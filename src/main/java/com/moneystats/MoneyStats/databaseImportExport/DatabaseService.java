@@ -1,11 +1,14 @@
 package com.moneystats.MoneyStats.databaseImportExport;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moneystats.MoneyStats.commStats.statement.IStatementDAO;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.IWalletDAO;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseCommand;
 import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseCommandDTO;
+import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseJSONExportDTO;
 import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseResponseDTO;
 import com.moneystats.MoneyStats.databaseImportExport.template.DTO.TemplateDTO;
 import com.moneystats.MoneyStats.databaseImportExport.template.TemplateException;
@@ -21,13 +24,13 @@ import com.moneystats.generic.timeTracker.LoggerMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class DatabaseService {
@@ -38,6 +41,11 @@ public class DatabaseService {
   @Autowired IWalletDAO walletDAO;
   @Autowired AuthCredentialDAO authCredentialDAO;
 
+  private static ObjectMapper objectMapper = new ObjectMapper();
+
+  @Value(value = "${database.name}")
+  private String databaseName;
+
   @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
   public DatabaseResponseDTO backupDatabase(
       DatabaseCommandDTO databaseCommandDTO, TokenDTO tokenDTO)
@@ -45,12 +53,15 @@ public class DatabaseService {
     DatabaseValidator.validateDatabaseCommandDTO(databaseCommandDTO);
     TokenValidation.validateTokenDTO(tokenDTO);
     Map<String, List<String>> placeholder = new HashMap<>();
-    placeholder.putAll(placeholderStatement());
-    placeholder.putAll(placeholderWallet());
-    placeholder.putAll(placeholderUsers());
+    DatabaseJSONExportDTO placeStatement = placeholderStatement();
+    DatabaseJSONExportDTO placeWallet = placeholderWallet();
+    DatabaseJSONExportDTO placeUsers = placeholderUsers();
+    placeholder.putAll(placeStatement.getPlaceholder());
+    placeholder.putAll(placeWallet.getPlaceholder());
+    placeholder.putAll(placeUsers.getPlaceholder());
 
     Map<String, String> placeholderMustache = new HashMap<>();
-    placeholderMustache.put(TemplatePlaceholders.DATABASE_PLACEHOLDER, "moneystats");
+    placeholderMustache.put(TemplatePlaceholders.DATABASE_PLACEHOLDER, databaseName);
     placeholderMustache.put(TemplatePlaceholders.DATE_PLACEHOLDER, LocalDate.now().toString());
     DatabaseResponseDTO response = new DatabaseResponseDTO();
 
@@ -59,9 +70,18 @@ public class DatabaseService {
       throw new DatabaseException(DatabaseException.Code.INVALID_DATABASE_COMMAND_DTO);
     }
     TemplateDTO getExportTemplate =
-            templateService.getTemplate(TemplatePlaceholders.GET_EXPORT_DATABASE_TEMPLATE);
-    List<String> appliedTemplate = templateService.applyTemplate(getExportTemplate, placeholder, placeholderMustache);
+        templateService.getTemplate(TemplatePlaceholders.GET_EXPORT_DATABASE_TEMPLATE);
+    List<String> appliedTemplate =
+        templateService.applyTemplate(getExportTemplate, placeholder, placeholderMustache);
     templateService.saveTemplate(databaseCommandDTO.getFilePath(), appliedTemplate);
+
+    // Export JSON File
+    DatabaseJSONExportDTO databaseJSONToExport =
+        new DatabaseJSONExportDTO(
+            placeStatement.getStatementEntities(),
+            placeWallet.getWalletEntities(),
+            placeUsers.getAuthCredentialEntities());
+    templateService.applyAndSaveJsonBackup(databaseJSONToExport, databaseCommandDTO.getFilePath());
     response.setResponse(DatabaseResponseDTO.String.EXPORTED);
     return response;
   }
@@ -77,11 +97,35 @@ public class DatabaseService {
       LOG.error("Wrong database command, Command: {}", databaseCommandDTO.getDatabase());
       throw new DatabaseException(DatabaseException.Code.INVALID_DATABASE_COMMAND_DTO);
     }
+    File sqlExportTemplate = new File(databaseCommandDTO.getFilePath());
+    Scanner scanner = null;
+    try {
+      scanner = new Scanner(sqlExportTemplate);
+    } catch (FileNotFoundException e) {
+      LOG.error(
+          "Backup File not found {},", DatabaseException.Code.ERROR_ON_IMPORT_DATABASE.toString());
+      throw new DatabaseException(DatabaseException.Code.ERROR_ON_IMPORT_DATABASE);
+    }
+    StringBuilder databaseJsonString = new StringBuilder();
+    while (scanner.hasNextLine()) {
+      databaseJsonString.append(scanner.nextLine());
+    }
+    scanner.close();
+    DatabaseJSONExportDTO databaseJSONExportDTO;
+    try {
+       databaseJSONExportDTO =
+          objectMapper.readValue(databaseJsonString.toString(), DatabaseJSONExportDTO.class);
+    } catch (JsonProcessingException e) {
+      LOG.error(
+          "A Problem occurred during deserialize object {},",
+          DatabaseException.Code.ERROR_ON_IMPORT_DATABASE.toString());
+      throw new DatabaseException(DatabaseException.Code.ERROR_ON_IMPORT_DATABASE);
+    }
     response.setResponse(DatabaseResponseDTO.String.IMPORTED);
     return response;
-    }
+  }
 
-  private Map<String, List<String>> placeholderStatement() {
+  private DatabaseJSONExportDTO placeholderStatement() {
     Map<String, List<String>> placeholder = new HashMap<>();
     List<StatementEntity> exportStatementEntity = statementDAO.findAll();
     List<String> compositStatementString = new ArrayList<>();
@@ -107,10 +151,10 @@ public class DatabaseService {
       compositStatementString.add(databaseLine);
     }
     placeholder.put(TemplatePlaceholders.STATEMENT_PLACEHOLDER, compositStatementString);
-    return placeholder;
+    return new DatabaseJSONExportDTO(placeholder, exportStatementEntity, null, null);
   }
 
-  private Map<String, List<String>> placeholderWallet() {
+  private DatabaseJSONExportDTO placeholderWallet() {
     Map<String, List<String>> placeholder = new HashMap<>();
     List<WalletEntity> exportWalletEntity = walletDAO.findAll();
     List<String> compositWalletString = new ArrayList<>();
@@ -134,10 +178,10 @@ public class DatabaseService {
       compositWalletString.add(databaseLine);
     }
     placeholder.put(TemplatePlaceholders.WALLET_PLACEHOLDER, compositWalletString);
-    return placeholder;
+    return new DatabaseJSONExportDTO(placeholder, null, exportWalletEntity, null);
   }
 
-  private Map<String, List<String>> placeholderUsers() throws AuthenticationException {
+  private DatabaseJSONExportDTO placeholderUsers() throws AuthenticationException {
     Map<String, List<String>> placeholder = new HashMap<>();
     List<AuthCredentialEntity> exportUsersEntity = authCredentialDAO.getAllUsers();
     List<String> compositStatementString = new ArrayList<>();
@@ -169,6 +213,6 @@ public class DatabaseService {
       compositStatementString.add(databaseLine);
     }
     placeholder.put(TemplatePlaceholders.USERS_PLACEHOLDER, compositStatementString);
-    return placeholder;
+    return new DatabaseJSONExportDTO(placeholder, null, null, exportUsersEntity);
   }
 }

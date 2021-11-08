@@ -165,7 +165,7 @@ public class AuthCredentialDAO {
       pstm.setString(5, authCredentialToUpdateDTO.getUsername());
       pstm.execute();
     } catch (SQLException e) {
-      LOG.error("Process aborted during update {}", e);
+      LOG.error("Process aborted during update {}", Code.DATABASE_ERROR.toString());
       throw new AuthenticationException(Code.DATABASE_ERROR);
     }
   }
@@ -181,7 +181,7 @@ public class AuthCredentialDAO {
       pstm.setString(2, usernameDB);
       pstm.execute();
     } catch (SQLException e) {
-      LOG.error("Process aborted during update {}", e);
+      LOG.error("Process aborted during update {}", Code.DATABASE_ERROR.toString());
       throw new AuthenticationException(Code.DATABASE_ERROR);
     }
   }

@@ -3,24 +3,40 @@ package com.moneystats.MoneyStats.databaseImportExport.DTO;
 import com.moneystats.MoneyStats.commStats.statement.entity.StatementEntity;
 import com.moneystats.MoneyStats.commStats.wallet.entity.WalletEntity;
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
+import com.moneystats.authentication.entity.AuthCredentialEntity;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class DatabaseJSONExportDTO implements Serializable {
 
+  private Map<String, List<String>> placeholder;
   @NotNull private List<StatementEntity> statementEntities;
   @NotNull private List<WalletEntity> walletEntities;
-  @NotNull private List<AuthCredentialDTO> authCredentialDTOS;
+  @NotNull private List<AuthCredentialEntity> authCredentialEntities;
+
+  public DatabaseJSONExportDTO() {}
 
   public DatabaseJSONExportDTO(
       List<StatementEntity> statementEntities,
       List<WalletEntity> walletEntities,
-      List<AuthCredentialDTO> authCredentialDTOS) {
+      List<AuthCredentialEntity> authCredentialEntities) {
     this.statementEntities = statementEntities;
     this.walletEntities = walletEntities;
-    this.authCredentialDTOS = authCredentialDTOS;
+    this.authCredentialEntities = authCredentialEntities;
+  }
+
+  public DatabaseJSONExportDTO(
+      Map<String, List<String>> placeholder,
+      List<StatementEntity> statementEntities,
+      List<WalletEntity> walletEntities,
+      List<AuthCredentialEntity> authCredentialEntities) {
+    this.placeholder = placeholder;
+    this.statementEntities = statementEntities;
+    this.walletEntities = walletEntities;
+    this.authCredentialEntities = authCredentialEntities;
   }
 
   public List<StatementEntity> getStatementEntities() {
@@ -39,11 +55,19 @@ public class DatabaseJSONExportDTO implements Serializable {
     this.walletEntities = walletEntities;
   }
 
-  public List<AuthCredentialDTO> getAuthCredentialDTOS() {
-    return authCredentialDTOS;
+  public List<AuthCredentialEntity> getAuthCredentialEntities() {
+    return authCredentialEntities;
   }
 
-  public void setAuthCredentialDTOS(List<AuthCredentialDTO> authCredentialDTOS) {
-    this.authCredentialDTOS = authCredentialDTOS;
+  public void setAuthCredentialEntities(List<AuthCredentialEntity> authCredentialEntities) {
+    this.authCredentialEntities = authCredentialEntities;
+  }
+
+  public Map<String, List<String>> getPlaceholder() {
+    return placeholder;
+  }
+
+  public void setPlaceholder(Map<String, List<String>> placeholder) {
+    this.placeholder = placeholder;
   }
 }

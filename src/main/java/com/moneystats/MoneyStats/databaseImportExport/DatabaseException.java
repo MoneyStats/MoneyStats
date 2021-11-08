@@ -21,6 +21,7 @@ public class DatabaseException extends Exception {
     public static enum Code {
         INVALID_DATABASE_COMMAND_DTO,
         NOT_ADMIN_USER,
-        ERROR_ON_EXPORT_DATABASE
+        ERROR_ON_EXPORT_DATABASE,
+        ERROR_ON_IMPORT_DATABASE
     }
 }
