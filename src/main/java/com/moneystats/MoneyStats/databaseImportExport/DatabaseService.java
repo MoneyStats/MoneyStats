@@ -50,6 +50,7 @@ public class DatabaseService {
   public DatabaseResponseDTO backupDatabase(
       DatabaseCommandDTO databaseCommandDTO, TokenDTO tokenDTO)
       throws AuthenticationException, DatabaseException, TemplateException {
+    databaseCommandDTO.setFilePath(TemplatePlaceholders.FILEPATH_BACKUP);
     DatabaseValidator.validateDatabaseCommandDTO(databaseCommandDTO);
     TokenValidation.validateTokenDTO(tokenDTO);
     Map<String, List<String>> placeholder = new HashMap<>();
@@ -98,12 +99,12 @@ public class DatabaseService {
       throw new DatabaseException(DatabaseException.Code.INVALID_DATABASE_COMMAND_DTO);
     }
     File sqlExportTemplate = new File(databaseCommandDTO.getFilePath());
-    Scanner scanner = null;
+    Scanner scanner;
     try {
       scanner = new Scanner(sqlExportTemplate);
     } catch (FileNotFoundException e) {
       LOG.error(
-          "Backup File not found {},", DatabaseException.Code.ERROR_ON_IMPORT_DATABASE.toString());
+          "Backup File not found {},", DatabaseException.Code.ERROR_ON_IMPORT_DATABASE);
       throw new DatabaseException(DatabaseException.Code.ERROR_ON_IMPORT_DATABASE);
     }
     StringBuilder databaseJsonString = new StringBuilder();
@@ -118,10 +119,14 @@ public class DatabaseService {
     } catch (JsonProcessingException e) {
       LOG.error(
           "A Problem occurred during deserialize object {},",
-          DatabaseException.Code.ERROR_ON_IMPORT_DATABASE.toString());
+          DatabaseException.Code.ERROR_ON_IMPORT_DATABASE);
       throw new DatabaseException(DatabaseException.Code.ERROR_ON_IMPORT_DATABASE);
     }
+    /*
+     TODO: Database delete and insert data, OBJECT(databaseJSONExportDTO)
+     */
     response.setResponse(DatabaseResponseDTO.String.IMPORTED);
+    LOG.info("Database successfully imported, PATH: {}", databaseCommandDTO.getFilePath());
     return response;
   }
 

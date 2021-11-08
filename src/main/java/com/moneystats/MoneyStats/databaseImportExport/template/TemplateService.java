@@ -36,7 +36,7 @@ public class TemplateService {
     } catch (FileNotFoundException e) {
       LOG.error(
           "Template not found on TemplateService getTemplate:27 {}",
-          TemplateException.Code.TEMPLATE_NOT_FOUND.toString());
+          TemplateException.Code.TEMPLATE_NOT_FOUND);
       throw new TemplateException(TemplateException.Code.TEMPLATE_NOT_FOUND);
     }
     List<String> alltemplateLine = new ArrayList<>();
@@ -70,7 +70,12 @@ public class TemplateService {
 
   @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public void saveTemplate(String filePath, List<String> templateList) throws TemplateException {
-    String filePathToSave = filePath + "MoneyStats_Backup" + LocalDate.now().toString() + ".sql";
+    String newFolder = filePath + LocalDate.now() + "/";
+    File theDir = new File(newFolder);
+    if (!theDir.exists()){
+      theDir.mkdirs();
+    }
+    String filePathToSave = newFolder + "MoneyStats_Backup_" + LocalDate.now() + ".sql";
     File outputTemplate = new File(filePathToSave);
     BufferedWriter newTemplate;
     try {
@@ -91,18 +96,23 @@ public class TemplateService {
   @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public void applyAndSaveJsonBackup(DatabaseJSONExportDTO databaseJSONToExport, String filePath)
           throws DatabaseException, TemplateException {
-    String filePathToSave = filePath + "json_dump_backup_" + LocalDate.now().toString() + ".backup";
+    String newFolder = filePath + LocalDate.now() + "/";
+    File theDir = new File(newFolder);
+    if (!theDir.exists()){
+      theDir.mkdirs();
+    }
+    String filePathToSave = newFolder + "json_dump_backup_" + LocalDate.now() + ".backup";
     try {
       objectMapper.writeValue(new File(filePathToSave), databaseJSONToExport);
     } catch (JsonProcessingException e) {
       LOG.error(
           "A problem occurred during Serialize Object on applyAndSaveJsonBackup:132 {}",
-          DatabaseException.Code.ERROR_ON_EXPORT_DATABASE.toString());
+          DatabaseException.Code.ERROR_ON_EXPORT_DATABASE);
       throw new DatabaseException(DatabaseException.Code.ERROR_ON_EXPORT_DATABASE);
     } catch (IOException e) {
       LOG.error(
               "A problem occurred during Serialize Object on applyAndSaveJsonBackup:132 {}",
-              DatabaseException.Code.ERROR_ON_EXPORT_DATABASE.toString());
+              DatabaseException.Code.ERROR_ON_EXPORT_DATABASE);
       throw new DatabaseException(DatabaseException.Code.ERROR_ON_EXPORT_DATABASE);
     }
     LOG.info("Database successfully exported, PATH: {}", filePathToSave);
