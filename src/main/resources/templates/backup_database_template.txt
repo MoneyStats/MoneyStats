@@ -1,6 +1,6 @@
 -- MoneyStats dump 1.0.0  Distrib 8.0.23, for Win64 (x86_64)
 --
-database.placeholder
+-- Host: localhost    Database: {{database.placeholder}}
 -- ------------------------------------------------------
 -- Server version	8.0.23
 
@@ -142,4 +142,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-date.placeholder
+-- Dump completed on {{date.placeholder}}

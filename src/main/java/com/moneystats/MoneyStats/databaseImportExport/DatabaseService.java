@@ -48,8 +48,10 @@ public class DatabaseService {
     placeholder.putAll(placeholderStatement());
     placeholder.putAll(placeholderWallet());
     placeholder.putAll(placeholderUsers());
-    placeholder.putAll(placeholderDatabase());
-    placeholder.putAll(placeholderData());
+
+    Map<String, String> placeholderMustache = new HashMap<>();
+    placeholderMustache.put(TemplatePlaceholders.DATABASE_PLACEHOLDER, "moneystats");
+    placeholderMustache.put(TemplatePlaceholders.DATE_PLACEHOLDER, LocalDate.now().toString());
     DatabaseResponseDTO response = new DatabaseResponseDTO();
 
     if (!(databaseCommandDTO.getDatabase() == DatabaseCommand.EXPORT_DUMP_COMMAND)) {
@@ -58,7 +60,7 @@ public class DatabaseService {
     }
     TemplateDTO getExportTemplate =
             templateService.getTemplate(TemplatePlaceholders.GET_EXPORT_DATABASE_TEMPLATE);
-    List<String> appliedTemplate = templateService.applyTemplate(getExportTemplate, placeholder);
+    List<String> appliedTemplate = templateService.applyTemplate(getExportTemplate, placeholder, placeholderMustache);
     templateService.saveTemplate(databaseCommandDTO.getFilePath(), appliedTemplate);
     response.setResponse(DatabaseResponseDTO.String.EXPORTED);
     return response;
@@ -167,26 +169,6 @@ public class DatabaseService {
       compositStatementString.add(databaseLine);
     }
     placeholder.put(TemplatePlaceholders.USERS_PLACEHOLDER, compositStatementString);
-    return placeholder;
-  }
-
-  private Map<String, List<String>> placeholderDatabase() throws AuthenticationException {
-    Map<String, List<String>> placeholder = new HashMap<>();
-    List<String> compositDatabaseString = new ArrayList<>();
-      String databaseLine =
-              "-- Host: localhost    Database: " + "moneystats";
-    compositDatabaseString.add(databaseLine);
-    placeholder.put(TemplatePlaceholders.DATABASE_PLACEHOLDER, compositDatabaseString);
-    return placeholder;
-  }
-
-  private Map<String, List<String>> placeholderData() throws AuthenticationException {
-    Map<String, List<String>> placeholder = new HashMap<>();
-    List<String> compositDataString = new ArrayList<>();
-    String databaseLine =
-            "-- Dump completed on " + LocalDate.now();
-    compositDataString.add(databaseLine);
-    placeholder.put(TemplatePlaceholders.DATE_PLACEHOLDER, compositDataString);
     return placeholder;
   }
 }
