@@ -41,4 +41,7 @@ public interface IStatementDAO extends JpaRepository<StatementEntity, Long> {
    * @return List of {@link StatementEntity}
    */
   List<StatementEntity> findAllByUserIdAndDateOrderByWalletId(Long userId, String date);
+
+  @Override
+  void deleteAll();
 }

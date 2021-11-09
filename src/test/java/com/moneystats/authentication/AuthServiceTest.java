@@ -45,7 +45,7 @@ public class AuthServiceTest {
     Assertions.assertEquals(
         TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER.getUsername(),
         authCredentialDTOArgumentCaptor.getValue().getUsername());
-    Assertions.assertEquals(ResponseMapping.USER_ADDED_CORRECT, response.getMessage());
+    Assertions.assertEquals(ResponseMapping.USER_ADDED_CORRECT, response.getResponse());
   }
 
   @Test
@@ -240,7 +240,7 @@ public class AuthServiceTest {
    */
   @Test
   void update_shouldUpdateUserCorrectly() throws Exception {
-    AuthResponseDTO expected = new AuthResponseDTO(ResponseMapping.USER_UPDATED);
+    AuthResponseDTO expected = new AuthResponseDTO(AuthResponseDTO.String.USER_UPDATED);
     AuthCredentialToUpdateDTO authCredentialToUpdateDTO = createValidAuthCredentialDTOToUpdate();
     TokenDTO tokenDTO = TestSchema.TOKEN_JWT_DTO_ROLE_USER;
 
@@ -249,7 +249,7 @@ public class AuthServiceTest {
 
     AuthResponseDTO actualResponseDTO = service.updateUser(authCredentialToUpdateDTO, tokenDTO);
 
-    Assertions.assertEquals(expected.getMessage(), actualResponseDTO.getMessage());
+    Assertions.assertEquals(expected.getResponse(), actualResponseDTO.getResponse());
   }
 
   @Test
@@ -370,7 +370,7 @@ public class AuthServiceTest {
     TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
     AuthCredentialDTO authCredentialDTO = createValidAuthCredentialDTO();
     AuthChangePasswordInputDTO authChangePasswordInputDTO = createValidAuthChangePasswordInputDTO();
-    AuthResponseDTO expectedResponse = new AuthResponseDTO(ResponseMapping.PASSWORD_UPDATED);
+    AuthResponseDTO expectedResponse = new AuthResponseDTO(AuthResponseDTO.String.PASSWORD_UPDATED);
 
     Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
     AuthCredentialDTO actualAuthCredentialDTO = tokenService.parseToken(tokenDTO);
@@ -391,7 +391,7 @@ public class AuthServiceTest {
     Assertions.assertEquals(authCredentialDTO.getEmail(), authCredentialEntity.getEmail());
 
     AuthResponseDTO actual = service.updatePassword(authChangePasswordInputDTO, tokenDTO);
-    Assertions.assertEquals(expectedResponse.getMessage(), actual.getMessage());
+    Assertions.assertEquals(expectedResponse.getResponse(), actual.getResponse());
   }
 
   @Test

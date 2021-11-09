@@ -122,12 +122,22 @@ public class DatabaseService {
           DatabaseException.Code.ERROR_ON_IMPORT_DATABASE);
       throw new DatabaseException(DatabaseException.Code.ERROR_ON_IMPORT_DATABASE);
     }
-    /*
-     TODO: Database delete and insert data, OBJECT(databaseJSONExportDTO)
-     */
+    deleteAndInsertIntoDatabase(databaseJSONExportDTO);
+
     response.setResponse(DatabaseResponseDTO.String.IMPORTED);
     LOG.info("Database successfully imported, PATH: {}", databaseCommandDTO.getFilePath());
     return response;
+  }
+
+  private void deleteAndInsertIntoDatabase(DatabaseJSONExportDTO databaseJSONExportDTO) throws AuthenticationException {
+    authCredentialDAO.deleteAllUser();
+    statementDAO.deleteAll();
+    walletDAO.deleteAll();
+    for (AuthCredentialEntity user : databaseJSONExportDTO.getAuthCredentialEntities()) {
+        authCredentialDAO.insertUser(user);
+    }
+    walletDAO.saveAllAndFlush(databaseJSONExportDTO.getWalletEntities());
+    statementDAO.saveAllAndFlush(databaseJSONExportDTO.getStatementEntities());
   }
 
   private DatabaseJSONExportDTO placeholderStatement() {

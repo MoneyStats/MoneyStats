@@ -95,7 +95,7 @@ public class TemplateService {
 
   @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public void applyAndSaveJsonBackup(DatabaseJSONExportDTO databaseJSONToExport, String filePath)
-          throws DatabaseException, TemplateException {
+          throws DatabaseException {
     String newFolder = filePath + LocalDate.now() + "/";
     File theDir = new File(newFolder);
     if (!theDir.exists()){

@@ -58,7 +58,7 @@ public class AuthCredentialService {
 
     userCredential.setPassword(bCryptPasswordEncoder.encode(userCredential.getPassword()));
     authCredentialDAO.insertUserCredential(userCredential);
-    return new AuthResponseDTO(ResponseMapping.USER_ADDED_CORRECT);
+    return new AuthResponseDTO(AuthResponseDTO.String.USER_ADDED);
   }
 
   /**
@@ -204,7 +204,7 @@ public class AuthCredentialService {
     }
 
     authCredentialDAO.updateUserById(authCredentialToUpdateDTO);
-    return new AuthResponseDTO(ResponseMapping.USER_UPDATED);
+    return new AuthResponseDTO(AuthResponseDTO.String.USER_UPDATED);
   }
 
   /**
@@ -268,6 +268,6 @@ public class AuthCredentialService {
 
     String newPassword = bCryptPasswordEncoder.encode(authChangePasswordInputDTO.getNewPassword());
     authCredentialDAO.updatePasswordUserById(authChangePasswordInputDTO.getUsername(), newPassword);
-    return new AuthResponseDTO(ResponseMapping.PASSWORD_UPDATED);
+    return new AuthResponseDTO(AuthResponseDTO.String.PASSWORD_UPDATED);
   }
 }

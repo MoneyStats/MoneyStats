@@ -1,10 +1,27 @@
 package com.moneystats.authentication.entity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
 public class AuthCredentialEntity {
+
+  public static final String UPDATE_USERS =
+          "UPDATE users SET first_name = ?, last_name = ?, date_of_birth = ?, email = ? WHERE username = ?";
+
+  public static final String UPDATE_PASSWORD = "UPDATE users SET password = ? WHERE username = ?";
+  public static final String SELECT_FROM_USERS_WHERE_ROLE =
+          "SELECT * FROM users WHERE role = 'USER'";
+  public static final String SELECT_FROM_USERS = "SELECT * FROM users WHERE username = ?";
+  public static final String FIND_ALL = "SELECT * FROM users";
+  public static final String FIND_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
+  public static final String INSERT_INTO_USERS =
+          "INSERT INTO users (first_name, last_name, date_of_birth, email, username, password, role) VALUES (?, ?, ?, ?, ?, ?, 'USER')";
+public static final String DELETE_ALL_USERS = "delete * from users";
+public static final String INSERT_USER_FROM_BACKUP = "insert into users(first_name, last_name, date_of_birth, email, username, password, role) values (?, ?, ?, ?, ?, ?, ?)";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
