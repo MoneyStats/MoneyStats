@@ -124,6 +124,7 @@ public class AuthCredentialService {
    * @return list of user into db
    * @throws AuthenticationException parsing Token
    */
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public List<AuthCredentialDTO> getUsers(TokenDTO token) throws AuthenticationException {
     TokenValidation.validateTokenDTO(token);
     AuthCredentialDTO user = tokenService.parseToken(token);

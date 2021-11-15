@@ -90,7 +90,7 @@ public class DatabaseService {
   @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
   public DatabaseResponseDTO restoreDatabase(
       DatabaseCommandDTO databaseCommandDTO, TokenDTO tokenDTO)
-      throws AuthenticationException, DatabaseException, TemplateException {
+      throws AuthenticationException, DatabaseException {
     DatabaseValidator.validateDatabaseCommandDTO(databaseCommandDTO);
     TokenValidation.validateTokenDTO(tokenDTO);
     DatabaseResponseDTO response = new DatabaseResponseDTO();
@@ -99,6 +99,8 @@ public class DatabaseService {
       throw new DatabaseException(DatabaseException.Code.INVALID_DATABASE_COMMAND_DTO);
     }
     File sqlExportTemplate = new File(databaseCommandDTO.getFilePath());
+
+    // TODO: ScannerUtils
     Scanner scanner;
     try {
       scanner = new Scanner(sqlExportTemplate);

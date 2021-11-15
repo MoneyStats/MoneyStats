@@ -45,7 +45,7 @@ public class AuthServiceTest {
     Assertions.assertEquals(
         TestSchema.USER_CREDENTIAL_INPUT_DTO_ROLE_USER.getUsername(),
         authCredentialDTOArgumentCaptor.getValue().getUsername());
-    Assertions.assertEquals(ResponseMapping.USER_ADDED_CORRECT, response.getResponse());
+    Assertions.assertEquals(AuthResponseDTO.String.USER_ADDED, response.getResponse());
   }
 
   @Test

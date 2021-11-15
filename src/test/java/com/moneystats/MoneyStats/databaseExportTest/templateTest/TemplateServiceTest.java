@@ -1,5 +1,6 @@
 package com.moneystats.MoneyStats.databaseExportTest.templateTest;
 
+import com.moneystats.MoneyStats.databaseImportExport.DatabaseException;
 import com.moneystats.MoneyStats.databaseImportExport.template.DTO.TemplateDTO;
 import com.moneystats.MoneyStats.databaseImportExport.template.TemplateException;
 import com.moneystats.MoneyStats.databaseImportExport.template.TemplatePlaceholders;
