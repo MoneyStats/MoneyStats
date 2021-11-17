@@ -1,8 +1,8 @@
 package com.moneystats.MoneyStats.commStats.category;
 
 import com.moneystats.MoneyStats.commStats.category.entity.CategoryEntity;
-import com.moneystats.timeTracker.LogTimeTracker;
-import com.moneystats.timeTracker.LoggerMethod;
+import com.moneystats.generic.timeTracker.LogTimeTracker;
+import com.moneystats.generic.timeTracker.LoggerMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

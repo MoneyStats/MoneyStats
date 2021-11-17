@@ -74,7 +74,7 @@ public class TestSchema {
           SecurityRoles.MONEYSTATS_ADMIN_ROLE);
 
   public static final AuthResponseDTO AUTH_RESPONSE_DTO =
-      new AuthResponseDTO(ResponseMapping.USER_ADDED_CORRECT);
+      new AuthResponseDTO(AuthResponseDTO.String.USER_ADDED);
 
   public static final AuthCredentialToUpdateDTO AUTH_CREDENTIAL_TO_UPDATE_DTO =
       new AuthCredentialToUpdateDTO(

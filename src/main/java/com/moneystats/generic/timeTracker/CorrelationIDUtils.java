@@ -1,4 +1,4 @@
-package com.moneystats.generic;
+package com.moneystats.generic.timeTracker;
 
 import java.util.UUID;
 

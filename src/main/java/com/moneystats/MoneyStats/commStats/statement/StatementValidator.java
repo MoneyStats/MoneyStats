@@ -13,16 +13,6 @@ import java.util.Set;
 public class StatementValidator {
   private static final Logger LOG = LoggerFactory.getLogger(StatementValidator.class);
 
-  public static void validateStatementDTO(StatementDTO statementDTO) throws StatementException {
-    Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-    Set<ConstraintViolation<StatementDTO>> violations = validator.validate(statementDTO);
-
-    if (violations.size() > 0) {
-      LOG.warn("Invalid Statement {}", statementDTO);
-      throw new StatementException(StatementException.Code.INVALID_STATEMENT_DTO);
-    }
-  }
-
   public static void validateStatementInputDTO(StatementInputDTO statementDTO)
       throws StatementException {
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();

@@ -4,8 +4,8 @@ import com.moneystats.authentication.AuthenticationException.Code;
 import com.moneystats.authentication.DTO.*;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 import com.moneystats.generic.ResponseMapping;
-import com.moneystats.timeTracker.LogTimeTracker;
-import com.moneystats.timeTracker.LoggerMethod;
+import com.moneystats.generic.timeTracker.LogTimeTracker;
+import com.moneystats.generic.timeTracker.LoggerMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class AuthCredentialService {
 
     userCredential.setPassword(bCryptPasswordEncoder.encode(userCredential.getPassword()));
     authCredentialDAO.insertUserCredential(userCredential);
-    return new AuthResponseDTO(ResponseMapping.USER_ADDED_CORRECT);
+    return new AuthResponseDTO(AuthResponseDTO.String.USER_ADDED);
   }
 
   /**
@@ -124,6 +124,7 @@ public class AuthCredentialService {
    * @return list of user into db
    * @throws AuthenticationException parsing Token
    */
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public List<AuthCredentialDTO> getUsers(TokenDTO token) throws AuthenticationException {
     TokenValidation.validateTokenDTO(token);
     AuthCredentialDTO user = tokenService.parseToken(token);
@@ -204,7 +205,7 @@ public class AuthCredentialService {
     }
 
     authCredentialDAO.updateUserById(authCredentialToUpdateDTO);
-    return new AuthResponseDTO(ResponseMapping.USER_UPDATED);
+    return new AuthResponseDTO(AuthResponseDTO.String.USER_UPDATED);
   }
 
   /**
@@ -268,6 +269,6 @@ public class AuthCredentialService {
 
     String newPassword = bCryptPasswordEncoder.encode(authChangePasswordInputDTO.getNewPassword());
     authCredentialDAO.updatePasswordUserById(authChangePasswordInputDTO.getUsername(), newPassword);
-    return new AuthResponseDTO(ResponseMapping.PASSWORD_UPDATED);
+    return new AuthResponseDTO(AuthResponseDTO.String.PASSWORD_UPDATED);
   }
 }

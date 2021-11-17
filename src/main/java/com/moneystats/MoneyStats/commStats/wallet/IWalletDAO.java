@@ -32,4 +32,7 @@ public interface IWalletDAO extends JpaRepository<WalletEntity, Long> {
    * @return
    */
   WalletEntity findWalletsById(Long id);
+
+  @Override
+  void deleteAll();
 }
