@@ -57,5 +57,6 @@ public class LogTimeTracker {
     APP_WEB_SERVICE,
     APP_TOKEN_SERVICE,
     APP_VALIDATOR,
+    APP_REPOSITORY
   }
 }

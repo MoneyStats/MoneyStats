@@ -22,6 +22,8 @@ public class DatabaseException extends Exception {
         INVALID_DATABASE_COMMAND_DTO,
         NOT_ADMIN_USER,
         ERROR_ON_EXPORT_DATABASE,
-        ERROR_ON_IMPORT_DATABASE
+        ERROR_ON_IMPORT_DATABASE,
+        CONNECTION_FAILED,
+        FILE_NOT_FOUND
     }
 }

@@ -21,14 +21,14 @@ import com.moneystats.authentication.TokenValidation;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 import com.moneystats.generic.timeTracker.LogTimeTracker;
 import com.moneystats.generic.timeTracker.LoggerMethod;
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -40,6 +40,7 @@ public class DatabaseService {
   @Autowired IStatementDAO statementDAO;
   @Autowired IWalletDAO walletDAO;
   @Autowired AuthCredentialDAO authCredentialDAO;
+  @Autowired public DatabaseRepository databaseRepository;
 
   private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -130,15 +131,26 @@ public class DatabaseService {
   }
 
   private void deleteAndInsertIntoDatabase(DatabaseJSONExportDTO databaseJSONExportDTO)
-      throws AuthenticationException {
-    authCredentialDAO.deleteAllUser();
+          throws AuthenticationException, DatabaseException {
+    LOG.info("Deleting Database data");
     statementDAO.deleteAll();
     walletDAO.deleteAll();
+    authCredentialDAO.deleteAllUser();
+    LOG.info("Deleting completed");
+    LOG.info("Insert Users");
     for (AuthCredentialEntity user : databaseJSONExportDTO.getAuthCredentialEntities()) {
       authCredentialDAO.insertUser(user);
     }
-    walletDAO.saveAllAndFlush(databaseJSONExportDTO.getWalletEntities());
-    statementDAO.saveAllAndFlush(databaseJSONExportDTO.getStatementEntities());
+    LOG.info("Users insert Successfully");
+    String filePath = TemplatePlaceholders.FILEPATH_RESET_COUNTER;
+    databaseRepository.executingResetCounterScript(filePath);
+
+    LOG.info("Insert Wallets");
+    walletDAO.saveAll(databaseJSONExportDTO.getWalletEntities());
+    LOG.info("Wallets insert successfully");
+    LOG.info("Insert Statements");
+    statementDAO.saveAll(databaseJSONExportDTO.getStatementEntities());
+    LOG.info("Statements insert successfully");
   }
 
   private DatabaseJSONExportDTO placeholderStatement() {

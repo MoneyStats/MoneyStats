@@ -10,6 +10,7 @@ import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseCommand;
 import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseCommandDTO;
 import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseResponseDTO;
 import com.moneystats.MoneyStats.databaseImportExport.DatabaseException;
+import com.moneystats.MoneyStats.databaseImportExport.DatabaseRepository;
 import com.moneystats.MoneyStats.databaseImportExport.DatabaseService;
 import com.moneystats.MoneyStats.databaseImportExport.template.DTO.TemplateDTO;
 import com.moneystats.MoneyStats.databaseImportExport.template.TemplatePlaceholders;
@@ -117,10 +118,16 @@ public class DatabaseServiceTest {
     databaseCommandDTO.setFilePath("src/test/resources/restoreTest/testBackupFile.backup");
 
     Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
-    Mockito.when(authCredentialDAO.deleteAllUser()).thenReturn(new AuthResponseDTO(AuthResponseDTO.String.DELETED));
+    Mockito.when(authCredentialDAO.deleteAllUser())
+        .thenReturn(new AuthResponseDTO(AuthResponseDTO.String.DELETED));
     Mockito.doNothing().when(authCredentialDAO).insertUser(authCredentialEntity);
-    Mockito.when(statementDAO.saveAllAndFlush(statementEntityList)).thenReturn(statementEntityList);
-    Mockito.when(walletDAO.saveAllAndFlush(walletEntities)).thenReturn(walletEntities);
+    Mockito.when(statementDAO.saveAll(statementEntityList)).thenReturn(statementEntityList);
+    Mockito.when(walletDAO.saveAll(walletEntities)).thenReturn(walletEntities);
+
+    databaseService.databaseRepository = Mockito.mock(DatabaseRepository.class);
+    Mockito.doNothing()
+        .when(databaseService.databaseRepository)
+        .executingResetCounterScript(TemplatePlaceholders.FILEPATH_RESET_COUNTER);
 
     DatabaseResponseDTO actual = databaseService.restoreDatabase(databaseCommandDTO, tokenDTO);
     Assertions.assertEquals(expected.getResponse(), actual.getResponse());
@@ -140,18 +147,19 @@ public class DatabaseServiceTest {
     databaseCommandDTO.setFilePath("src/test/resources/restoreTest/testBackupFile.backup");
 
     Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
-    Mockito.when(authCredentialDAO.deleteAllUser()).thenReturn(new AuthResponseDTO(AuthResponseDTO.String.DELETED));
+    Mockito.when(authCredentialDAO.deleteAllUser())
+        .thenReturn(new AuthResponseDTO(AuthResponseDTO.String.DELETED));
     Mockito.doNothing().when(authCredentialDAO).insertUser(authCredentialEntity);
     Mockito.when(statementDAO.saveAllAndFlush(statementEntityList)).thenReturn(statementEntityList);
     Mockito.when(walletDAO.saveAllAndFlush(walletEntities)).thenReturn(walletEntities);
 
     DatabaseException expectedExpeption =
-            new DatabaseException(DatabaseException.Code.INVALID_DATABASE_COMMAND_DTO);
+        new DatabaseException(DatabaseException.Code.INVALID_DATABASE_COMMAND_DTO);
 
     DatabaseException actualException =
-            Assertions.assertThrows(
-                    DatabaseException.class,
-                    () -> databaseService.restoreDatabase(databaseCommandDTO, tokenDTO));
+        Assertions.assertThrows(
+            DatabaseException.class,
+            () -> databaseService.restoreDatabase(databaseCommandDTO, tokenDTO));
 
     Assertions.assertEquals(expectedExpeption.getCode(), actualException.getCode());
   }
@@ -170,18 +178,19 @@ public class DatabaseServiceTest {
     databaseCommandDTO.setFilePath("src/test/resources/restoreTest/testBackup");
 
     Mockito.when(tokenService.parseToken(tokenDTO)).thenReturn(authCredentialDTO);
-    Mockito.when(authCredentialDAO.deleteAllUser()).thenReturn(new AuthResponseDTO(AuthResponseDTO.String.DELETED));
+    Mockito.when(authCredentialDAO.deleteAllUser())
+        .thenReturn(new AuthResponseDTO(AuthResponseDTO.String.DELETED));
     Mockito.doNothing().when(authCredentialDAO).insertUser(authCredentialEntity);
     Mockito.when(statementDAO.saveAllAndFlush(statementEntityList)).thenReturn(statementEntityList);
     Mockito.when(walletDAO.saveAllAndFlush(walletEntities)).thenReturn(walletEntities);
 
     DatabaseException expectedExpeption =
-            new DatabaseException(DatabaseException.Code.ERROR_ON_IMPORT_DATABASE);
+        new DatabaseException(DatabaseException.Code.ERROR_ON_IMPORT_DATABASE);
 
     DatabaseException actualException =
-            Assertions.assertThrows(
-                    DatabaseException.class,
-                    () -> databaseService.restoreDatabase(databaseCommandDTO, tokenDTO));
+        Assertions.assertThrows(
+            DatabaseException.class,
+            () -> databaseService.restoreDatabase(databaseCommandDTO, tokenDTO));
 
     Assertions.assertEquals(expectedExpeption.getCode(), actualException.getCode());
   }

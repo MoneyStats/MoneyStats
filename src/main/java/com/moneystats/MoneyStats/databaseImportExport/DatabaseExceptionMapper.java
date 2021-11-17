@@ -29,6 +29,12 @@ public class DatabaseExceptionMapper {
             case NOT_ADMIN_USER:
                 error.setError(DatabaseException.Code.NOT_ADMIN_USER.toString());
                 return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            case FILE_NOT_FOUND:
+                error.setError(DatabaseException.Code.FILE_NOT_FOUND.toString());
+                return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+            case CONNECTION_FAILED:
+                error.setError(DatabaseException.Code.CONNECTION_FAILED.toString());
+                return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
             default:
                 return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }

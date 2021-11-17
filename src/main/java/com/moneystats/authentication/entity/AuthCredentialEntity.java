@@ -20,8 +20,8 @@ public class AuthCredentialEntity {
   public static final String FIND_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
   public static final String INSERT_INTO_USERS =
           "INSERT INTO users (first_name, last_name, date_of_birth, email, username, password, role) VALUES (?, ?, ?, ?, ?, ?, 'USER')";
-public static final String DELETE_ALL_USERS = "delete * from users";
-public static final String INSERT_USER_FROM_BACKUP = "insert into users(first_name, last_name, date_of_birth, email, username, password, role) values (?, ?, ?, ?, ?, ?, ?)";
+public static final String DELETE_ALL_USERS = "delete from users";
+public static final String INSERT_USER_FROM_BACKUP = "insert into users(id, first_name, last_name, date_of_birth, email, username, password, role) values (?, ?, ?, ?, ?, ?, ?, ?)";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -225,13 +225,14 @@ public class AuthCredentialDAO {
       String sqlCommand =
           AuthCredentialEntity.INSERT_USER_FROM_BACKUP;
       PreparedStatement pstm = connection.prepareStatement(sqlCommand);
-      pstm.setString(1, authCredentialEntity.getFirstName());
-      pstm.setString(2, authCredentialEntity.getLastName());
-      pstm.setString(3, authCredentialEntity.getDateOfBirth());
-      pstm.setString(4, authCredentialEntity.getEmail());
-      pstm.setString(5, authCredentialEntity.getUsername());
-      pstm.setString(6, authCredentialEntity.getPassword());
-      pstm.setString(7, authCredentialEntity.getRole());
+      pstm.setLong(1, authCredentialEntity.getId());
+      pstm.setString(2, authCredentialEntity.getFirstName());
+      pstm.setString(3, authCredentialEntity.getLastName());
+      pstm.setString(4, authCredentialEntity.getDateOfBirth());
+      pstm.setString(5, authCredentialEntity.getEmail());
+      pstm.setString(6, authCredentialEntity.getUsername());
+      pstm.setString(7, authCredentialEntity.getPassword());
+      pstm.setString(8, authCredentialEntity.getRole());
       pstm.execute();
     } catch (SQLException e) {
       LOG.error("Process aborted during insert {}", Code.DATABASE_ERROR);
