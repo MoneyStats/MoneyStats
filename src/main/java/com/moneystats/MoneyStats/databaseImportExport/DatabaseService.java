@@ -100,13 +100,11 @@ public class DatabaseService {
     }
     File sqlExportTemplate = new File(databaseCommandDTO.getFilePath());
 
-    // TODO: ScannerUtils
     Scanner scanner;
     try {
       scanner = new Scanner(sqlExportTemplate);
     } catch (FileNotFoundException e) {
-      LOG.error(
-          "Backup File not found {},", DatabaseException.Code.ERROR_ON_IMPORT_DATABASE);
+      LOG.error("Backup File not found {},", DatabaseException.Code.ERROR_ON_IMPORT_DATABASE);
       throw new DatabaseException(DatabaseException.Code.ERROR_ON_IMPORT_DATABASE);
     }
     StringBuilder databaseJsonString = new StringBuilder();
@@ -116,7 +114,7 @@ public class DatabaseService {
     scanner.close();
     DatabaseJSONExportDTO databaseJSONExportDTO;
     try {
-       databaseJSONExportDTO =
+      databaseJSONExportDTO =
           objectMapper.readValue(databaseJsonString.toString(), DatabaseJSONExportDTO.class);
     } catch (JsonProcessingException e) {
       LOG.error(
@@ -131,12 +129,13 @@ public class DatabaseService {
     return response;
   }
 
-  private void deleteAndInsertIntoDatabase(DatabaseJSONExportDTO databaseJSONExportDTO) throws AuthenticationException {
+  private void deleteAndInsertIntoDatabase(DatabaseJSONExportDTO databaseJSONExportDTO)
+      throws AuthenticationException {
     authCredentialDAO.deleteAllUser();
     statementDAO.deleteAll();
     walletDAO.deleteAll();
     for (AuthCredentialEntity user : databaseJSONExportDTO.getAuthCredentialEntities()) {
-        authCredentialDAO.insertUser(user);
+      authCredentialDAO.insertUser(user);
     }
     walletDAO.saveAllAndFlush(databaseJSONExportDTO.getWalletEntities());
     statementDAO.saveAllAndFlush(databaseJSONExportDTO.getStatementEntities());

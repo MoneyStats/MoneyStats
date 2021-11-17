@@ -1,6 +1,5 @@
 package com.moneystats.MoneyStats.databaseImportExport.template;
 
-import com.moneystats.MoneyStats.commStats.statement.StatementException;
 
 public class TemplateException extends Exception{
     private Code code;
