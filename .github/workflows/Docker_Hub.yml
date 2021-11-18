@@ -28,7 +28,7 @@ jobs:
           images: giovannilamarmora/moneystats
 
       - name: Build Docker image
-        run: docker build . --file Dockerfile --tag moneystats:$(date +%s)
+        run: docker build -t MoneyStats-2.0.0.jar .
 
       - name: Push Docker image
         run: docker push giovannilamarmora/moneystats
