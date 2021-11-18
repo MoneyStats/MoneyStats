@@ -1,3 +1,3 @@
 FROM openjdk:11
-ADD /target/MoneyStats-2.0.0.jar MoneyStats-2.0.0.jar
-CMD ["java","-jar","MoneyStats-2.0.0.jar"]
+ADD /target/moneystats-2.0.0.jar moneystats-2.0.0.jar
+CMD ["java","-jar","moneystats-2.0.0.jar"]

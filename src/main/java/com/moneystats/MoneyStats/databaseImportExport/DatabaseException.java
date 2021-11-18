@@ -1,7 +1,5 @@
 package com.moneystats.MoneyStats.databaseImportExport;
 
-import com.moneystats.MoneyStats.commStats.statement.StatementException;
-
 public class DatabaseException extends Exception {
 
     private Code code;
@@ -25,6 +23,6 @@ public class DatabaseException extends Exception {
         ERROR_ON_IMPORT_DATABASE,
         CONNECTION_FAILED,
         FILE_NOT_FOUND,
-        NOT_A_DIRECTORY
-    }
+    NOT_A_DIRECTORY
+  }
 }
