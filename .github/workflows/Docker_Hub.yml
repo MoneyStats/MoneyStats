@@ -44,4 +44,4 @@ jobs:
         run: docker build -t moneystats-2.0.0.jar .
 
       - name: Push Docker image
-        run: docker push giovannilamarmora/moneystats
+        run: docker push moneystats-2.0.0.jar:latest
