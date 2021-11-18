@@ -32,9 +32,6 @@ jobs:
         with:
           java-version: '11'
 
-      - name: Build Docker image
-        run: docker build -t moneystats-2.0.0.jar .
-
       - name: Build package
         run: mvn clean package
       - name: Upload build artifacts
@@ -42,6 +39,9 @@ jobs:
         with:
           name: moneystats-2.0.0.jar
           path: target/moneystats-2.0.0.jar
+
+      - name: Build Docker image
+        run: docker build -t moneystats-2.0.0.jar .
 
       - name: Push Docker image
         run: docker push giovannilamarmora/moneystats
