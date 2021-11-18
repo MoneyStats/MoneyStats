@@ -35,6 +35,9 @@ public class DatabaseExceptionMapper {
             case CONNECTION_FAILED:
                 error.setError(DatabaseException.Code.CONNECTION_FAILED.toString());
                 return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+            case NOT_A_DIRECTORY:
+                error.setError(DatabaseException.Code.NOT_A_DIRECTORY.toString());
+                return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
             default:
                 return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }

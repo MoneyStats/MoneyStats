@@ -24,6 +24,7 @@ public class DatabaseException extends Exception {
         ERROR_ON_EXPORT_DATABASE,
         ERROR_ON_IMPORT_DATABASE,
         CONNECTION_FAILED,
-        FILE_NOT_FOUND
+        FILE_NOT_FOUND,
+        NOT_A_DIRECTORY
     }
 }

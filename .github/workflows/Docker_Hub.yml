@@ -1,0 +1,24 @@
+name: Moneystats Web Application
+on: push
+jobs:
+  build-container:
+    name: Moneystats
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Publish Github Package
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: $${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}
+          tags: latest, ${{ github.run_number }}
+      - name: Publish to Docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          username: $${{ secrets.GITHUB_USERNAME }}
+          password: $${{ secrets.GITHUB_PASSWORD }}
+          repository: ${{ giovannilamarmora/moneystats }}
+          tags: latest, ${{ github.run_number }}
