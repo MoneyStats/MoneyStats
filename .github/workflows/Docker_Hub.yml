@@ -45,7 +45,7 @@ jobs:
 
       - name: Push Docker image
         #run: docker push moneystats-2.0.0.jar:latest
-        uses: docker/push-action@v1
+        uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
