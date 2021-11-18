@@ -33,7 +33,7 @@ jobs:
           java-version: '11'
 
       - name: Build package
-        run: mvn clean package
+        run: mvn clean package -DskipTests
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
         with:
