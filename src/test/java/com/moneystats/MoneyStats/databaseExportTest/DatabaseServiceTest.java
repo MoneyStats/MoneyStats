@@ -10,7 +10,6 @@ import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseCommand;
 import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseCommandDTO;
 import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseResponseDTO;
 import com.moneystats.MoneyStats.databaseImportExport.DatabaseException;
-import com.moneystats.MoneyStats.databaseImportExport.DatabaseRepository;
 import com.moneystats.MoneyStats.databaseImportExport.DatabaseService;
 import com.moneystats.MoneyStats.databaseImportExport.template.DTO.TemplateDTO;
 import com.moneystats.MoneyStats.databaseImportExport.template.TemplatePlaceholders;

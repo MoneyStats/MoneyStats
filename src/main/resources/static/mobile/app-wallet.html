@@ -14,6 +14,7 @@
     <!-- ========= CSS Files ========= -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/plugin/icon.css">
+    <link rel="stylesheet" href="assets/css/changelog.css">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
@@ -27,6 +28,7 @@
     <script src="./assets/js/wallet.js"></script>
     <!-- JS Category -->
     <script src="./assets/js/category.js"></script>
+    <script src="./assets/js/changelog.js"></script>
 
     <!-- ========= SEZIONE COLORI SEARCH BAR ========= -->
     <!-- Chrome, Firefox OS and Opera -->
@@ -97,7 +99,7 @@
             <strong>Pages</strong>
         </div>
     </a>
-    <a href="#" class="item">
+    <a href="#" class="item" data-bs-toggle="modal" data-bs-target="#infoActionSheet">
         <div class="col">
             <div class="action-button large">
                 <ion-icon name="arrow-up-outline"></ion-icon>
@@ -231,6 +233,7 @@
     </div>
 </div>
 <!-- * Edit Action Sheet -->
+<div id="renderChangelog"></div>
 
 
 <!-- ========= JS Files =========  -->

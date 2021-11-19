@@ -11,12 +11,14 @@
 
     <!-- ========= CSS Files ========= -->
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/changelog.css">
 
     <!-- ========= JS Files =========  -->
     <!-- JQuery -->
     <script src="./assets/js/lib/jquery-3.6.0.min.js"></script>
     <!-- JS Settigns -->
     <script src="./assets/js/settings.js"></script>
+    <script src="./assets/js/changelog.js"></script>
     <!-- SweetAlert -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -168,6 +170,7 @@
             </div>
         </li> -->
     </ul>
+    <div id="renderDatabase"></div>
 
     <div class="listview-title mt-1">Security</div>
     <ul class="listview image-listview text mb-2 inset">
@@ -333,7 +336,8 @@
                             <div class="form-group basic animated">
                                 <div class="input-group input-wrapper">
                                     <label class="label" for="oldPassword">Old Password</label>
-                                    <input type="password" class="form-control" id="oldPassword" placeholder="Old Password">
+                                    <input type="password" class="form-control" id="oldPassword"
+                                           placeholder="Old Password">
                                     <i class="clear-input">
                                         <ion-icon name="close-circle"></ion-icon>
                                     </i>
@@ -350,7 +354,8 @@
                             <div class="form-group basic animated">
                                 <div class="input-group input-wrapper">
                                     <label class="label" for="newPassword">New Password</label>
-                                    <input type="password" class="form-control" id="newPassword" placeholder="New Password">
+                                    <input type="password" class="form-control" id="newPassword"
+                                           placeholder="New Password">
                                     <i class="clear-input">
                                         <ion-icon name="close-circle"></ion-icon>
                                     </i>
@@ -433,6 +438,56 @@
     </div>
 </div>
 <!-- * Update User Action Sheet -->
+
+<!-- Backup Database Action Sheet -->
+<div class="modal fade action-sheet" id="backupDatabaseModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="action-sheet-content">
+                    <div class="iconbox">
+                        <img src="assets/img/logos/favicon_trasparent.png" alt="image" class="imaged w64 rounded">
+                    </div>
+                    <div class="text-center p-2">
+                        <h3>Backup Database</h3>
+                        <p>Press Backup To proceed.</p>
+                    </div>
+                    <a href="#" id="backup-database-btn" class="btn btn-primary btn-lg btn-block"
+                       data-bs-dismiss="modal">Backup</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * Backup Database Action Sheet -->
+<!-- Restore Database Action Sheet -->
+<div class="modal fade action-sheet" id="restoreDatabaseModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="action-sheet-content">
+                    <div class="iconbox">
+                        <img src="assets/img/logos/favicon_trasparent.png" alt="image" class="imaged w64 rounded">
+                    </div>
+                    <div class="text-center p-2">
+                        <h3>Restore Database</h3>
+                    </div>
+                    <div class="section mt-2">
+                        <div class="section-title">Checkbox List Inset</div>
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="input-list" id="listFolder"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" id="restore-btn" class="btn btn-primary btn-lg btn-block" data-bs-dismiss="modal">Restore</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- * Restore Database Action Sheet -->
+<div id="renderChangelog"></div>
 
 <!-- toast danger -->
 <div id="soon" class="toast-box toast-bottom bg-danger">

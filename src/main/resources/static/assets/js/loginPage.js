@@ -29,9 +29,9 @@ $(document).ready(function () {
                     showConfirmButton: false,
                     timer: 1000
                 })
-                    setTimeout(function () {
-                        window.location.href = 'loginpage.html';
-                    }, 1000)
+                setTimeout(function () {
+                    window.location.href = 'loginpage.html';
+                }, 1000)
             },
             error: function (authErrorResponseDTO) {
                 var responseDTO = authErrorResponseDTO.responseJSON.message;
@@ -167,7 +167,7 @@ $(document).ready(function () {
                     showConfirmButton: false,
                     timer: 1500
                 })
-                    sessionStorage.setItem('accessToken', accessToken);
+                sessionStorage.setItem('accessToken', accessToken);
 
                 setTimeout(function () {
                     window.location.href = 'homepage.html';
