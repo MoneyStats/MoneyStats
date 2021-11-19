@@ -6,8 +6,6 @@ name: Deploy on DockerHub Java CI with Maven
 on:
   push:
     branches: [ deploy_docker_hub ]
-  pull_request:
-    branches: [ deploy_docker_hub ]
 
 jobs:
   build:
