@@ -9,11 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.moneystats</groupId>
-	<artifactId>MoneyStats</artifactId>
+	<artifactId>moneystats</artifactId>
 	<version>2.0.0</version>
-	<!--<packaging>jar</packaging>-->
-	<packaging>war</packaging>
-	<name>MoneyStats</name>
+	<packaging>jar</packaging>
+	<!--<packaging>war</packaging>-->
 	<description>MoneyStats Web Application</description>
 	<properties>
 		<java.version>11</java.version>
@@ -153,6 +152,7 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<finalName>moneystats</finalName>
 	</build>
 
 </project>

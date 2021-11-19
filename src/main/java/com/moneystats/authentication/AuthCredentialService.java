@@ -177,7 +177,7 @@ public class AuthCredentialService {
         authCredentialEntity.getDateOfBirth(),
         authCredentialEntity.getEmail(),
         authCredentialEntity.getUsername(),
-        null);
+        authCredentialEntity.getRole());
   }
 
   /**

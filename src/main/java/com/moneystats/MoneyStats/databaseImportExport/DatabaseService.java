@@ -21,14 +21,14 @@ import com.moneystats.authentication.TokenValidation;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
 import com.moneystats.generic.timeTracker.LogTimeTracker;
 import com.moneystats.generic.timeTracker.LoggerMethod;
-import org.apache.ibatis.jdbc.ScriptRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -99,7 +99,13 @@ public class DatabaseService {
       LOG.error("Wrong database command, Command: {}", databaseCommandDTO.getDatabase());
       throw new DatabaseException(DatabaseException.Code.INVALID_DATABASE_COMMAND_DTO);
     }
-    File sqlExportTemplate = new File(databaseCommandDTO.getFilePath());
+    String folderFilePath =
+        TemplatePlaceholders.FILEPATH_BACKUP
+            + databaseCommandDTO.getFilePath()
+            + "/json_dump_backup_"
+            + databaseCommandDTO.getFilePath()
+            + ".backup";
+    File sqlExportTemplate = new File(folderFilePath);
 
     Scanner scanner;
     try {
@@ -130,8 +136,29 @@ public class DatabaseService {
     return response;
   }
 
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
+  public List<String> getFolderDatabase() throws DatabaseException {
+    File folder = new File(TemplatePlaceholders.FILEPATH_BACKUP);
+    File[] listFolder = folder.listFiles();
+    if (listFolder == null) {
+      LOG.error("List Folder is Null");
+      throw new DatabaseException(DatabaseException.Code.FILE_NOT_FOUND);
+    }
+    List<String> folderList = new ArrayList<>();
+    LOG.info("Adding directory to get");
+    for (int i = listFolder.length - 1; i >= 0; i--) {
+      if (listFolder[i].isFile()) {
+        LOG.error("File is not a Directory {}", listFolder[i].getName());
+        throw new DatabaseException(DatabaseException.Code.NOT_A_DIRECTORY);
+      }
+      folderList.add(listFolder[i].getName());
+      LOG.info("Added to list {}", listFolder[i].getName());
+    }
+    return folderList;
+  }
+
   private void deleteAndInsertIntoDatabase(DatabaseJSONExportDTO databaseJSONExportDTO)
-          throws AuthenticationException, DatabaseException {
+      throws AuthenticationException, DatabaseException {
     LOG.info("Deleting Database data");
     statementDAO.deleteAll();
     walletDAO.deleteAll();

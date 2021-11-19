@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
-import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/database")
@@ -32,7 +32,7 @@ public class DatabaseController {
   public DatabaseResponseDTO exportDatabase(
       @RequestHeader(value = "Authorization") String jwt,
       @RequestBody DatabaseCommandDTO databaseCommandDTO)
-          throws AuthenticationException, DatabaseException, TemplateException {
+      throws AuthenticationException, DatabaseException, TemplateException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return databaseService.backupDatabase(databaseCommandDTO, tokenDTO);
   }
@@ -40,14 +40,24 @@ public class DatabaseController {
   @PostMapping("/importDatabase")
   @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE})
   @Operation(
-          summary = SchemaDescription.POST_EXPORT_DATABASE_SUMMARY,
-          description = SchemaDescription.POST_EXPORT_DATABASE_DESCRIPTION,
-          tags = "Database")
+      summary = SchemaDescription.POST_IMPORT_DATABASE_SUMMARY,
+      description = SchemaDescription.POST_IMPORT_DATABASE_DESCRIPTION,
+      tags = "Database")
   public DatabaseResponseDTO importDatabase(
-          @RequestHeader(value = "Authorization") String jwt,
-          @RequestBody DatabaseCommandDTO databaseCommandDTO)
-          throws AuthenticationException, DatabaseException, TemplateException {
+      @RequestHeader(value = "Authorization") String jwt,
+      @RequestBody DatabaseCommandDTO databaseCommandDTO)
+      throws AuthenticationException, DatabaseException {
     TokenDTO tokenDTO = new TokenDTO(jwt);
     return databaseService.restoreDatabase(databaseCommandDTO, tokenDTO);
+  }
+
+  @GetMapping("/getBackupFolder")
+  @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE})
+  @Operation(
+      summary = SchemaDescription.GET_FOLDER_DATABASE_SUMMARY,
+      description = SchemaDescription.GET_FOLDER_DATABASE_DESCRIPTION,
+      tags = "Database")
+  public List<String> getBackupFolder() throws DatabaseException {
+    return databaseService.getFolderDatabase();
   }
 }
