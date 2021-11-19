@@ -1,6 +1,7 @@
 $(document).ready(function () {
 
     const LOGIN_REQUIRED = "LOGIN_REQUIRED";
+    const ADMIN_ROLE = "ADMIN";
 
     //-------------------------------------------------------------
     // Check if session is validated with a user
@@ -30,10 +31,13 @@ $(document).ready(function () {
                 $('#emailsSettings').val(`${authCredentialDTO.email}`);
                 $('#dateOfBirthSettings').val(`${authCredentialDTO.dateOfBirth}`);
                 localStorage.setItem('username', authCredentialDTO.username);
+                // GET Role for render pages
+                localStorage.setItem('user-role', authCredentialDTO.role);
+                if (authCredentialDTO.role === ADMIN_ROLE) {
+                    renderDatabase();
+                }
             },
-            error: function (authErrorResponseDTO) {
-                var responseDTO = authErrorResponseDTO.responseJSON.error;
-                if (responseDTO === LOGIN_REQUIRED) {
+            error: function () {
                     const Toast = Swal.mixin({
                         toast: true,
                         position: 'top-end',
@@ -49,8 +53,30 @@ $(document).ready(function () {
                         window.location.href = "app-login.html";
                     }, 1500);
                 }
-            }
         })
+    }
+
+    //-------------------------------------------------------------
+    // Render Database
+    //-------------------------------------------------------------
+    function renderDatabase() {
+        const render = $('#renderDatabase');
+        $(`<div class="listview-title mt-1">Admin Function</div>
+        <ul class="listview image-listview text mb-2 inset">
+        <li>
+        <a href="#" class="item" data-bs-toggle="modal" data-bs-target="#backupDatabaseModal">
+            <div class="in">
+                <div>Backup Database</div>
+            </div>
+        </a>
+    </li>
+    <li>
+        <a href="#" class="item" data-bs-toggle="modal" data-bs-target="#restoreDatabaseModal">
+            <div class="in">
+                <div>Restore Database</div>
+            </div>
+        </a>
+    </li></ul>`).appendTo(render);
     }
 
     //------------------------------------------------------------------------------------
@@ -233,4 +259,146 @@ $(document).ready(function () {
     /*--------------------------------------------------------------------------
      *  Switch Desktop Mode
      *--------------------------------------------------------------------------*/
+
+    //------------------------------------------------------------------------------------
+    // On click of Backup Database
+    //------------------------------------------------------------------------------------
+    const BACKUP_DATABASE = "EXPORT_DUMP_COMMAND";
+    var USER_ROLE = localStorage.getItem('user-role');
+    $('#backup-database-btn').click(function () {
+        const databaseCommandDTO = {
+            //filePath: $('#filepath').val(),
+            database: BACKUP_DATABASE,
+            role: USER_ROLE
+        }
+        Swal.fire({
+            icon: 'question',
+            title: "<span style='color:#2D2C2C'>Do you want to Backup the Database?</span>",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: `Save`,
+            denyButtonText: `Don't Save`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                backupDatabase(databaseCommandDTO);
+            } else if (result.isDenied) {
+                Swal.fire("Operation Aborted!", '', 'info')
+            }
+        })
+    })
+
+    function backupDatabase(databaseCommandDTO) {
+        $.ajax({
+            type: "POST",
+            url: `/database/exportDatabase`,
+            data: JSON.stringify(databaseCommandDTO),
+            contentType: 'application/json',
+            dataType: 'json',
+            headers: {
+                Authorization: sessionStorage.getItem('accessToken')
+            },
+            success: function () {
+                Swal.fire({
+                    title: "<span style='color:#2D2C2C'>Backup Completed!</span>",
+                    icon: 'success',
+                    showConfirmButton: false
+                })
+                setTimeout(function () {
+                    window.location.href = 'app-settings.html';
+                }, 1000);
+            },
+            error: function (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: "<span style='color:#2D2C2C'>Error</span>",
+                    text: 'Backup aborted, try again.'
+                })
+            }
+        });
+    }
+
+    //-------------------------------------------------------------
+    // END On click of Backup Database
+    //-------------------------------------------------------------ù
+
+    //------------------------------------------------------------------------------------
+    // On click of Restore Database
+    //------------------------------------------------------------------------------------
+    const RESTORE_DATABASE = "IMPORT_DUMP_COMMAND";
+    
+    getFolderData();
+    function getFolderData() {
+        $.ajax({
+            type: "GET",
+            url: `/database/getBackupFolder`,
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (folder) {
+                const render = $('#listFolder');
+                for (let i = 0; i < folder.length; i++) {
+                    $(`<div class="form-check">
+                    <input type="checkbox" class="form-check-input folderSelect" id="customCheckd${i}" value="${folder[i]}">
+                    <label class="form-check-label" for="customCheckd${i}">Backup_${folder[i]}</label>
+                </div>`).appendTo(render);
+                }
+            }
+        });
+    }
+
+    $('#restore-btn').click(function () {
+        console.log($('.folderSelect').val())
+        const databaseCommandDTO = {
+            filePath: $('.folderSelect').val(),
+            database: RESTORE_DATABASE,
+            role: USER_ROLE
+        }
+        Swal.fire({
+            icon: 'question',
+            title: "<span style='color:#2D2C2C'>Do you want to Restore the Current Database?</span>",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: `Save`,
+            denyButtonText: `Don't Save`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                importDatabase(databaseCommandDTO);
+            } else if (result.isDenied) {
+                Swal.fire("<span style='color:#2D2C2C'>Operation Aborted!</span>", '', 'info')
+            }
+        })
+    })
+
+    function importDatabase(databaseCommandDTO) {
+        $.ajax({
+            type: "POST",
+            url: `/database/importDatabase`,
+            data: JSON.stringify(databaseCommandDTO),
+            contentType: 'application/json',
+            dataType: 'json',
+            headers: {
+                Authorization: sessionStorage.getItem('accessToken')
+            },
+            success: function () {
+                Swal.fire({
+                    title: "<span style='color:#2D2C2C'>Restore Completed!</span>",
+                    icon: 'success',
+                    showConfirmButton: false
+                })
+                setTimeout(function () {
+                    window.location.href = 'settings.html';
+                }, 1000);
+            },
+            error: function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: "<span style='color:#2D2C2C'>Error</span>",
+                    text: 'Restore aborted, try again.'
+                })
+            }
+        });
+    }
+
+    //-------------------------------------------------------------
+    // END On click of Restore Database
+    //-------------------------------------------------------------
 });

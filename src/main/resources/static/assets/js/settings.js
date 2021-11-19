@@ -1,7 +1,5 @@
 $(document).ready(function () {
 
-    const LOGIN_REQUIRED = "LOGIN_REQUIRED";
-    const UNAUTHORIZED = "UNAUTHORIZED";
     const ADMIN_ROLE = "ADMIN";
 
     //-------------------------------------------------------------
@@ -33,25 +31,25 @@ $(document).ready(function () {
                 $('#dateOfBirthSettings').val(`${authCredentialDTO.dateOfBirth}`);
                 localStorage.setItem('username', authCredentialDTO.username);
                 localStorage.setItem('user-role', authCredentialDTO.role);
-                if (authCredentialDTO.role === ADMIN_ROLE){
+                if (authCredentialDTO.role === ADMIN_ROLE) {
                     renderDatabase();
                 }
             },
             error: function (errorResponse) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 1500,
-                        timerProgressBar: true,
-                    })
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Expired Session, reidirect...'
-                    })
-                    setTimeout(function () {
-                        window.location.href = "loginpage.html";
-                    }, 1500);
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true,
+                })
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Expired Session, reidirect...'
+                })
+                setTimeout(function () {
+                    window.location.href = "loginpage.html";
+                }, 1500);
             }
         })
     }
@@ -217,6 +215,7 @@ $(document).ready(function () {
                         Database
                     </a>`).appendTo(render);
     }
+
     //-------------------------------------------------------------
     // Reset Tabs
     //-------------------------------------------------------------
@@ -239,20 +238,20 @@ $(document).ready(function () {
             database: BACKUP_DATABASE,
             role: USER_ROLE
         }
-            Swal.fire({
-                icon: 'question',
-                title: 'Do you want to Backup the Database?',
-                showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: `Save`,
-                denyButtonText: `Don't Save`,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    backupDatabase(databaseCommandDTO);
-                } else if (result.isDenied) {
-                    Swal.fire("Operation Aborted!", '', 'info')
-                }
-            })
+        Swal.fire({
+            icon: 'question',
+            title: 'Do you want to Backup the Database?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: `Save`,
+            denyButtonText: `Don't Save`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                backupDatabase(databaseCommandDTO);
+            } else if (result.isDenied) {
+                Swal.fire("Operation Aborted!", '', 'info')
+            }
+        })
     })
 
     function backupDatabase(databaseCommandDTO) {
@@ -284,6 +283,7 @@ $(document).ready(function () {
             }
         });
     }
+
     //-------------------------------------------------------------
     // END On click of Backup Database
     //-------------------------------------------------------------ù
@@ -305,7 +305,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (folder) {
                 const render = $('#listFolder');
-                for (let i = 0; i < folder.length; i ++){
+                for (let i = 0; i < folder.length; i++) {
                     $(`<tr>
                     <td class='space folderSelect' style='margin-left: 0px;'><div class="form-check">
                     <input id="folderSelect" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="${folder[i]}">
@@ -324,20 +324,20 @@ $(document).ready(function () {
             database: RESTORE_DATABASE,
             role: USER_ROLE
         }
-            Swal.fire({
-                icon: 'question',
-                title: 'Do you want to Restore the Current Database?',
-                showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: `Save`,
-                denyButtonText: `Don't Save`,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    importDatabase(databaseCommandDTO);
-                } else if (result.isDenied) {
-                    Swal.fire("Operation Aborted!", '', 'info')
-                }
-            })
+        Swal.fire({
+            icon: 'question',
+            title: 'Do you want to Restore the Current Database?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: `Save`,
+            denyButtonText: `Don't Save`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                importDatabase(databaseCommandDTO);
+            } else if (result.isDenied) {
+                Swal.fire("Operation Aborted!", '', 'info')
+            }
+        })
     })
 
     function importDatabase(databaseCommandDTO) {
@@ -369,6 +369,7 @@ $(document).ready(function () {
             }
         });
     }
+
     //-------------------------------------------------------------
     // END On click of Restore Database
     //-------------------------------------------------------------
