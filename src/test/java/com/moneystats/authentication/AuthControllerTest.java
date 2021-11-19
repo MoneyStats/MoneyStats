@@ -235,7 +235,7 @@ public class AuthControllerTest {
         TestSchema.AUTH_CREDENTIAL_TO_UPDATE_DTO;
     String authCredentialToUpdateDTOAsString =
         objectMapper.writeValueAsString(authCredentialToUpdateDTOExpected);
-    AuthResponseDTO authResponseDTOExpected = new AuthResponseDTO(ResponseMapping.USER_UPDATED);
+    AuthResponseDTO authResponseDTOExpected = new AuthResponseDTO(AuthResponseDTO.String.USER_UPDATED);
 
     Mockito.when(credential.updateUser(authCredentialToUpdateDTOExpected, tokenDTO))
         .thenReturn(authResponseDTOExpected);
@@ -364,7 +364,7 @@ public class AuthControllerTest {
   @Test
   void updatePassword_shouldUpdatePasswordCorrectly() throws Exception {
     TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
-    AuthResponseDTO response = new AuthResponseDTO(ResponseMapping.PASSWORD_UPDATED);
+    AuthResponseDTO response = new AuthResponseDTO(AuthResponseDTO.String.PASSWORD_UPDATED);
     AuthChangePasswordInputDTO authChangePasswordInputDTO =
         TestSchema.AUTH_CHANGE_PASSWORD_INPUT_DTO;
     String authChangePasswordInputDTOAsString =

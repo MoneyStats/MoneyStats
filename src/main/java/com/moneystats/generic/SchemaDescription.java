@@ -55,4 +55,12 @@ public class SchemaDescription {
     public static final String GET_LOGINPAGE_DESCRIPTION = "return the HTML page";
     public static final String GET_LOGOUT_SUMMARY = "logout";
     public static final String GET_LOGOUT_DESCRIPTION = "get logout from server";
+
+    // Database
+    public static final String POST_EXPORT_DATABASE_SUMMARY = "Export DB";
+    public static final String POST_EXPORT_DATABASE_DESCRIPTION = "Method that let the ADMIN to export the full db";
+    public static final String POST_IMPORT_DATABASE_SUMMARY = "Import DB";
+    public static final String POST_IMPORT_DATABASE_DESCRIPTION = "Method that let the ADMIN to import the full db";
+    public static final String GET_FOLDER_DATABASE_SUMMARY = "Folder DB";
+    public static final String GET_FOLDER_DATABASE_DESCRIPTION = "Method that let the ADMIN to get the folder of the full db";
 }

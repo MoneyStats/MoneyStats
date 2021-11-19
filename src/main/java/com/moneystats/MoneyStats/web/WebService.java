@@ -2,8 +2,8 @@ package com.moneystats.MoneyStats.web;
 
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.TokenDTO;
-import com.moneystats.timeTracker.LogTimeTracker;
-import com.moneystats.timeTracker.LoggerMethod;
+import com.moneystats.generic.timeTracker.LogTimeTracker;
+import com.moneystats.generic.timeTracker.LoggerMethod;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

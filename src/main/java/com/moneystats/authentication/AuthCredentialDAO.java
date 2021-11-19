@@ -4,9 +4,10 @@ import com.moneystats.authentication.AuthenticationException.Code;
 import com.moneystats.authentication.DTO.AuthCredentialDTO;
 import com.moneystats.authentication.DTO.AuthCredentialInputDTO;
 import com.moneystats.authentication.DTO.AuthCredentialToUpdateDTO;
+import com.moneystats.authentication.DTO.AuthResponseDTO;
 import com.moneystats.authentication.entity.AuthCredentialEntity;
-import com.moneystats.timeTracker.LogTimeTracker;
-import com.moneystats.timeTracker.LoggerMethod;
+import com.moneystats.generic.timeTracker.LogTimeTracker;
+import com.moneystats.generic.timeTracker.LoggerMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,18 +20,7 @@ import java.util.List;
 @Repository
 public class AuthCredentialDAO {
 
-  private static final String UPDATE_USERS =
-      "UPDATE users SET first_name = ?, last_name = ?, date_of_birth = ?, email = ? WHERE username = ?";
-
   private final Logger LOG = LoggerFactory.getLogger(this.getClass());
-
-  private static final String UPDATE_PASSWORD = "UPDATE users SET password = ? WHERE username = ?";
-  private static final String SELECT_FROM_USERS_WHERE_ROLE =
-      "SELECT * FROM users WHERE role = 'USER'";
-  private static final String SELECT_FROM_USERS = "SELECT * FROM users WHERE username = ?";
-  private static final String FIND_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
-  private static final String INSERT_INTO_USERS =
-      "INSERT INTO users (first_name, last_name, date_of_birth, email, username, password, role) VALUES (?, ?, ?, ?, ?, ?, 'USER')";
 
   private String dbAddress;
   private String username;
@@ -50,7 +40,7 @@ public class AuthCredentialDAO {
   public void insertUserCredential(AuthCredentialDTO user) throws AuthenticationException {
     try {
       Connection connection = DriverManager.getConnection(dbAddress, username, password);
-      String sqlCommand = INSERT_INTO_USERS;
+      String sqlCommand = AuthCredentialEntity.INSERT_INTO_USERS;
       PreparedStatement pstm = connection.prepareStatement(sqlCommand);
       pstm.setString(1, user.getFirstName());
       pstm.setString(2, user.getLastName());
@@ -71,7 +61,7 @@ public class AuthCredentialDAO {
     AuthCredentialEntity userCredential = null;
     try {
       Connection connection = DriverManager.getConnection(dbAddress, username, password);
-      String sqlCommand = SELECT_FROM_USERS;
+      String sqlCommand = AuthCredentialEntity.SELECT_FROM_USERS;
       PreparedStatement pstm = connection.prepareStatement(sqlCommand);
       pstm.setString(1, user.getUsername());
       ResultSet rs = pstm.executeQuery();
@@ -99,7 +89,7 @@ public class AuthCredentialDAO {
     AuthCredentialEntity userCredential = null;
     try {
       Connection connection = DriverManager.getConnection(dbAddress, username, password);
-      String sqlCommand = FIND_BY_EMAIL;
+      String sqlCommand = AuthCredentialEntity.FIND_BY_EMAIL;
       PreparedStatement pstm = connection.prepareStatement(sqlCommand);
       pstm.setString(1, email);
       ResultSet rs = pstm.executeQuery();
@@ -127,7 +117,7 @@ public class AuthCredentialDAO {
     List<AuthCredentialEntity> listUser = new ArrayList<AuthCredentialEntity>();
     try {
       Connection connection = DriverManager.getConnection(dbAddress, username, password);
-      String sqlCommand = SELECT_FROM_USERS_WHERE_ROLE;
+      String sqlCommand = AuthCredentialEntity.SELECT_FROM_USERS_WHERE_ROLE;
       PreparedStatement pstm = connection.prepareStatement(sqlCommand);
       ResultSet rs = pstm.executeQuery();
 
@@ -155,7 +145,7 @@ public class AuthCredentialDAO {
       throws AuthenticationException {
     try {
       Connection connection = DriverManager.getConnection(dbAddress, username, password);
-      String sqlCommand = UPDATE_USERS;
+      String sqlCommand = AuthCredentialEntity.UPDATE_USERS;
       PreparedStatement pstm = connection.prepareStatement(sqlCommand);
       pstm.setString(1, authCredentialToUpdateDTO.getFirstName());
       pstm.setString(2, authCredentialToUpdateDTO.getLastName());
@@ -164,7 +154,7 @@ public class AuthCredentialDAO {
       pstm.setString(5, authCredentialToUpdateDTO.getUsername());
       pstm.execute();
     } catch (SQLException e) {
-      LOG.error("Process aborted during update {}", e);
+      LOG.error("Process aborted during update {}", Code.DATABASE_ERROR);
       throw new AuthenticationException(Code.DATABASE_ERROR);
     }
   }
@@ -174,13 +164,78 @@ public class AuthCredentialDAO {
       throws AuthenticationException {
     try {
       Connection connection = DriverManager.getConnection(dbAddress, username, password);
-      String sqlCommand = UPDATE_PASSWORD;
+      String sqlCommand = AuthCredentialEntity.UPDATE_PASSWORD;
       PreparedStatement pstm = connection.prepareStatement(sqlCommand);
       pstm.setString(1, passwordDB);
       pstm.setString(2, usernameDB);
       pstm.execute();
     } catch (SQLException e) {
-      LOG.error("Process aborted during update {}", e);
+      LOG.error("Process aborted during update {}", Code.DATABASE_ERROR);
+      throw new AuthenticationException(Code.DATABASE_ERROR);
+    }
+  }
+
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
+  public List<AuthCredentialEntity> getAllUsers() throws AuthenticationException {
+    List<AuthCredentialEntity> listUser = new ArrayList<AuthCredentialEntity>();
+    try {
+      Connection connection = DriverManager.getConnection(dbAddress, username, password);
+      String sqlCommand = AuthCredentialEntity.FIND_ALL;
+      PreparedStatement pstm = connection.prepareStatement(sqlCommand);
+      ResultSet rs = pstm.executeQuery();
+
+      while (rs.next()) {
+        listUser.add(
+                new AuthCredentialEntity(
+                        rs.getLong("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("date_of_birth"),
+                        rs.getString("email"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("role")));
+      }
+    } catch (SQLException e) {
+      LOG.error("Database Error in getAllUser");
+      throw new AuthenticationException(AuthenticationException.Code.DATABASE_ERROR);
+    }
+    return listUser;
+  }
+
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
+  public AuthResponseDTO deleteAllUser() throws AuthenticationException {
+    try {
+      Connection connection = DriverManager.getConnection(dbAddress, username, password);
+      String sqlCommand = AuthCredentialEntity.DELETE_ALL_USERS;
+      PreparedStatement pstm = connection.prepareStatement(sqlCommand);
+      pstm.execute();
+    } catch (SQLException e) {
+      LOG.error("Database Error in deleteAllUsers");
+      throw new AuthenticationException(AuthenticationException.Code.DATABASE_ERROR);
+    }
+    return new AuthResponseDTO(AuthResponseDTO.String.DELETED);
+  }
+
+  @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
+  public void insertUser(AuthCredentialEntity authCredentialEntity)
+          throws AuthenticationException {
+    try {
+      Connection connection = DriverManager.getConnection(dbAddress, username, password);
+      String sqlCommand =
+          AuthCredentialEntity.INSERT_USER_FROM_BACKUP;
+      PreparedStatement pstm = connection.prepareStatement(sqlCommand);
+      pstm.setLong(1, authCredentialEntity.getId());
+      pstm.setString(2, authCredentialEntity.getFirstName());
+      pstm.setString(3, authCredentialEntity.getLastName());
+      pstm.setString(4, authCredentialEntity.getDateOfBirth());
+      pstm.setString(5, authCredentialEntity.getEmail());
+      pstm.setString(6, authCredentialEntity.getUsername());
+      pstm.setString(7, authCredentialEntity.getPassword());
+      pstm.setString(8, authCredentialEntity.getRole());
+      pstm.execute();
+    } catch (SQLException e) {
+      LOG.error("Process aborted during insert {}", Code.DATABASE_ERROR);
       throw new AuthenticationException(Code.DATABASE_ERROR);
     }
   }

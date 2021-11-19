@@ -1,3 +1,5 @@
 FROM openjdk:11
-ADD ./target/MoneyStats-1.0.0.jar MoneyStats-1.0.0.jar
-CMD ["java","-jar","MoneyStats-1.0.0.jar"]
+FROM mysql:8
+EXPOSE 8080
+COPY /target/moneystats.jar moneystats.jar
+ENTRYPOINT ["java","-jar","moneystats.jar"]
