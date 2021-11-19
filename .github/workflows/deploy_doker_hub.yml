@@ -23,7 +23,7 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - name: Build with Maven
-        run: mvn clean install -DskipTest
+        run: mvn clean install -DskipTests
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
