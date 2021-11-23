@@ -34,41 +34,48 @@ $(document).ready(function () {
                 }, 1000)
             },
             error: function (authErrorResponseDTO) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true,
+                })
                 var responseDTO = authErrorResponseDTO.responseJSON.message;
                 if (responseDTO === INVALID_AUTH_CREDENTIAL_DTO) {
-                    Swal.fire({
+                    Toast.fire({
                         icon: 'error',
-                        title: "Error, is not possible to add the User",
-                        text: 'Check Data and try again.'
+                        title: 'Error, is not possible to add the User'
                     })
+                    $('#content-desktop').show();
                 }
                 if (responseDTO === DATABASE_ERROR) {
-                    Swal.fire({
+                    Toast.fire({
                         icon: 'error',
-                        title: "Internal Error",
-                        text: 'Try later.'
+                        title: "Internal Error"
                     })
+                    $('#content-desktop').show();
                 }
                 if (responseDTO === USER_PRESENT) {
-                    Swal.fire({
+                    Toast.fire({
                         icon: 'error',
-                        title: "Error",
-                        text: "The username is already present, try with another username."
+                        title: "Error, The User is present, Try a new One"
                     })
+                    $('#content-desktop').show();
                 }
                 if (responseDTO === INTERNAL_SERVER_ERROR) {
-                    Swal.fire({
+                    Toast.fire({
                         icon: 'error',
-                        title: "Internal Error",
-                        text: 'Try later.'
+                        title: "Internal Error"
                     })
+                    $('#content-desktop').show();
                 }
                 if (responseDTO === EMAIL_PRESENT) {
-                    Swal.fire({
+                    Toast.fire({
                         icon: 'error',
-                        title: "Email Present",
-                        text: 'Try with another one.'
+                        title: "Email Present"
                     })
+                    $('#content-desktop').show();
                 }
             }
         });
@@ -108,13 +115,16 @@ $(document).ready(function () {
             })
             return;
         }
+        $('#content-desktop').hide();
         Swal.fire({
             title: 'Do you want to save?',
             text: "Confirm to register Current User",
             icon: 'question',
-            showCancelButton: true,
+            showCancelButton: false,
+            showDenyButton: true,
             confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            denyButtonColor: '#d33',
+            denyButtonText: `Cancel`,
             confirmButtonText: 'Sign up'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -126,9 +136,11 @@ $(document).ready(function () {
                 $('#username_desktop').val('');
                 $('#password_desktop').val('');
                 $('#check_password_desktop').val('');
-            } else {
+            } else if (result.isDenied){
+                $('#content-desktop').show();
                 return;
-            }
+            };
+        
         })
     })
     // SignUp process end
@@ -159,49 +171,57 @@ $(document).ready(function () {
             contentType: 'application/json',
             dataType: 'json',
             success: function (tokenDTO) {
-                var accessToken = tokenDTO.accessToken;
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Correct Credential!',
-                    text: `Welcome ${userLogged}`,
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
                     showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true,
+                })
+                var accessToken = tokenDTO.accessToken;
+                Toast.fire({
+                    icon: 'success',
+                    title: `Correct Credential! Welcome ${userLogged}`,
                     timer: 1500
                 })
                 sessionStorage.setItem('accessToken', accessToken);
 
                 setTimeout(function () {
                     window.location.href = 'homepage.html';
-                }, 3000)
+                }, 1500)
             },
             error: function (authErrorResponseDTO) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true,
+                })
                 var responseDTO = authErrorResponseDTO.responseJSON.message;
                 if (responseDTO === INVALID_AUTH_INPUT_DTO) {
-                    Swal.fire({
+                    Toast.fire({
                         icon: 'error',
-                        title: "Error!",
-                        text: 'Check data and try again.'
+                        title: "Error!"
                     })
                 }
                 if (responseDTO === DATABASE_ERROR) {
-                    Swal.fire({
+                    Toast.fire({
                         icon: 'error',
-                        title: "Internal Error",
-                        text: 'Try again.'
+                        title: "Internal Error"
                     })
                 }
                 if (responseDTO === WRONG_CREDENTIAL) {
-                    Swal.fire({
+                    Toast.fire({
                         icon: 'error',
-                        title: "Wrong Credential",
-                        text: "Wrong username or password, try again."
+                        title: "Wrong Credential"
                     })
                     return;
                 }
                 if (responseDTO === INTERNAL_SERVER_ERROR) {
-                    Swal.fire({
+                    Toast.fire({
                         icon: 'error',
-                        title: "Internal Error",
-                        text: 'Try again.'
+                        title: "Internal Error"
                     })
                 }
             }

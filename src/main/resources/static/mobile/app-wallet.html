@@ -93,7 +93,7 @@
             <strong>Overview</strong>
         </div>
     </a>
-    <a href="#" class="item">
+    <a href="#" class="item" onclick="toastbox('soon')">
         <div class="col">
             <ion-icon name="document-text-outline"></ion-icon>
             <strong>Pages</strong>
@@ -234,6 +234,17 @@
 </div>
 <!-- * Edit Action Sheet -->
 <div id="renderChangelog"></div>
+
+<!-- toast danger -->
+<div id="soon" class="toast-box toast-bottom bg-danger">
+    <div class="in">
+        <div class="text">
+            Available Soon..
+        </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-text-light close-button">OK</button>
+</div>
+<!-- * toast danger -->
 
 
 <!-- ========= JS Files =========  -->
