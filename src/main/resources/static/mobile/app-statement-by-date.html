@@ -14,6 +14,7 @@
     <!-- ========= CSS Files ========= -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/plugin/icon.css">
+    <link rel="stylesheet" href="assets/css/changelog.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
 
@@ -24,6 +25,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- JS Wallet -->
     <script src="./assets/js/capitalewallet.js"></script>
+    <script src="./assets/js/changelog.js"></script>
     <title id="title">MoneyStats - Capitale</title>
 
     <!-- ========= SEZIONE COLORI SEARCH BAR ========= -->
@@ -133,13 +135,13 @@
             <strong>Overview</strong>
         </div>
     </a>
-    <a href="#" class="item">
+    <a href="#" class="item" onclick="toastbox('soon')">
         <div class="col">
             <ion-icon name="document-text-outline"></ion-icon>
             <strong>Pages</strong>
         </div>
     </a>
-    <a href="#" class="item">
+    <a href="#" class="item" data-bs-toggle="modal" data-bs-target="#infoActionSheet">
         <div class="col">
             <div class="action-button large">
                 <ion-icon name="arrow-up-outline"></ion-icon>
@@ -160,6 +162,18 @@
     </a>
 </div>
 <!-- * App Bottom Menu -->
+<div id="renderChangelog"></div>
+
+<!-- toast danger -->
+<div id="soon" class="toast-box toast-bottom bg-danger">
+    <div class="in">
+        <div class="text">
+            Available Soon..
+        </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-text-light close-button">OK</button>
+</div>
+<!-- * toast danger -->
 
 <!-- ========= JS Files =========  -->
 <!-- Bootstrap -->

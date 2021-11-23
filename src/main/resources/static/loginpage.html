@@ -11,7 +11,6 @@
     <meta name='apple-mobile-web-app-status-bar-style' content='#080957'>
     <!-- Login Page Style -->
     <link rel="stylesheet" href="./assets/css/loginPage.css">
-    <link href="./assets/scss/loginpage.scss" rel="stylesheet/scss">
     <!-- JQuery Library -->
     <script src="./assets/js/plugin/jquery-3.6.0.min.js"></script>
     <!-- Login Page Script -->
@@ -45,8 +44,8 @@
     <div class="container" id="container">
         <!-- Sign Up form code Desktop -->
         <div class="form-container sign-up-container">
-            <form action="#">
-                <h2>Sign Up</h2>
+            <div class="center" style="background-color: white;">
+                <h2 class="textCenter" style="padding-right: 100px;">Sign Up</h2>
                 <input type="text" id="firstName_desktop" style="height: 30px; border-radius: 100px;"
                        placeholder="First Name" required/>
                 <input type="text" id="lastName_desktop" style="height: 30px; border-radius: 100px;"
@@ -61,8 +60,8 @@
                        placeholder="Password" required/>
                 <input type="password" id="check_password_desktop" style="height: 30px; border-radius: 100px;"
                        placeholder="Insert Password Again" required/>
-                <button id="signUpBtn_desktop">Sign Up</button>
-            </form>
+                <button id="signUpBtn_desktop" style="margin-left: 78px;">Sign Up</button>
+            </div>
         </div>
         <!-- Sign In form code goes here -->
         <div class="form-container sign-in-container">

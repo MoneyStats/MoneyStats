@@ -267,7 +267,7 @@ $(document).ready(function () {
     var USER_ROLE = localStorage.getItem('user-role');
     $('#backup-database-btn').click(function () {
         const databaseCommandDTO = {
-            //filePath: $('#filepath').val(),
+            filePath: "backup/database/",
             database: BACKUP_DATABASE,
             role: USER_ROLE
         }
