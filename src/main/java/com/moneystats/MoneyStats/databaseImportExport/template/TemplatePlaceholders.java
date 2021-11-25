@@ -2,7 +2,12 @@ package com.moneystats.MoneyStats.databaseImportExport.template;
 
 public class TemplatePlaceholders {
 
-    public static final String GET_EXPORT_DATABASE_TEMPLATE = "src/main/resources/templates/backup_database_template.txt";
+    // TODO: Remove if dont need it
+    public static final String GET_EXPORT_DATABASE_TEMPLATE = "src/main/resources/templates/backup_database_template.sql";
+
+    // Template Identifier
+    public static final String EXPORT_TEMPLATE = "EXPORT_TEMPLATE";
+
     public static final String FILEPATH_RESET_COUNTER = "sql-script/ResetCounterScript.sql";
     public static final String FILEPATH_BACKUP = "backup/database/";
     public static final String FIX_TEXT = "\n";

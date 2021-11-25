@@ -267,10 +267,11 @@ $(document).ready(function () {
     var USER_ROLE = localStorage.getItem('user-role');
     $('#backup-database-btn').click(function () {
         const databaseCommandDTO = {
-            filePath: "backup/database/",
+            filePath: "EXPORT_DATABASE",
             database: BACKUP_DATABASE,
             role: USER_ROLE
         }
+        /*
         Swal.fire({
             icon: 'question',
             title: "<span style='color:#2D2C2C'>Do you want to Backup the Database?</span>",
@@ -279,15 +280,17 @@ $(document).ready(function () {
             confirmButtonText: `Save`,
             denyButtonText: `Don't Save`,
         }).then((result) => {
-            if (result.isConfirmed) {
+            if (result.isConfirmed) {*/
                 backupDatabase(databaseCommandDTO);
-            } else if (result.isDenied) {
+            /*} else if (result.isDenied) {
                 Swal.fire("Operation Aborted!", '', 'info')
             }
-        })
+        })*/
     })
 
     function backupDatabase(databaseCommandDTO) {
+        $('#backup-render').html('');
+        const render = $('#backup-render');
         $.ajax({
             type: "POST",
             url: `/database/exportDatabase`,
@@ -297,15 +300,16 @@ $(document).ready(function () {
             headers: {
                 Authorization: sessionStorage.getItem('accessToken')
             },
-            success: function () {
-                Swal.fire({
+            success: function (response) {
+                $(`<pre>${JSON.stringify(response, undefined, 2)}</pre>`).appendTo(render);
+               /* Swal.fire({
                     title: "<span style='color:#2D2C2C'>Backup Completed!</span>",
                     icon: 'success',
                     showConfirmButton: false
                 })
                 setTimeout(function () {
                     window.location.href = 'app-settings.html';
-                }, 1000);
+                }, 1000);*/
             },
             error: function (error) {
                 Swal.fire({
@@ -348,7 +352,7 @@ $(document).ready(function () {
     $('#restore-btn').click(function () {
         console.log($('.folderSelect').val())
         const databaseCommandDTO = {
-            filePath: $('.folderSelect').val(),
+            filePath: $('#restore-path').val(),
             database: RESTORE_DATABASE,
             role: USER_ROLE
         }
@@ -385,7 +389,7 @@ $(document).ready(function () {
                     showConfirmButton: false
                 })
                 setTimeout(function () {
-                    window.location.href = 'settings.html';
+                    window.location.href = 'app-settings.html';
                 }, 1000);
             },
             error: function () {

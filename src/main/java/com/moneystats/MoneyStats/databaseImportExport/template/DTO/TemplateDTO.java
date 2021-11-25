@@ -1,44 +1,41 @@
 package com.moneystats.MoneyStats.databaseImportExport.template.DTO;
 
 import javax.validation.constraints.NotNull;
-import java.io.File;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 
 public class TemplateDTO implements Serializable {
 
-  @NotNull private List<String> content;
-  @NotNull private Map<String, List<String>> metadata;
-  @NotNull private File template;
+  @NotNull private String identifier;
+  @NotNull private String templateContent;
+  @NotNull private String databaseCommand;
 
-  public TemplateDTO(List<String> content, Map<String, List<String>> metadata, File template) {
-    this.content = content;
-    this.metadata = metadata;
-    this.template = template;
+  public TemplateDTO(String identifier, String templateContent, String databaseCommand) {
+    this.identifier = identifier;
+    this.templateContent = templateContent;
+    this.databaseCommand = databaseCommand;
   }
 
-  public List<String> getContent() {
-    return content;
+  public String getIdentifier() {
+    return identifier;
   }
 
-  public void setContent(List<String> content) {
-    this.content = content;
+  public void setIdentifier(String identifier) {
+    this.identifier = identifier;
   }
 
-  public Map<String, List<String>> getMetadata() {
-    return metadata;
+  public String getTemplateContent() {
+    return templateContent;
   }
 
-  public void setMetadata(Map<String, List<String>> metadata) {
-    this.metadata = metadata;
+  public void setTemplateContent(String templateContent) {
+    this.templateContent = templateContent;
   }
 
-  public File getTemplate() {
-    return template;
+  public String getDatabaseCommand() {
+    return databaseCommand;
   }
 
-  public void setTemplate(File template) {
-    this.template = template;
+  public void setDatabaseCommand(String databaseCommand) {
+    this.databaseCommand = databaseCommand;
   }
 }

@@ -1,7 +1,9 @@
 package com.moneystats.MoneyStats.databaseImportExport;
 
 import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseCommandDTO;
+import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseJSONExportDTO;
 import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseResponseDTO;
+import com.moneystats.MoneyStats.databaseImportExport.template.DTO.TemplateDTO;
 import com.moneystats.MoneyStats.databaseImportExport.template.TemplateException;
 import com.moneystats.authentication.AuthenticationException;
 import com.moneystats.authentication.DTO.TokenDTO;
@@ -29,7 +31,7 @@ public class DatabaseController {
       summary = SchemaDescription.POST_EXPORT_DATABASE_SUMMARY,
       description = SchemaDescription.POST_EXPORT_DATABASE_DESCRIPTION,
       tags = "Database")
-  public DatabaseResponseDTO exportDatabase(
+  public DatabaseJSONExportDTO exportDatabase(
       @RequestHeader(value = "Authorization") String jwt,
       @RequestBody DatabaseCommandDTO databaseCommandDTO)
       throws AuthenticationException, DatabaseException, TemplateException {
@@ -51,7 +53,7 @@ public class DatabaseController {
     return databaseService.restoreDatabase(databaseCommandDTO, tokenDTO);
   }
 
-  @GetMapping("/getBackupFolder")
+  /*@GetMapping("/getBackupFolder")
   @RolesAllowed({SecurityRoles.MONEYSTATS_ADMIN_ROLE})
   @Operation(
       summary = SchemaDescription.GET_FOLDER_DATABASE_SUMMARY,
@@ -59,5 +61,5 @@ public class DatabaseController {
       tags = "Database")
   public List<String> getBackupFolder() throws DatabaseException {
     return databaseService.getFolderDatabase();
-  }
+  }*/
 }
