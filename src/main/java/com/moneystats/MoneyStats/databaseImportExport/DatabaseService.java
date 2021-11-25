@@ -48,57 +48,64 @@ public class DatabaseService {
   private String databaseName;
 
   @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
-  public DatabaseResponseDTO backupDatabase(
+  public DatabaseJSONExportDTO backupDatabase(
       DatabaseCommandDTO databaseCommandDTO, TokenDTO tokenDTO)
       throws AuthenticationException, DatabaseException, TemplateException {
-    databaseCommandDTO.setFilePath(TemplatePlaceholders.FILEPATH_BACKUP);
     DatabaseValidator.validateDatabaseCommandDTO(databaseCommandDTO);
     TokenValidation.validateTokenDTO(tokenDTO);
-    Map<String, List<String>> placeholder = new HashMap<>();
     DatabaseJSONExportDTO placeStatement = placeholderStatement();
     DatabaseJSONExportDTO placeWallet = placeholderWallet();
     DatabaseJSONExportDTO placeUsers = placeholderUsers();
-    placeholder.putAll(placeStatement.getPlaceholder());
-    placeholder.putAll(placeWallet.getPlaceholder());
-    placeholder.putAll(placeUsers.getPlaceholder());
 
+    /*
     Map<String, String> placeholderMustache = new HashMap<>();
     placeholderMustache.put(TemplatePlaceholders.DATABASE_PLACEHOLDER, databaseName);
     placeholderMustache.put(TemplatePlaceholders.DATE_PLACEHOLDER, LocalDate.now().toString());
+    placeholderMustache.putAll(placeStatement.getPlaceholder());
+    placeholderMustache.putAll(placeWallet.getPlaceholder());
+    placeholderMustache.putAll(placeUsers.getPlaceholder());
     DatabaseResponseDTO response = new DatabaseResponseDTO();
+     */
 
     if (!(databaseCommandDTO.getDatabase() == DatabaseCommand.EXPORT_DUMP_COMMAND)) {
       LOG.error("Wrong database command, Command: {}", databaseCommandDTO.getDatabase());
       throw new DatabaseException(DatabaseException.Code.INVALID_DATABASE_COMMAND_DTO);
     }
+    /*
+    LOG.info("Getting Template with Identifier {}", TemplatePlaceholders.EXPORT_TEMPLATE);
     TemplateDTO getExportTemplate =
-        templateService.getTemplate(TemplatePlaceholders.GET_EXPORT_DATABASE_TEMPLATE);
-    List<String> appliedTemplate =
-        templateService.applyTemplate(getExportTemplate, placeholder, placeholderMustache);
-    templateService.saveTemplate(databaseCommandDTO.getFilePath(), appliedTemplate);
+        templateService.getTemplate(TemplatePlaceholders.EXPORT_TEMPLATE);
+    LOG.info("Template Found {}", getExportTemplate.getTemplateContent());
 
+    LOG.info("Appling Template with placeholder {}", placeholderMustache);
+    TemplateDTO appliedTemplate =
+        templateService.applyTemplate(getExportTemplate, placeholderMustache);
+    templateService.saveTemplate(databaseCommandDTO.getFilePath(), appliedTemplate);
+    */
     // Export JSON File
     DatabaseJSONExportDTO databaseJSONToExport =
         new DatabaseJSONExportDTO(
             placeStatement.getStatementEntities(),
             placeWallet.getWalletEntities(),
             placeUsers.getAuthCredentialEntities());
+    /*
     templateService.applyAndSaveJsonBackup(databaseJSONToExport, databaseCommandDTO.getFilePath());
-    response.setResponse(DatabaseResponseDTO.String.EXPORTED);
-    return response;
+    response.setResponse(DatabaseResponseDTO.String.EXPORTED);*/
+    return databaseJSONToExport;
   }
 
   @LoggerMethod(type = LogTimeTracker.ActionType.APP_DATABASE_ENDPOINT)
   public DatabaseResponseDTO restoreDatabase(
       DatabaseCommandDTO databaseCommandDTO, TokenDTO tokenDTO)
       throws AuthenticationException, DatabaseException {
-    DatabaseValidator.validateDatabaseCommandDTO(databaseCommandDTO);
+    //DatabaseValidator.validateDatabaseCommandDTO(databaseCommandDTO);
     TokenValidation.validateTokenDTO(tokenDTO);
     DatabaseResponseDTO response = new DatabaseResponseDTO();
     if (!(databaseCommandDTO.getDatabase() == DatabaseCommand.IMPORT_DUMP_COMMAND)) {
       LOG.error("Wrong database command, Command: {}", databaseCommandDTO.getDatabase());
       throw new DatabaseException(DatabaseException.Code.INVALID_DATABASE_COMMAND_DTO);
     }
+    /*
     String folderFilePath =
         TemplatePlaceholders.FILEPATH_BACKUP
             + databaseCommandDTO.getFilePath()
@@ -119,10 +126,11 @@ public class DatabaseService {
       databaseJsonString.append(scanner.nextLine());
     }
     scanner.close();
+     */
     DatabaseJSONExportDTO databaseJSONExportDTO;
     try {
       databaseJSONExportDTO =
-          objectMapper.readValue(databaseJsonString.toString(), DatabaseJSONExportDTO.class);
+          objectMapper.readValue(databaseCommandDTO.getFilePath(), DatabaseJSONExportDTO.class);
     } catch (JsonProcessingException e) {
       LOG.error(
           "A Problem occurred during deserialize object {},",
@@ -181,9 +189,9 @@ public class DatabaseService {
   }
 
   private DatabaseJSONExportDTO placeholderStatement() {
-    Map<String, List<String>> placeholder = new HashMap<>();
+    Map<String, String> placeholder = new HashMap<>();
     List<StatementEntity> exportStatementEntity = statementDAO.findAll();
-    List<String> compositStatementString = new ArrayList<>();
+    StringBuilder compositStatementString = new StringBuilder();
     for (int i = 0; i < exportStatementEntity.size(); i++) {
       String databaseLine =
           "("
@@ -203,16 +211,16 @@ public class DatabaseService {
       if (exportStatementEntity.size() != i + 1) {
         databaseLine += "," + TemplatePlaceholders.FIX_TEXT;
       }
-      compositStatementString.add(databaseLine);
+      compositStatementString.append(databaseLine);
     }
-    placeholder.put(TemplatePlaceholders.STATEMENT_PLACEHOLDER, compositStatementString);
+    placeholder.put(TemplatePlaceholders.STATEMENT_PLACEHOLDER, compositStatementString.toString());
     return new DatabaseJSONExportDTO(placeholder, exportStatementEntity, null, null);
   }
 
   private DatabaseJSONExportDTO placeholderWallet() {
-    Map<String, List<String>> placeholder = new HashMap<>();
+    Map<String, String> placeholder = new HashMap<>();
     List<WalletEntity> exportWalletEntity = walletDAO.findAll();
-    List<String> compositWalletString = new ArrayList<>();
+    StringBuilder compositWalletString = new StringBuilder();
     for (int i = 0; i < exportWalletEntity.size(); i++) {
       String databaseLine =
           "("
@@ -230,16 +238,16 @@ public class DatabaseService {
       if (exportWalletEntity.size() != i + 1) {
         databaseLine += "," + TemplatePlaceholders.FIX_TEXT;
       }
-      compositWalletString.add(databaseLine);
+      compositWalletString.append(databaseLine);
     }
-    placeholder.put(TemplatePlaceholders.WALLET_PLACEHOLDER, compositWalletString);
+    placeholder.put(TemplatePlaceholders.WALLET_PLACEHOLDER, compositWalletString.toString());
     return new DatabaseJSONExportDTO(placeholder, null, exportWalletEntity, null);
   }
 
   private DatabaseJSONExportDTO placeholderUsers() throws AuthenticationException {
-    Map<String, List<String>> placeholder = new HashMap<>();
+    Map<String, String> placeholder = new HashMap<>();
     List<AuthCredentialEntity> exportUsersEntity = authCredentialDAO.getAllUsers();
-    List<String> compositStatementString = new ArrayList<>();
+    StringBuilder compositStatementString = new StringBuilder();
     for (int i = 0; i < exportUsersEntity.size(); i++) {
       String databaseLine =
           "("
@@ -265,9 +273,9 @@ public class DatabaseService {
       if (exportUsersEntity.size() != i + 1) {
         databaseLine += "," + TemplatePlaceholders.FIX_TEXT;
       }
-      compositStatementString.add(databaseLine);
+      compositStatementString.append(databaseLine);
     }
-    placeholder.put(TemplatePlaceholders.USERS_PLACEHOLDER, compositStatementString);
+    placeholder.put(TemplatePlaceholders.USERS_PLACEHOLDER, compositStatementString.toString());
     return new DatabaseJSONExportDTO(placeholder, null, null, exportUsersEntity);
   }
 }

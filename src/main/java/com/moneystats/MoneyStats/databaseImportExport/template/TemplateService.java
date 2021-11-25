@@ -8,71 +8,71 @@ import com.github.mustachejava.MustacheFactory;
 import com.moneystats.MoneyStats.databaseImportExport.DTO.DatabaseJSONExportDTO;
 import com.moneystats.MoneyStats.databaseImportExport.DatabaseException;
 import com.moneystats.MoneyStats.databaseImportExport.template.DTO.TemplateDTO;
+import com.moneystats.MoneyStats.databaseImportExport.template.entity.TemplateEntity;
 import com.moneystats.generic.timeTracker.LogTimeTracker;
 import com.moneystats.generic.timeTracker.LoggerMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class TemplateService {
 
+  @Autowired ITemplateDAO templateDAO;
   private static final Logger LOG = LoggerFactory.getLogger(TemplateService.class);
-  private static ObjectMapper objectMapper = new ObjectMapper();
+  private static final ObjectMapper objectMapper = new ObjectMapper();
 
   private MustacheFactory mustacheFactory = new DefaultMustacheFactory();
   private Map<String, Mustache> cache = new HashMap<>();
 
   @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public TemplateDTO getTemplate(String templateId) throws TemplateException {
-    File sqlExportTemplate = new File(TemplatePlaceholders.GET_EXPORT_DATABASE_TEMPLATE);
-    Scanner scanner = null;
-    try {
-      scanner = new Scanner(sqlExportTemplate);
-    } catch (FileNotFoundException e) {
+    TemplateEntity templateEntity = templateDAO.findTemplateEntityByIdentifier(templateId);
+    if (templateEntity == null) {
       LOG.error(
-          "Template not found on TemplateService getTemplate:27 {}",
+          "Template not found on TemplateService getTemplate:38 {}",
           TemplateException.Code.TEMPLATE_NOT_FOUND);
       throw new TemplateException(TemplateException.Code.TEMPLATE_NOT_FOUND);
     }
-    List<String> alltemplateLine = new ArrayList<>();
-    while (scanner.hasNextLine()) {
-      alltemplateLine.add(scanner.nextLine());
-    }
-    scanner.close();
-    return new TemplateDTO(alltemplateLine, null, sqlExportTemplate);
+
+    LOG.info("Template String {}", templateEntity.getTemplate());
+    return new TemplateDTO(
+        templateEntity.getIdentifier(),
+        templateEntity.getTemplate(),
+        templateEntity.getDatabaseCommand());
   }
 
   @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
-  public List<String> applyTemplate(
+  public TemplateDTO applyTemplate(
       TemplateDTO template,
-      Map<String, List<String>> placeholders,
       Map<String, String> placeholderTemplate)
       throws TemplateException {
-    List<String> templateList = template.getContent();
-    for (int i = 0; i < templateList.size(); i++) {
-      if (placeholders.containsKey(templateList.get(i))) {
-        StringBuilder allInOne = new StringBuilder();
-        List<String> placeholder = placeholders.get(templateList.get(i));
-        for (int y = 0; y < placeholder.size(); y++) {
-          allInOne.append(placeholder.get(y));
-        }
-        templateList.set(i, allInOne.toString());
-      }
-    }
+    StringBuilder templateToApply = new StringBuilder();
+    templateToApply.append(template.getTemplateContent());
     // Set Data and Database Information
-    return compileTemplate(templateList, placeholderTemplate);
+    StringBuilder compiledPlaceholder =
+        compilePlaceholder(templateToApply, placeholderTemplate);
+    TemplateDTO appliedTemplate =
+        new TemplateDTO(
+            template.getIdentifier(),
+            compiledPlaceholder.toString(),
+            template.getDatabaseCommand());
+    LOG.info("Template Applied {}", appliedTemplate.getTemplateContent());
+    return appliedTemplate;
   }
 
   @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
-  public void saveTemplate(String filePath, List<String> templateList) throws TemplateException {
+  public void saveTemplate(String filePath, TemplateDTO template) throws TemplateException {
     String newFolder = filePath + LocalDate.now() + "/";
     File theDir = new File(newFolder);
-    if (!theDir.exists()){
+    if (!theDir.exists()) {
       theDir.mkdirs();
     }
     String filePathToSave = newFolder + "MoneyStats_Backup_" + LocalDate.now() + ".sql";
@@ -80,9 +80,7 @@ public class TemplateService {
     BufferedWriter newTemplate;
     try {
       newTemplate = new BufferedWriter(new FileWriter(outputTemplate));
-      for (String s : templateList) {
-        newTemplate.write(s + TemplatePlaceholders.FIX_TEXT);
-      }
+      newTemplate.write(template.getTemplateContent());
       newTemplate.close();
     } catch (IOException e) {
       LOG.error(
@@ -95,10 +93,10 @@ public class TemplateService {
 
   @LoggerMethod(type = LogTimeTracker.ActionType.APP_SERVICE_LOGIC)
   public void applyAndSaveJsonBackup(DatabaseJSONExportDTO databaseJSONToExport, String filePath)
-          throws DatabaseException {
+      throws DatabaseException {
     String newFolder = filePath + LocalDate.now() + "/";
     File theDir = new File(newFolder);
-    if (!theDir.exists()){
+    if (!theDir.exists()) {
       theDir.mkdirs();
     }
     String filePathToSave = newFolder + "json_dump_backup_" + LocalDate.now() + ".backup";
@@ -111,30 +109,29 @@ public class TemplateService {
       throw new DatabaseException(DatabaseException.Code.ERROR_ON_EXPORT_DATABASE);
     } catch (IOException e) {
       LOG.error(
-              "A problem occurred during Serialize Object on applyAndSaveJsonBackup:132 {}",
-              DatabaseException.Code.ERROR_ON_EXPORT_DATABASE);
+          "A problem occurred during Serialize Object on applyAndSaveJsonBackup:132 {}",
+          DatabaseException.Code.ERROR_ON_EXPORT_DATABASE);
       throw new DatabaseException(DatabaseException.Code.ERROR_ON_EXPORT_DATABASE);
     }
     LOG.info("Database successfully exported, PATH: {}", filePathToSave);
   }
 
-  private List<String> compileTemplate(List<String> template, Map<String, String> placeholder)
+  private StringBuilder compilePlaceholder(
+      StringBuilder temp, Map<String, String> placeholder)
       throws TemplateException {
-    List<String> compiledTemplate = new ArrayList<>();
+    String template = temp.toString();
+    StringBuilder compiledTemplate = new StringBuilder();
     try {
       StringWriter writer = new StringWriter();
-      for (int i = 0; i < template.size(); i++) {
-        int finalI = i;
-        Mustache mustache =
-            cache.computeIfAbsent(
-                template.get(i),
-                k ->
-                    mustacheFactory.compile(
-                        new StringReader(template.get(finalI) + TemplatePlaceholders.FIX_TEXT),
-                        null));
-        mustache.execute(writer, placeholder).flush();
-      }
-      compiledTemplate.add(writer.toString());
+      Mustache mustache =
+          cache.computeIfAbsent(
+              template,
+              k ->
+                  mustacheFactory.compile(
+                      new StringReader(template + TemplatePlaceholders.FIX_TEXT), null));
+      mustache.execute(writer, placeholder).flush();
+      compiledTemplate.append(writer.toString().replace("[", "").replace("]", ""));
+      writer.close();
     } catch (IOException e) {
       String message = "Cannot fill the template";
       LOG.error(message, e);

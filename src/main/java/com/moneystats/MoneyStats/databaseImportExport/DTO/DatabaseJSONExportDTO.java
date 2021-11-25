@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class DatabaseJSONExportDTO implements Serializable {
 
-  private Map<String, List<String>> placeholder;
+  private Map<String, String> placeholder;
   @NotNull private List<StatementEntity> statementEntities;
   @NotNull private List<WalletEntity> walletEntities;
   @NotNull private List<AuthCredentialEntity> authCredentialEntities;
@@ -29,7 +29,7 @@ public class DatabaseJSONExportDTO implements Serializable {
   }
 
   public DatabaseJSONExportDTO(
-      Map<String, List<String>> placeholder,
+      Map<String, String> placeholder,
       List<StatementEntity> statementEntities,
       List<WalletEntity> walletEntities,
       List<AuthCredentialEntity> authCredentialEntities) {
@@ -63,11 +63,11 @@ public class DatabaseJSONExportDTO implements Serializable {
     this.authCredentialEntities = authCredentialEntities;
   }
 
-  public Map<String, List<String>> getPlaceholder() {
+  public Map<String, String> getPlaceholder() {
     return placeholder;
   }
 
-  public void setPlaceholder(Map<String, List<String>> placeholder) {
+  public void setPlaceholder(Map<String, String> placeholder) {
     this.placeholder = placeholder;
   }
 }

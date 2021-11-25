@@ -440,20 +440,24 @@
 <!-- * Update User Action Sheet -->
 
 <!-- Backup Database Action Sheet -->
-<div class="modal fade action-sheet" id="backupDatabaseModal" tabindex="-1" role="dialog">
+<div class="modal fade modalbox" id="backupDatabaseModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Backup Database</h5>
+                <a href="javascript:;" data-bs-dismiss="modal">Close</a>
+            </div>
             <div class="modal-body">
-                <div class="action-sheet-content">
-                    <div class="iconbox">
+                <div class="modalbox-content">
+                    <div class="iconbox position-absolute top-0 start-50 translate-middle-x" style="padding-top: 50px;">
                         <img src="assets/img/logos/favicon_trasparent.png" alt="image" class="imaged w64 rounded">
                     </div>
-                    <div class="text-center p-2">
+                    <div class="text-center p-2" style="margin-top: 100px;">
                         <h3>Backup Database</h3>
-                        <p>Press Backup To proceed.</p>
+                        <p>You Can Copy The JSON File.</p>
                     </div>
-                    <a href="#" id="backup-database-btn" class="btn btn-primary btn-lg btn-block"
-                       data-bs-dismiss="modal">Backup</a>
+                    <div id="backup-render"></div>
+                    <a href="#" id="backup-database-btn" class="btn btn-primary btn-lg btn-block">Backup</a>
                 </div>
             </div>
         </div>
@@ -472,14 +476,26 @@
                     <div class="text-center p-2">
                         <h3>Restore Database</h3>
                     </div>
-                    <div class="section mt-2">
+                    <div class="form-group basic animated">
+                        <div class="input-group input-wrapper">
+                            <label class="label" for="restore-path">Path JSON</label>
+                            <input type="text" class="form-control" id="restore-path" placeholder="Path JSON">
+                            <i class="clear-input">
+                                <ion-icon name="close-circle"></ion-icon>
+                            </i>
+                        </div>
+                        <div class="input-info">Please enter name for the new wallet</div>
+                    </div>
+                    
+                    
+                    <!-- <div class="section mt-2">
                         <div class="section-title">Checkbox List Inset</div>
                         <div class="card">
                             <div class="card-body p-0">
                                 <div class="input-list" id="listFolder"></div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <a href="#" id="restore-btn" class="btn btn-primary btn-lg btn-block" data-bs-dismiss="modal">Restore</a>
                 </div>
             </div>

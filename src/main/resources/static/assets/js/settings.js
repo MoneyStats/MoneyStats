@@ -255,6 +255,8 @@ $(document).ready(function () {
     })
 
     function backupDatabase(databaseCommandDTO) {
+        $('#backup-render').html('');
+        const render = $('#backup-render');
         $.ajax({
             type: "POST",
             url: `/database/exportDatabase`,
@@ -264,15 +266,17 @@ $(document).ready(function () {
             headers: {
                 Authorization: sessionStorage.getItem('accessToken')
             },
-            success: function () {
-                Swal.fire({
+            success: function (response) {
+                $(`<pre>${JSON.stringify(response, undefined, 2)}</pre>`).appendTo(render);
+                $('#backupModal').modal('show');
+                /*Swal.fire({
                     title: 'Backup Completed!',
                     icon: 'success',
                     showConfirmButton: false
                 })
                 setTimeout(function () {
                     window.location.href = 'settings.html';
-                }, 1000);
+                }, 1000);*/
             },
             error: function (error) {
                 Swal.fire({
@@ -320,7 +324,7 @@ $(document).ready(function () {
 
     $('#restore-btn').click(function () {
         const databaseCommandDTO = {
-            filePath: $('#folderSelect').val(),
+            filePath: $('#restore-path').val(),
             database: RESTORE_DATABASE,
             role: USER_ROLE
         }

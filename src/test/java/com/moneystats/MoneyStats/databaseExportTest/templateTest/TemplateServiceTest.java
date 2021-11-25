@@ -26,7 +26,7 @@ public class TemplateServiceTest {
   @Autowired TemplateService templateService;
   @Captor ArgumentCaptor<DatabaseJSONExportDTO> jsonExportDTOArgumentCaptor;
   @Captor ArgumentCaptor<String> filePathCaptor;
-
+/*
   @Test
   void testGetTemplate() throws TemplateException, FileNotFoundException {
     String templateId = TemplatePlaceholders.GET_EXPORT_DATABASE_TEMPLATE;
@@ -43,8 +43,8 @@ public class TemplateServiceTest {
 
     Assertions.assertEquals(expectedTemplateDTO.getTemplate(), actualTemplateDTO.getTemplate());
     Assertions.assertEquals(expectedTemplateDTO.getContent(), actualTemplateDTO.getContent());
-  }
-
+  }*/
+/*
   @Test
   void testApplyTemplate() throws TemplateException, FileNotFoundException {
     File sqlExportTemplate = new File(TemplatePlaceholders.GET_EXPORT_DATABASE_TEMPLATE);
@@ -80,7 +80,7 @@ public class TemplateServiceTest {
 
     String filePath = TemplatePlaceholders.FILEPATH_BACKUP;
     templateService.saveTemplate(filePath, applyTemplate);
-  }
+  }*/
 
   @Test
   void testApplyAndSaveJsonBackup() throws DatabaseException {
@@ -93,8 +93,8 @@ public class TemplateServiceTest {
   private DatabaseJSONExportDTO createValidDatabaseJSONDTO() {
     return new DatabaseJSONExportDTO(null, List.of(), List.of(), List.of());
   }
-
+/*
   private TemplateDTO createValidTemplateDTO(File sqlExportTemplate, List<String> alltemplateLine) {
     return new TemplateDTO(alltemplateLine, null, sqlExportTemplate);
-  }
+  }*/
 }
