@@ -1,4 +1,5 @@
--- MoneyStats dump 1.0.0  Distrib 8.0.23, for Win64 (x86_64)
+insert into templates(id, template, command, creation_date, update_date, identifier) values
+(1, "-- MoneyStats dump 1.0.0  Distrib 8.0.23, for Win64 (x86_64)
 --
 -- Host: localhost    Database: {{database.placeholder}}
 -- ------------------------------------------------------
@@ -67,7 +68,7 @@ CREATE TABLE `statements` (
 LOCK TABLES `statements` WRITE;
 /*!40000 ALTER TABLE `statements` DISABLE KEYS */;
 INSERT INTO `statements` VALUES
-statement.placeholder
+{{{statement.placeholder}}}
 /*!40000 ALTER TABLE `statements` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -98,7 +99,7 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` VALUES
-users.placeholder
+{{{users.placeholder}}}
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -129,7 +130,7 @@ CREATE TABLE `wallets` (
 LOCK TABLES `wallets` WRITE;
 /*!40000 ALTER TABLE `wallets` DISABLE KEYS */;
 INSERT INTO `wallets` VALUES
-wallet.placeholder
+{{{wallet.placeholder}}}
 /*!40000 ALTER TABLE `wallets` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -142,4 +143,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on {{date.placeholder}}
+-- Dump completed on {{date.placeholder}}", 'EXPORT_DUMP_COMMAND', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'EXPORT_TEMPLATE');

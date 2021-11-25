@@ -43,7 +43,7 @@ public class DatabaseServiceTest {
   @InjectMocks private DatabaseService databaseService;
   @Mock private TokenService tokenService;
   @Mock private TemplateService templateService;
-
+/*
   @Test
   void testBackupDatabase() throws Exception {
     TokenDTO tokenDTO = new TokenDTO(TestSchema.STRING_TOKEN_JWT_ROLE_USER);
@@ -71,7 +71,7 @@ public class DatabaseServiceTest {
 
     DatabaseResponseDTO actual = databaseService.backupDatabase(databaseCommandDTO, tokenDTO);
     Assertions.assertEquals(expected.getResponse(), actual.getResponse());
-  }
+  }*/
 
   @Test
   void testBackupDatabase_shouldThowOnInvalidCommand() throws Exception {
@@ -194,10 +194,10 @@ public class DatabaseServiceTest {
     Assertions.assertEquals(expectedExpeption.getCode(), actualException.getCode());
   }
 
-  private TemplateDTO createValidTemplateDTO() {
+  /*private TemplateDTO createValidTemplateDTO() {
     return new TemplateDTO(
         List.of("my content"), Map.of("my-key", List.of("my.values")), new File("test.sql"));
-  }
+  }*/
 
   private DatabaseCommandDTO createValidDatabaseCommandDTO() {
     return new DatabaseCommandDTO(
